@@ -23,7 +23,7 @@
         
         public static Func<string, string[]> portNameCache = MemorizeTool.Create((string x) => new string[2]);
         
-        public static List<TTarget> GetOutputConnections<TTarget>(this UniBaseNode node)
+        public static List<TTarget> GetOutputConnections<TTarget>(this INode node)
             where TTarget :UniBaseNode
         {
             var items = ClassPool.Spawn<List<TTarget>>();
@@ -97,11 +97,11 @@
             return (inputValue,outputValue);
         }
         
-        public static List<NodePort> GetConnectionToNodes<TTarget>(this NodePort port)
+        public static List<INodePort> GetConnectionToNodes<TTarget>(this INodePort port)
             where TTarget :UniBaseNode
         {
             
-            var items = ClassPool.Spawn<List<NodePort>>();
+            var items = ClassPool.Spawn<List<INodePort>>();
             
             var connections = port.GetConnections();
             
@@ -119,7 +119,7 @@
             
         }
         
-        public static List<TTarget> GetConnectedNodes<TTarget>(this NodePort port)
+        public static List<TTarget> GetConnectedNodes<TTarget>(this INodePort port)
             where TTarget :UniBaseNode
         {
             var items = ClassPool.Spawn<List<TTarget>>();
@@ -138,7 +138,7 @@
             return items;
         }
 
-        public static TValue GetConnectedNode<TValue>(this NodePort port)
+        public static TValue GetConnectedNode<TValue>(this INodePort port)
             where TValue :UniBaseNode
         {
             if (port == null || !port.IsConnected)
@@ -154,7 +154,7 @@
         }
 
         
-        public static (IPortValue , NodePort) UpdatePortValue<TValue>(this IUniNode node, 
+        public static (IPortValue , INodePort) UpdatePortValue<TValue>(this IUniNode node, 
             PortIO direction = PortIO.Output)
         {
             var type = typeof(TValue);
@@ -172,7 +172,7 @@
         
         }
         
-        public static (IPortValue value, NodePort port) UpdatePortValue(
+        public static (IPortValue value, INodePort port) UpdatePortValue(
             this IUniNode node, 
             string portName, 
             PortIO direction = PortIO.Output)
@@ -194,7 +194,7 @@
         
         }
         
-        public static bool IsPortRemoved(this IUniNode node,NodePort port)
+        public static bool IsPortRemoved(this IUniNode node,INodePort port)
         {
             if (port.IsStatic) return false;
             var value = node.GetPortValue(port.fieldName);
