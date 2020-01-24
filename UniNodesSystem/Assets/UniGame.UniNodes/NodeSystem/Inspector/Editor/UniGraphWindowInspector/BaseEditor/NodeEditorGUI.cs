@@ -606,12 +606,12 @@
                     GUILayout.BeginVertical(new GUIStyle(highlightStyle));
                 }
                 catch (Exception e) {
-                    GameLog.LogError(e);
+                    
                     GameLog.Log($"EventType {state.EventType} EventData[type: {state.Event.type} rawtype: {state.Event.type}");
-                    //throw;
+                    GameLog.LogError(e);
                     GUILayout.EndVertical();
                     GUILayout.EndVertical();
-                    return;
+                    GUIUtility.ExitGUI();
                 }
             }
             else {
