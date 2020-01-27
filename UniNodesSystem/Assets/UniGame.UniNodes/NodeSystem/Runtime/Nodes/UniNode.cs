@@ -93,12 +93,9 @@
         {
             //node already active
             if (isActive) {
-                GameLog.Log($"STATE ALREADY ACTIVE {name} TYPE {GetType().Name}");
                 return;
             }
 
-            GameLog.Log($"STATE EXECUTE {name} TYPE {GetType().Name}");
-            
             //mark as active
             isActive = true;
             
