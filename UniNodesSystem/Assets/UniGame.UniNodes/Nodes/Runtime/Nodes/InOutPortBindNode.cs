@@ -6,8 +6,8 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nod
     using UniCore.Runtime.Interfaces;
     using UniNodeSystem.Nodes.Commands;
 
-    [CreateNodeMenu("Common/InOutPort")]
-    public class InOutPortNode : UniNode
+    [CreateNodeMenu("Common/InOutBindPort")]
+    public class InOutPortBindNode : UniNode
     {
         private const string defaultPortName = "data";
         
@@ -18,7 +18,7 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nod
             base.UpdateCommands(nodeCommands);
 
             var portCommand = new ConnectedFormatedPairCommand();
-            portCommand.Initialize(this,defaultPortName,false);
+            portCommand.Initialize(this,defaultPortName,true);
             nodeCommands.Add(portCommand);
 
             PortPair = portCommand;

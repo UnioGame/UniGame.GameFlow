@@ -12,13 +12,15 @@
     using UniCore.Runtime.Interfaces;
     using UniCore.Runtime.ProfilerTools;
     using UniStateMachine.Runtime;
+    using UnityEngine;
 
     [Serializable]
     public abstract class UniNode : UniBaseNode, IUniNode
     {       
         #region inspector fields
 
-        public List<SerializedNodeCommand> savedCommands = new List<SerializedNodeCommand>();
+        [SerializeField]
+        public List<SerializedNodeCommand> nodeSavedCommands = new List<SerializedNodeCommand>();
 
         #endregion
         
@@ -185,8 +187,8 @@
             commands.Clear();
             
             //register all backed commands to main list
-            for (var i = 0; i < savedCommands.Count; i++) {
-                var command = savedCommands[i];
+            for (var i = 0; i < nodeSavedCommands.Count; i++) {
+                var command = nodeSavedCommands[i];
                 if(command!=null) 
                     commands.Add(command.Create(this));
             }
@@ -201,7 +203,8 @@
         
         protected virtual void OnValidate()
         {
-            Initialize();
+            if(Application.isPlaying == false)
+                Initialize();
         }
         
 #endregion
