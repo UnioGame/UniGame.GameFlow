@@ -8,7 +8,7 @@ namespace UniGreenModules.UniGameSystems.Examples.ServiceNode
     using UniRoutine.Runtime;
     using UniRoutine.Runtime.Extension;
 
-    [UniBaseNode.CreateNodeMenuAttribute("Examples/DemoSystem/IntDemoSource")]
+    [CreateNodeMenuAttribute("Examples/DemoSystem/IntDemoSource")]
     public class IntDemoSourceNode : InOutPortNode
     {
         public int interval = 1;
@@ -23,9 +23,10 @@ namespace UniGreenModules.UniGameSystems.Examples.ServiceNode
 
         private IEnumerator IntSourceProcess(int increment, float updateDelay)
         {
+            var wait = new WaitForSeconds(delay);
             while (isActiveAndEnabled) {
                 PortPair.OutputPort.Publish(increment);
-                yield return this.WaitForSeconds(updateDelay);
+                yield return wait;
             }
         }
     }
