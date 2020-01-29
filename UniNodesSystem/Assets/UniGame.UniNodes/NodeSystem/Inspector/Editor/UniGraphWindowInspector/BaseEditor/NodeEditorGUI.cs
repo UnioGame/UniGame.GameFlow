@@ -7,6 +7,7 @@
     using Runtime.Core;
     using UniCore.EditorTools.Editor.Utility;
     using UniCore.Runtime.ProfilerTools;
+    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Attributes;
     using UnityEditor;
     using UnityEngine;
     using Object = UnityEngine.Object;
@@ -178,6 +179,9 @@
             for (var i = 0; i < NodeTypes.Count; i++) {
                 var type = NodeTypes[i];
 
+                if(IsValidNode(type) == false)
+                    continue;
+                
                 //Get node context menu path
                 var path = graphEditor.GetNodeMenuName(type);
                 if (string.IsNullOrEmpty(path)) continue;
@@ -189,6 +193,11 @@
             contextMenu.AddItem(new GUIContent("Preferences"), false, () => OpenPreferences());
             AddCustomContextMenuItems(contextMenu, ActiveGraph);
             contextMenu.DropDown(new Rect(Event.current.mousePosition, Vector2.zero));
+        }
+
+        private bool IsValidNode(Type nodeType)
+        {
+            return !NodeEditorUtilities.GetAttrib<HideNodeAttribute>(nodeType, out var hideNodeAttribute);
         }
 
         void AddCustomContextMenuItems(GenericMenu contextMenu, object obj)

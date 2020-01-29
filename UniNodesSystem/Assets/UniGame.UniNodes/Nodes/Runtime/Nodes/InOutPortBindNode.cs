@@ -3,10 +3,11 @@
 namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nodes.Runtime.Nodes
 {
     using System.Collections.Generic;
+    using NodeSystem.Runtime.Attributes;
     using UniCore.Runtime.Interfaces;
     using UniNodeSystem.Nodes.Commands;
 
-    [CreateNodeMenu("Common/InOutBindPort")]
+    [HideNode]
     public class InOutPortBindNode : UniNode
     {
         private const string defaultPortName = "data";

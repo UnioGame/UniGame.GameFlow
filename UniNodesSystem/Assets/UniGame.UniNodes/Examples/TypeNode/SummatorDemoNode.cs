@@ -15,12 +15,9 @@ namespace UniGreenModules.UniGameSystems.Examples.ServiceNode
         
         protected override void OnDataUpdated(int data, IContext source, IContext target)
         {
-
             summ += data;
-            GameLog.Log($"{graph.name}:{name} SUMM = {summ}");
             
             target.Publish(summ);
-
         }
     }
 }

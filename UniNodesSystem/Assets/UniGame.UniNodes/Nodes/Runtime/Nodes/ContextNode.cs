@@ -4,9 +4,10 @@
     using UniCore.Runtime.Interfaces;
     using UniFlowNodes;
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nodes.Runtime.Nodes;
+    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Attributes;
 
     [Serializable]
-    [CreateNodeMenu("Common/ContextNode")]
+    [HideNode]
     public class ContextNode : TypeBridgeNode<IContext>
     {
         

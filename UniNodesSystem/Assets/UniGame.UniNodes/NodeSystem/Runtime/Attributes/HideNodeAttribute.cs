@@ -1,18 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System;
 
-public class HideNodeAttribute : MonoBehaviour
+namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Attributes
 {
-    // Start is called before the first frame update
-    void Start()
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true,Inherited = false)]
+    public class HideNodeAttribute : Attribute
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

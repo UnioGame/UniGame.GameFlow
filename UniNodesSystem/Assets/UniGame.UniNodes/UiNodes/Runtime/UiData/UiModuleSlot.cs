@@ -3,6 +3,7 @@ namespace UniGreenModules.UniUiNodes.Runtime.UiData
 {
     using System;
     using Interfaces;
+    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Connections;
     using UniNodeSystem.Runtime.Connections;
     using UniNodeSystem.Runtime.Interfaces;
     using UnityEngine;

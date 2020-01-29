@@ -1,22 +1,24 @@
 ﻿
-namespace UniGreenModules.UniNodeSystem.Runtime.Connections
+namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Connections
 {
-    using System;
     using System.Collections.Generic;
-    using Interfaces;
+    using System.Runtime.CompilerServices;
     using UniCore.Runtime.Interfaces;
     using UniCore.Runtime.ObjectPool.Runtime.Interfaces;
+    using UniNodeSystem.Runtime.Interfaces;
 
     public class TypeDataBrodcaster : 
         IPoolable, ITypeDataBrodcaster
     {
         private List<IContextWriter> _registeredItems = new List<IContextWriter>();
+        private int count = 0;
 
         #region ipoolable
         
         public virtual void Release()
         {
             _registeredItems.Clear();
+            UpdateCounter();
         }
         
         #endregion
@@ -25,18 +27,30 @@ namespace UniGreenModules.UniNodeSystem.Runtime.Connections
 
         public void CleanUp()
         {
-            BroadcastAction(x => x.CleanUp());
+            for (var i = 0; i < count; i++)
+            {
+                var context = _registeredItems[i];
+                context.CleanUp();
+            }
         }
         
         public virtual bool Remove<TData>()
         {
-            BroadcastAction(x => x.Remove<TData>());
+            for (var i = 0; i < count; i++)
+            {
+                var context = _registeredItems[i];
+                context.Remove<TData>();
+            }
             return true;          
         }
 
         public void Publish<TData>(TData value)
         {
-            BroadcastAction(x => x.Publish(value));
+            for (var i = 0; i < count; i++)
+            {
+                var context = _registeredItems[i];
+                context.Publish(value);
+            }
         }
 
         #endregion
@@ -45,23 +59,21 @@ namespace UniGreenModules.UniNodeSystem.Runtime.Connections
         {
             if (!_registeredItems.Contains(connection))
                 _registeredItems.Add(connection);
+            UpdateCounter();
             return this;
         }
 
         public void Disconnect(IContextWriter connection)
         {
             _registeredItems.Remove(connection);
+            UpdateCounter();
         }
 
-        private void BroadcastAction(Action<IContextWriter> action)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void UpdateCounter()
         {
-            for (var i = 0; i < _registeredItems.Count; i++)
-            {
-                var context = _registeredItems[i];
-                action(context);
-            }
+            count = _registeredItems.Count;
         }
-        
     }
     
 }
