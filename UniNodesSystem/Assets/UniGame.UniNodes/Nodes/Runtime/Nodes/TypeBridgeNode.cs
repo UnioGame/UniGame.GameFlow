@@ -1,13 +1,10 @@
-﻿namespace UniGreenModules.UniFlowNodes
+﻿namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nodes.Runtime.Nodes
 {
     using System;
     using System.Collections.Generic;
     using UniCore.Runtime.Interfaces;
-    using UniCore.Runtime.Rx.Extensions;
     using UniNodeSystem.Nodes.Commands;
     using UniNodeSystem.Runtime;
-    using UniNodeSystem.Runtime.Interfaces;
-    using UniRx;
 
     [Serializable]
     public class TypeBridgeNode<TData> : UniNode
@@ -25,13 +22,6 @@
                 portCommand.InputPort, 
                 portCommand.OutputPort);
             nodeCommands.Add(contextPortAction);
-            
-            portCommand.InputPort.
-                Receive<TData>().
-                Do(x => OnDataUpdated(x,portCommand.InputPort, portCommand.OutputPort)).
-                Subscribe().
-                AddTo(LifeTime);
-            
         }
 
         /// <summary>
