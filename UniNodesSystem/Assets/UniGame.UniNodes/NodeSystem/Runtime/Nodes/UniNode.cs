@@ -1,19 +1,20 @@
-﻿namespace UniGreenModules.UniNodeSystem.Runtime
+﻿namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Nodes
 {
     using System;
     using System.Collections.Generic;
-    using Commands;
-    using Core;
-    using Extensions;
-    using Interfaces;
+    using Attributes;
     using UniCore.Runtime.DataFlow;
     using UniCore.Runtime.DataFlow.Interfaces;
     using UniCore.Runtime.Extension;
     using UniCore.Runtime.Interfaces;
     using UniCore.Runtime.ProfilerTools;
-    using UniStateMachine.Runtime;
+    using UniNodeSystem.Runtime.Commands;
+    using UniNodeSystem.Runtime.Core;
+    using UniNodeSystem.Runtime.Extensions;
+    using UniNodeSystem.Runtime.Interfaces;
     using UnityEngine;
 
+    [HideNode]
     [Serializable]
     public abstract class UniNode : UniBaseNode, IUniNode
     {       

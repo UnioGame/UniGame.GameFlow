@@ -7,6 +7,7 @@ namespace UniGreenModules.UniNodeSystem.Nodes
     using Runtime.Interfaces;
     using UniCore.Runtime.DataFlow;
     using UniCore.Runtime.DataFlow.Interfaces;
+    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Nodes;
 
     public abstract class UniGraphNode : UniNode
     {

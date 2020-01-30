@@ -1,10 +1,8 @@
-﻿namespace UniGreenModules.UniNodes.Runtime.Nodes
+﻿namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nodes.Runtime.Nodes
 {
     using System;
+    using NodeSystem.Runtime.Attributes;
     using UniCore.Runtime.Interfaces;
-    using UniFlowNodes;
-    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nodes.Runtime.Nodes;
-    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Attributes;
 
     [Serializable]
     [HideNode]

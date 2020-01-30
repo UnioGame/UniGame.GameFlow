@@ -2,10 +2,13 @@
 {
     using System;
     using System.Collections.Generic;
+    using NodeSystem.Runtime.Attributes;
+    using NodeSystem.Runtime.Nodes;
     using UniCore.Runtime.Interfaces;
     using UniNodeSystem.Nodes.Commands;
     using UniNodeSystem.Runtime;
 
+    [HideNode]
     [Serializable]
     public class TypeBridgeNode<TData> : UniNode
     {
