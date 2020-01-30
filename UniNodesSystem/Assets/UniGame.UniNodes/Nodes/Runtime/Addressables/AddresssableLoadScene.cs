@@ -5,6 +5,8 @@
     using UniGreenModules.UniCore.Runtime.Interfaces;
     using UniGreenModules.UniCore.Runtime.ProfilerTools;
     using UniGreenModules.UniCore.Runtime.Rx.Extensions;
+    using UniGreenModules.UniGame.AddressableTools.Runtime.Attributes;
+    using UniGreenModules.UniGame.AddressableTools.Runtime.Extensions;
     using UniGreenModules.UniNodeSystem.Nodes.Commands;
     using UniGreenModules.UniNodeSystem.Runtime;
     using UniGreenModules.UniNodeSystem.Runtime.Core;
@@ -13,8 +15,10 @@
     using UniGreenModules.UniRoutine.Runtime;
     using UniGreenModules.UniRoutine.Runtime.Extension;
     using UniRx;
+    using UniRx.Async;
     using UnityEngine;
     using UnityEngine.AddressableAssets;
+    using UnityEngine.ResourceManagement.ResourceProviders;
     using UnityEngine.SceneManagement;
 
     [CreateNodeMenu("Addressable/AddressableLoadScene")]
@@ -22,6 +26,7 @@
     {
         private const string portName = "data";
         
+        [ShowAssetReference]
         [SerializeField]
         private AssetReference sceneAsset;
 
@@ -39,7 +44,6 @@
         
         private IPortValue input;
         private IPortValue output;
-        private IPortValue progress;
         
         protected override void UpdateCommands(List<ILifeTimeCommand> nodeCommands)
         {
@@ -49,7 +53,6 @@
             portPairCommand.Initialize(this, portName, bindInOut);
             input = portPairCommand.InputPort;
             output = portPairCommand.OutputPort;
-            progress = this.UpdatePortValue(nameof(progress), PortIO.Output).value;
             
             nodeCommands.Add(portPairCommand);
             
@@ -59,21 +62,9 @@
         {
             input.PortValueChanged.
                 Where(x => input.HasValue).
-                Subscribe(x => 
-                    LoadScene().Execute().AddTo(LifeTime)).
+                Do(async x => await sceneAsset.LoadSceneTaskAsync()).
+                Subscribe().
                 AddTo(LifeTime);
-        }
-
-        private IEnumerator LoadScene()
-        {
-            GameLog.Log($"LOAD SCENE {sceneAsset.SubObjectName}");
-            
-            var sceneHandler = this.sceneAsset.LoadSceneAsync(loadSceneMode, activateOnLoad, priority);
-            while (sceneHandler.IsDone == false) {
-                yield return null;
-                progress.Publish(sceneHandler.PercentComplete);
-            }
-            
         }
         
     }
