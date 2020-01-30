@@ -2,9 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using Interfaces;
-    using UniCore.Runtime.ReorderableInspector;
     using UnityEngine;
 
     /// <summary> Base class for all node graphs </summary>
@@ -143,6 +141,7 @@
             if (nodes.RemoveAll(x => !x) > 0) {
                 Debug.LogError($"NULL node found at {name}");
             }
+      
         }   
 
         #endregion
