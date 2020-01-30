@@ -1,17 +1,13 @@
-﻿namespace UniGreenModules.UniUiNodes.Runtime
+﻿namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.UiNodes.Runtime
 {
     using System.Collections;
     using System.Collections.Generic;
-    using Interfaces;
-    using UiData;
+    using NodeSystem.Runtime.Nodes;
     using UniCore.Runtime.AsyncOperations;
-    using UniCore.Runtime.DataFlow;
     using UniCore.Runtime.DataFlow.Interfaces;
     using UniCore.Runtime.Interfaces;
-    using UniCore.Runtime.ObjectPool;
     using UniCore.Runtime.ObjectPool.Runtime;
     using UniCore.Runtime.ObjectPool.Runtime.Extensions;
-    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Nodes;
     using UniNodeSystem.Runtime;
     using UniNodeSystem.Runtime.Core;
     using UniNodeSystem.Runtime.Extensions;
@@ -20,9 +16,12 @@
     using UnityEngine;
     using UnityEngine.AddressableAssets;
     using UnityEngine.ResourceManagement.AsyncOperations;
+    using UniUiNodes.Runtime.Interfaces;
+    using UniUiNodes.Runtime.UiData;
     using UniUiSystem.Runtime.Interfaces;
     using Debug = UnityEngine.Debug;
 
+    [CreateNodeMenu("UI/UiView")]
     public class UniUiNode : UniNode
     {
         #region inspector
