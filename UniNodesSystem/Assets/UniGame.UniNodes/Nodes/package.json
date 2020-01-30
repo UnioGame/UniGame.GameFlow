@@ -4,7 +4,7 @@
   "displayName": "UniGame UniNode System Common Nodes",
   "description": "Common nodes",
   "unity": "2019.2",
-  "version": "1.2.14",
+  "version": "1.2.15",
   "keywords": [
     "nodes",
     "nodeeditor",
@@ -15,8 +15,8 @@
     "com.unigame.neuecc.unirx.async": "1.2.0",
     "com.unigame.unicore": "1.3.26",
     "com.unigame.contextdata": "1.2.14",
-    "com.unigame.uniroutine": "1.3.22",
-    "com.unigame.resourcesystem": "1.1.14",
-    "com.unigame.nodessystem": "1.0.4"
+    "com.unigame.uniroutine": "1.4.0",
+    "com.unigame.resourcesystem": "1.1.15",
+    "com.unigame.nodessystem": "1.0.5"
   }
 }
