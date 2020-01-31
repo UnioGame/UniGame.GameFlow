@@ -1,11 +1,16 @@
 {
   "name": "com.unigame.nodessystem",
-  "author": "Mefodei",
-  "displayName": "UniGame Game Nodes Package",
+  "author": "Mefodei (https://github.com/Mefodei)",
+  "displayName": "UniGame Nodes System Package",
   "description": "Nodes System for Unity. Include base nodes realisation",
   "unity": "2019.2",
-  "version": "1.1.0",
-  "keywords": [],
+  "version": "1.1.2",
+  "homepage": "https://github.com/Mefodei/UniGameFlow#readme",
+  "keywords": [
+    "nodes",
+    "graph",
+    "uinode"
+  ],
   "dependencies": {
     "com.unigame.neuecc.unirx": "7.1.1",
     "com.unigame.neuecc.unirx.async": "1.2.0",
@@ -13,6 +18,7 @@
     "com.unigame.addressablestools": "1.0.6",
     "com.unigame.contextdata": "1.2.14",
     "com.unigame.uniroutine": "1.4.0",
+    "com.unigame.uisystem": "0.1.15",
     "com.unity.addressables": "1.6.0"
   }
 }

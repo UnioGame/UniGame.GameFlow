@@ -2,7 +2,6 @@
     "name": "unigame.nodesystem.uninodes.runtime",
     "references": [
         "GUID:8e4577c9194c10845984cf27eb974fd1",
-        "GUID:0d24a03ae3e7f2f459f0a0cc9bc544fb",
         "GUID:d47fc5ef4ff8943449ade80dec65e4ca",
         "GUID:96fbbd3bddd8620468d52e65216e1e79",
         "GUID:9f8e6b2872ac2ca4683e584b9ba21f29",
@@ -19,5 +18,6 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": []
+    "versionDefines": [],
+    "noEngineReferences": false
 }
