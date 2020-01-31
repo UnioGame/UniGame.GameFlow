@@ -7,6 +7,8 @@ UniGame Node System for Unity
 ### Unity Package Installation
 
 Add to your project manifiest by path [%UnityProject%]/Packages/manifiest.json these lines:
+
+```json
 {
   "scopedRegistries": [
     {
@@ -25,5 +27,5 @@ Add to your project manifiest by path [%UnityProject%]/Packages/manifiest.json t
     }
   ],
 }
-
+```
 Open window Package Manager in Unity and install UniGame Nodes System Package
