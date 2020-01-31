@@ -48,7 +48,6 @@ ExportedObj/
 *.svd.meta
 *.pdb.meta
 /[Pp]ackages.meta
-/[Aa]ssets.meta
 /[Pp]rojectSettings.meta
 *.DotSettings.meta
 *.DotSettings.user.meta
