@@ -536,11 +536,17 @@
         {
             if (state.EventType == EventType.Ignore) return;
 
-            GUILayout.BeginArea(rectArea);
+            try {
+                GUILayout.BeginArea(rectArea);
 
-            DrawNodeEditorArea(nodeEditor, node, state);
+                DrawNodeEditorArea(nodeEditor, node, state);
             
-            DrawNodePorts(node,nodePos, state);
+                DrawNodePorts(node,nodePos, state);
+            }
+            catch (Exception e) {
+                GameLog.LogError(e);
+                GUIUtility.ExitGUI();
+            }
 
             GUILayout.EndArea();
         }

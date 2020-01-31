@@ -1,15 +1,12 @@
-﻿namespace UniGreenModules.UniNodeSystem.Nodes
+﻿namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Nodes
 {
     using System.Collections.Generic;
-    using Commands;
-    using Runtime;
-    using Runtime.Core;
-    using Runtime.Extensions;
-    using Runtime.Interfaces;
     using UniCore.Runtime.Interfaces;
-    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Nodes;
-    using UnityEngine;
+    using UniNodeSystem.Nodes.Commands;
+    using UniNodeSystem.Runtime.Core;
+    using UniNodeSystem.Runtime.Interfaces;
 
+    [CreateNodeMenu("Common/PortNode")]
     public class UniPortNode : UniNode, IUniPortNode
     {
                 
