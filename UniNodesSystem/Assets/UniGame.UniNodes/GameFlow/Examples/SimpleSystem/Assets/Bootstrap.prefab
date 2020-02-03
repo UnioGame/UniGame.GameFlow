@@ -631,6 +631,7 @@ MonoBehaviour:
       _connectionType: 0
       _dynamic: 1
   _graph: {fileID: 3947279238786959826}
+  bindInOut: 0
   contextAsset:
     m_AssetGUID: 7ac5f3a92dc42094b9fbb6a31ecd86be
     m_SubObjectName: 

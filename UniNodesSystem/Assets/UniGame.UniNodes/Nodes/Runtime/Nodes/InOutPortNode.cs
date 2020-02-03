@@ -2,17 +2,26 @@
 
 namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nodes.Runtime.Nodes
 {
+    using System;
     using System.Collections.Generic;
     using NodeSystem.Runtime.Attributes;
     using NodeSystem.Runtime.Nodes;
     using UniCore.Runtime.Interfaces;
     using UniNodeSystem.Nodes.Commands;
+    using UnityEngine;
 
     [HideNode]
     public class InOutPortNode : UniNode
     {
-        private const string defaultPortName = "data";
+        private string defaultPortName = "data";
+
+        #region inspector
         
+        [SerializeField]
+        private bool bindInOut = false;
+
+        #endregion
+
         public IPortPair PortPair { get; private set; }
 
         protected override void UpdateCommands(List<ILifeTimeCommand> nodeCommands)
@@ -20,7 +29,7 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nod
             base.UpdateCommands(nodeCommands);
 
             var portCommand = new ConnectedFormatedPairCommand();
-            portCommand.Initialize(this,defaultPortName,false);
+            portCommand.Initialize(this,defaultPortName,bindInOut);
             nodeCommands.Add(portCommand);
 
             PortPair = portCommand;
