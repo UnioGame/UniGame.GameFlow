@@ -120,7 +120,7 @@
         }
         
         public static List<TTarget> GetConnectedNodes<TTarget>(this INodePort port)
-            where TTarget :UniBaseNode
+            where TTarget :IUniNode
         {
             var items = ClassPool.Spawn<List<TTarget>>();
             

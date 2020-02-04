@@ -29,7 +29,7 @@
             OutputPort = ports.outputValue;
         }
         
-        public virtual void Execute(ILifeTime lifeTime) {}
+        public void Execute(ILifeTime lifeTime) {}
         
     }
 }
