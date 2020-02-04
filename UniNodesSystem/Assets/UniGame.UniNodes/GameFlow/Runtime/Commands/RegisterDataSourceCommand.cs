@@ -18,6 +18,9 @@ namespace UniGreenModules.UniGameSystems.Runtime.Commands
         private readonly UniTask<IContext> contextTask;
         private readonly AssetReference resource;
 
+        public Object asset;
+        public IAsyncContextDataSource dataSource;
+
         public RegisterDataSourceCommand(UniTask<IContext> contextTask,AssetReference resource)
         {
             this.contextTask = contextTask;
@@ -26,12 +29,15 @@ namespace UniGreenModules.UniGameSystems.Runtime.Commands
 
         public async void Execute(ILifeTime lifeTime)
         {
-            var asset = await resource.LoadAssetTaskAsync<ScriptableObject>() as IAsyncContextDataSource;
+            asset = await resource.LoadAssetTaskAsync<ScriptableObject>();
+            dataSource = asset as IAsyncContextDataSource;
             if (asset == null) {
                 GameLog.LogError($"NULL asset loaded from {resource}");
                 return;
             }
-            await asset.RegisterAsync(await contextTask);
+            
+            await dataSource.RegisterAsync(await contextTask);
+            
         }
     }
 }
