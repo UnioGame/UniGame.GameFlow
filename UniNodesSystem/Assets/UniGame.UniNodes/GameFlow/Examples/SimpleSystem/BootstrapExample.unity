@@ -361,16 +361,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1930435006}
     m_Modifications:
-    - target: {fileID: 991473993277028984, guid: 892ba2dd7c7ecdb4bbd63fa0a897edcb,
-        type: 3}
-      propertyPath: savedCommands.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 991473993277028984, guid: 892ba2dd7c7ecdb4bbd63fa0a897edcb,
-        type: 3}
-      propertyPath: position.y
-      value: -56
-      objectReference: {fileID: 0}
     - target: {fileID: 3173182001011437811, guid: 892ba2dd7c7ecdb4bbd63fa0a897edcb,
         type: 3}
       propertyPath: m_Name

@@ -140,12 +140,13 @@
         }
 
         /// <summary> Show right-click context menu for hovered port </summary>
-        void ShowPortContextMenu(NodePort hoveredPort)
+        void ShowPortContextMenu(INodePort hoveredPort)
         {
             var contextMenu = new GenericMenu();
-            contextMenu.AddItem(new GUIContent("Clear Connections"), false, () => hoveredPort.ClearConnections());
+            contextMenu.AddItem(new GUIContent("Clear Connections"), false, hoveredPort.ClearConnections);
+            
             contextMenu.DropDown(new Rect(Event.current.mousePosition, Vector2.zero));
-            //if (NodeEditorPreferences.GetSettings().autoSave) AssetDatabase.SaveAssets();
+            
         }
 
         /// <summary> Show right-click context menu for selected nodes </summary>
