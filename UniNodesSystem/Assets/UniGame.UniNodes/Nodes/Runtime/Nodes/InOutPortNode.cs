@@ -1,13 +1,11 @@
-﻿using UniGreenModules.UniNodeSystem.Runtime;
-
-namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nodes.Runtime.Nodes
+﻿namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nodes.Runtime.Nodes
 {
-    using System;
     using System.Collections.Generic;
     using NodeSystem.Runtime.Attributes;
     using NodeSystem.Runtime.Nodes;
     using UniCore.Runtime.Interfaces;
     using UniNodeSystem.Nodes.Commands;
+    using UniNodeSystem.Runtime.Interfaces;
     using UnityEngine;
 
     [HideNode]
@@ -20,6 +18,9 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nod
         [SerializeField]
         private bool bindInOut = false;
 
+        protected IPortValue inputPort;
+        protected IPortValue outputPort;
+        
         #endregion
 
         public IPortPair PortPair { get; private set; }
@@ -33,6 +34,8 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nod
             nodeCommands.Add(portCommand);
 
             PortPair = portCommand;
+            inputPort = portCommand.InputPort;
+            outputPort = portCommand.OutputPort;
         }
     }
 }
