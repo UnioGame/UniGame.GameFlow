@@ -144,7 +144,7 @@
         {
             var contextMenu = new GenericMenu();
             contextMenu.AddItem(new GUIContent("Clear Connections"), false, hoveredPort.ClearConnections);
-            
+            contextMenu.AddItem(new GUIContent("Show Content"), false, hoveredPort.ClearConnections);
             contextMenu.DropDown(new Rect(Event.current.mousePosition, Vector2.zero));
             
         }
