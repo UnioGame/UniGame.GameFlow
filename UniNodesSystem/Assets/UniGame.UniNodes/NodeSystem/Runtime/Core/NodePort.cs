@@ -4,6 +4,7 @@
     using System.Reflection;
     using UniCore.Runtime.Attributes;
     using UniCore.Runtime.ObjectPool.Runtime;
+    using UniCore.Runtime.ObjectPool.Runtime.Extensions;
     using UnityEngine;
 
     [Serializable]
@@ -249,18 +250,36 @@
             return result;
         }
 
-        public NodePort GetConnection(int i) {
+        public NodePort GetConnection(int i)
+        {
+            var connection = connections[i];
             //If the connection is broken for some reason, remove it.
-            if (connections[i].node == null || string.IsNullOrEmpty(connections[i].fieldName)) {
-                connections.RemoveAt(i);
+            if (connection.node == null || string.IsNullOrEmpty(connection.fieldName)) {
                 return null;
             }
-            var port = connections[i].node.GetPort(connections[i].fieldName);
-            if (port == null) {
-                connections.RemoveAt(i);
-                return null;
+            var port = connection.node.GetPort(connection.fieldName);
+            return port ?? null;
+        }
+
+        public void Validate()
+        {
+            var tempConnections = ClassPool.Spawn<List<PortConnection>>();
+            tempConnections.AddRange(connections);
+
+            for (var i = 0; i < tempConnections.Count; i++) {
+                var connection = tempConnections[i];
+                if (connection.node == null || 
+                    string.IsNullOrEmpty(connection.fieldName)) {
+                    connections.Remove(connection);
+                    continue;
+                }
+                var port = connection.node.GetPort(connection.fieldName);
+                if (port == null) {
+                    connections.Remove(connection);
+                }
             }
-            return port;
+            
+            tempConnections.DespawnCollection();
         }
 
         /// <summary> Get index of the connection connecting this and specified ports </summary>
@@ -280,9 +299,11 @@
 
         /// <summary> Disconnect this port from another port </summary>
         public void Disconnect(NodePort port) {
+            
             // Remove this ports connection to the other
             for (var i = connections.Count - 1; i >= 0; i--) {
-                if (connections[i].Port == port) {
+                var connection = connections[i];
+                if (connection.Port == port) {
                     connections.RemoveAt(i);
                 }
             }
@@ -296,7 +317,7 @@
             }
             // Trigger OnRemoveConnection
             node.OnRemoveConnection(this);
-            if (port != null) port.node.OnRemoveConnection(port);
+            port?.node.OnRemoveConnection(port);
         }
 
         /// <summary> Disconnect this port from another port </summary>
@@ -315,7 +336,7 @@
 
             // Trigger OnRemoveConnection
             node.OnRemoveConnection(this);
-            if (otherPort != null) otherPort.node.OnRemoveConnection(otherPort);
+            otherPort?.node.OnRemoveConnection(otherPort);
         }
 
         public void ClearConnections() {

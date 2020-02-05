@@ -71,7 +71,8 @@
             
             allNodes.ForEach( ApplyNodeConnections );
             
-            cancelationNodes.ForEach(x => x.PortValue.PortValueChanged.
+            cancelationNodes.ForEach(x => 
+                x.PortValue.PortValueChanged.
                                          Subscribe(unit => Exit()).
                                          AddTo(LifeTime));
             

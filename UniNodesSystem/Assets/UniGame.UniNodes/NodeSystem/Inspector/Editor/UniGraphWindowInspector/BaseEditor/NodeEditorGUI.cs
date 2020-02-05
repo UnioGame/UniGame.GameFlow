@@ -381,6 +381,9 @@
                 EditorDrawerUtils.DrawButton("Apply Prefab", () => Open(Save(ActiveGraph)),
                     GUILayout.Height(20), GUILayout.Width(200));
                 
+                EditorDrawerUtils.DrawButton("Refresh", Refresh,
+                    GUILayout.Height(20), GUILayout.Width(200));
+                
             }, GUILayout.Height(100));
         }
 

@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using Attributes;
     using UniCore.Runtime.DataFlow;
     using UniCore.Runtime.DataFlow.Interfaces;
@@ -199,15 +200,27 @@
         }
         
         private void OnDestroy() => Exit();
+
+        [Conditional("UNITY_EDITOR")]
+        private void LogMessage(string message)
+        {
+            GameLog.Log($"{graph.name}:{name}: {message}");
+        }
         
 #region inspector call
         
+        [Conditional("UNITY_EDITOR")]
         protected virtual void OnValidate()
         {
             if(Application.isPlaying == false)
                 Initialize();
+
+            foreach (var port in Ports) {
+                port.Validate();
+            }
         }
         
 #endregion
+
     }
 }

@@ -141,6 +141,13 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
             Save(ActiveGraph);
         }
 
+        public void Refresh()
+        {
+            if(ActiveGraph == null) return;
+            ActiveGraph.Release();
+            ActiveGraph.Initialize();
+        }
+
         public void OnInspectorUpdate()
         {
             if (!Application.isPlaying)

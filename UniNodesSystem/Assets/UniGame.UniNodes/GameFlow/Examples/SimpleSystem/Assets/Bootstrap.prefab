@@ -82,10 +82,7 @@ MonoBehaviour:
       _connectionType: 0
       _dynamic: 1
   _graph: {fileID: 3947279238786959826}
-  savedCommands: []
   isGameReady: 0
-  references:
-    version: 1
 --- !u!1 &577861545461902430
 GameObject:
   m_ObjectHideFlags: 0
@@ -162,11 +159,8 @@ MonoBehaviour:
       _connectionType: 0
       _dynamic: 1
   _graph: {fileID: 3947279238786959826}
-  savedCommands: []
   isReady: 0
   waitForServiceReady: 1
-  references:
-    version: 1
 --- !u!1 &1934318856891791380
 GameObject:
   m_ObjectHideFlags: 0
@@ -243,11 +237,8 @@ MonoBehaviour:
       _connectionType: 0
       _dynamic: 1
   _graph: {fileID: 3947279238786959826}
-  savedCommands: []
   isReady: 0
   waitForServiceReady: 1
-  references:
-    version: 1
 --- !u!1 &3173182001011437811
 GameObject:
   m_ObjectHideFlags: 0
@@ -315,7 +306,6 @@ MonoBehaviour:
       _connectionType: 0
       _dynamic: 1
   _graph: {fileID: 0}
-  savedCommands: []
   _uniqueId: 45
   nodes:
   - {fileID: 6208779352982914149}
@@ -325,8 +315,6 @@ MonoBehaviour:
   - {fileID: 7014688245974289662}
   - {fileID: 2059202639}
   - {fileID: 991473993277028984}
-  references:
-    version: 1
 --- !u!1 &5183761810912439007
 GameObject:
   m_ObjectHideFlags: 0
@@ -403,11 +391,8 @@ MonoBehaviour:
       _connectionType: 0
       _dynamic: 1
   _graph: {fileID: 3947279238786959826}
-  savedCommands: []
   isReady: 0
   waitForServiceReady: 1
-  references:
-    version: 1
 --- !u!1 &5857939353232338133
 GameObject:
   m_ObjectHideFlags: 0
@@ -481,11 +466,8 @@ MonoBehaviour:
       _connectionType: 0
       _dynamic: 1
   _graph: {fileID: 3947279238786959826}
-  savedCommands: []
   direction: 0
   bindInOut: 1
-  references:
-    version: 1
 --- !u!1 &6098447404668877688
 GameObject:
   m_ObjectHideFlags: 0
@@ -562,11 +544,8 @@ MonoBehaviour:
       _connectionType: 0
       _dynamic: 1
   _graph: {fileID: 3947279238786959826}
-  savedCommands: []
   isReady: 0
   waitForServiceReady: 1
-  references:
-    version: 1
 --- !u!1 &6496434285127464261
 GameObject:
   m_ObjectHideFlags: 0
@@ -612,7 +591,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _id: 41
   width: 318
-  position: {x: -184, y: -40}
+  position: {x: -184, y: -56}
   ports:
     keys:
     - '[out]data'
@@ -652,7 +631,6 @@ MonoBehaviour:
       _connectionType: 0
       _dynamic: 1
   _graph: {fileID: 3947279238786959826}
-  savedCommands: []
   bindInOut: 0
   contextAsset:
     m_AssetGUID: 7ac5f3a92dc42094b9fbb6a31ecd86be
@@ -660,5 +638,3 @@ MonoBehaviour:
   contextDataSources:
     m_AssetGUID: afd7adc1bde95bd4a859bcbbff8e1f1b
     m_SubObjectName: 
-  references:
-    version: 1
