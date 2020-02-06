@@ -1,5 +1,6 @@
 ﻿namespace UniGreenModules.UniGameSystems.Examples.SimpleSystem.Nodes
 {
+    using System;
     using Runtime.Context;
     using UniCore.Runtime.Attributes;
     using UniCore.Runtime.Interfaces;
@@ -12,13 +13,23 @@
     [CreateNodeMenuAttribute("Examples/DemoSystem/GameStatusNode")]
     public class GameStatusNode : ContextNode
     {
+        private IDisposable disposableSystems;
+        
         [ReadOnlyValue]
         [SerializeField]
         public bool isGameReady = false;
 
-        protected override void OnDataUpdated(IContext context, IContext source, IContext target)
+        protected override void OnExecute()
         {
-            context.Receive<SimpleSystem1>().
+            Source.Do(OnContextUpdate).
+                Subscribe().
+                AddTo(LifeTime);
+        }
+
+        private void OnContextUpdate(IContext context)
+        {
+            disposableSystems.Cancel();
+            disposableSystems = context.Receive<SimpleSystem1>().
                 CombineLatest(
                     context.Receive<SimpleSystem2>(), 
                     context.Receive<SimpleSystem3>(), 
@@ -31,7 +42,7 @@
                 Do(x => isGameReady = x.IsGameReady.Value).
                 Do(x => GameLog.Log("Game Status: Ready")).
                 Do(x => x.SetGameStatus(true)).
-                Do(x => base.OnDataUpdated(context,source, target)).
+                Do(x => Finish()).
                 Subscribe().
                 AddTo(LifeTime);
         }

@@ -40,10 +40,12 @@
             string inputPortName, 
             string outputPortName)
         {
-
             var inputPort = node.GetPort(inputPortName);
             var outputPort = node.GetPort(outputPortName);
 
+            if (inputPort == outputPort)
+                return false;
+            
             return DrawPortPair(node,inputPort, outputPort);
             
         }
@@ -77,8 +79,7 @@
                 var inputPortName = portName.GetFormatedPortName(PortIO.Input);
 
                 //Try Draw port pairs
-                var result = string.Equals(inputPortName,outputPortName) ? false :
-                    DrawPortPair(node, inputPortName, outputPortName);
+                var result = DrawPortPair(node, inputPortName, outputPortName);
                 
                 var portOutput = node.GetPort(outputPortName);
                 cache[portName] = portOutput;

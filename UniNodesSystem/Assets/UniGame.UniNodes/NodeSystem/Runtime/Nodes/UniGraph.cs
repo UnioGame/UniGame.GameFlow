@@ -12,9 +12,11 @@
     using UniCore.Runtime.ObjectPool.Runtime;
     using UniCore.Runtime.ObjectPool.Runtime.Extensions;
     using UniCore.Runtime.Rx.Extensions;
+    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Attributes;
     using UniRx;
     using UnityEngine;
 
+    [HideNode]
     public class UniGraph : NodeGraph, IUniGraph
     {
         

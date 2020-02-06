@@ -6,6 +6,6 @@ namespace UniGreenModules.UniGameSystems.Examples.SimpleSystem.Context
     using UnityEngine;
     
     [CreateAssetMenu(menuName = "UniGame/GameSystem/Examples/DemoGameContext")]
-    public class DemoGameContextAsset : ContextTypeValueAsset<DemoGameContext,IDemoGameContext>{}
+    public class DemoGameStatusData : ContextTypeValueAsset<DemoGameData,IDemoGameContext>{}
     
 }

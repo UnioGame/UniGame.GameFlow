@@ -8,7 +8,7 @@
     using UnityEngine;
 
     [Serializable]
-    public class DemoGameContext : 
+    public class DemoGameData : 
         IDemoGameContext, 
         IAsyncContextDataSource
     {

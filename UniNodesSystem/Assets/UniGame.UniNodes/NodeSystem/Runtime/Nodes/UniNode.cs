@@ -206,8 +206,16 @@
         {
             GameLog.Log($"{graph.name}:{name}: {message}");
         }
-        
-#region inspector call
+
+        /// <summary>
+        /// finish node life time
+        /// </summary>
+        private void OnDisable()
+        {
+            Exit();
+        }
+
+        #region inspector call
         
         [Conditional("UNITY_EDITOR")]
         protected virtual void OnValidate()

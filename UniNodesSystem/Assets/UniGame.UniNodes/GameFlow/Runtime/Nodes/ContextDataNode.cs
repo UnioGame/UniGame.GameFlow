@@ -13,7 +13,7 @@
     using UniRx.Async;
     using UnityEngine;
 
-    [CreateNodeMenu("GameSystem/DataContext")]
+    [CreateNodeMenu("GameSystem/Context Source")]
     public class ContextDataNode : InOutPortNode
     {
         [Header("Context")]

@@ -5,18 +5,24 @@
     using UniCore.Runtime.ProfilerTools;
     using UniCore.Runtime.Rx.Extensions;
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nodes.Runtime.Nodes;
+    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Attributes;
     using UniGameSystem.Runtime.Interfaces;
     using UniRx;
     using UnityEngine;
+
+    [HideNode]
+    public class GameServiceNode<TService> :
+        GameServiceNode<TService, TService> where TService : IGameService, new() { }
 
     /// <summary>
     /// Base game service binder between Unity world and regular classes
     /// </summary>
     /// <typeparam name="TService"></typeparam>
-    [CreateNodeMenu("GameSystem/Service Node")]
-    public class GameServiceNode<TService> : 
+    [HideNode]
+    public class GameServiceNode<TService,TServiceApi> : 
         ContextNode
-        where TService : IGameService, new()
+        where TServiceApi : IGameService
+        where TService : TServiceApi, new()
     {
         private TService service = new TService();
 
@@ -30,30 +36,19 @@
         #endregion
         
         public bool waitForServiceReady = true;
-        
-        protected override void OnDataUpdated(IContext data, IContext source, IContext target)
-        {
-            GameLog.LogMessage($"{graph.name}:{name}: OnDataUpdated with {data.GetType().Name}");
-            
-            //bind service with context and node lifetime
-            var context = service.Bind(data, LifeTime);
 
-            service.IsReady.
-                Subscribe(x => this.isReady = x).
+        protected override void OnExecute()
+        {
+            GameLog.LogMessage($"{graph.name}:{name}: Service {typeof(TService).Name}");
+
+            Source.Do(x => service.Bind(x,LifeTime)).
+                CombineLatest(service.IsReady, (ctx, ready) => (ctx,ready)).
+                Where(x => x.ready || !waitForServiceReady).
+                Do(x => x.ctx.Publish<TServiceApi>(service)).
+                Subscribe().
                 AddTo(LifeTime);
-            
-            //is await options is active?
-            if (waitForServiceReady) {
-                service.IsReady.
-                    Where(x => x).
-                    Do(x => base.OnDataUpdated(context, source, target)).
-                    Subscribe().
-                    AddTo(LifeTime);
-            }
-            else {
-                base.OnDataUpdated(context, source, target);
-            }
 
         }
+
     }
 }

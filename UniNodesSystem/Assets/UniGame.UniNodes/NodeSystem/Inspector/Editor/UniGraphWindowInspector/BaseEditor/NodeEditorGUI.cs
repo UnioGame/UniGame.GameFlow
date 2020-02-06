@@ -548,7 +548,7 @@
                 DrawNodePorts(node,nodePos, state);
             }
             catch (Exception e) {
-                GameLog.LogError(e);
+                GameLog.LogWarning(e.Message);
                 GUIUtility.ExitGUI();
             }
 

@@ -1,11 +1,11 @@
-﻿using UniGreenModules.UniCore.Runtime.DataFlow;
-
-namespace UniGreenModules.UniNodeSystem.Nodes
+﻿namespace UniGreenModules.UniNodeSystem.Nodes
 {
     using UniCore.Runtime.DataFlow.Interfaces;
     using UniCore.Runtime.ObjectPool;
     using UniCore.Runtime.ObjectPool.Runtime.Extensions;
+    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Attributes;
 
+    [HideNode]
     public class SyncGraphNode : UniGraphNode
     {
         public UniGraph graphAsset;

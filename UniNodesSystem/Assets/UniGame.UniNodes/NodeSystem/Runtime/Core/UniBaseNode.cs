@@ -44,7 +44,10 @@
         [SerializeField] private NodePortDictionary ports = new NodePortDictionary();
       
         /// <summary> Parent <see cref="NodeGraph"/> </summary>
-        [SerializeField] [Tooltip("Parent Graph")] [HideInInspector] [FormerlySerializedAs("graph")]
+        [SerializeField] 
+        [Tooltip("Parent Graph")] 
+        [HideInInspector] 
+        [FormerlySerializedAs("graph")]
         private NodeGraph _graph;
         
         public ulong Id

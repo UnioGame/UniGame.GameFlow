@@ -9,26 +9,28 @@
     using UniRx;
 
     [Serializable]
-    public class PortDataBridgeActionCommand<TTarget> : ILifeTimeCommand
+    public class PortDataBridgeActionCommand<TData> : ILifeTimeCommand
     {
         private readonly IContext inputPort;
-        private readonly IContext outputPort;
-        private readonly Action<TTarget,IContext,IContext> action;
+        private readonly bool distinctSame;
 
-        public PortDataBridgeActionCommand(Action<TTarget,IContext,IContext> action,IContext input,IContext output)
+        public IObservable<TData> Source { get; protected set; }
+
+        public PortDataBridgeActionCommand(IContext input,bool distinctSame = true)
         {
-            this.action = action;
             this.inputPort = input;
-            this.outputPort = output;
+            this.distinctSame = distinctSame;
+            
+            var valueObservable = inputPort.Receive<TData>();
+
+            valueObservable = distinctSame ? 
+                valueObservable.DistinctUntilChanged() : 
+                valueObservable;
+            
+            Source = valueObservable;
         }
-        
-        public void Execute(ILifeTime lifeTime)
-        {
-            inputPort.Receive<TTarget>().
-                Do(x => action(x,inputPort,outputPort)).
-                Subscribe().
-                AddTo(lifeTime);
-        }
-        
+
+
+        public void Execute(ILifeTime lifeTime) { }
     }
 }
