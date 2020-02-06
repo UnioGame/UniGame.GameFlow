@@ -8,6 +8,7 @@ namespace UniGreenModules.UniGameSystems.Runtime.Nodes
     using UniCore.Runtime.ProfilerTools;
     using UniGame.AddressableTools.Runtime.Attributes;
     using UniGame.SerializableContext.Runtime.Addressables;
+    using UniNodeSystem.Runtime.Core;
     using UniRx.Async;
     using UnityEngine;
 

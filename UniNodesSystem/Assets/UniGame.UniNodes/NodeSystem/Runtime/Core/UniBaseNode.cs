@@ -36,6 +36,10 @@
         [HideInInspector]
         [SerializeField]
         public int width = 220;
+
+        [HideInInspector]
+        [SerializeField] 
+        public string nodeName;
         
         /// <summary> Position on the <see cref="NodeGraph"/> </summary>
         [SerializeField] public Vector2 position;
@@ -75,7 +79,7 @@
 
         public virtual string GetName()
         {
-            return gameObject.name;
+            return nodeName;
         }
         
         public IReadOnlyDictionary<ulong, NodePort> PortsMap
@@ -355,19 +359,6 @@
         }
 
         [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-        public class CreateNodeMenuAttribute : Attribute
-        {
-            public string menuName;
-
-            /// <summary> Manually supply node class with a context menu path </summary>
-            /// <param name="menuName"> Path to this node in the context menu. Null or empty hides it. </param>
-            public CreateNodeMenuAttribute(string menuName)
-            {
-                this.menuName = menuName;
-            }
-        }
-
-        [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
         public class NodeTint : Attribute
         {
             public Color color;
@@ -412,7 +403,7 @@
         }
 
         [Serializable]
-        private class NodePortDictionary : Dictionary<string, NodePort>, ISerializationCallbackReceiver
+        public class NodePortDictionary : Dictionary<string, NodePort>, ISerializationCallbackReceiver
         {
             [SerializeField] private List<string> keys = new List<string>();
             [SerializeField] private List<NodePort> values = new List<NodePort>();

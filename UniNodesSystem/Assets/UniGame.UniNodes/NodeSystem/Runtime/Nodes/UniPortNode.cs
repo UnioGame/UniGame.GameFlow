@@ -6,7 +6,7 @@
     using UniNodeSystem.Runtime.Core;
     using UniNodeSystem.Runtime.Interfaces;
 
-    [CreateNodeMenu("Common/PortNode")]
+    [CreateNodeMenu("Common/PortNode","GraphPort")]
     public class UniPortNode : UniNode, IUniPortNode
     {
                 

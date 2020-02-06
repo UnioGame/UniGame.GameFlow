@@ -4,6 +4,7 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Exa
 {
     using Models;
     using UniCore.Runtime.Rx.Extensions;
+    using UniNodeSystem.Runtime.Core;
     using UniRx;
 
     [CreateNodeMenu("Examples/DemoGame/SetGameState")]

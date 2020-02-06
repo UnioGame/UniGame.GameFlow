@@ -6,7 +6,7 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Exa
     using UniGreenModules.UniGame.SerializableContext.Runtime.Abstract;
 
     [CreateAssetMenu(fileName = nameof(DemoGameStatusSource),menuName = "UniGame/NodeSystem/Examples/DemoGame/DemoGameStatusSource")]
-    public class DemoGameStatusSource : ContextTypeValueAsset<DemoGameStatusData>
+    public class DemoGameStatusSource : TypeValueSource<DemoGameStatusData>
     {
         
     }

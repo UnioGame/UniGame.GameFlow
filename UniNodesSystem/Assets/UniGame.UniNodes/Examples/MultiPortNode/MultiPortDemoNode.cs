@@ -8,7 +8,7 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Exa
     using UniCore.Runtime.Interfaces;
     using UniNodeSystem.Runtime.Extensions;
 
-    [UniBaseNode.CreateNodeMenuAttribute("Examples/MultiPortDemo/MultiPortNode")]
+    [CreateNodeMenu("Examples/MultiPortDemo/MultiPortNode")]
     public class MultiPortDemoNode : UniNode
     {
         protected override void UpdateCommands(List<ILifeTimeCommand> nodeCommands)

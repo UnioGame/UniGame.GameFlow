@@ -21,7 +21,7 @@
     using UniUiSystem.Runtime.Interfaces;
     using Debug = UnityEngine.Debug;
 
-    [CreateNodeMenu("UI/UiView")]
+    [CreateNodeMenu("UI/UiView", "UiView")]
     public class UniUiNode : UniNode
     {
         #region inspector

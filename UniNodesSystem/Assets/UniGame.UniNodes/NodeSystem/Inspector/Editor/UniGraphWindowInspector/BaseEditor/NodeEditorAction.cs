@@ -466,7 +466,7 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
         {
             var node = ActiveGraph.AddNode(type);
             node.position = position;
-            node.name = nodeName;
+            node.nodeName = nodeName;
             node.transform.parent = ActiveGraph.transform;
 
             if (NodeEditorPreferences.GetSettings().autoSave)

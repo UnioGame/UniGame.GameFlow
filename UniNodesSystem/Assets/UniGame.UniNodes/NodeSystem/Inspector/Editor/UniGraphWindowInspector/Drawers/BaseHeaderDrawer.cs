@@ -13,6 +13,12 @@
         {
             var target = node;
             var title = target.GetName();
+            if (string.IsNullOrEmpty(title)) {
+                CreateNodeMenuAttribute attrib;
+                var type = node.GetType();
+                title = NodeEditorUtilities.GetAttrib(type, out attrib) ? attrib.nodeName : type.Name;
+                node.nodeName = title;
+            }
             var renaming = NodeEditor.Renaming;
 
             if (NodeEditor.Renaming != 0 && Selection.Contains(target))

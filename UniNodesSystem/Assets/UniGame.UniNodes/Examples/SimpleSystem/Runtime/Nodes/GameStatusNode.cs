@@ -7,10 +7,11 @@
     using UniCore.Runtime.ProfilerTools;
     using UniCore.Runtime.Rx.Extensions;
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nodes.Runtime.Nodes;
+    using UniNodeSystem.Runtime.Core;
     using UniRx;
     using UnityEngine;
 
-    [CreateNodeMenuAttribute("Examples/DemoSystem/GameStatusNode")]
+    [CreateNodeMenu("Examples/DemoSystem/GameStatusNode")]
     public class GameStatusNode : ContextNode
     {
         private IDisposable disposableSystems;

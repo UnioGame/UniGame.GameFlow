@@ -96,7 +96,7 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
 
         public void Rename(string newName)
         {
-            target.name = newName;
+            target.nodeName = newName;
             AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(target));
         }
         

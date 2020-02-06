@@ -244,6 +244,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _id: 4
   width: 220
+  nodeName: 
   position: {x: -56, y: 72}
   ports:
     keys:

@@ -46,17 +46,19 @@
 
         public virtual UniBaseNode AddNode(string nodeName,Type type)
         {
-            var childNode = new GameObject();
-            childNode.name             = type.Name;
-            childNode.transform.parent = transform;
+//            var childNode = new GameObject();
+//            childNode.name             = type.Name;
+//            childNode.transform.parent = transform;
 
-            var node = childNode.AddComponent(type) as UniBaseNode;
-            if (!node) {
-                DestroyImmediate(childNode);
+            var nodeAsset = gameObject.AddComponent(type);
+            var node =  nodeAsset as UniBaseNode;
+            if (node == null) {
+                DestroyImmediate(nodeAsset);
+                return null;
             }
-
-            nodes.Add(node);
+           
             node.graph = this;
+            nodes.Add(node);
             return node;
         }
 

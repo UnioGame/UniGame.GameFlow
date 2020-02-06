@@ -3,6 +3,7 @@
     using Models;
     using UniCore.Runtime.Rx.Extensions;
     using UniNodes.Nodes.Runtime.Nodes;
+    using UniNodeSystem.Runtime.Core;
     using UniRx;
 
     [CreateNodeMenu("Examples/DemoGame/DemoGameSetGameReady")]

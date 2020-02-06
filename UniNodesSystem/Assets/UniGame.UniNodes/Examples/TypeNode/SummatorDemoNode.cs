@@ -4,6 +4,7 @@ namespace UniGreenModules.UniGameSystems.Examples.ServiceNode
 {
     using UniCore.Runtime.Rx.Extensions;
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nodes.Runtime.Nodes;
+    using UniNodeSystem.Runtime.Core;
     using UniRx;
 
     [CreateNodeMenu("Examples/DemoSystem/SummatorNode")]

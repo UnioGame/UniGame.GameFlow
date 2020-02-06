@@ -33,7 +33,7 @@
         /// <summary> Returns context node menu path. Null or empty strings for hidden nodes. </summary>
         public virtual string GetNodeMenuName(Type type) {
             //Check if type has the CreateNodeMenuAttribute
-            UniBaseNode.CreateNodeMenuAttribute attrib;
+            CreateNodeMenuAttribute attrib;
             return NodeEditorUtilities.GetAttrib(type, out attrib) ? 
                 attrib.menuName : 
                 ObjectNames.NicifyVariableName(type.ToString().Replace('.', '/'));
@@ -67,7 +67,7 @@
             var sourceGraph = PrefabUtility.GetCorrespondingObjectFromSource(target);
             var sourceNode = PrefabUtility.GetCorrespondingObjectFromSource(node);
 
-            var removedAsset = sourceNode != null ? (Object)sourceNode.gameObject : node.gameObject;
+            var removedAsset = sourceNode != null ? (Object)sourceNode : node;
             var targetGraph = sourceGraph ? sourceGraph : target;
 
             var targetNode = sourceNode ? sourceNode : node;
