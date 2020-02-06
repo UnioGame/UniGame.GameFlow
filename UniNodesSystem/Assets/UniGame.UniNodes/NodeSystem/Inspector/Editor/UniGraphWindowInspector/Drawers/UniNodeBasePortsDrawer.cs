@@ -77,7 +77,8 @@
                 var inputPortName = portName.GetFormatedPortName(PortIO.Input);
 
                 //Try Draw port pairs
-                var result = DrawPortPair(node, inputPortName, outputPortName);
+                var result = string.Equals(inputPortName,outputPortName) ? false :
+                    DrawPortPair(node, inputPortName, outputPortName);
                 
                 var portOutput = node.GetPort(outputPortName);
                 cache[portName] = portOutput;
