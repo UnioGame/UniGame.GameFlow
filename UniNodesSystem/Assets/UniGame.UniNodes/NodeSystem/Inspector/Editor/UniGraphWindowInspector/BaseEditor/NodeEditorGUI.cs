@@ -695,8 +695,9 @@
                 var content = new GUIContent();
                 content.text = type.PrettyName();
                 if (hoveredPort.IsOutput) {
-                    var obj = hoveredPort.node.GetValue(hoveredPort);
-                    content.text += " = " + (obj != null ? obj.ToString() : "null");
+                    //TODO DRAW ACTUAL VALUE
+                    //var obj = hoveredPort.node.GetValue(hoveredPort);
+                    //content.text += " = " + (obj != null ? obj.ToString() : "null");
                 }
 
                 var size = NodeEditorResources.styles.tooltip.CalcSize(content);

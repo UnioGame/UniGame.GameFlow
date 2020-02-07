@@ -125,9 +125,7 @@
         public void Release() => Exit();
 
         #region Node Ports operations
-
-        public override object GetValue(NodePort port) => GetPortValue(port);
-
+        
         public IPortValue GetPortValue(INodePort port) => GetPortValue(port.fieldName);
 
         public IPortValue GetPortValue(string portName)

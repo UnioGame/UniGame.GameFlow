@@ -1,6 +1,7 @@
 ﻿namespace UniGreenModules.UniNodeSystem.Runtime
 {
     using System;
+    using System.Collections.Generic;
     using Connections;
     using Interfaces;
     using UniContextData.Runtime.Entities;
@@ -22,13 +23,14 @@
         /// </summary>
         public string name = string.Empty;
 
+        
         #endregion
 
         #region private property
 
-        [NonSerialized] private IContext context;
+        [NonSerialized] private EntityContext context;
 
-        [NonSerialized] private ITypeDataBrodcaster broadcaster;
+        [NonSerialized] private TypeDataBrodcaster broadcaster;
 
         [NonSerialized] private bool initialized = false;
         
@@ -53,8 +55,15 @@
             Initialize();
         }
 
-        public void ConnectToPort(string portName)
+        public UniPortValue(List<string> typeFilters) : this()
         {
+            valueTypeFilters = typeFilters;
+        }
+        
+        public void Initialize(string portName, ILifeTime lifeTime)
+        {
+            lifeTime.AddCleanUpAction(Release);
+            
             name = portName;
             Initialize();
         }
@@ -63,7 +72,24 @@
         {
             Release();
         }
-
+        
+        #region Value Filter
+        
+        /// <summary>
+        /// is target type value valid for this port
+        /// </summary>
+        public bool ValidatePortValueType(Type targetType)
+        {
+            if (portValueTypes.Count == 0) return true;
+            for (var i = 0; i < portValueTypes.Count; i++) {
+                var type = portValueTypes[i];
+                if (type == targetType) return true;
+            }
+            return false;
+        }
+        
+        #endregion
+        
         #region type data container
 
         public bool Remove<TData>()
@@ -142,6 +168,8 @@
                 return;
             context    = new EntityContext();
             broadcaster = new TypeDataBrodcaster();
+            //setup port target types
+            UpdateValueFilter(valueTypeFilters);
             //mark as initialized
             initialized = true;
         }

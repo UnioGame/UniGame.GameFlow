@@ -164,7 +164,7 @@
             if (portValue == null)
             {
                 portValue = new UniPortValue();
-                portValue.ConnectToPort(port.fieldName);
+                portValue.Initialize(port.fieldName);
                 node.AddPortValue(portValue);
             }
 
@@ -184,11 +184,11 @@
             if (portValue == null)
             {
                 portValue = new UniPortValue();
-                portValue.ConnectToPort(portName);
+                portValue.Initialize(portName);
                 node.AddPortValue(portValue);
             }
 
-            portValue.ConnectToPort(port.fieldName);
+            portValue.Initialize(port.fieldName);
             
             return (portValue,port);
         

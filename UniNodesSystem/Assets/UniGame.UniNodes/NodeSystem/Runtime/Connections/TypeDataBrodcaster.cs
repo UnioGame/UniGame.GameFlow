@@ -55,6 +55,7 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nod
 
         #endregion
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public IConnector<IContextWriter> Connect(IContextWriter connection)
         {
             if (!_registeredItems.Contains(connection))

@@ -7,10 +7,12 @@ namespace UniGreenModules.UniNodeSystem.Nodes.DebugTools
     using Commands;
     using Runtime.Core;
     using Runtime.Extensions;
+    using Runtime.Interfaces;
     using UniCore.Runtime.Interfaces;
     using UniCore.Runtime.ProfilerTools;
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Nodes;
     using UniNodes.Runtime.Commands;
+    using UnityEngine;
 
     [Serializable]
     [CreateNodeMenu("Debug/Log","Log")]
@@ -19,7 +21,7 @@ namespace UniGreenModules.UniNodeSystem.Nodes.DebugTools
         private const string logPortName = "log";
         
         public LogMode mode = LogMode.Log;
-        
+
         public string message = "LogNode";
         
         protected override void OnExecute()

@@ -74,9 +74,9 @@
             var tints = new Dictionary<Type, Color>();
             for (var i = 0; i < NodeTypes.Count; i++)
             {
-                var attribs = NodeTypes[i].GetCustomAttributes(typeof(UniBaseNode.NodeTint), true);
+                var attribs = NodeTypes[i].GetCustomAttributes(typeof(NodeTint), true);
                 if (attribs == null || attribs.Length == 0) continue;
-                var attrib = attribs[0] as UniBaseNode.NodeTint;
+                var attrib = attribs[0] as NodeTint;
                 tints.Add(NodeTypes[i], attrib.color);
             }
 
@@ -88,9 +88,9 @@
             var widths = new Dictionary<Type, int>();
             for (var i = 0; i < NodeTypes.Count; i++)
             {
-                var attribs = NodeTypes[i].GetCustomAttributes(typeof(UniBaseNode.NodeWidth), true);
+                var attribs = NodeTypes[i].GetCustomAttributes(typeof(NodeWidth), true);
                 if (attribs == null || attribs.Length == 0) continue;
-                var attrib = attribs[0] as UniBaseNode.NodeWidth;
+                var attrib = attribs[0] as NodeWidth;
                 widths.Add(NodeTypes[i], attrib.width);
             }
 

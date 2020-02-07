@@ -12,7 +12,5 @@ namespace UniGreenModules.UniNodeSystem.Runtime.Interfaces
 
         IObservable<Unit> PortValueChanged { get; }
 
-        void ConnectToPort(string portName);
-
     }
 }

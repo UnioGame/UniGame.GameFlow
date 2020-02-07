@@ -138,6 +138,12 @@
         
         private void ApplyNodeConnections(IUniNode node)
         {
+            foreach (var input in node.Inputs) {
+                input.Initialize(node.LifeTime);
+            }
+            foreach (var output in node.Outputs) {
+                output.Initialize(node.LifeTime);
+            }
             
             var values = node.PortValues;
 

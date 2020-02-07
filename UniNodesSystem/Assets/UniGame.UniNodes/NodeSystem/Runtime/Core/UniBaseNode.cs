@@ -31,7 +31,10 @@
     public abstract class UniBaseNode : MonoBehaviour, INode
     {
 
-        [HideInInspector] [ReadOnlyValue] [SerializeField] private ulong _id;
+        [HideInInspector] 
+        [ReadOnlyValue] 
+        [SerializeField] 
+        private ulong _id;
 
         [HideInInspector]
         [SerializeField]
@@ -299,34 +302,26 @@
 
         #region Inputs/Outputs
 
-        /// <summary> Return input value for a specified port. Returns fallback value if no ports are connected </summary>
-        /// <param name="fieldName">Field name of requested input port</param>
-        /// <param name="fallback">If no ports are connected, this value will be returned</param>
-        public T GetInputValue<T>(string fieldName, T fallback = default(T))
-        {
-            var port = GetPort(fieldName);
-            if (port != null && port.IsConnected) return port.GetInputValue<T>();
-            else return fallback;
-        }
-
-        /// <summary> Return all input values for a specified port. Returns fallback value if no ports are connected </summary>
-        /// <param name="fieldName">Field name of requested input port</param>
-        /// <param name="fallback">If no ports are connected, this value will be returned</param>
-        public T[] GetInputValues<T>(string fieldName, params T[] fallback)
-        {
-            var port = GetPort(fieldName);
-            if (port != null && port.IsConnected) return port.GetInputValues<T>();
-            else return fallback;
-        }
-
-        /// <summary> Returns a value based on requested port output. Should be overridden in all derived nodes with outputs. </summary>
-        /// <param name="port">The requested port.</param>
-        public virtual object GetValue(NodePort port)
-        {
-            Debug.LogWarning("No GetValue(NodePort port) override defined for " + GetType());
-            return null;
-        }
-
+        // /// <summary> Return input value for a specified port. Returns fallback value if no ports are connected </summary>
+        // /// <param name="fieldName">Field name of requested input port</param>
+        // /// <param name="fallback">If no ports are connected, this value will be returned</param>
+        // public T GetInputValue<T>(string fieldName, T fallback = default(T))
+        // {
+        //     var port = GetPort(fieldName);
+        //     if (port != null && port.IsConnected) return port.GetInputValue<T>();
+        //     else return fallback;
+        // }
+        //
+        // /// <summary> Return all input values for a specified port. Returns fallback value if no ports are connected </summary>
+        // /// <param name="fieldName">Field name of requested input port</param>
+        // /// <param name="fallback">If no ports are connected, this value will be returned</param>
+        // public T[] GetInputValues<T>(string fieldName, params T[] fallback)
+        // {
+        //     var port = GetPort(fieldName);
+        //     if (port != null && port.IsConnected) return port.GetInputValues<T>();
+        //     else return fallback;
+        // }
+        
         #endregion
 
         /// <summary> Called after a connection between two <see cref="NodePort"/>s is created </summary>
@@ -356,80 +351,6 @@
             }
 
             return JsonUtility.ToJson(this).GetHashCode();
-        }
-
-        [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-        public class NodeTint : Attribute
-        {
-            public Color color;
-
-            /// <summary> Specify a color for this node type </summary>
-            /// <param name="r"> Red [0.0f .. 1.0f] </param>
-            /// <param name="g"> Green [0.0f .. 1.0f] </param>
-            /// <param name="b"> Blue [0.0f .. 1.0f] </param>
-            public NodeTint(float r, float g, float b)
-            {
-                color = new Color(r, g, b);
-            }
-
-            /// <summary> Specify a color for this node type </summary>
-            /// <param name="hex"> HEX color value </param>
-            public NodeTint(string hex)
-            {
-                ColorUtility.TryParseHtmlString(hex, out color);
-            }
-
-            /// <summary> Specify a color for this node type </summary>
-            /// <param name="r"> Red [0 .. 255] </param>
-            /// <param name="g"> Green [0 .. 255] </param>
-            /// <param name="b"> Blue [0 .. 255] </param>
-            public NodeTint(byte r, byte g, byte b)
-            {
-                color = new Color32(r, g, b, byte.MaxValue);
-            }
-        }
-
-        [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-        public class NodeWidth : Attribute
-        {
-            public int width;
-
-            /// <summary> Specify a width for this node type </summary>
-            /// <param name="width"> Width </param>
-            public NodeWidth(int width)
-            {
-                this.width = width;
-            }
-        }
-
-        [Serializable]
-        public class NodePortDictionary : Dictionary<string, NodePort>, ISerializationCallbackReceiver
-        {
-            [SerializeField] private List<string> keys = new List<string>();
-            [SerializeField] private List<NodePort> values = new List<NodePort>();
-
-            public void OnBeforeSerialize()
-            {
-                keys.Clear();
-                values.Clear();
-                foreach (var pair in this)
-                {
-                    keys.Add(pair.Key);
-                    values.Add(pair.Value);
-                }
-            }
-
-            public void OnAfterDeserialize()
-            {
-                this.Clear();
-
-                if (keys.Count != values.Count)
-                    throw new System.Exception("there are " + keys.Count + " keys and " + values.Count +
-                                               " values after deserialization. Make sure that both key and value types are serializable.");
-
-                for (var i = 0; i < keys.Count; i++)
-                    this.Add(keys[i], values[i]);
-            }
         }
     }
 }
