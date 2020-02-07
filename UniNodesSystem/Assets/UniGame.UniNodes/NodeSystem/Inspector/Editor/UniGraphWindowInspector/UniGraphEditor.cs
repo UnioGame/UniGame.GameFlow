@@ -16,17 +16,16 @@
 		{
 			base.OnEnable();
 			graph = target as UniGraph;
-			CleanUp();
+			Validate();
 		}
 		
-		private void CleanUp()
+		private void Validate()
 		{
 			var changed = false;
 			var nodes = graph.nodes;
-			foreach (Transform child in graph.transform) 
+			foreach (var node in graph.GetComponents<UniBaseNode>()) 
 			{
-				var node = child.gameObject.GetComponent<UniBaseNode>();
-				if (nodes.Contains(node) != false) {
+				if (nodes.Contains(node) != false || graph == node) {
 					continue;
 				}
 				RemoveNode(node);
