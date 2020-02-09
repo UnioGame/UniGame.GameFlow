@@ -53,13 +53,13 @@
                 var rect = new Rect();
 
                 // If property is an input, display a regular property field and put a port handle on the left side
-                if (port.direction == PortIO.Input)
+                if (port.Direction == PortIO.Input)
                 {
                     // Get data from [Input] attribute
                     var showBacking = ShowBackingValue.Unconnected;
                     NodeInputAttribute nodeInputAttribute;
                     var instancePortList = false;
-                    if (NodeEditorUtilities.GetAttrib(port.node.GetType(), property.name, out nodeInputAttribute))
+                    if (NodeEditorUtilities.GetAttrib(port.Node.GetType(), property.name, out nodeInputAttribute))
                     {
                         instancePortList = nodeInputAttribute.instancePortList;
                         showBacking = nodeInputAttribute.backingValue;
@@ -71,7 +71,7 @@
                         var connectionType = nodeInputAttribute != null
                             ? nodeInputAttribute.connectionType
                             : ConnectionType.Multiple;
-                        InstancePortList(property.name, type, property.serializedObject, port.direction,
+                        InstancePortList(property.name, type, property.serializedObject, port.Direction,
                             connectionType);
                         return;
                     }
@@ -102,13 +102,13 @@
                     rect.position = rect.position - new Vector2(16, 0);
                     // If property is an output, display a text label and put a port handle on the right side
                 }
-                else if (port.direction == PortIO.Output)
+                else if (port.Direction == PortIO.Output)
                 {
                     // Get data from [Output] attribute
                     var showBacking = ShowBackingValue.Unconnected;
                     NodeOutputAttribute nodeOutputAttribute;
                     var instancePortList = false;
-                    if (NodeEditorUtilities.GetAttrib(port.node.GetType(), property.name, out nodeOutputAttribute))
+                    if (NodeEditorUtilities.GetAttrib(port.Node.GetType(), property.name, out nodeOutputAttribute))
                     {
                         instancePortList = nodeOutputAttribute.instancePortList;
                         showBacking = nodeOutputAttribute.backingValue;
@@ -120,7 +120,7 @@
                         var connectionType = nodeOutputAttribute != null
                             ? nodeOutputAttribute.connectionType
                             : ConnectionType.Multiple;
-                        InstancePortList(property.name, type, property.serializedObject, port.direction,
+                        InstancePortList(property.name, type, property.serializedObject, port.Direction,
                             connectionType);
                         return;
                     }
@@ -155,7 +155,7 @@
 
                 Color backgroundColor = new Color32(90, 97, 105, 255);
                 Color tint;
-                if (NodeEditorWindow.nodeTint.TryGetValue(port.node.GetType(), out tint)) backgroundColor *= tint;
+                if (NodeEditorWindow.nodeTint.TryGetValue(port.Node.GetType(), out tint)) backgroundColor *= tint;
                 var col = NodeEditorWindow.Current.graphEditor.GetTypeColor(port.ValueType);
                 DrawPortHandle(rect, backgroundColor, col);
 
@@ -203,11 +203,11 @@
 
             Vector2 position = Vector3.zero;
             portStyle.Label = portStyle.Label != null ? portStyle.Label
-                : string.IsNullOrEmpty(portStyle.Name) ? new GUIContent(ObjectNames.NicifyVariableName(port.fieldName))
+                : string.IsNullOrEmpty(portStyle.Name) ? new GUIContent(ObjectNames.NicifyVariableName(port.FieldName))
                 : new GUIContent(portStyle.Name);
 
             // If property is an input, display a regular property field and put a port handle on the left side
-            if (port.direction == PortIO.Input)
+            if (port.Direction == PortIO.Input)
             {
                 // Display a label
                 EditorGUILayout.LabelField(portStyle.Label, portStyle.Options);
@@ -216,7 +216,7 @@
                 position = rect.position - new Vector2(16, 0);
             }
             // If property is an output, display a text label and put a port handle on the right side
-            else if (port.direction == PortIO.Output)
+            else if (port.Direction == PortIO.Output)
             {
                 // Display a label
                 EditorGUILayout.LabelField(portStyle.Label, NodeEditorResources.OutputPort, portStyle.Options);
@@ -240,8 +240,8 @@
 
         public static NodeGuiLayoutStyle GetDefaultPortStyle(NodePort port)
         {
-            var name = port == null ? string.Empty : port.fieldName;
-            var label = port == null ? new GUIContent(string.Empty) : new GUIContent(port.fieldName);
+            var name = port == null ? string.Empty : port.FieldName;
+            var label = port == null ? new GUIContent(string.Empty) : new GUIContent(port.FieldName);
 
             var style = new NodeGuiLayoutStyle()
             {
@@ -269,7 +269,7 @@
             if (port == null)
                 return backgroundColor;
 
-            if (NodeEditorWindow.nodeTint.TryGetValue(port.node.GetType(), out var tint)) backgroundColor *= tint;
+            if (NodeEditorWindow.nodeTint.TryGetValue(port.Node.GetType(), out var tint)) backgroundColor *= tint;
             return backgroundColor;
         }
 
@@ -303,13 +303,13 @@
             var rect = new Rect();
 
             // If property is an input, display a regular property field and put a port handle on the left side
-            if (port.direction == PortIO.Input)
+            if (port.Direction == PortIO.Input)
             {
                 rect = GUILayoutUtility.GetLastRect();
                 rect.position = rect.position - new Vector2(16, 0);
                 // If property is an output, display a text label and put a port handle on the right side
             }
-            else if (port.direction == PortIO.Output)
+            else if (port.Direction == PortIO.Output)
             {
                 rect = GUILayoutUtility.GetLastRect();
                 rect.position = rect.position + new Vector2(rect.width, 0);
@@ -319,7 +319,7 @@
 
             Color backgroundColor = new Color32(90, 97, 105, 255);
             Color tint;
-            if (NodeEditorWindow.nodeTint.TryGetValue(port.node.GetType(), out tint)) backgroundColor *= tint;
+            if (NodeEditorWindow.nodeTint.TryGetValue(port.Node.GetType(), out tint)) backgroundColor *= tint;
             var col = NodeEditorWindow.Current.graphEditor.GetTypeColor(port.ValueType);
             DrawPortHandle(rect, backgroundColor, col);
 
@@ -385,8 +385,8 @@
                     if (split != null && split.Length == 2) return split[0] == fieldName;
                     else return false;
                 };
-            var instancePorts = node.InstancePorts.Where(x => isMatchingInstancePort(x.fieldName))
-                .OrderBy(x => x.fieldName).ToList();
+            var instancePorts = node.InstancePorts.Where(x => isMatchingInstancePort(x.FieldName))
+                .OrderBy(x => x.FieldName).ToList();
 
             ReorderableList list = null;
             Dictionary<string, ReorderableList> rlc;
@@ -429,7 +429,7 @@
                         var itemData = arrayData.GetArrayElementAtIndex(index);
                         EditorGUI.PropertyField(rect, itemData);
                     }
-                    else EditorGUI.LabelField(rect, port.fieldName);
+                    else EditorGUI.LabelField(rect, port.FieldName);
 
                     var pos = rect.position + (port.IsOutput ? new Vector2(rect.width + 6, 0) : new Vector2(-36, 0));
                     PortField(pos, port);
@@ -535,7 +535,7 @@
                     }
 
                     // Remove the last instance port, to avoid messing up the indexing
-                    node.RemoveInstancePort(instancePorts[instancePorts.Count() - 1].fieldName);
+                    node.RemoveInstancePort(instancePorts[instancePorts.Count() - 1].FieldName);
                     serializedObject.Update();
                     EditorUtility.SetDirty(node);
                     if (hasArrayData)

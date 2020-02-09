@@ -251,7 +251,7 @@
             if (port.IsStatic) throw new ArgumentException("cannot remove static port");
             
             port.ClearConnections();
-            ports.Remove(port.fieldName);
+            ports.Remove(port.FieldName);
         }
 
         /// <summary> Removes all instance ports from the node </summary>
@@ -273,7 +273,7 @@
         public NodePort GetOutputPort(string fieldName)
         {
             var port = GetPort(fieldName);
-            if (port == null || port.direction != PortIO.Output) return null;
+            if (port == null || port.Direction != PortIO.Output) return null;
             else return port;
         }
 
@@ -281,7 +281,7 @@
         public NodePort GetInputPort(string fieldName)
         {
             var port = GetPort(fieldName);
-            if (port == null || port.direction != PortIO.Input) return null;
+            if (port == null || port.Direction != PortIO.Input) return null;
             else return port;
         }
 

@@ -70,9 +70,7 @@
             LifeTime.AddCleanUpAction(() => ActiveGraphs.Remove(this));
 
             allNodes.ForEach( InitializeNode );
-            
-            allNodes.ForEach( ApplyNodeConnections );
-            
+
             cancelationNodes.ForEach(x => 
                 x.PortValue.PortValueChanged.
                                          Subscribe(unit => Exit()).
@@ -131,58 +129,11 @@
 
         private void InitializeNode(IUniNode node)
         {
-            LifeTime.AddCleanUpAction(() => node.Exit());
+            LifeTime.AddCleanUpAction(node.Exit);
                 
             node.Execute();
         }
         
-        private void ApplyNodeConnections(IUniNode node)
-        {
-            foreach (var input in node.Inputs) {
-                input.Initialize(node.LifeTime);
-            }
-            foreach (var output in node.Outputs) {
-                output.Initialize(node.LifeTime);
-            }
-            
-            var values = node.PortValues;
-
-            for (var j = 0; j < values.Count; j++) {
-                var value = values[j];
-                var port  = node.GetPort(value.ItemName);
-
-                //take only input ports
-                if (port.direction == PortIO.Output)
-                    continue;
-
-                var connection = ClassPool.Spawn<PortValueConnection>();
-                connection.Initialize(value);
-
-                BindWithOutputs(connection, port);
-                
-                LifeTime.AddCleanUpAction(() => connection.Despawn());
-            }
-            
-        }
-        
-        
-        private void BindWithOutputs(IContextWriter writer, INodePort port)
-        {
-            var portConnections = port.GetConnections();
-
-            for (var i = 0; i < portConnections.Count; i++) {
-                var connection    = portConnections[i];
-                var connectedNode = connection.node;
-
-                if (!(connectedNode is IUniNode node))
-                    continue;
-
-                //register connection with target input 
-                var connectedValue = node.GetPortValue(connection.fieldName);
-                connectedValue.Connect(writer);
-
-            }
-        }
 
         private void OnDisable() => Dispose();
         

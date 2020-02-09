@@ -25,7 +25,7 @@
             List<NodePort> typePortCache;
             if (portDataCache.TryGetValue(nodeType, out typePortCache)) {
                 for (var i = 0; i < typePortCache.Count; i++) {
-                    staticPorts.Add(typePortCache[i].fieldName, portDataCache[nodeType][i]);
+                    staticPorts.Add(typePortCache[i].FieldName, portDataCache[nodeType][i]);
                 }
             }
 
@@ -34,21 +34,21 @@
             foreach (var port in ports.Values.ToList()) {
                 // If port still exists, check it it has been changed
                 NodePort staticPort;
-                if (staticPorts.TryGetValue(port.fieldName, out staticPort)) {
+                if (staticPorts.TryGetValue(port.FieldName, out staticPort)) {
                     // If port exists but with wrong settings, remove it. Re-add it later.
-                    if (port.connectionType != staticPort.connectionType || port.IsDynamic || port.direction != staticPort.direction) {
-                        ports.Remove(port.fieldName);
+                    if (port.ConnectionType != staticPort.ConnectionType || port.IsDynamic || port.Direction != staticPort.Direction) {
+                        ports.Remove(port.FieldName);
                     }
                     else port.ValueType = staticPort.ValueType;
                 }
                 // If port doesn't exist anymore, remove it
-                else if (port.IsStatic) ports.Remove(port.fieldName);
+                else if (port.IsStatic) ports.Remove(port.FieldName);
             }
 
             // Add missing ports
             foreach (var staticPort in staticPorts.Values) {
-                if (!ports.ContainsKey(staticPort.fieldName)) {
-                    ports.Add(staticPort.fieldName, new NodePort(staticPort, node));
+                if (!ports.ContainsKey(staticPort.FieldName)) {
+                    ports.Add(staticPort.FieldName, new NodePort(staticPort, node));
                 }
             }
         }

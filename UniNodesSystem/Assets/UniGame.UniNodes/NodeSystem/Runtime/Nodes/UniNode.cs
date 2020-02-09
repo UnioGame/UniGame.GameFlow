@@ -69,6 +69,11 @@
             if (isInitialized)
                 return;
 
+            //initialize ports
+            foreach (var nodePort in Ports) {
+                nodePort.Initialize(LifeTime);
+            }
+            
             isInitialized = true;
             
             //custom node initialization
@@ -126,7 +131,7 @@
 
         #region Node Ports operations
         
-        public IPortValue GetPortValue(INodePort port) => GetPortValue(port.fieldName);
+        public IPortValue GetPortValue(INodePort port) => GetPortValue(port.FieldName);
 
         public IPortValue GetPortValue(string portName)
         {

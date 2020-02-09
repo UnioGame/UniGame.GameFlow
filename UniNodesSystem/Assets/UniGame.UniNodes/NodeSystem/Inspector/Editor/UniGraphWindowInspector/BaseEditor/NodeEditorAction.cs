@@ -239,7 +239,7 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
                                 hoveredPort.VerifyConnections();
                                 if (hoveredPort.IsConnected)
                                 {
-                                    var node = hoveredPort.node;
+                                    var node = hoveredPort.Node;
                                     var output = hoveredPort.Connection;
                                     var outputConnectionIndex = output.GetConnectionIndex(hoveredPort);
                                     draggedOutputReroutes = output.GetReroutePoints(outputConnectionIndex);
@@ -305,7 +305,7 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
                             //If connection is valid, save it
                             if (draggedOutputTarget != null)
                             {
-                                var node = draggedOutputTarget.node;
+                                var node = draggedOutputTarget.Node;
                                 if (ActiveGraph.nodes.Count != 0) draggedOutput.Connect(draggedOutputTarget);
 
                                 // ConnectionIndex can be -1 if the connection is removed instantly after creation
@@ -547,19 +547,19 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
                     {
                         for (var c = 0; c < port.ConnectionCount; c++)
                         {
-                            var inputPort = port.direction == PortIO.Input ? port : port.GetConnection(c);
-                            var outputPort = port.direction == PortIO.Output
+                            var inputPort = port.Direction == PortIO.Input ? port : port.GetConnection(c);
+                            var outputPort = port.Direction == PortIO.Output
                                 ? port
                                 : port.GetConnection(c);
 
                             UniBaseNode newNodeIn, newNodeOut;
-                            if (substitutes.TryGetValue(inputPort.node, out newNodeIn) &&
-                                substitutes.TryGetValue(outputPort.node, out newNodeOut))
+                            if (substitutes.TryGetValue(inputPort.Node, out newNodeIn) &&
+                                substitutes.TryGetValue(outputPort.Node, out newNodeOut))
                             {
                                 newNodeIn.UpdateStaticPorts();
                                 newNodeOut.UpdateStaticPorts();
-                                inputPort = newNodeIn.GetInputPort(inputPort.fieldName);
-                                outputPort = newNodeOut.GetOutputPort(outputPort.fieldName);
+                                inputPort = newNodeIn.GetInputPort(inputPort.FieldName);
+                                outputPort = newNodeOut.GetOutputPort(outputPort.FieldName);
                             }
 
                             if (!inputPort.IsConnectedTo(outputPort)) inputPort.Connect(outputPort);

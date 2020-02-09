@@ -12,18 +12,18 @@
         public virtual NodeGuiLayoutStyle Select(NodePort port)
         {
             var portStyle = NodeEditorGUILayout.GetDefaultPortStyle(port);
-            var uniNode = port.node as UniNode;
+            var uniNode = port.Node as UniNode;
             
             if (!uniNode) return portStyle;
 
-            var portValue = uniNode.GetPortValue(port.fieldName);
+            var portValue = uniNode.GetPortValue(port.FieldName);
             var hasData = portValue != null && portValue.HasValue;
 
             if (port.IsDynamic)
             {
-                portStyle.Name = port.fieldName;
+                portStyle.Name = port.FieldName;
                 portStyle.Background = Color.red;
-                portStyle.Color = port.direction == PortIO.Input ? 
+                portStyle.Color = port.Direction == PortIO.Input ? 
                     hasData ? new Color(128, 128, 0) : Color.green :
                     hasData ? new Color(128, 128, 0) : Color.blue;
             }

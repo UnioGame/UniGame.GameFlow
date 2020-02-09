@@ -13,8 +13,8 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
 
             public NodePortReference(NodePort nodePort)
             {
-                _node = nodePort.node;
-                _name = nodePort.fieldName;
+                _node = nodePort.Node;
+                _name = nodePort.FieldName;
             }
 
             public NodePort GetNodePort()

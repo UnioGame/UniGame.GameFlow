@@ -512,7 +512,7 @@
             }
 
             if (state.EventType == EventType.Repaint) {
-                _portConnectionPoints = _portConnectionPoints.Where(x => x.Key.node != node)
+                _portConnectionPoints = _portConnectionPoints.Where(x => x.Key.Node != node)
                     .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
             }
 

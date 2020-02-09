@@ -107,7 +107,7 @@
             
             foreach (var connection in connections)
             {
-                if(!(connection.node is TTarget node))
+                if(!(connection.Node is TTarget node))
                     continue;
                 
                 items.Add(connection);
@@ -128,7 +128,7 @@
             
             foreach (var connection in connections)
             {
-                if(!(connection.node is TTarget node))
+                if(!(connection.Node is TTarget node))
                     continue;
                 items.Add(node);
             }
@@ -145,7 +145,7 @@
             {
                 return null;
             }
-            if (!(port.node is TValue item))
+            if (!(port.Node is TValue item))
             {
                 return null;
             }
@@ -164,7 +164,7 @@
             if (portValue == null)
             {
                 portValue = new UniPortValue();
-                portValue.Initialize(port.fieldName);
+                portValue.Initialize(port.FieldName);
                 node.AddPortValue(portValue);
             }
 
@@ -188,7 +188,7 @@
                 node.AddPortValue(portValue);
             }
 
-            portValue.Initialize(port.fieldName);
+            portValue.Initialize(port.FieldName);
             
             return (portValue,port);
         
@@ -197,7 +197,7 @@
         public static bool IsPortRemoved(this IUniNode node,INodePort port)
         {
             if (port.IsStatic) return false;
-            var value = node.GetPortValue(port.fieldName);
+            var value = node.GetPortValue(port.FieldName);
             return value == null;
         }
         
@@ -228,7 +228,7 @@
 
             if (nodePort != null && nodePort.IsDynamic)
             {      
-                if (nodePort.direction != direction)
+                if (nodePort.Direction != direction)
                 {
                     node.RemoveInstancePort(portName);
                     nodePort = null;

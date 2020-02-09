@@ -12,21 +12,26 @@ namespace UniGreenModules.UniNodeSystem.Runtime.Core
         int ConnectionCount { get; }
 
         /// <summary> Return the first non-null connection </summary>
-        NodePort Connection { get; }
+        INodePort Connection { get; }
 
-        PortIO direction { get; }
+        PortIO Direction { get; }
         
-        ConnectionType connectionType { get; }
+        ConnectionType ConnectionType { get; }
 
         /// <summary> Is this port connected to anytihng? </summary>
         bool IsConnected { get; }
         bool IsInput { get; }
         bool IsOutput { get; }
-        string fieldName { get; }
-        UniBaseNode node { get; set; }
+        
+        string FieldName { get; }
+
+        IReadOnlyList<Type> ValueTypes { get; }
+
+        UniBaseNode Node { get; set; }
+        
         bool IsDynamic { get; }
+        
         bool IsStatic { get; }
-        Type ValueType { get; }
 
         ulong UpdateId();
 
@@ -37,9 +42,9 @@ namespace UniGreenModules.UniNodeSystem.Runtime.Core
         /// <param name="port">The <see cref="NodePort"/> to connect to</param>
         void Connect(NodePort port);
 
-        List<NodePort> GetConnections();
+        List<INodePort> GetConnections();
         
-        NodePort GetConnection(int i);
+        INodePort GetConnection(int i);
 
         /// <summary> Get index of the connection connecting this and specified ports </summary>
         int GetConnectionIndex(NodePort port);

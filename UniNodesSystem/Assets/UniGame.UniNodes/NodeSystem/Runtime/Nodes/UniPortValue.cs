@@ -1,12 +1,8 @@
 ﻿namespace UniGreenModules.UniNodeSystem.Runtime
 {
     using System;
-    using System.Collections.Generic;
-    using Connections;
     using Interfaces;
-    using UniContextData.Runtime.Entities;
     using UniCore.Runtime.Common;
-    using UniCore.Runtime.DataFlow;
     using UniCore.Runtime.DataFlow.Interfaces;
     using UniCore.Runtime.Interfaces;
     using UniCore.Runtime.ObjectPool.Runtime.Interfaces;
@@ -28,7 +24,7 @@
 
         #region private property
 
-        [NonSerialized] private EntityContext context;
+        [NonSerialized] private TypeData context;
 
         [NonSerialized] private TypeDataBrodcaster broadcaster;
 
@@ -46,25 +42,23 @@
 
         public IObservable<Unit> PortValueChanged => portValueChanged;
 
-        public ILifeTime LifeTime => context.LifeTime;
-        
         #endregion
 
+        #region constructor
+        
         public UniPortValue()
         {
             Initialize();
         }
 
-        public UniPortValue(List<string> typeFilters) : this()
-        {
-            valueTypeFilters = typeFilters;
-        }
+        #endregion
         
         public void Initialize(string portName, ILifeTime lifeTime)
         {
             lifeTime.AddCleanUpAction(Release);
             
             name = portName;
+            
             Initialize();
         }
 
@@ -72,23 +66,6 @@
         {
             Release();
         }
-        
-        #region Value Filter
-        
-        /// <summary>
-        /// is target type value valid for this port
-        /// </summary>
-        public bool ValidatePortValueType(Type targetType)
-        {
-            if (portValueTypes.Count == 0) return true;
-            for (var i = 0; i < portValueTypes.Count; i++) {
-                var type = portValueTypes[i];
-                if (type == targetType) return true;
-            }
-            return false;
-        }
-        
-        #endregion
         
         #region type data container
 
@@ -166,10 +143,9 @@
         {
             if (initialized)
                 return;
-            context    = new EntityContext();
+            
+            context    = new TypeData();
             broadcaster = new TypeDataBrodcaster();
-            //setup port target types
-            UpdateValueFilter(valueTypeFilters);
             //mark as initialized
             initialized = true;
         }

@@ -27,10 +27,10 @@ namespace UniGreenModules.UniNodeSystem.Nodes
             
             //create node port values by target graph
             foreach (var input in sourceGraphPrefab.Inputs) {
-                this.UpdatePortValue(input.fieldName, input.direction);
+                this.UpdatePortValue(input.FieldName, input.Direction);
             }
             foreach (var output in sourceGraphPrefab.Outputs) {
-                this.UpdatePortValue(output.fieldName, output.direction);
+                this.UpdatePortValue(output.FieldName, output.Direction);
             }
         }
 
@@ -49,7 +49,7 @@ namespace UniGreenModules.UniNodeSystem.Nodes
                 var portName = port.ItemName;
                 var originPort = GetPort(portName);
                 var targetPort = graphPrefab.GetPortValue(portName);
-                ConnectToGraphPort(port,targetPort, originPort.direction);
+                ConnectToGraphPort(port,targetPort, originPort.Direction);
             }
             
             LifeTime.AddCleanUpAction(() => graphPrefab?.Exit());
