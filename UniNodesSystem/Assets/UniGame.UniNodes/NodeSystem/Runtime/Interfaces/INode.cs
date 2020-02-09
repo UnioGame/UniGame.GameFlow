@@ -2,10 +2,13 @@ namespace UniGreenModules.UniNodeSystem.Runtime.Interfaces
 {
     using System.Collections.Generic;
     using Core;
+    using UniCore.Runtime.Interfaces;
 
-    public interface INode : IMutableNode
+    public interface INode : IMutableNode , INamedItem
     {
         ulong Id { get; }
+
+        IReadOnlyList<NodePort> Ports { get; }
 
         /// <summary> Iterate over all outputs on this node. </summary>
         IEnumerable<NodePort> Outputs { get; }

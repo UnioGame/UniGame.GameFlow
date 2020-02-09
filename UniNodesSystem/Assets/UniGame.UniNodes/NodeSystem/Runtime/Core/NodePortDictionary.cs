@@ -10,6 +10,8 @@
         [SerializeField] private List<string>   keys   = new List<string>();
         [SerializeField] private List<NodePort> values = new List<NodePort>();
 
+        public IReadOnlyList<NodePort> Ports => values;
+        
         public void OnBeforeSerialize()
         {
             keys.Clear();

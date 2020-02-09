@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using Core;
     using Interfaces;
-    using UniCore.Runtime.ObjectPool;
     using UniCore.Runtime.ObjectPool.Runtime;
     using UniCore.Runtime.ObjectPool.Runtime.Extensions;
     using UniCore.Runtime.Rx.Extensions;
@@ -41,7 +40,7 @@
 
             
         public static (IPortValue inputValue, IPortValue outputValue) 
-            CreatePortPair(this IUniNode node, string outputPortName, bool connectInOut = false)
+            CreatePortPair(this INode node, string outputPortName, bool connectInOut = false)
         {
             var inputName = outputPortName.GetFormatedPortName(PortIO.Input);
             return node.CreatePortPair(inputName, outputPortName, connectInOut);
@@ -83,13 +82,13 @@
 #endregion
         
         public static (IPortValue inputValue, IPortValue outputValue) 
-            CreatePortPair(this IUniNode node,string inputPort, string outputPort, bool connectInOut = false)
+            CreatePortPair(this INode node,string inputPortName, string outputPortName, bool connectInOut = false)
         {
-            var outputPortPair = node.UpdatePortValue(outputPort, PortIO.Output);
-            var inputPortPair  = node.UpdatePortValue(inputPort, PortIO.Input);
+            var outputPort = node.UpdatePortValue(outputPortName, PortIO.Output);
+            var inputPort  = node.UpdatePortValue(inputPortName, PortIO.Input);
                 
-            var inputValue  = inputPortPair.value;
-            var outputValue = outputPortPair.value;
+            var inputValue  = inputPort;
+            var outputValue = outputPort;
             
             if(connectInOut)
                 inputValue.Connect(outputValue);
@@ -154,50 +153,10 @@
         }
 
         
-        public static (IPortValue , INodePort) UpdatePortValue<TValue>(this IUniNode node, 
-            PortIO direction = PortIO.Output)
-        {
-            var type = typeof(TValue);
-            var port = node.UpdatePort(type.Name, direction);
-            var portValue = node.GetPortValue(port);
-        
-            if (portValue == null)
-            {
-                portValue = new UniPortValue();
-                portValue.Initialize(port.FieldName);
-                node.AddPortValue(portValue);
-            }
-
-            return (portValue,port);
-        
-        }
-        
-        public static (IPortValue value, INodePort port) UpdatePortValue(
-            this IUniNode node, 
-            string portName, 
-            PortIO direction = PortIO.Output)
-        {
-        
-            var port = node.UpdatePort(portName, direction);
-            var portValue = node.GetPortValue(port);
-        
-            if (portValue == null)
-            {
-                portValue = new UniPortValue();
-                portValue.Initialize(portName);
-                node.AddPortValue(portValue);
-            }
-
-            portValue.Initialize(port.FieldName);
-            
-            return (portValue,port);
-        
-        }
-        
         public static bool IsPortRemoved(this IUniNode node,INodePort port)
         {
             if (port.IsStatic) return false;
-            var value = node.GetPortValue(port.FieldName);
+            var value = node.GetPort(port.FieldName);
             return value == null;
         }
         
@@ -208,7 +167,8 @@
             bool oneShot = false)
         {
             //subscribe to port value observable
-            portValue.Receive<TValue>().Finally(() => {
+            portValue.Receive<TValue>().
+                Finally(() => {
                     //if node stoped or 
                     if (!oneShot || !node.IsActive) return;
                     //resubscribe to port values
@@ -218,10 +178,11 @@
                 AddTo(node.LifeTime);     //stop all subscriptions when node deactivated
         }
 
-        public static NodePort UpdatePort(
-            this IUniNode node,
+        public static IPortValue UpdatePortValue(
+            this INode node,
             string portName,
-            PortIO direction = PortIO.Output)
+            PortIO direction = PortIO.Output,
+            ConnectionType connectionType = ConnectionType.Multiple)
         {
         
             var nodePort = node.GetPort(portName);
@@ -241,8 +202,8 @@
                 var portType = typeof(UniPortValue);
 
                 nodePort = direction == PortIO.Output
-                    ? node.AddInstanceOutput(portType, ConnectionType.Multiple, portName)
-                    : node.AddInstanceInput(portType, ConnectionType.Multiple, portName);
+                    ? node.AddInstanceOutput(portType, connectionType, portName)
+                    : node.AddInstanceInput(portType, connectionType, portName);
             }
 
             return nodePort;

@@ -1,7 +1,7 @@
 namespace UniGreenModules.UniUiNodes.Runtime.Interfaces
 {
-    using UniNodeSystem.Runtime.Connections;
     using UniNodeSystem.Runtime.Interfaces;
+    using UniRx;
     using UniUiSystem.Runtime.Interfaces;
 
     public interface IUiModuleSlot : IUiPlacement
@@ -9,7 +9,7 @@ namespace UniGreenModules.UniUiNodes.Runtime.Interfaces
         
         string SlotName { get; }
 
-        ITypeDataBrodcaster Value { get; }
+        IConnector<IMessagePublisher> Value { get; }
         
     }
 }

@@ -28,10 +28,10 @@
                 for (int k = 0; k < objs.Length; k++) {
                     UniBaseNode node = objs[k] as UniBaseNode;
                     if (node.GetType () == scriptType) {
-                        if (node != null && node.graph != null) {
+                        if (node != null && node.Graph != null) {
                             // Delete the node and notify the user
-                            Debug.LogWarning (node.name + " of " + node.graph + " depended on deleted script and has been removed automatically.", node.graph);
-                            node.graph.RemoveNode (node);
+                            Debug.LogWarning (node.name + " of " + node.Graph + " depended on deleted script and has been removed automatically.", node.Graph);
+                            node.Graph.RemoveNode (node);
                         }
                     }
                 }

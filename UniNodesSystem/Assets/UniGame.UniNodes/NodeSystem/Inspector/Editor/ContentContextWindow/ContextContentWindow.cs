@@ -16,7 +16,7 @@
 
         public void Initialize(UniNode node, string portName)
         {
-            var portValue = node.GetPortValue(portName);
+            var portValue = node.GetPort(portName);
             if (portValue == null) return;
             
         }

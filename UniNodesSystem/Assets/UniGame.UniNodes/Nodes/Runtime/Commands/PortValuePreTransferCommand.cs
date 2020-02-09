@@ -4,25 +4,27 @@
     using System.Collections;
     using UniCore.Runtime.DataFlow.Interfaces;
     using UniCore.Runtime.Interfaces;
+    using UniCore.Runtime.Rx.Extensions;
     using UniNodeSystem.Runtime.Interfaces;
     using UniRoutine.Runtime;
     using UniRoutine.Runtime.Extension;
+    using UniRx;
 
     [Serializable]
     public class PortValuePreTransferCommand : ILifeTimeCommand,IContextWriter
     {
-        private readonly Func<IContext,IContextWriter,IEnumerator> action;
-        private readonly IConnector<IContextWriter> connector;
+        private readonly Func<IContext,IMessagePublisher,IEnumerator> action;
+        private readonly IConnector<IMessagePublisher> connector;
         private readonly IContext sourceContext;
-        private readonly IContextWriter target;
+        private readonly IMessagePublisher target;
 
         private RoutineHandler handler;
 
         public PortValuePreTransferCommand(
-            Func<IContext,IContextWriter,IEnumerator> action,
-            IConnector<IContextWriter> connector,
+            Func<IContext,IMessagePublisher,IEnumerator> action,
+            IConnector<IMessagePublisher> connector,
             IContext sourceContext,
-            IContextWriter target)
+            IMessagePublisher target)
         {
             this.action = action;
             this.connector = connector;
@@ -32,8 +34,8 @@
         
         public void Execute(ILifeTime lifeTime)
         {
-            connector.Connect(this);
-            lifeTime.AddCleanUpAction(() => connector.Disconnect(this));
+            connector.Connect(this).
+                AddTo(lifeTime);
             lifeTime.AddCleanUpAction(() => handler.Cancel());
         }
 

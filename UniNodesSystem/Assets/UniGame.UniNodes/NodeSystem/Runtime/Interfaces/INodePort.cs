@@ -2,10 +2,13 @@ namespace UniGreenModules.UniNodeSystem.Runtime.Core
 {
     using System;
     using System.Collections.Generic;
+    using Interfaces;
+    using UniCore.Runtime.Interfaces;
     using UniRx;
     using UnityEngine;
 
-    public interface INodePort : IMessageBroker
+    public interface INodePort : 
+        IPortValue
     {
         ulong Id { get; }
         

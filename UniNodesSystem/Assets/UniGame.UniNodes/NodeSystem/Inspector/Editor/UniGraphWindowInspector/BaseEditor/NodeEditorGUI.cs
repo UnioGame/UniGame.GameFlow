@@ -288,7 +288,7 @@
                     if (item.Key == null) continue;
 
                     var fromRect        = item.Value;
-                    var connectionColor = graphEditor.GetTypeColor(output.ValueType);
+                    var connectionColor = graphEditor.GetTypeColor(output.ValueTypes.FirstOrDefault());
 
                     for (var k = 0; k < output.ConnectionCount; k++) {
                         var input = output.GetConnection(k);
@@ -298,7 +298,7 @@
                             continue; //If a script has been updated and the port doesn't exist, it is removed and null is returned. If this happens, return.
                         if (!input.IsConnectedTo(output)) input.Connect(output);
                         Rect toRect;
-                        if (!_portConnectionPoints.TryGetValue(input, out toRect)) continue;
+                        if (!_portConnectionPoints.TryGetValue(input as NodePort,out toRect)) continue;
 
                         var from          = fromRect.center;
                         var to            = Vector2.zero;

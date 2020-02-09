@@ -2,15 +2,15 @@
 {
     using System;
     using Interfaces;
+    using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
     using UniCore.Runtime.Common;
     using UniCore.Runtime.DataFlow.Interfaces;
-    using UniCore.Runtime.Interfaces;
-    using UniCore.Runtime.ObjectPool.Runtime.Interfaces;
+    using UniCore.Runtime.ProfilerTools;
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Connections;
     using UniRx;
 
     [Serializable]
-    public class UniPortValue : IPortValue, IPoolable
+    public class UniPortValue : IPortValue
     {
         #region serialized data
 
@@ -19,22 +19,27 @@
         /// </summary>
         public string name = string.Empty;
 
-        
         #endregion
 
         #region private property
 
-        [NonSerialized] private TypeData context;
+        private TypeData context;
 
-        [NonSerialized] private TypeDataBrodcaster broadcaster;
+        private TypeDataBrodcaster broadcaster;
 
-        [NonSerialized] private bool initialized = false;
+        private bool initialized = false;
         
-        [NonSerialized] private ReactiveCommand portValueChanged = new ReactiveCommand();
+        private ReactiveCommand portValueChanged = new ReactiveCommand();
 
+        private ILifeTime lifeTime;
+        
+        private Func<Type, bool> valueFilters;
+        
 #endregion
 
         #region public properties
+
+        public ILifeTime LifeTime => lifeTime;
 
         public string ItemName => name;
 
@@ -53,11 +58,15 @@
 
         #endregion
         
-        public void Initialize(string portName, ILifeTime lifeTime)
+        
+        public void Initialize(string portName, ILifeTime lifeTimeScope, Func<Type,bool> valueFilter = null)
         {
-            lifeTime.AddCleanUpAction(Release);
-            
             name = portName;
+
+            this.lifeTime = lifeTimeScope;
+            this.lifeTime.AddCleanUpAction(Release);
+
+            valueFilters = valueFilter ?? DefaultFilter;
             
             Initialize();
         }
@@ -67,13 +76,18 @@
             Release();
         }
         
+        public void Release()
+        {
+            context.Release();
+            RemoveAllConnections();
+        }
+
         #region type data container
 
         public bool Remove<TData>()
         {
             var result = context.Remove<TData>();
             if (result) {
-                broadcaster.Remove<TData>();
                 portValueChanged.Execute(Unit.Default);
             }
 
@@ -82,23 +96,20 @@
 
         public void Publish<TData>(TData value)
         {
+            if (!valueFilters(typeof(TData))) {
+                GameLog.Log($"PUBLISH: You try to Publish wrong type value {nameof(T)} into {ItemName}");
+                return;
+            }
             
             context.Publish(value);
             broadcaster.Publish(value);
-
             portValueChanged.Execute(Unit.Default);
             
         }
 
-        public void CleanUp()
-        {
-            context.CleanUp();
-            broadcaster.CleanUp();
-        }
-
         public void RemoveAllConnections()
         {
-            broadcaster.CleanUp();
+            broadcaster.Release();
         }
 
         public TData Get<TData>()
@@ -110,31 +121,19 @@
         {
             return context.Contains<TData>();
         }
-
+        
+        public IObservable<T> Receive<T>()
+        {
+            return valueFilters(typeof(T)) ? context.Receive<T>() : Observable.Empty<T>();
+        }
+        
         #endregion
 
         #region connector
 
-        public IConnector<IContextWriter> Connect(IContextWriter contextData)
+        public IDisposable Connect(IMessagePublisher contextData)
         {
-            broadcaster.Connect(contextData);
-            return this;
-        }
-
-        public void Disconnect(IContextWriter contextData)
-        {
-            broadcaster.Disconnect(contextData);
-        }
-
-        public void Release()
-        {
-            CleanUp();
-            RemoveAllConnections();
-        }
-
-        public IObservable<T> Receive<T>()
-        {
-            return context.Receive<T>();
+            return broadcaster.Connect(contextData);
         }
         
         #endregion
@@ -150,6 +149,7 @@
             initialized = true;
         }
 
-
+        private bool DefaultFilter(Type type) => true;
+        
     }
 }

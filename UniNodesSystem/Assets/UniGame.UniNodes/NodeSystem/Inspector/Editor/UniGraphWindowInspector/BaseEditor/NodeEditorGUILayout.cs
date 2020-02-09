@@ -529,7 +529,7 @@
                         for (var j = 0; j < instancePorts[k].ConnectionCount; j++)
                         {
                             var other = instancePorts[k].GetConnection(j);
-                            instancePorts[k].Disconnect(other);
+                            instancePorts[k].Disconnect(other as NodePort);
                             instancePorts[k - 1].Connect(other);
                         }
                     }

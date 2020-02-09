@@ -1,12 +1,9 @@
-﻿using UniGreenModules.UniNodeSystem.Runtime;
-
-namespace UniGreenModules.UniNodeSystem.Nodes
+﻿namespace UniGreenModules.UniNodeSystem.Nodes
 {
     using Runtime.Core;
     using Runtime.Extensions;
-    using Runtime.Interfaces;
-    using UniCore.Runtime.DataFlow;
     using UniCore.Runtime.DataFlow.Interfaces;
+    using UniCore.Runtime.Rx.Extensions;
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Nodes;
 
     public abstract class UniGraphNode : UniNode
@@ -45,10 +42,10 @@ namespace UniGreenModules.UniNodeSystem.Nodes
 
             graphPrefab.Execute();
 
-            foreach (var port in PortValues) {
+            foreach (var port in Ports) {
                 var portName = port.ItemName;
                 var originPort = GetPort(portName);
-                var targetPort = graphPrefab.GetPortValue(portName);
+                var targetPort = graphPrefab.GetPort(portName);
                 ConnectToGraphPort(port,targetPort, originPort.Direction);
             }
             
@@ -57,12 +54,13 @@ namespace UniGreenModules.UniNodeSystem.Nodes
 
         protected abstract UniGraph CreateGraph(ILifeTime lifeTime);
         
-        private void ConnectToGraphPort(IPortValue sourcePort, IPortValue targetPort, PortIO direction)
+        private void ConnectToGraphPort(INodePort sourcePort, INodePort targetPort, PortIO direction)
         {
             var source    = direction == PortIO.Input ? sourcePort : targetPort;
             var target    = direction == PortIO.Input ? targetPort : sourcePort;
 
-            source.Connect(target);
+            source.Connect(target).
+                AddTo(LifeTime);
         }
         
         

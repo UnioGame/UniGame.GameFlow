@@ -39,7 +39,7 @@
 
         protected override void OnExecute()
         {
-            GameLog.LogMessage($"{graph.name}:{name}: Service {typeof(TService).Name}");
+            GameLog.LogMessage($"{Graph.name}:{name}: Service {typeof(TService).Name}");
 
             Source.Do(x => service.Bind(x,LifeTime)).
                 CombineLatest(service.IsReady, (ctx, ready) => (ctx,ready)).

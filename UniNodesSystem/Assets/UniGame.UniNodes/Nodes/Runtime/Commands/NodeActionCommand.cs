@@ -20,7 +20,7 @@
             PortIO direction = PortIO.Input)
         {
             var portInfo = node.UpdatePortValue(name, direction);
-            portAction = new PortActionCommand<T>(action,portInfo.value);
+            portAction = new PortActionCommand<T>(action,portInfo);
         }
         
         public void Execute(ILifeTime lifeTime)

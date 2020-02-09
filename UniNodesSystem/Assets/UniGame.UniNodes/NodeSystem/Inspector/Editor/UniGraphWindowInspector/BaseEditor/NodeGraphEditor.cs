@@ -49,7 +49,7 @@
             
             var node = target.CopyNode(original);
             node.name = original.name;
-            node.transform.parent = original.graph.transform;
+            node.transform.parent = original.Graph.transform;
             
             if (NodeEditorPreferences.GetSettings().autoSave)
             {
@@ -62,7 +62,7 @@
         /// <summary> Safely remove a node and all its connections. </summary>
         public void RemoveNode(UniBaseNode node)
         {
-            var graph = node.graph;
+            var graph = node.Graph;
 
             var sourceGraph = PrefabUtility.GetCorrespondingObjectFromSource(target);
             var sourceNode = PrefabUtility.GetCorrespondingObjectFromSource(node);

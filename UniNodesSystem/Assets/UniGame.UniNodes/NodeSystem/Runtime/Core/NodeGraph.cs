@@ -57,7 +57,7 @@
                 return null;
             }
            
-            node.graph = this;
+            node.Graph = this;
             nodes.Add(node);
             return node;
         }
@@ -75,7 +75,7 @@
             node.UpdateId();
             node.ClearConnections();
             nodes.Add(node);
-            node.graph = this;
+            node.Graph = this;
             return node;
         }
 
@@ -109,7 +109,7 @@
             for (int i = 0; i < nodes.Count; i++) {
                 if (nodes[i] == null) continue;
                 UniBaseNode node = Instantiate(nodes[i]) as UniBaseNode;
-                node.graph     = graph;
+                node.Graph     = graph;
                 graph.nodes[i] = node;
             }
 

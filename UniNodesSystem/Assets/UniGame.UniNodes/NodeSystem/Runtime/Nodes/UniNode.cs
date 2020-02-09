@@ -31,14 +31,8 @@
         [NonSerialized] public List<ILifeTimeCommand> commands = 
             new List<ILifeTimeCommand>();
 
-        [NonSerialized] public List<IPortValue> portValues = 
-            new List<IPortValue>();
-        
         [NonSerialized] private LifeTimeDefinition lifeTimeDefinition = 
             new LifeTimeDefinition();
-
-        [NonSerialized] private Dictionary<string, IPortValue> portValuesMap = 
-            new Dictionary<string, IPortValue>();
 
         [NonSerialized] private bool isInitialized;
 
@@ -53,11 +47,7 @@
         /// </summary>
         public bool IsActive => isActive;
 
-        public IReadOnlyList<IPortValue> PortValues => portValues;
-
         public ILifeTime LifeTime => lifeTimeDefinition.LifeTime;
-
-        public string ItemName => name;
 
         #endregion
 
@@ -79,7 +69,7 @@
             //custom node initialization
             OnInitialize();
 
-            //initialize all node commandss
+            //initialize all node commands
             InitializeCommands();
             
             //remove deleted ports
@@ -114,9 +104,6 @@
             //initialize
             Initialize();
 
-            //cleanup ports on exit
-            LifeTime.AddCleanUpAction(CleanUpPorts);
-
             //execute all node commands
             commands.ForEach(x => x.Execute(LifeTime));
             
@@ -128,35 +115,6 @@
         /// stop node execution
         /// </summary>
         public void Release() => Exit();
-
-        #region Node Ports operations
-        
-        public IPortValue GetPortValue(INodePort port) => GetPortValue(port.FieldName);
-
-        public IPortValue GetPortValue(string portName)
-        {
-            portValuesMap.TryGetValue(portName, out var value);
-            return value;
-        }
-
-        public bool AddPortValue(IPortValue portValue)
-        {
-            if (portValue == null) {
-                GameLog.LogErrorFormat("Try add NULL port value to {0}", this);
-                return false;
-            }
-
-            if (portValuesMap.ContainsKey(portValue.ItemName)) {
-                return false;
-            }
-
-            portValuesMap[portValue.ItemName] = portValue;
-            portValues.Add(portValue);
-
-            return true;
-        }
-        
-        #endregion
 
         #endregion
 
@@ -176,17 +134,6 @@
         /// </summary>
         protected virtual void UpdateCommands(List<ILifeTimeCommand> nodeCommands){}
         
-        /// <summary>
-        /// cleanup all ports values
-        /// </summary>
-        private void CleanUpPorts()
-        {
-            for (var i = 0; i < PortValues.Count; i++) {
-                var portValue = PortValues[i];
-                portValue.CleanUp();
-            }
-        }
-
         private void InitializeCommands()
         {
             commands.Clear();
@@ -204,22 +151,19 @@
         
         private void OnDestroy() => Exit();
 
-        [Conditional("UNITY_EDITOR")]
-        private void LogMessage(string message)
-        {
-            GameLog.Log($"{graph.name}:{name}: {message}");
-        }
-
         /// <summary>
         /// finish node life time
         /// </summary>
-        private void OnDisable()
+        private void OnDisable() => Exit();
+
+#region inspector call
+        
+        [Conditional("UNITY_EDITOR")]
+        private void LogMessage(string message)
         {
-            Exit();
+            GameLog.Log($"{Graph.name}:{name}: {message}");
         }
 
-        #region inspector call
-        
         [Conditional("UNITY_EDITOR")]
         protected virtual void OnValidate()
         {

@@ -1,23 +1,11 @@
 namespace UniGreenModules.UniNodeSystem.Runtime.Interfaces
 {
-    using System.Collections.Generic;
-    using Core;
-    using UniCore.Runtime.Interfaces;
     using UniStateMachine.Runtime.Interfaces;
 
     public interface IUniNode : 
         INode,
-        IState,
-        INamedItem
+        IState
     {
-
-        IReadOnlyList<IPortValue> PortValues { get; }
-
-        IPortValue GetPortValue(INodePort port);
-        
-        IPortValue GetPortValue(string port);
-
-        bool AddPortValue(IPortValue portValue);
         
     }
 }

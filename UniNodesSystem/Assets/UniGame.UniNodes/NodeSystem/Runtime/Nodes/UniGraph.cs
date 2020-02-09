@@ -2,15 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
-    using Runtime;
-    using Runtime.Connections;
     using Runtime.Core;
     using Runtime.Extensions;
     using Runtime.Interfaces;
-    using UniCore.Runtime.Interfaces;
-    using UniCore.Runtime.ObjectPool;
-    using UniCore.Runtime.ObjectPool.Runtime;
-    using UniCore.Runtime.ObjectPool.Runtime.Extensions;
     using UniCore.Runtime.Rx.Extensions;
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Attributes;
     using UniRx;
@@ -71,14 +65,22 @@
 
             allNodes.ForEach( InitializeNode );
 
-            cancelationNodes.ForEach(x => 
+            for (var i = 0; i < cancelationNodes.Count; i++) {
+                var x = cancelationNodes[i];
                 x.PortValue.PortValueChanged.
-                                         Subscribe(unit => Exit()).
-                                         AddTo(LifeTime));
+                    Subscribe(unit => Exit()).
+                    AddTo(LifeTime);
+            }
+                      
+            inputs.ForEach(x => 
+                GetPort(x.ItemName).
+                Connect(x.PortValue).
+                AddTo(LifeTime) );
             
-            inputs.ForEach(x => GetPortValue(x.ItemName).Connect(x.PortValue) );
-            
-            outputs.ForEach(x => GetPortValue(x.ItemName).Connect(x.PortValue) );
+            outputs.ForEach(x => 
+                GetPort(x.ItemName).
+                Connect(x.PortValue).
+                AddTo(LifeTime) );
 
         }
 

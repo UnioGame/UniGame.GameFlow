@@ -56,6 +56,8 @@
         [HideInInspector] 
         [FormerlySerializedAs("graph")]
         private NodeGraph _graph;
+
+        #region public properties
         
         public ulong Id
         {
@@ -70,9 +72,18 @@
             }
         }
 
+        public string ItemName => nodeName;
+        
+        
+        /// <summary> Iterate over all ports on this node. </summary>
+        public IReadOnlyList<NodePort> Ports => ports.Ports;
+
+        
+        #endregion
+        
         public void UpdateId()
         {
-            _id = graph.GetId();
+            _id = Graph.GetId();
             foreach (var portPair in ports)
             {
                 var port = portPair.Value;
@@ -83,20 +94,6 @@
         public virtual string GetName()
         {
             return nodeName;
-        }
-        
-        public IReadOnlyDictionary<ulong, NodePort> PortsMap
-        {
-            get { return Ports.ToDictionary(x => x.Id); }
-        }
-
-        /// <summary> Iterate over all ports on this node. </summary>
-        public IEnumerable<NodePort> Ports
-        {
-            get
-            {
-                foreach (var port in ports.Values) yield return port;
-            }
         }
 
         /// <summary> Iterate over all outputs on this node. </summary>
@@ -159,14 +156,13 @@
             }
         }
 
-        public NodeGraph graph
+        public NodeGraph Graph
         {
-            get { return _graph; }
+            get => _graph;
             set
             {
                 if (_graph == value)
                     return;
-
                 _graph = value;
                 _id = _graph.GetId();
             }
@@ -175,18 +171,12 @@
         protected void OnEnable()
         {
             UpdateStaticPorts();
-            Init();
         }
 
         /// <summary> Update static ports to reflect class fields. This happens automatically on enable. </summary>
         public void UpdateStaticPorts()
         {
             NodeDataCache.UpdatePorts(this, ports);
-        }
-
-        /// <summary> Initialize node. Called on creation. </summary>
-        protected virtual void Init()
-        {
         }
 
         /// <summary> Checks all connections for invalid references, and removes them. </summary>
@@ -299,31 +289,7 @@
         }
 
         #endregion
-
-        #region Inputs/Outputs
-
-        // /// <summary> Return input value for a specified port. Returns fallback value if no ports are connected </summary>
-        // /// <param name="fieldName">Field name of requested input port</param>
-        // /// <param name="fallback">If no ports are connected, this value will be returned</param>
-        // public T GetInputValue<T>(string fieldName, T fallback = default(T))
-        // {
-        //     var port = GetPort(fieldName);
-        //     if (port != null && port.IsConnected) return port.GetInputValue<T>();
-        //     else return fallback;
-        // }
-        //
-        // /// <summary> Return all input values for a specified port. Returns fallback value if no ports are connected </summary>
-        // /// <param name="fieldName">Field name of requested input port</param>
-        // /// <param name="fallback">If no ports are connected, this value will be returned</param>
-        // public T[] GetInputValues<T>(string fieldName, params T[] fallback)
-        // {
-        //     var port = GetPort(fieldName);
-        //     if (port != null && port.IsConnected) return port.GetInputValues<T>();
-        //     else return fallback;
-        // }
         
-        #endregion
-
         /// <summary> Called after a connection between two <see cref="NodePort"/>s is created </summary>
         /// <param name="from">Output</param> <param name="to">Input</param>
         public virtual void OnCreateConnection(NodePort from, NodePort to)
@@ -344,6 +310,7 @@
 
         public override int GetHashCode()
         {
+            return (int)Id;
             if (Application.isPlaying)
             {
                 var id = base.GetHashCode();
@@ -352,5 +319,6 @@
 
             return JsonUtility.ToJson(this).GetHashCode();
         }
+
     }
 }

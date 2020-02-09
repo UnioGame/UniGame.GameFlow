@@ -240,7 +240,7 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
                                 if (hoveredPort.IsConnected)
                                 {
                                     var node = hoveredPort.Node;
-                                    var output = hoveredPort.Connection;
+                                    var output = hoveredPort.Connection as NodePort;
                                     var outputConnectionIndex = output.GetConnectionIndex(hoveredPort);
                                     draggedOutputReroutes = output.GetReroutePoints(outputConnectionIndex);
                                     hoveredPort.Disconnect(output);
@@ -528,7 +528,7 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
                 if (Selection.objects[i] is UniBaseNode)
                 {
                     var srcNode = Selection.objects[i] as UniBaseNode;
-                    if (srcNode.graph != ActiveGraph) continue; // ignore nodes selected in another graph
+                    if (srcNode.Graph != ActiveGraph) continue; // ignore nodes selected in another graph
                     var newNode = graphEditor.CopyNode(srcNode);
                     substitutes.Add(srcNode, newNode);
                     newNode.position = srcNode.position + new Vector2(30, 30);
@@ -542,7 +542,7 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
                 if (Selection.objects[i] is UniBaseNode)
                 {
                     var srcNode = Selection.objects[i] as UniBaseNode;
-                    if (srcNode.graph != ActiveGraph) continue; // ignore nodes selected in another graph
+                    if (srcNode.Graph != ActiveGraph) continue; // ignore nodes selected in another graph
                     foreach (var port in srcNode.Ports)
                     {
                         for (var c = 0; c < port.ConnectionCount; c++)
@@ -562,7 +562,7 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
                                 outputPort = newNodeOut.GetOutputPort(outputPort.FieldName);
                             }
 
-                            if (!inputPort.IsConnectedTo(outputPort)) inputPort.Connect(outputPort);
+                            if (!inputPort.IsConnectedTo(outputPort as NodePort)) inputPort.Connect(outputPort);
                         }
                     }
                 }

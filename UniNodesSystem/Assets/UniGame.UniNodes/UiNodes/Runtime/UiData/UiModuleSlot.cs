@@ -3,9 +3,10 @@ namespace UniGreenModules.UniUiNodes.Runtime.UiData
 {
     using System;
     using Interfaces;
+    using UniCore.Runtime.Interfaces;
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Connections;
-    using UniNodeSystem.Runtime.Connections;
     using UniNodeSystem.Runtime.Interfaces;
+    using UniRx;
     using UnityEngine;
     using UnityEngine.EventSystems;
 
@@ -21,7 +22,7 @@ namespace UniGreenModules.UniUiNodes.Runtime.UiData
 
         public string SlotName => name;
 
-        public ITypeDataBrodcaster Value => value;
+        public IConnector<IMessagePublisher> Value => value;
      
         public void Dispose()
         {

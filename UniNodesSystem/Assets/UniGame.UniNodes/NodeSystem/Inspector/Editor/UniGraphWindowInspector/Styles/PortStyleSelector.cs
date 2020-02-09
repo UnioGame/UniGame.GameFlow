@@ -16,7 +16,7 @@
             
             if (!uniNode) return portStyle;
 
-            var portValue = uniNode.GetPortValue(port.FieldName);
+            var portValue = uniNode.GetPort(port.FieldName);
             var hasData = portValue != null && portValue.HasValue;
 
             if (port.IsDynamic)

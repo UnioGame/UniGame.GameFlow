@@ -6,7 +6,7 @@
     using System.Linq;
     using System.Reflection;
     using UniCore.Runtime.Attributes;
-    using UniCore.Runtime.Common;
+    using UniCore.Runtime.DataFlow;
     using UniCore.Runtime.DataFlow.Interfaces;
     using UniCore.Runtime.ObjectPool.Runtime;
     using UniCore.Runtime.ObjectPool.Runtime.Extensions;
@@ -24,7 +24,8 @@
         /// unique graph space port id 
         /// </summary>
         [ReadOnlyValue]
-        [SerializeField] private ulong _id;
+        [SerializeField]
+        private ulong _id;
         [SerializeField] protected string               _fieldName;
         [SerializeField] protected UniBaseNode          _node;
         [SerializeField] protected List<PortConnection> connections = new List<PortConnection>();
@@ -42,26 +43,26 @@
         /// port container value
         /// </summary>
         [SerializeField] protected UniPortValue _portValue = new UniPortValue();
-        
+
         #endregion
 
-        private ILifeTime _lifetime;
+        private LifeTimeDefinition _lifetime = new LifeTimeDefinition();
 
         private List<Type> _portValueTypes = new List<Type>();
 
         private HashSet<Type> _portValueSubscriptions = new HashSet<Type>();
-        
+
         /// <summary>
         /// draft validator refactoring. Move rule to SO files
         /// </summary>
-        private List<Func<NodePort,NodePort,bool>> connectionsValidators = new List<Func<NodePort, NodePort, bool>>() {
-            (source,to) => to != null,
-            (source,to) => to != source,
-            (source,to) => !source.IsConnectedTo(to),
-            (source,to) => source.Direction != to.Direction,
-            (source,to) => source.ValueTypes.Any(to.ValidateValueType),
+        private List<Func<NodePort, NodePort, bool>> connectionsValidators = new List<Func<NodePort, NodePort, bool>>() {
+            (source, to) => to != null,
+            (source, to) => to != source,
+            (source, to) => !source.IsConnectedTo(to),
+            (source, to) => source.Direction != to.Direction,
+            (source, to) => source.ValueTypes.Any(to.ValidateValueType),
         };
-        
+
         #region  constructor
 
         /// <summary>
@@ -86,18 +87,17 @@
                 }
             }
 
-            SetValueFilter(new List<Type>() { fieldInfo.FieldType });
-            
+            SetValueFilter(new List<Type>() {fieldInfo.FieldType});
         }
 
         /// <summary>
         /// Copy a nodePort but assign it to another node.
         /// </summary>
         public NodePort(NodePort nodePort, UniBaseNode node) :
-            this(nodePort.FieldName, 
-                nodePort.Direction, 
-                nodePort.ConnectionType, 
-                node, 
+            this(nodePort.FieldName,
+                nodePort.Direction,
+                nodePort.ConnectionType,
+                node,
                 nodePort.ValueTypes)
         {
         }
@@ -111,15 +111,15 @@
             PortIO direction,
             ConnectionType connectionType,
             UniBaseNode node) :
-            this(fieldName, direction, connectionType, node,new List<Type>() {type})
+            this(fieldName, direction, connectionType, node, new List<Type>() {type})
         {
         }
 
 
         public NodePort(
             string fieldName,
-            PortIO direction, 
-            ConnectionType connectionType, 
+            PortIO direction,
+            ConnectionType connectionType,
             UniBaseNode node,
             IReadOnlyList<Type> types)
         {
@@ -138,7 +138,7 @@
 
         public ulong Id => _id = _id == 0 ? UpdateId() : _id;
 
-        public IReadOnlyList<Type> ValueTypes => _portValueTypes; 
+        public IReadOnlyList<Type> ValueTypes => _portValueTypes;
 
         public int ConnectionCount => connections.Count;
 
@@ -148,6 +148,7 @@
                 for (var i = 0; i < connections.Count; i++) {
                     if (connections[i] != null) return connections[i].Port;
                 }
+
                 return null;
             }
         }
@@ -163,6 +164,8 @@
 
         public string FieldName => _fieldName;
 
+        public string ItemName => _fieldName;
+
         public bool IsDynamic => _dynamic;
 
         public bool IsStatic => !_dynamic;
@@ -173,59 +176,42 @@
                 if (_node == value)
                     return;
                 _node = value;
-                _id   = _node.graph.GetId();
+                _id   = _node.Graph.GetId();
             }
         }
+
+        public Type ValueType => ValueTypes.FirstOrDefault();
+        
+        public bool HasValue => _portValue.HasValue;
+
+        public ILifeTime LifeTime => _lifetime.LifeTime;
 
         #endregion
 
-        #region value methods
+        #region port value methods
 
-        public T GetValue<T>() => _portValue.Get<T>();
+        public void Dispose() => Release();
 
+        public IObservable<Unit> PortValueChanged => _portValue.PortValueChanged;
+
+        public TData Get<TData>() => _portValue.Get<TData>();
+
+        public bool Remove<TData>() => _portValue.Remove<TData>();
+        
         public bool Contains<T>() => _portValue.Contains<T>();
 
-        //TODO
-//        public List<T> GetValues<T>()
-//        {
-//            var values = ClassPool.Spawn<List<T>>();
-//
-//            if (Direction == PortIO.Output)
-//                return values;
-//
-//            for (var i = 0; i < connections.Count; i++) {
-//                var connection = connections[i];
-//                var port       = connection.Port;
-//                var hasValue   = port.Contains<T>();
-//                if (hasValue) values.Add(port.GetValue<T>());
-//            }
-//
-//            return values;
-//        }
+        public void Publish<T>(T message) => _portValue.Publish(message);
 
-        public void Publish<T>(T message)
-        {
-            if (ValidateValueType<T>()) {
-                _portValue.Publish(message);
-                return;
-            }
-            
-            GameLog.Log($"PUBLISH: You try to Publish wrong type value {nameof(T)} into {_node.graph.name}:{_node.name}:{_fieldName}");
-        }
+        public IObservable<T> Receive<T>() => GetObservable<T>();
 
-        public IObservable<T> Receive<T>()
-        {
-            return ValidateValueType<T>() ? 
-                _portValue.Receive<T>() : 
-                Observable.Empty<T>();
-        }
+        public IDisposable Connect(IMessagePublisher publisher) => _portValue.Connect(publisher);
 
         public void SetValueFilter(IReadOnlyList<Type> allowedTypes)
         {
             _portValueTypes = _portValueTypes == null ? new List<Type>() : _portValueTypes;
             _portValueTypes.Clear();
             _portValueTypes.AddRange(allowedTypes);
-            
+
             UpdateSerializedFilter(allowedTypes);
         }
 
@@ -233,7 +219,7 @@
         {
             return ValidateValueType(typeof(T));
         }
-        
+
         /// <summary>
         /// is target type value valid for this port
         /// </summary>
@@ -250,16 +236,15 @@
 
         #endregion
 
-        #region node methods
-
         public void Initialize(ILifeTime lifeTime)
         {
-            _lifetime = lifeTime;
+            _lifetime = _lifetime == null ? new LifeTimeDefinition() : _lifetime;
+            _lifetime.Release();
             
-            lifeTime.AddCleanUpAction(Release);
-            
-            _portValue.Initialize(_fieldName,lifeTime);
-            
+            lifeTime.AddCleanUpAction(() => _lifetime.Terminate());
+
+            _portValue.Initialize(_fieldName, _lifetime.LifeTime, ValidateValueType);
+
             InitializeTypeFilter();
         }
 
@@ -267,8 +252,10 @@
         {
             _portValueSubscriptions.Clear();
         }
-        
-        public ulong UpdateId() => _id = _node.graph.GetId();
+
+        #region node methods
+
+        public ulong UpdateId() => _id = _node.Graph.GetId();
 
         /// <summary> Checks all connections for invalid references, and removes them. </summary>
         public void VerifyConnections()
@@ -281,7 +268,7 @@
                 connections.RemoveAt(i);
             }
         }
-        
+
         /// <summary> Connect this <see cref="NodePort"/> to another </summary>
         /// <param name="port">The <see cref="NodePort"/> to connect to</param>
         public void Connect(NodePort port)
@@ -449,7 +436,7 @@
                 targetPortConnections.Add(targetPort.connections[i].Port);
 
             ClearConnections();
-            
+
             targetPort.ClearConnections();
 
             // Add port connections to targetPort
@@ -500,15 +487,11 @@
 
         #region private methods
 
-        
         private void InitializeTypeFilter()
         {
             _portValueTypes = _portValueTypes ?? new List<Type>();
             _portValueTypes.Clear();
-            _portValueTypes.AddRange(_allowedValueTypes.
-                Select(x => Type.GetType(x, false)).
-                Where(x => x!=null).
-                ToList());
+            _portValueTypes.AddRange(_allowedValueTypes.Select(x => Type.GetType(x, false)).Where(x => x != null).ToList());
         }
 
         /// <summary>
@@ -521,25 +504,22 @@
             _portValueSubscriptions = _portValueSubscriptions ?? new HashSet<Type>();
 
             var type = typeof(TValue);
-            if (_portValueSubscriptions.Add(type)) 
-            {
+            if (_portValueSubscriptions.Add(type)) {
                 for (var i = 0; i < connections.Count; i++) {
                     var connection     = connections[i];
                     var portObservable = connection.Port.Receive<TValue>();
-                    if(!connection.Port.ValidateValueType<TValue>())
+                    if (!connection.Port.ValidateValueType<TValue>())
                         continue;
-                
-                    portObservable.
-                        Subscribe(x => _portValue.Publish(x)).
-                        AddTo(_lifetime);
+
+                    portObservable.Subscribe(x => _portValue.Publish(x)).AddTo(LifeTime);
                 }
             }
-            
+
             return _portValue.Receive<TValue>();
         }
-        
+
         #region Unity Methods
-        
+
         [Conditional("UNITY_EDITOR")]
         private void UpdateSerializedFilter(IReadOnlyList<Type> filter)
         {
@@ -551,17 +531,18 @@
         {
             _allowedValueTypes = _allowedValueTypes ?? new List<string>();
             _allowedValueTypes.Clear();
-            
+
             for (var i = 0; i < valueTypes.Count; i++) {
                 var typeFilter = valueTypes[i];
                 var type       = Type.GetType(typeFilter, false, true);
-                if(type!=null)
+                if (type != null)
                     _allowedValueTypes.Add(typeFilter);
             }
         }
-        
+
         #endregion
 
         #endregion
+
     }
 }
