@@ -1,4 +1,5 @@
-﻿namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor {
+﻿namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
+{
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -10,24 +11,26 @@
     using Object = UnityEngine.Object;
 
     /// <summary> A set of editor-only utilities and extensions for UnityNodeEditorBase </summary>
-    public static class NodeEditorUtilities {
-
+    public static class NodeEditorUtilities
+    {
         /// <summary>C#'s Script Icon [The one MonoBhevaiour Scripts have].</summary>
         private static Texture2D scriptIcon = (EditorGUIUtility.IconContent("cs Script Icon").image as Texture2D);
 
-        public static bool GetAttrib<T>(Type classType, out T attribOut) where T : Attribute {
+        public static bool GetAttrib<T>(Type classType, out T attribOut) where T : Attribute
+        {
             var attribs = classType.GetCustomAttributes(typeof(T), false);
             return GetAttrib(attribs, out attribOut);
         }
 
-        public static bool GetAttrib<T>(object[] attribs, out T attribOut) where T : Attribute {
+        public static bool GetAttrib<T>(object[] attribs, out T attribOut) where T : Attribute
+        {
             for (var i = 0; i < attribs.Length; i++) {
-                
                 if (attribs[i].GetType() != typeof(T)) continue;
-                
+
                 attribOut = attribs[i] as T;
                 return true;
             }
+
             attribOut = null;
             return false;
         }
@@ -35,105 +38,113 @@
         public static bool GetAttrib<T>(Type classType, string fieldName, out T attribOut) where T : Attribute
         {
             var field = classType.GetField(fieldName);
-            if (field == null)
-            {
+            if (field == null) {
                 attribOut = null;
                 return false;
             }
-            
+
             var attribs = field.GetCustomAttributes(typeof(T), false);
             return GetAttrib(attribs, out attribOut);
         }
 
-        public static bool HasAttrib<T>(object[] attribs) where T : Attribute {
-            for (int i = 0; i < attribs.Length; i++) {
+        public static bool HasAttrib<T>(object[] attribs) where T : Attribute
+        {
+            for (var i = 0; i < attribs.Length; i++) {
                 if (attribs[i].GetType() == typeof(T)) {
                     return true;
                 }
             }
+
             return false;
         }
 
         /// <summary> Returns true if this can be casted to <see cref="Type"/></summary>
-        public static bool IsCastableTo(this Type from, Type to) {
+        public static bool IsCastableTo(this Type from, Type to)
+        {
             if (to.IsAssignableFrom(from)) return true;
             var methods = from.GetMethods(BindingFlags.Public | BindingFlags.Static)
                 .Where(
                     m => m.ReturnType == to &&
-                    (m.Name == "op_Implicit" ||
-                        m.Name == "op_Explicit")
+                         (m.Name == "op_Implicit" ||
+                          m.Name == "op_Explicit")
                 );
             return methods.Count() > 0;
         }
 
         /// <summary> Return a prettiefied type name. </summary>
-        public static string PrettyName(this Type type) {
+        public static string PrettyName(this Type type)
+        {
             if (type == null) return "null";
             if (type == typeof(System.Object)) return "object";
             if (type == typeof(float)) return "float";
-            else if (type == typeof(int)) return "int";
-            else if (type == typeof(long)) return "long";
-            else if (type == typeof(double)) return "double";
-            else if (type == typeof(string)) return "string";
-            else if (type == typeof(bool)) return "bool";
-            else if (type.IsGenericType) {
-                string s = "";
-                Type genericType = type.GetGenericTypeDefinition();
-                if (genericType == typeof(List<>)) s = "List";
-                else s = type.GetGenericTypeDefinition().ToString();
-
-                Type[] types = type.GetGenericArguments();
-                string[] stypes = new string[types.Length];
-                for (int i = 0; i < types.Length; i++) {
+            if (type == typeof(int)) return "int";
+            if (type == typeof(long)) return "long";
+            if (type == typeof(double)) return "double";
+            if (type == typeof(string)) return "string";
+            if (type == typeof(bool)) return "bool";
+            if (type.IsGenericType) {
+                var s           = "";
+                var   genericType = type.GetGenericTypeDefinition();
+                s = genericType == typeof(List<>) ? "List" : type.GetGenericTypeDefinition().ToString();
+                var   types  = type.GetGenericArguments();
+                var stypes = new string[types.Length];
+                for (var i = 0; i < types.Length; i++) {
                     stypes[i] = types[i].PrettyName();
                 }
+
                 return s + "<" + string.Join(", ", stypes) + ">";
-            } else if (type.IsArray) {
-                string rank = "";
-                for (int i = 1; i < type.GetArrayRank(); i++) {
+            }
+            if (type.IsArray) {
+                var rank = "";
+                for (var i = 1; i < type.GetArrayRank(); i++) {
                     rank += ",";
                 }
-                Type elementType = type.GetElementType();
+
+                var elementType = type.GetElementType();
                 if (!elementType.IsArray) return elementType.PrettyName() + "[" + rank + "]";
-                else {
-                    string s = elementType.PrettyName();
-                    int i = s.IndexOf('[');
+                {
+                    var s = elementType.PrettyName();
+                    var    i = s.IndexOf('[');
                     return s.Substring(0, i) + "[" + rank + "]" + s.Substring(i);
                 }
-            } else return type.ToString();
+            }
+
+            return type.ToString();
         }
 
         /// <summary>Creates a new C# Class.</summary>
         [MenuItem("Assets/Create/UniNodeSystem/Node C# Script", false, 89)]
-        private static void CreateNode() {
-            string[] guids = AssetDatabase.FindAssets("Node_NodeTemplate.cs");
+        private static void CreateNode()
+        {
+            var guids = AssetDatabase.FindAssets("Node_NodeTemplate.cs");
             if (guids.Length == 0) {
                 Debug.LogWarning("UniNodeSystem_NodeTemplate.cs.txt not found in asset database");
                 return;
             }
-            string path = AssetDatabase.GUIDToAssetPath(guids[0]);
-            CreateFromTemplate(
-                "NewNode.cs",
-                path
-            );
+
+            var path = AssetDatabase.GUIDToAssetPath(guids[0]);
+            CreateFromTemplate("NewNode.cs", path);
         }
 
         /// <summary>Creates a new C# Class.</summary>
         [MenuItem("Assets/Create/UniNodeSystem/NodeGraph C# Script", false, 89)]
-        private static void CreateGraph() {
-            string[] guids = AssetDatabase.FindAssets("Node_NodeGraphTemplate.cs");
+        private static void CreateGraph()
+        {
+            var guids = AssetDatabase.FindAssets("Node_NodeGraphTemplate.cs");
             if (guids.Length == 0) {
                 Debug.LogWarning("UniNodeSystem_NodeGraphTemplate.cs.txt not found in asset database");
                 return;
             }
-            string path = AssetDatabase.GUIDToAssetPath(guids[0]);
+
+            var path = AssetDatabase.GUIDToAssetPath(guids[0]);
             CreateFromTemplate(
                 "NewNodeGraph.cs",
                 path
             );
         }
 
-        public static void CreateFromTemplate(string initialName, string templatePath) {
+        public static void CreateFromTemplate(string initialName, string templatePath)
+        {
             ProjectWindowUtil.StartNameEditingIfProjectWindowExists(
                 0,
                 ScriptableObject.CreateInstance<DoCreateCodeFile>(),
@@ -144,23 +155,26 @@
         }
 
         /// Inherits from EndNameAction, must override EndNameAction.Action
-        public class DoCreateCodeFile : UnityEditor.ProjectWindowCallback.EndNameEditAction {
-            public override void Action(int instanceId, string pathName, string resourceFile) {
-                Object o = CreateScript(pathName, resourceFile);
+        public class DoCreateCodeFile : UnityEditor.ProjectWindowCallback.EndNameEditAction
+        {
+            public override void Action(int instanceId, string pathName, string resourceFile)
+            {
+                var o = CreateScript(pathName, resourceFile);
                 ProjectWindowUtil.ShowCreatedAsset(o);
             }
         }
 
         /// <summary>Creates Script from Template's path.</summary>
-        internal static Object CreateScript(string pathName, string templatePath) {
-            string className = Path.GetFileNameWithoutExtension(pathName).Replace(" ", string.Empty);
-            string templateText = string.Empty;
+        internal static Object CreateScript(string pathName, string templatePath)
+        {
+            var className    = Path.GetFileNameWithoutExtension(pathName).Replace(" ", string.Empty);
+            var templateText = string.Empty;
 
-            UTF8Encoding encoding = new UTF8Encoding(true, false);
+            var encoding = new UTF8Encoding(true, false);
 
             if (File.Exists(templatePath)) {
                 /// Read procedures.
-                StreamReader reader = new StreamReader(templatePath);
+                var reader = new StreamReader(templatePath);
                 templateText = reader.ReadToEnd();
                 reader.Close();
 
@@ -172,13 +186,14 @@
 
                 /// Write procedures.
 
-                StreamWriter writer = new StreamWriter(Path.GetFullPath(pathName), false, encoding);
+                var writer = new StreamWriter(Path.GetFullPath(pathName), false, encoding);
                 writer.Write(templateText);
                 writer.Close();
 
                 AssetDatabase.ImportAsset(pathName);
                 return AssetDatabase.LoadAssetAtPath(pathName, typeof(Object));
-            } else {
+            }
+            else {
                 Debug.LogError(string.Format("The template file was not found: {0}", templatePath));
                 return null;
             }

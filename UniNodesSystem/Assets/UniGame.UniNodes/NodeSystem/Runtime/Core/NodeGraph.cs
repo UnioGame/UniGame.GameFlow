@@ -16,49 +16,47 @@
 
         #endregion
 
-        [HideInInspector] [SerializeField] private ulong _uniqueId;
+        [HideInInspector] 
+        [SerializeField] private ulong _uniqueId;
 
         /// <summary> All nodes in the graph. <para/>
         /// See: <see cref="AddNode{T}"/> </summary>
-        [SerializeField]
-        public List<UniBaseNode> nodes = new List<UniBaseNode>();
+        [SerializeField] public List<UniBaseNode> nodes = new List<UniBaseNode>();
 
 
         public IReadOnlyList<INode> Nodes => nodes;
-        
+
         public ulong GetId()
         {
             return ++_uniqueId;
         }
 
         #region graph operations
-        
+
         /// <summary> Add a node to the graph by type </summary>
         public T AddNode<T>() where T : UniBaseNode
         {
             return AddNode(typeof(T)) as T;
         }
-        
+
         public T AddNode<T>(string name) where T : UniBaseNode
         {
-            return AddNode(name,typeof(T)) as T;
+            return AddNode(name, typeof(T)) as T;
         }
 
-        public virtual UniBaseNode AddNode(string nodeName,Type type)
+        public virtual UniBaseNode AddNode(string itemName, Type type)
         {
-//            var childNode = new GameObject();
-//            childNode.name             = type.Name;
-//            childNode.transform.parent = transform;
-
             var nodeAsset = gameObject.AddComponent(type);
-            var node =  nodeAsset as UniBaseNode;
+            var node      = nodeAsset as UniBaseNode;
             if (node == null) {
                 DestroyImmediate(nodeAsset);
                 return null;
             }
-           
+
+            node.nodeName = itemName;
             node.Graph = this;
             nodes.Add(node);
+            
             return node;
         }
 
@@ -71,7 +69,7 @@
         /// <summary> Creates a copy of the original node in the graph </summary>
         public virtual UniBaseNode CopyNode(UniBaseNode original)
         {
-            UniBaseNode node = ScriptableObject.Instantiate(original);
+            var node = ScriptableObject.Instantiate(original);
             node.UpdateId();
             node.ClearConnections();
             nodes.Add(node);
@@ -92,7 +90,7 @@
         public void Clear()
         {
             if (Application.isPlaying) {
-                for (int i = 0; i < nodes.Count; i++) {
+                for (var i = 0; i < nodes.Count; i++) {
                     Destroy(nodes[i]);
                 }
             }
@@ -104,19 +102,19 @@
         public NodeGraph Copy()
         {
             // Instantiate a new nodegraph instance
-            NodeGraph graph = Instantiate(this);
+            var graph = Instantiate(this);
             // Instantiate all nodes inside the graph
-            for (int i = 0; i < nodes.Count; i++) {
+            for (var i = 0; i < nodes.Count; i++) {
                 if (nodes[i] == null) continue;
-                UniBaseNode node = Instantiate(nodes[i]) as UniBaseNode;
+                var node = Instantiate(nodes[i]) as UniBaseNode;
                 node.Graph     = graph;
                 graph.nodes[i] = node;
             }
 
             // Redirect all connections
-            for (int i = 0; i < graph.nodes.Count; i++) {
+            for (var i = 0; i < graph.nodes.Count; i++) {
                 if (graph.nodes[i] == null) continue;
-                foreach (NodePort port in graph.nodes[i].Ports) {
+                foreach (var port in graph.nodes[i].Ports) {
                     port.Redirect(nodes, graph.nodes);
                 }
             }
@@ -124,10 +122,12 @@
             return graph;
         }
 
-        public virtual void Dispose() {}
-        
+        public virtual void Dispose()
+        {
+        }
+
         #endregion
-        
+
         private void OnDestroy()
         {
             // Remove all nodes prior to graph destruction
@@ -139,15 +139,13 @@
         protected override void OnValidate()
         {
             base.OnValidate();
-            
+
             //remove all empty nodes
             if (nodes.RemoveAll(x => !x) > 0) {
                 Debug.LogError($"NULL node found at {name}");
             }
-      
-        }   
+        }
 
         #endregion
-        
     }
 }

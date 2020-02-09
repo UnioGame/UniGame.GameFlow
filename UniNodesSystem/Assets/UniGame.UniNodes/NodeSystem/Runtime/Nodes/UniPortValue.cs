@@ -124,6 +124,9 @@
         
         public IObservable<T> Receive<T>()
         {
+            if (valueFilters == null) {
+                return Observable.Empty<T>();
+            }
             return valueFilters(typeof(T)) ? context.Receive<T>() : Observable.Empty<T>();
         }
         

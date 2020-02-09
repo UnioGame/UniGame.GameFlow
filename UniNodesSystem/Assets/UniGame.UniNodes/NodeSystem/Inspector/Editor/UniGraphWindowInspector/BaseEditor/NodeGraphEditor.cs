@@ -77,7 +77,7 @@
 
             AssetDatabase.SaveAssets();
 
-            if (sourceGraph)
+            if (sourceGraph && targetGraph)
             {
                 PrefabUtility.ApplyPrefabInstance(targetGraph.gameObject,InteractionMode.AutomatedAction);
             }

@@ -190,16 +190,16 @@
         /// <summary> Convenience function. </summary>
         /// <seealso cref="AddInstancePort"/>
         /// <seealso cref="AddInstanceOutput"/>
-        public NodePort AddInstanceInput(Type type, ConnectionType connectionType = ConnectionType.Multiple,
+        public NodePort AddInstanceInput(List<Type> type, ConnectionType connectionType = ConnectionType.Multiple,
             string fieldName = null)
         {
-            return AddInstancePort(type, PortIO.Input, connectionType, fieldName);
+            return AddInstancePort(type,PortIO.Input, connectionType, fieldName);
         }
 
         /// <summary> Convenience function. </summary>
         /// <seealso cref="AddInstancePort"/>
         /// <seealso cref="AddInstanceInput"/>
-        public NodePort AddInstanceOutput(Type type, ConnectionType connectionType = ConnectionType.Multiple,
+        public NodePort AddInstanceOutput(List<Type> type, ConnectionType connectionType = ConnectionType.Multiple,
             string fieldName = null)
         {
             return AddInstancePort(type, PortIO.Output, connectionType, fieldName);
@@ -208,7 +208,7 @@
         /// <summary> Add a dynamic, serialized port to this node. </summary>
         /// <seealso cref="AddInstanceInput"/>
         /// <seealso cref="AddInstanceOutput"/>
-        private NodePort AddInstancePort(Type type, PortIO direction,
+        private NodePort AddInstancePort(List<Type> types, PortIO direction,
             ConnectionType connectionType = ConnectionType.Multiple, string fieldName = null)
         {
             if (fieldName == null)
@@ -223,7 +223,7 @@
                 return ports[fieldName];
             }
 
-            var port = new NodePort(fieldName, type, direction, connectionType, this);
+            var port = new NodePort(fieldName, direction, connectionType, this,types);
             ports.Add(fieldName, port);
             return port;
         }
@@ -310,7 +310,6 @@
 
         public override int GetHashCode()
         {
-            return (int)Id;
             if (Application.isPlaying)
             {
                 var id = base.GetHashCode();

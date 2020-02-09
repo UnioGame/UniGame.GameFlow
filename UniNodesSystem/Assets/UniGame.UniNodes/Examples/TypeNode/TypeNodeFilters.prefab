@@ -1,0 +1,473 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &9055180557488551274
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7212427602988102999}
+  - component: {fileID: 3666624980242943853}
+  - component: {fileID: 6341517157453944093}
+  - component: {fileID: 8520775426397002439}
+  - component: {fileID: 6341517157453944095}
+  - component: {fileID: 6341517157453944097}
+  - component: {fileID: 1027448284966264346}
+  - component: {fileID: 7530481606034183946}
+  m_Layer: 0
+  m_Name: TypeNodeFilters
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7212427602988102999
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9055180557488551274}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3666624980242943853
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9055180557488551274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 782945db79ce44748b3f294e0edf364e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _id: 0
+  width: 220
+  nodeName: 
+  position: {x: 0, y: 0}
+  ports:
+    keys:
+    - GraphPort
+    values:
+    - _id: 0
+      _fieldName: GraphPort
+      _node: {fileID: 3666624980242943853}
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _dynamic: 1
+      _allowedValueTypes:
+      - UniGreenModules.UniNodeSystem.Runtime.UniPortValue, unigame.nodesystem.runtime,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      _portValue:
+        name: GraphPort
+  _graph: {fileID: 0}
+  _uniqueId: 55
+  nodes:
+  - {fileID: 8520775426397002439}
+  - {fileID: 6341517157453944095}
+  - {fileID: 6341517157453944097}
+  - {fileID: 1027448284966264346}
+  - {fileID: 7530481606034183946}
+--- !u!114 &6341517157453944093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9055180557488551274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff87142bf9c884741bbcd295bab90ce7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  graph: {fileID: 3666624980242943853}
+--- !u!114 &8520775426397002439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9055180557488551274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07d0c7065aa6e1e46be96a27eb24c3cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _id: 1
+  width: 220
+  nodeName: GraphPort
+  position: {x: 0, y: 0}
+  ports:
+    keys:
+    - '[out]GraphPort'
+    - '[in]GraphPort'
+    values:
+    - _id: 4
+      _fieldName: '[out]GraphPort'
+      _node: {fileID: 8520775426397002439}
+      connections:
+      - fieldName: '[in]data'
+        node: {fileID: 6341517157453944097}
+        reroutePoints: []
+      - fieldName: '[in]data'
+        node: {fileID: 1027448284966264346}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _dynamic: 1
+      _allowedValueTypes:
+      - UniGreenModules.UniNodeSystem.Runtime.UniPortValue, unigame.nodesystem.runtime,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      _portValue:
+        name: '[out]GraphPort'
+    - _id: 5
+      _fieldName: '[in]GraphPort'
+      _node: {fileID: 8520775426397002439}
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _dynamic: 1
+      _allowedValueTypes:
+      - UniGreenModules.UniNodeSystem.Runtime.UniPortValue, unigame.nodesystem.runtime,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      _portValue:
+        name: '[in]GraphPort'
+  _graph: {fileID: 3666624980242943853}
+  direction: 0
+  bindInOut: 1
+--- !u!114 &6341517157453944095
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9055180557488551274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23f9640bdcee91f44b837897ec957069, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _id: 2
+  width: 220
+  nodeName: Log Node
+  position: {x: 1144, y: -232}
+  ports:
+    keys:
+    - log
+    values:
+    - _id: 3
+      _fieldName: log
+      _node: {fileID: 6341517157453944095}
+      connections:
+      - fieldName: '[out]context'
+        node: {fileID: 7530481606034183946}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _dynamic: 1
+      _allowedValueTypes:
+      - UniGreenModules.UniNodeSystem.Runtime.UniPortValue, unigame.nodesystem.runtime,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      _portValue:
+        name: log
+  _graph: {fileID: 3666624980242943853}
+  mode: 1
+  message: SUMM
+--- !u!114 &6341517157453944097
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9055180557488551274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 242b893caa6457547b5a46e8b09ff42e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _id: 6
+  width: 280
+  nodeName: Int Demo Source Node
+  position: {x: 328, y: 56}
+  ports:
+    keys:
+    - '[out]data'
+    - '[in]data'
+    - intIn
+    - floatIn
+    - intOut
+    - floatOut
+    values:
+    - _id: 7
+      _fieldName: '[out]data'
+      _node: {fileID: 6341517157453944097}
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _dynamic: 1
+      _allowedValueTypes:
+      - UniGreenModules.UniNodeSystem.Runtime.UniPortValue, unigame.nodesystem.runtime,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      _portValue:
+        name: '[out]data'
+    - _id: 8
+      _fieldName: '[in]data'
+      _node: {fileID: 6341517157453944097}
+      connections:
+      - fieldName: '[out]GraphPort'
+        node: {fileID: 8520775426397002439}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _dynamic: 1
+      _allowedValueTypes:
+      - UniGreenModules.UniNodeSystem.Runtime.UniPortValue, unigame.nodesystem.runtime,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      _portValue:
+        name: '[in]data'
+    - _id: 43
+      _fieldName: intIn
+      _node: {fileID: 6341517157453944097}
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _dynamic: 1
+      _allowedValueTypes:
+      - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      _portValue:
+        name: intIn
+    - _id: 44
+      _fieldName: floatIn
+      _node: {fileID: 6341517157453944097}
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _dynamic: 1
+      _allowedValueTypes:
+      - System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      _portValue:
+        name: floatIn
+    - _id: 42
+      _fieldName: intOut
+      _node: {fileID: 6341517157453944097}
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _dynamic: 1
+      _allowedValueTypes:
+      - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      _portValue:
+        name: intOut
+    - _id: 52
+      _fieldName: floatOut
+      _node: {fileID: 6341517157453944097}
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _dynamic: 1
+      _allowedValueTypes:
+      - System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      _portValue:
+        name: floatOut
+  _graph: {fileID: 3666624980242943853}
+  floatOut: 0
+  intOut: 0
+  interval: 1
+  delay: 1
+--- !u!114 &1027448284966264346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9055180557488551274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 242b893caa6457547b5a46e8b09ff42e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _id: 12
+  width: 220
+  nodeName: Int Demo Source Node
+  position: {x: 344, y: -264}
+  ports:
+    keys:
+    - '[out]data'
+    - '[in]data'
+    - intValue
+    - intIn
+    - intOut
+    - floatOut
+    values:
+    - _id: 13
+      _fieldName: '[out]data'
+      _node: {fileID: 1027448284966264346}
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _dynamic: 1
+      _allowedValueTypes:
+      - UniGreenModules.UniNodeSystem.Runtime.UniPortValue, unigame.nodesystem.runtime,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      _portValue:
+        name: '[out]data'
+    - _id: 14
+      _fieldName: '[in]data'
+      _node: {fileID: 1027448284966264346}
+      connections:
+      - fieldName: '[out]GraphPort'
+        node: {fileID: 8520775426397002439}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _dynamic: 1
+      _allowedValueTypes:
+      - UniGreenModules.UniNodeSystem.Runtime.UniPortValue, unigame.nodesystem.runtime,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      _portValue:
+        name: '[in]data'
+    - _id: 27
+      _fieldName: intValue
+      _node: {fileID: 1027448284966264346}
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _dynamic: 1
+      _allowedValueTypes:
+      - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      _portValue:
+        name: intValue
+    - _id: 30
+      _fieldName: intIn
+      _node: {fileID: 1027448284966264346}
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _dynamic: 1
+      _allowedValueTypes:
+      - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      _portValue:
+        name: intIn
+    - _id: 33
+      _fieldName: intOut
+      _node: {fileID: 1027448284966264346}
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _dynamic: 1
+      _allowedValueTypes:
+      - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      _portValue:
+        name: intOut
+    - _id: 53
+      _fieldName: floatOut
+      _node: {fileID: 1027448284966264346}
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _dynamic: 1
+      _allowedValueTypes:
+      - System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      _portValue:
+        name: floatOut
+  _graph: {fileID: 3666624980242943853}
+  floatOut: 0
+  intOut: 0
+  interval: 3
+  delay: 5
+--- !u!114 &7530481606034183946
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9055180557488551274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55f6ec6d932a48040a4a828ef7880ba9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _id: 17
+  width: 220
+  nodeName: Summator Demo Node
+  position: {x: 776, y: 24}
+  ports:
+    keys:
+    - '[out]context'
+    - '[in]context'
+    - summ
+    - summInt
+    - summFloat
+    values:
+    - _id: 18
+      _fieldName: '[out]context'
+      _node: {fileID: 7530481606034183946}
+      connections:
+      - fieldName: log
+        node: {fileID: 6341517157453944095}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _dynamic: 1
+      _allowedValueTypes:
+      - UniGreenModules.UniNodeSystem.Runtime.UniPortValue, unigame.nodesystem.runtime,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      _portValue:
+        name: '[out]context'
+    - _id: 19
+      _fieldName: '[in]context'
+      _node: {fileID: 7530481606034183946}
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _dynamic: 1
+      _allowedValueTypes:
+      - UniGreenModules.UniNodeSystem.Runtime.UniPortValue, unigame.nodesystem.runtime,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      _portValue:
+        name: '[in]context'
+    - _id: 46
+      _fieldName: summ
+      _node: {fileID: 7530481606034183946}
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _dynamic: 1
+      _allowedValueTypes:
+      - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      _portValue:
+        name: summ
+    - _id: 54
+      _fieldName: summInt
+      _node: {fileID: 7530481606034183946}
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _dynamic: 1
+      _allowedValueTypes:
+      - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      _portValue:
+        name: summInt
+    - _id: 55
+      _fieldName: summFloat
+      _node: {fileID: 7530481606034183946}
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _dynamic: 1
+      _allowedValueTypes:
+      - System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      _portValue:
+        name: summFloat
+  _graph: {fileID: 3666624980242943853}
+  summInt: 0
+  summFloat: 0

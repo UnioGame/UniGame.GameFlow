@@ -11,7 +11,6 @@
     using UniCore.Runtime.ObjectPool.Runtime;
     using UniCore.Runtime.ObjectPool.Runtime.Extensions;
     using UniCore.Runtime.ProfilerTools;
-    using UniCore.Runtime.Rx.Extensions;
     using UniRx;
     using UnityEngine;
 
@@ -24,8 +23,7 @@
         /// unique graph space port id 
         /// </summary>
         [ReadOnlyValue]
-        [SerializeField]
-        private ulong _id;
+        [SerializeField] private ulong _id;
         [SerializeField] protected string               _fieldName;
         [SerializeField] protected UniBaseNode          _node;
         [SerializeField] protected List<PortConnection> connections = new List<PortConnection>();
@@ -55,13 +53,7 @@
         /// <summary>
         /// draft validator refactoring. Move rule to SO files
         /// </summary>
-        private List<Func<NodePort, NodePort, bool>> connectionsValidators = new List<Func<NodePort, NodePort, bool>>() {
-            (source, to) => to != null,
-            (source, to) => to != source,
-            (source, to) => !source.IsConnectedTo(to),
-            (source, to) => source.Direction != to.Direction,
-            (source, to) => source.ValueTypes.Any(to.ValidateValueType),
-        };
+        private IReadOnlyList<Func<NodePort, NodePort, bool>> _connectionsValidators;
 
         #region  constructor
 
@@ -88,6 +80,7 @@
             }
 
             SetValueFilter(new List<Type>() {fieldInfo.FieldType});
+            Initialize();
         }
 
         /// <summary>
@@ -130,12 +123,24 @@
             _connectionType = connectionType;
 
             SetValueFilter(types);
+            Initialize();
         }
 
         #endregion
 
         #region public properties
 
+        public IReadOnlyList<Func<NodePort, NodePort, bool>> ConnectionsValidators =>
+            _connectionsValidators == null
+                ? new List<Func<NodePort, NodePort, bool>>() {
+                    (source, to) => to != null && source != null,
+                    (source, to) => to != source,
+                    (source, to) => !source.IsConnectedTo(to),
+                    (source, to) => source.Direction != to.Direction,
+                    (source, to) => source.ValueTypes.Any(to.ValidateValueType),
+                }
+                : _connectionsValidators;
+        
         public ulong Id => _id = _id == 0 ? UpdateId() : _id;
 
         public IReadOnlyList<Type> ValueTypes => _portValueTypes;
@@ -225,7 +230,9 @@
         /// </summary>
         public bool ValidateValueType(Type targetType)
         {
-            if (_portValueTypes.Count == 0) return true;
+            if (_portValueTypes == null || _portValueTypes.Count == 0) 
+                return true;
+            
             for (var i = 0; i < _portValueTypes.Count; i++) {
                 var type = _portValueTypes[i];
                 if (type == targetType) return true;
@@ -236,20 +243,19 @@
 
         #endregion
 
-        public void Initialize(ILifeTime lifeTime)
+        public void Initialize()
         {
-            _lifetime = _lifetime == null ? new LifeTimeDefinition() : _lifetime;
+            _lifetime = _lifetime ?? new LifeTimeDefinition();
             _lifetime.Release();
             
-            lifeTime.AddCleanUpAction(() => _lifetime.Terminate());
-
             _portValue.Initialize(_fieldName, _lifetime.LifeTime, ValidateValueType);
-
+            
             InitializeTypeFilter();
         }
 
         public void Release()
         {
+            _lifetime.Terminate();
             _portValueSubscriptions.Clear();
         }
 
@@ -275,7 +281,7 @@
         {
             if (connections == null) connections = new List<PortConnection>();
 
-            if (!connectionsValidators.Any(x => x(this, port))) {
+            if (!ConnectionsValidators.All(x => x(this, port))) {
                 GameLog.LogError("Port Connection Error");
                 return;
             }
@@ -487,6 +493,18 @@
 
         #region private methods
 
+        private IReadOnlyList<Func<NodePort, NodePort, bool>> CreateConnectionValidators()
+        {
+            var validators = new List<Func<NodePort, NodePort, bool>>() {
+                (source, to) => to != null && source!=null,
+                (source, to) => to != source,
+                (source, to) => !source.IsConnectedTo(to),
+                (source, to) => source.Direction != to.Direction,
+                (source, to) => source.ValueTypes.Any(to.ValidateValueType),
+            };
+            return validators;
+        }
+        
         private void InitializeTypeFilter()
         {
             _portValueTypes = _portValueTypes ?? new List<Type>();
@@ -494,6 +512,8 @@
             _portValueTypes.AddRange(_allowedValueTypes.Select(x => Type.GetType(x, false)).Where(x => x != null).ToList());
         }
 
+        
+        
         /// <summary>
         /// Create connection between valid nodes 
         /// </summary>
@@ -504,14 +524,11 @@
             _portValueSubscriptions = _portValueSubscriptions ?? new HashSet<Type>();
 
             var type = typeof(TValue);
-            if (_portValueSubscriptions.Add(type)) {
+            if (_portValueSubscriptions.Add(type))
+            {
                 for (var i = 0; i < connections.Count; i++) {
                     var connection     = connections[i];
-                    var portObservable = connection.Port.Receive<TValue>();
-                    if (!connection.Port.ValidateValueType<TValue>())
-                        continue;
-
-                    portObservable.Subscribe(x => _portValue.Publish(x)).AddTo(LifeTime);
+                    connection.Port.Connect(this);
                 }
             }
 

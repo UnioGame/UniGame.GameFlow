@@ -33,7 +33,8 @@
             // Loop through current node ports
             foreach (var port in ports.Values.ToList()) {
                 // If port still exists, check it it has been changed
-                if (staticPorts.TryGetValue(port.FieldName, out var staticPort)) {
+                NodePort staticPort;
+                if (staticPorts.TryGetValue(port.FieldName, out staticPort)) {
                     // If port exists but with wrong settings, remove it. Re-add it later.
                     if (port.ConnectionType != staticPort.ConnectionType || port.IsDynamic || port.Direction != staticPort.Direction) {
                         ports.Remove(port.FieldName);

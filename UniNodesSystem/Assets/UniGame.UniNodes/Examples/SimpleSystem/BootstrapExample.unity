@@ -138,7 +138,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1930435005
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -366,6 +366,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bootstrap
       objectReference: {fileID: 0}
+    - target: {fileID: 3947279238786959826, guid: 892ba2dd7c7ecdb4bbd63fa0a897edcb,
+        type: 3}
+      propertyPath: ports.keys.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3947279238786959826, guid: 892ba2dd7c7ecdb4bbd63fa0a897edcb,
+        type: 3}
+      propertyPath: ports.values.Array.size
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4243253785151902023, guid: 892ba2dd7c7ecdb4bbd63fa0a897edcb,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -420,6 +430,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6208779352982914149, guid: 892ba2dd7c7ecdb4bbd63fa0a897edcb,
+        type: 3}
+      propertyPath: ports.keys.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6208779352982914149, guid: 892ba2dd7c7ecdb4bbd63fa0a897edcb,
+        type: 3}
+      propertyPath: ports.values.Array.size
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 892ba2dd7c7ecdb4bbd63fa0a897edcb, type: 3}

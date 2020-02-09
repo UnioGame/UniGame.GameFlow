@@ -1,6 +1,7 @@
 namespace UniGreenModules.UniNodeSystem.Runtime.Interfaces
 {
     using System;
+    using System.Collections.Generic;
     using Core;
 
     public interface IMutableNode
@@ -8,12 +9,12 @@ namespace UniGreenModules.UniNodeSystem.Runtime.Interfaces
         /// <summary> Convenience function. </summary>
         /// <seealso cref="UniBaseNode.AddInstancePort"/>
         /// <seealso cref="UniBaseNode.AddInstanceOutput"/>
-        NodePort AddInstanceInput(Type type, ConnectionType connectionType = ConnectionType.Multiple, string fieldName = null);
+        NodePort AddInstanceInput(List<Type> type, ConnectionType connectionType = ConnectionType.Multiple, string fieldName = null);
 
         /// <summary> Convenience function. </summary>
         /// <seealso cref="UniBaseNode.AddInstancePort"/>
         /// <seealso cref="UniBaseNode.AddInstanceInput"/>
-        NodePort AddInstanceOutput(Type type, ConnectionType connectionType = ConnectionType.Multiple, string fieldName = null);
+        NodePort AddInstanceOutput(List<Type> type, ConnectionType connectionType = ConnectionType.Multiple, string fieldName = null);
 
         /// <summary> Remove an instance port from the node </summary>
         void RemoveInstancePort(string fieldName);

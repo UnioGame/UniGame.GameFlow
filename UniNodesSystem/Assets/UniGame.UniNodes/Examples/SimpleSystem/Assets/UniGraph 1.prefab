@@ -1,0 +1,214 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4039686100844950764
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1842625749090305702}
+  - component: {fileID: 7639729139964299732}
+  - component: {fileID: 8380738200308798948}
+  - component: {fileID: 6364643937187284853}
+  - component: {fileID: 5739525448131224373}
+  m_Layer: 0
+  m_Name: UniGraph 1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1842625749090305702
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4039686100844950764}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7639729139964299732
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4039686100844950764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 782945db79ce44748b3f294e0edf364e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _id: 0
+  width: 220
+  nodeName: 
+  position: {x: 0, y: 0}
+  ports:
+    keys:
+    - 
+    - GraphPort
+    values:
+    - _id: 0
+      _fieldName: 
+      _node: {fileID: 7639729139964299732}
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _dynamic: 1
+      _allowedValueTypes:
+      - UniGreenModules.UniNodeSystem.Runtime.UniPortValue, unigame.nodesystem.runtime,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      _portValue:
+        name: 
+    - _id: 0
+      _fieldName: GraphPort
+      _node: {fileID: 7639729139964299732}
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _dynamic: 1
+      _allowedValueTypes:
+      - UniGreenModules.UniNodeSystem.Runtime.UniPortValue, unigame.nodesystem.runtime,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      _portValue:
+        name: GraphPort
+  _graph: {fileID: 0}
+  _uniqueId: 7
+  nodes:
+  - {fileID: 8380738200308798948}
+  - {fileID: 6364643937187284853}
+--- !u!114 &8380738200308798948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4039686100844950764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07d0c7065aa6e1e46be96a27eb24c3cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _id: 1
+  width: 220
+  nodeName: GraphPort
+  position: {x: 0, y: 0}
+  ports:
+    keys:
+    - '[out]'
+    - '[in]'
+    - '[out]GraphPort'
+    - '[in]GraphPort'
+    values:
+    - _id: 3
+      _fieldName: '[out]'
+      _node: {fileID: 8380738200308798948}
+      connections:
+      - fieldName: log
+        node: {fileID: 6364643937187284853}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _dynamic: 1
+      _allowedValueTypes:
+      - UniGreenModules.UniNodeSystem.Runtime.UniPortValue, unigame.nodesystem.runtime,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      _portValue:
+        name: '[out]'
+    - _id: 2
+      _fieldName: '[in]'
+      _node: {fileID: 8380738200308798948}
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _dynamic: 1
+      _allowedValueTypes:
+      - UniGreenModules.UniNodeSystem.Runtime.UniPortValue, unigame.nodesystem.runtime,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      _portValue:
+        name: '[in]'
+    - _id: 6
+      _fieldName: '[out]GraphPort'
+      _node: {fileID: 8380738200308798948}
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _dynamic: 1
+      _allowedValueTypes:
+      - UniGreenModules.UniNodeSystem.Runtime.UniPortValue, unigame.nodesystem.runtime,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      _portValue:
+        name: '[out]GraphPort'
+    - _id: 7
+      _fieldName: '[in]GraphPort'
+      _node: {fileID: 8380738200308798948}
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _dynamic: 1
+      _allowedValueTypes:
+      - UniGreenModules.UniNodeSystem.Runtime.UniPortValue, unigame.nodesystem.runtime,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      _portValue:
+        name: '[in]GraphPort'
+  _graph: {fileID: 7639729139964299732}
+  direction: 0
+  bindInOut: 1
+--- !u!114 &6364643937187284853
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4039686100844950764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23f9640bdcee91f44b837897ec957069, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _id: 4
+  width: 220
+  nodeName: Log Node
+  position: {x: 344, y: -72}
+  ports:
+    keys:
+    - log
+    values:
+    - _id: 5
+      _fieldName: log
+      _node: {fileID: 6364643937187284853}
+      connections:
+      - fieldName: '[out]'
+        node: {fileID: 8380738200308798948}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _dynamic: 1
+      _allowedValueTypes:
+      - UniGreenModules.UniNodeSystem.Runtime.UniPortValue, unigame.nodesystem.runtime,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      _portValue:
+        name: log
+  _graph: {fileID: 7639729139964299732}
+  mode: 1
+  message: LogNode
+--- !u!114 &5739525448131224373
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4039686100844950764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff87142bf9c884741bbcd295bab90ce7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  graph: {fileID: 7639729139964299732}

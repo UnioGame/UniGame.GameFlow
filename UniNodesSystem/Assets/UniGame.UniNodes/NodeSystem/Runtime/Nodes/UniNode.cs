@@ -28,7 +28,10 @@
         
         #region private fields
 
-        [NonSerialized] public List<ILifeTimeCommand> commands = 
+        [NonSerialized] protected HashSet<IPortValue> portValues = 
+            new HashSet<IPortValue>();
+        
+        [NonSerialized] protected List<ILifeTimeCommand> commands = 
             new List<ILifeTimeCommand>();
 
         [NonSerialized] private LifeTimeDefinition lifeTimeDefinition = 
@@ -49,6 +52,8 @@
 
         public ILifeTime LifeTime => lifeTimeDefinition.LifeTime;
 
+        public IReadOnlyCollection<IPortValue> PortValues => portValues = (portValues ?? new HashSet<IPortValue>());
+
         #endregion
 
         #region public methods
@@ -59,23 +64,35 @@
             if (isInitialized)
                 return;
 
+            portValues = new HashSet<IPortValue>();
+            
             //initialize ports
             foreach (var nodePort in Ports) {
-                nodePort.Initialize(LifeTime);
+                nodePort.Initialize();
             }
             
             isInitialized = true;
             
             //custom node initialization
             OnInitialize();
-
             //initialize all node commands
             InitializeCommands();
-            
             //remove deleted ports
             Ports.RemoveItems(this.IsPortRemoved, RemoveInstancePort);
         }
 
+        public bool AddPortValue(IPortValue portValue)
+        {
+            if (portValue == null) {
+                GameLog.LogErrorFormat("Try add NULL port value to {0}", this);
+                return false;
+            }
+
+            portValues.Add(portValue);
+
+            return true;
+        }
+        
         /// <summary>
         /// stop execution
         /// </summary>
@@ -97,16 +114,12 @@
 
             //mark as active
             isActive = true;
-            
             //restart lifetime
             lifeTimeDefinition.Release();
-
             //initialize
             Initialize();
-
             //execute all node commands
             commands.ForEach(x => x.Execute(LifeTime));
-            
             //user defined logic
             OnExecute();
         }
@@ -148,8 +161,6 @@
             //register node commands
             UpdateCommands(commands);
         }
-        
-        private void OnDestroy() => Exit();
 
         /// <summary>
         /// finish node life time

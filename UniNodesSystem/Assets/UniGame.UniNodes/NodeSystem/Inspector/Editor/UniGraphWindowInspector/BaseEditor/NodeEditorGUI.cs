@@ -287,8 +287,11 @@
                     var item = _portConnectionPoints.FirstOrDefault(x => x.Key.Id == output.Id);
                     if (item.Key == null) continue;
 
+                    if(output == null)
+                        continue;
+                    var types = output.ValueTypes;
                     var fromRect        = item.Value;
-                    var connectionColor = graphEditor.GetTypeColor(output.ValueTypes.FirstOrDefault());
+                    var connectionColor = graphEditor.GetTypeColor(types.FirstOrDefault());
 
                     for (var k = 0; k < output.ConnectionCount; k++) {
                         var input = output.GetConnection(k);
@@ -536,7 +539,8 @@
             NodeEditor nodeEditor,
             UniBaseNode node, 
             Vector2 nodePos,
-            Rect rectArea, NodeEditorGuiState state)
+            Rect rectArea, 
+            NodeEditorGuiState state)
         {
             if (state.EventType == EventType.Ignore) return;
 
@@ -549,6 +553,7 @@
             }
             catch (Exception e) {
                 GameLog.LogWarning(e.Message);
+                GUILayout.EndArea();
                 GUIUtility.ExitGUI();
             }
 
@@ -627,7 +632,7 @@
                 catch (Exception e) {
                     
                     GameLog.Log($"EventType {state.EventType} EventData[type: {state.Event.type} rawtype: {state.Event.type}");
-                    GameLog.LogError(e);
+                    GameLog.LogWarning(e.Message);
                     GUILayout.EndVertical();
                     GUILayout.EndVertical();
                     GUIUtility.ExitGUI();

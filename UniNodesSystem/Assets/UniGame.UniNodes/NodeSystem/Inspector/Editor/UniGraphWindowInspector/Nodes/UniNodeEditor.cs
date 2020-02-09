@@ -1,13 +1,18 @@
 ﻿namespace UniGreenModules.UniNodeSystem.Inspector.Editor.Nodes
 {
+    using System;
     using System.Collections.Generic;
+    using System.Reflection;
     using BaseEditor;
     using Drawers;
     using Drawers.Interfaces;
     using Runtime;
+    using Runtime.Attributes;
+    using Runtime.Extensions;
     using Runtime.Interfaces;
     using Styles;
     using UniCore.EditorTools.Editor.Utility;
+    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Attributes;
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Nodes;
     using UnityEngine;
 
@@ -50,6 +55,8 @@
         {
             var node = target as UniNode;
 
+            InitializeNodeAttributes(node);
+            
             node.Initialize();
 
             UpdateData(node);
@@ -61,6 +68,30 @@
             serializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
 
+        public void InitializeNodeAttributes(UniNode node)
+        {
+            var type = target.GetType();
+            var fields = type.GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetField | BindingFlags.NonPublic);
+            foreach (var fieldInfo in fields) {
+                var attributes = fieldInfo.GetCustomAttributes(false);
+                var fieldType = fieldInfo.FieldType;
+
+                foreach (var attribute in attributes) {
+                    switch (attribute) {
+                        case PortValueFilterAttribute value:
+                            node.UpdatePortValue(value.portName, value.direction, value.connectionType, value.typeFilter);
+                            continue;
+                        case PortValueAttribute value:
+                            node.UpdatePortValue(fieldInfo.Name, value.Direction, value.ConnectionType, new List<Type>(){fieldType});
+                            continue;
+                    }
+                }
+                
+            }
+
+        }
+        
+        
         public virtual void UpdateData(UniNode node)
         {
             

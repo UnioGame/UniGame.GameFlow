@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using Core;
     using Interfaces;
     using UniCore.Runtime.ObjectPool.Runtime;
@@ -40,7 +41,7 @@
 
             
         public static (IPortValue inputValue, IPortValue outputValue) 
-            CreatePortPair(this INode node, string outputPortName, bool connectInOut = false)
+            CreatePortPair(this IUniNode node, string outputPortName, bool connectInOut = false)
         {
             var inputName = outputPortName.GetFormatedPortName(PortIO.Input);
             return node.CreatePortPair(inputName, outputPortName, connectInOut);
@@ -82,7 +83,7 @@
 #endregion
         
         public static (IPortValue inputValue, IPortValue outputValue) 
-            CreatePortPair(this INode node,string inputPortName, string outputPortName, bool connectInOut = false)
+            CreatePortPair(this IUniNode node,string inputPortName, string outputPortName, bool connectInOut = false)
         {
             var outputPort = node.UpdatePortValue(outputPortName, PortIO.Output);
             var inputPort  = node.UpdatePortValue(inputPortName, PortIO.Input);
@@ -156,7 +157,7 @@
         public static bool IsPortRemoved(this IUniNode node,INodePort port)
         {
             if (port.IsStatic) return false;
-            var value = node.GetPort(port.FieldName);
+            var value = node.PortValues.FirstOrDefault(x => x.ItemName == port.ItemName);
             return value == null;
         }
         
@@ -179,12 +180,12 @@
         }
 
         public static IPortValue UpdatePortValue(
-            this INode node,
+            this IUniNode node,
             string portName,
             PortIO direction = PortIO.Output,
-            ConnectionType connectionType = ConnectionType.Multiple)
+            ConnectionType connectionType = ConnectionType.Multiple, 
+            List<Type> types = null)
         {
-        
             var nodePort = node.GetPort(portName);
 
             if (nodePort != null && nodePort.IsDynamic)
@@ -199,13 +200,13 @@
         
             if (nodePort == null)
             {
-                var portType = typeof(UniPortValue);
-
+                types = types ?? new List<Type>(); 
                 nodePort = direction == PortIO.Output
-                    ? node.AddInstanceOutput(portType, connectionType, portName)
-                    : node.AddInstanceInput(portType, connectionType, portName);
+                    ? node.AddInstanceOutput(types, connectionType, portName)
+                    : node.AddInstanceInput(types, connectionType, portName);
+                node.AddPortValue(nodePort);
             }
-
+            
             return nodePort;
         }
 

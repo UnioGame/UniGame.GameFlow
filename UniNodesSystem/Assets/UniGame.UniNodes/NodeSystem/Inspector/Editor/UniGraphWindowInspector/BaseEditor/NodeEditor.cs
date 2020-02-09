@@ -47,22 +47,15 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
             return Selection.Contains(target);
         }
         
-        public virtual void OnHeaderGUI()
-        {
-            
-            Draw(_headerDrawers);
-            
-        }
+        public virtual void OnHeaderGUI() => Draw(_headerDrawers);
         
-        
-
         /// <summary> Draws standard field editors for all public fields </summary>
         public virtual void OnBodyGUI()
         {
             PortPositions = new Dictionary<NodePort, Vector2>();
             
             serializedObject.Update();
-            
+
             Draw(_bodyDrawers);
 
             serializedObject.ApplyModifiedProperties();

@@ -4,13 +4,22 @@ namespace UniGreenModules.UniGameSystems.Examples.ServiceNode
 {
     using System.Collections;
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nodes.Runtime.Nodes;
+    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Attributes;
+    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Nodes;
+    using UniNodeSystem.Runtime.Attributes;
     using UniNodeSystem.Runtime.Core;
     using UniRoutine.Runtime;
     using UniRoutine.Runtime.Extension;
 
-    [CreateNodeMenuAttribute("Examples/DemoSystem/IntDemoSource")]
-    public class IntDemoSourceNode : InOutPortNode
+    [CreateNodeMenuAttribute("Examples/TypeNodes/IntDemoSource")]
+    public class IntDemoSourceNode : UniNode
     {
+        [PortValue(PortIO.Output)]
+        public float floatOut;
+        
+        [PortValue(PortIO.Output)]
+        public int intOut;
+
         public int interval = 1;
         public float delay = 1;
         
@@ -23,9 +32,13 @@ namespace UniGreenModules.UniGameSystems.Examples.ServiceNode
 
         private IEnumerator IntSourceProcess(int increment, float updateDelay)
         {
-            var wait = new WaitForSeconds(delay);
+            var intPort = GetPort(nameof(intOut));
+            var floatPort = GetPort(nameof(floatOut));
+            
+            var wait = new WaitForSeconds(updateDelay);
             while (isActiveAndEnabled) {
-                PortPair.OutputPort.Publish(increment);
+                intPort.Publish(increment);
+                floatPort.Publish(Time.deltaTime);
                 yield return wait;
             }
         }
