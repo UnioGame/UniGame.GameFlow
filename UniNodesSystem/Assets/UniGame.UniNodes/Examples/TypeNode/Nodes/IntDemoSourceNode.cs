@@ -20,6 +20,10 @@ namespace UniGreenModules.UniGameSystems.Examples.ServiceNode
         [PortValue(PortIO.Output)]
         public int intOut;
 
+        [PortValue(PortIO.Output)]
+        public int intOut1;
+
+        
         public int interval = 1;
         public float delay = 1;
         

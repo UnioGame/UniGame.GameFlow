@@ -1,14 +1,15 @@
 namespace UniGreenModules.UniNodeSystem.Runtime.Interfaces
 {
     using System.Collections.Generic;
+    using Core;
     using UniStateMachine.Runtime.Interfaces;
 
     public interface IUniNode : 
         INode,
         IState
     {
-        IReadOnlyCollection<IPortValue> PortValues { get; }
+        IReadOnlyCollection<INodePort> PortValues { get; }
 
-        bool AddPortValue(IPortValue portValue);
+        bool AddPortValue(INodePort portValue);
     }
 }

@@ -157,7 +157,7 @@
         public static bool IsPortRemoved(this IUniNode node,INodePort port)
         {
             if (port.IsStatic) return false;
-            var value = node.PortValues.FirstOrDefault(x => x.ItemName == port.ItemName);
+            var value = node.PortValues.FirstOrDefault(x => x.ItemName == port.ItemName && x.Direction == port.Direction);
             return value == null;
         }
         

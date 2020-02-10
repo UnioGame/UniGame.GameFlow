@@ -28,8 +28,8 @@
         
         #region private fields
 
-        [NonSerialized] protected HashSet<IPortValue> portValues = 
-            new HashSet<IPortValue>();
+        [NonSerialized] protected HashSet<INodePort> portValues = 
+            new HashSet<INodePort>();
         
         [NonSerialized] protected List<ILifeTimeCommand> commands = 
             new List<ILifeTimeCommand>();
@@ -52,7 +52,7 @@
 
         public ILifeTime LifeTime => lifeTimeDefinition.LifeTime;
 
-        public IReadOnlyCollection<IPortValue> PortValues => portValues = (portValues ?? new HashSet<IPortValue>());
+        public IReadOnlyCollection<INodePort> PortValues => portValues = (portValues ?? new HashSet<INodePort>());
 
         #endregion
 
@@ -64,7 +64,7 @@
             if (isInitialized)
                 return;
 
-            portValues = new HashSet<IPortValue>();
+            portValues = new HashSet<INodePort>();
             
             //initialize ports
             foreach (var nodePort in Ports) {
@@ -81,7 +81,7 @@
             Ports.RemoveItems(this.IsPortRemoved, RemoveInstancePort);
         }
 
-        public bool AddPortValue(IPortValue portValue)
+        public bool AddPortValue(INodePort portValue)
         {
             if (portValue == null) {
                 GameLog.LogErrorFormat("Try add NULL port value to {0}", this);
