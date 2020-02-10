@@ -78,7 +78,7 @@
             //initialize all node commands
             InitializeCommands();
             //remove deleted ports
-            Ports.RemoveItems(this.IsPortRemoved, RemoveInstancePort);
+            Ports.RemoveItems(this.IsPortRemoved, RemovePort);
         }
 
         public bool AddPortValue(INodePort portValue)

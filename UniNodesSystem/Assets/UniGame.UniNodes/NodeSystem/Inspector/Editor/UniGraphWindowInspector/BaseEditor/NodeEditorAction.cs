@@ -556,8 +556,6 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
                             if (substitutes.TryGetValue(inputPort.Node, out newNodeIn) &&
                                 substitutes.TryGetValue(outputPort.Node, out newNodeOut))
                             {
-                                newNodeIn.UpdateStaticPorts();
-                                newNodeOut.UpdateStaticPorts();
                                 inputPort = newNodeIn.GetInputPort(inputPort.FieldName);
                                 outputPort = newNodeOut.GetOutputPort(outputPort.FieldName);
                             }

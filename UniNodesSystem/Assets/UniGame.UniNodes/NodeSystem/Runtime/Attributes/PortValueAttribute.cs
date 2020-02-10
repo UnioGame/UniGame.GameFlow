@@ -1,20 +1,43 @@
 ﻿namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Attributes
 {
     using System;
+    using System.Collections.Generic;
+    using Core;
     using UniNodeSystem.Runtime.Core;
 
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = true)]
-    public class PortValueAttribute : Attribute
+    public class PortValueAttribute : Attribute , IPortData
     {
-        public readonly PortIO Direction;
-        public readonly ConnectionType ConnectionType;
+        public bool             instancePortList = false;
+        public string           fieldName        = string.Empty;
+        public PortIO           direction        = PortIO.Output;
+        public ConnectionType   connectionType   = ConnectionType.Multiple;
+        public bool             isDynamic        = false;
+        public ShowBackingValue showBackingValue = ShowBackingValue.Always;
+        public IReadOnlyList<Type> valueTypes;
 
-        public PortValueAttribute(PortIO direction = PortIO.Input, 
-            ConnectionType connectionType = ConnectionType.Multiple)
+        public PortValueAttribute(
+            PortIO direction = PortIO.Input, 
+            ConnectionType connectionType = ConnectionType.Multiple,
+            ShowBackingValue backingValue = ShowBackingValue.Always)
         {
-            this.Direction = direction;
-            this.ConnectionType = connectionType;
+            this.direction = direction;
+            this.connectionType = connectionType;
+            this.showBackingValue = backingValue;
         }
         
+        public string FieldName => fieldName;
+
+        public PortIO Direction => direction;
+
+        public ConnectionType ConnectionType => connectionType;
+
+        public bool Dynamic => isDynamic;
+
+        public ShowBackingValue ShowBackingValue => showBackingValue;
+
+        public bool InstancePortList => instancePortList;
+
+        public IReadOnlyList<Type> ValueTypes => valueTypes;
     }
 }

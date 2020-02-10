@@ -5,6 +5,7 @@
     using System.Linq;
     using Interfaces;
     using UniCore.Runtime.Attributes;
+    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Core;
     using UnityEngine;
     using UnityEngine.Serialization;
 
@@ -119,43 +120,7 @@
                 }
             }
         }
-
-        /// <summary> Iterate over all instane ports on this node. </summary>
-        public IEnumerable<NodePort> InstancePorts
-        {
-            get
-            {
-                foreach (var port in Ports)
-                {
-                    if (port.IsDynamic) yield return port;
-                }
-            }
-        }
-
-        /// <summary> Iterate over all instance outputs on this node. </summary>
-        public IEnumerable<NodePort> InstanceOutputs
-        {
-            get
-            {
-                foreach (var port in Ports)
-                {
-                    if (port.IsDynamic && port.IsOutput) yield return port;
-                }
-            }
-        }
-
-        /// <summary> Iterate over all instance inputs on this node. </summary>
-        public IEnumerable<NodePort> InstanceInputs
-        {
-            get
-            {
-                foreach (var port in Ports)
-                {
-                    if (port.IsDynamic && port.IsInput) yield return port;
-                }
-            }
-        }
-
+        
         public NodeGraph Graph
         {
             get => _graph;
@@ -168,16 +133,15 @@
             }
         }
 
-        protected void OnEnable()
-        {
-            UpdateStaticPorts();
-        }
-
-        /// <summary> Update static ports to reflect class fields. This happens automatically on enable. </summary>
-        public void UpdateStaticPorts()
-        {
-            NodeDataCache.UpdatePorts(this, ports);
-        }
+        // protected void OnEnable()
+        // {
+        //     UpdateStaticPorts();
+        // }
+        // /// <summary> Update static ports to reflect class fields. This happens automatically on enable. </summary>
+        // public void UpdateStaticPorts()
+        // {
+        //     NodeDataCache.UpdatePorts(this, ports);
+        // }
 
         /// <summary> Checks all connections for invalid references, and removes them. </summary>
         public void VerifyConnections()
@@ -187,29 +151,12 @@
 
         #region Instance Ports
 
-        /// <summary> Convenience function. </summary>
-        /// <seealso cref="AddInstancePort"/>
-        /// <seealso cref="AddInstanceOutput"/>
-        public NodePort AddInstanceInput(List<Type> type, ConnectionType connectionType = ConnectionType.Multiple,
-            string fieldName = null)
-        {
-            return AddInstancePort(type,PortIO.Input, connectionType, fieldName);
-        }
-
-        /// <summary> Convenience function. </summary>
-        /// <seealso cref="AddInstancePort"/>
-        /// <seealso cref="AddInstanceInput"/>
-        public NodePort AddInstanceOutput(List<Type> type, ConnectionType connectionType = ConnectionType.Multiple,
-            string fieldName = null)
-        {
-            return AddInstancePort(type, PortIO.Output, connectionType, fieldName);
-        }
-
-        /// <summary> Add a dynamic, serialized port to this node. </summary>
-        /// <seealso cref="AddInstanceInput"/>
-        /// <seealso cref="AddInstanceOutput"/>
-        private NodePort AddInstancePort(List<Type> types, PortIO direction,
-            ConnectionType connectionType = ConnectionType.Multiple, string fieldName = null)
+        /// <summary> Add a serialized port to this node. </summary>
+        public INodePort AddPort(
+            string fieldName,
+            IReadOnlyList<Type> types, PortIO direction,
+            ConnectionType connectionType = ConnectionType.Multiple,
+            ShowBackingValue showBackingValue = ShowBackingValue.Always)
         {
             if (fieldName == null)
             {
@@ -221,38 +168,25 @@
             {
                 Debug.LogWarning("Port '" + fieldName + "' already exists in " + name, this);
                 return ports[fieldName];
-            }
+            }    
 
-            var port = new NodePort(fieldName, direction, connectionType, this,types);
+            var port = new NodePort(this,fieldName, direction, connectionType,showBackingValue,types);
             ports.Add(fieldName, port);
             return port;
         }
 
         /// <summary> Remove an instance port from the node </summary>
-        public void RemoveInstancePort(string fieldName)
+        public void RemovePort(string fieldName)
         {
-            RemoveInstancePort(GetPort(fieldName));
+            RemovePort(GetPort(fieldName));
         }
 
         /// <summary> Remove an instance port from the node </summary>
-        public virtual void RemoveInstancePort(NodePort port)
+        public virtual void RemovePort(NodePort port)
         {
             if (port == null) throw new ArgumentNullException("port");
-            if (port.IsStatic) throw new ArgumentException("cannot remove static port");
-            
             port.ClearConnections();
             ports.Remove(port.FieldName);
-        }
-
-        /// <summary> Removes all instance ports from the node </summary>
-        [ContextMenu("Clear Instance Ports")]
-        public void ClearInstancePorts()
-        {
-            var instancePorts = new List<NodePort>(InstancePorts);
-            foreach (var port in instancePorts)
-            {
-                RemoveInstancePort(port);
-            }
         }
 
         #endregion

@@ -13,6 +13,9 @@
         [PortValue(PortIO.Input)]
         public int summInt = 0;
 
+        [PortValue(PortIO.Output)]
+        public int summResult = 0;
+        
         [PortValue(PortIO.Input)]
         public float summFloat = 0f;
         

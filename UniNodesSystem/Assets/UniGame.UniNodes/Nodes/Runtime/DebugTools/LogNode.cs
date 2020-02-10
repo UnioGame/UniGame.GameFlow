@@ -34,6 +34,7 @@ namespace UniGreenModules.UniNodeSystem.Nodes.DebugTools
             base.UpdateCommands(nodeCommands);
             
             var inputMessagePort = this.UpdatePortValue(logPortName, PortIO.Input);
+            
             nodeCommands.Add(new ContextBroadCastCommand<object>(x => 
                 PrintLog($"GRAPH {Graph.name} NODE {name} \n\t {x.GetType().Name} : {x}", mode),inputMessagePort));
         }

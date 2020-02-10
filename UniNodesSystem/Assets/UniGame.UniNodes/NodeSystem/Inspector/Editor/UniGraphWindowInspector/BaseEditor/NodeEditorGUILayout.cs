@@ -4,6 +4,9 @@
     using System.Collections.Generic;
     using System.Linq;
     using Runtime.Core;
+    using UniCore.EditorTools.Editor.Utility;
+    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Core;
+    using UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Core;
     using UnityEditor;
     using UnityEditorInternal;
     using UnityEngine;
@@ -40,120 +43,89 @@
             PropertyField(property, null, port, includeChildren, options);
         }
 
+        
+        public static void ShowBackingValueField(
+            SerializedProperty property, 
+            GUIContent label, 
+            bool includeChildren,
+            bool isConnected,
+            ShowBackingValue showBacking,
+            GUIStyle style = null)
+        {
+            var labelContent = label != null ? label : new GUIContent(property.displayName);
+            switch (showBacking) {
+                case ShowBackingValue.Unconnected:
+                    // Display a label if port is connected
+                    if (isConnected) {
+                        EditorDrawerUtils.DrawLabelField(labelContent, style, GUILayout.MinWidth(30));
+                    }
+                    // Display an editable property field if port is not connected
+                    else
+                        EditorGUILayout.PropertyField(property, label, includeChildren, GUILayout.MinWidth(30));
+                    break;
+                case ShowBackingValue.Never:
+                    // Display a label
+                    EditorDrawerUtils.DrawLabelField(labelContent, style, GUILayout.MinWidth(30));
+                    break;
+                case ShowBackingValue.Always:
+                    // Display an editable property field
+                    EditorGUILayout.PropertyField(property, label, includeChildren, GUILayout.MinWidth(30));
+                    break;
+            }
+
+        }
+
+        
         /// <summary> Make a field for a serialized property. Manual node port override. </summary>
         public static void PropertyField(SerializedProperty property, GUIContent label, NodePort port,
             bool includeChildren = true, params GUILayoutOption[] options)
         {
             if (property == null) throw new NullReferenceException();
 
+            label = label ?? new GUIContent(property.name); 
+            
             // If property is not a port, display a regular property field
-            if (port == null) EditorGUILayout.PropertyField(property, label, includeChildren, GUILayout.MinWidth(30));
+            if (port == null) {
+                EditorGUILayout.PropertyField(property, label, includeChildren, GUILayout.MinWidth(30));
+            }
             else {
                 var rect = new Rect();
 
-                // If property is an input, display a regular property field and put a port handle on the left side
-                if (port.Direction == PortIO.Input) {
-                    // Get data from [Input] attribute
-                    var                showBacking = ShowBackingValue.Unconnected;
-                    NodeInputAttribute nodeInputAttribute;
-                    var                instancePortList = false;
-                    if (NodeEditorUtilities.GetAttrib(port.Node.GetType(), property.name, out nodeInputAttribute)) {
-                        instancePortList = nodeInputAttribute.instancePortList;
-                        showBacking      = nodeInputAttribute.backingValue;
-                    }
-
-                    if (instancePortList) {
-                        var type = GetType(property);
-                        var connectionType = nodeInputAttribute != null
-                            ? nodeInputAttribute.connectionType
-                            : ConnectionType.Multiple;
-                        InstancePortList(property.name, type, property.serializedObject, port.Direction,
-                            connectionType);
-                        return;
-                    }
-
-                    switch (showBacking) {
-                        case ShowBackingValue.Unconnected:
-                            // Display a label if port is connected
-                            if (port.IsConnected)
-                                EditorGUILayout.LabelField(label != null
-                                    ? label
-                                    : new GUIContent(property.displayName));
-                            // Display an editable property field if port is not connected
-                            else
-                                EditorGUILayout.PropertyField(property, label, includeChildren, GUILayout.MinWidth(30));
-                            break;
-                        case ShowBackingValue.Never:
-                            // Display a label
-                            EditorGUILayout.LabelField(label != null ? label : new GUIContent(property.displayName));
-                            break;
-                        case ShowBackingValue.Always:
-                            // Display an editable property field
-                            EditorGUILayout.PropertyField(property, label, includeChildren, GUILayout.MinWidth(30));
-                            break;
-                    }
-
-                    rect          = GUILayoutUtility.GetLastRect();
-                    rect.position = rect.position - new Vector2(16, 0);
-                    // If property is an output, display a text label and put a port handle on the right side
+                var portData = port.GetPortDataWithAttributes(property.name);
+                
+                if (portData.InstancePortList) {
+                    InstancePortList(property.name, 
+                        port.ValueType, 
+                        property.serializedObject, 
+                        portData.Direction,
+                        portData.ConnectionType);
+                    return;
                 }
-                else if (port.Direction == PortIO.Output) {
-                    // Get data from [Output] attribute
-                    var                 showBacking = ShowBackingValue.Unconnected;
-                    NodeOutputAttribute nodeOutputAttribute;
-                    var                 instancePortList = false;
-                    if (NodeEditorUtilities.GetAttrib(port.Node.GetType(), property.name, out nodeOutputAttribute)) {
-                        instancePortList = nodeOutputAttribute.instancePortList;
-                        showBacking      = nodeOutputAttribute.backingValue;
-                    }
 
-                    if (instancePortList) {
-                        var type = GetType(property);
-                        var connectionType = nodeOutputAttribute != null
-                            ? nodeOutputAttribute.connectionType
-                            : ConnectionType.Multiple;
-                        InstancePortList(property.name, type, property.serializedObject, port.Direction,
-                            connectionType);
-                        return;
-                    }
-
-                    switch (showBacking) {
-                        case ShowBackingValue.Unconnected:
-                            // Display a label if port is connected
-                            if (port.IsConnected)
-                                EditorGUILayout.LabelField(label != null ? label : new GUIContent(property.displayName),
-                                    NodeEditorResources.OutputPort, GUILayout.MinWidth(30));
-                            // Display an editable property field if port is not connected
-                            else
-                                EditorGUILayout.PropertyField(property, label, includeChildren, GUILayout.MinWidth(30));
-                            break;
-                        case ShowBackingValue.Never:
-                            // Display a label
-                            EditorGUILayout.LabelField(label != null ? label : new GUIContent(property.displayName),
-                                NodeEditorResources.OutputPort, GUILayout.MinWidth(30));
-                            break;
-                        case ShowBackingValue.Always:
-                            // Display an editable property field
-                            EditorGUILayout.PropertyField(property, label, includeChildren, GUILayout.MinWidth(30));
-                            break;
-                    }
-
-                    rect          = GUILayoutUtility.GetLastRect();
-                    rect.position = rect.position + new Vector2(rect.width, 0);
-                }
+                ShowBackingValueField(property, label, includeChildren, port.IsConnected, portData.ShowBackingValue);
+                
+                rect = GUILayoutUtility.GetLastRect();
+                rect.position = port.Direction == PortIO.Input ?
+                    rect.position - new Vector2(16, 0) :
+                    rect.position + new Vector2(rect.width, 0);
 
                 rect.size = new Vector2(16, 16);
 
                 Color backgroundColor = new Color32(90, 97, 105, 255);
-                Color tint;
-                if (NodeEditorWindow.nodeTint.TryGetValue(port.Node.GetType(), out tint)) backgroundColor *= tint;
+                if (NodeEditorWindow.nodeTint.TryGetValue(port.Node.GetType(), out var tint)) {
+                    backgroundColor *= tint;
+                }
+                
                 var col                                                                                   = NodeEditorWindow.Current.graphEditor.GetTypeColor(port.ValueType);
                 DrawPortHandle(rect, backgroundColor, col);
 
                 // Register the handle position
                 var portPos = rect.center;
-                if (NodeEditor.PortPositions.ContainsKey(port)) NodeEditor.PortPositions[port] = portPos;
-                else NodeEditor.PortPositions.Add(port, portPos);
+                
+                if (NodeEditor.PortPositions.ContainsKey(port)) 
+                    NodeEditor.PortPositions[port] = portPos;
+                else 
+                    NodeEditor.PortPositions.Add(port, portPos);
             }
         }
 
@@ -364,14 +336,15 @@
             var node      = serializedObject.targetObject as UniBaseNode;
             var arrayData = serializedObject.FindProperty(fieldName);
 
-            Predicate<string> isMatchingInstancePort =
-                x => {
-                    var split = x.Split(' ');
-                    if (split != null && split.Length == 2) return split[0] == fieldName;
-                    else return false;
-                };
-            var instancePorts = node.InstancePorts.Where(x => isMatchingInstancePort(x.FieldName))
-                .OrderBy(x => x.FieldName).ToList();
+            bool IsMatchingInstancePort(string x)
+            {
+                var split = x.Split(' ');
+                return split.Length == 2 && split[0] == fieldName;
+            }
+
+            var instancePorts = node.Ports.
+                Where(x => IsMatchingInstancePort(x.FieldName)).
+                OrderBy(x => x.FieldName).ToList();
 
             ReorderableList                     list = null;
             Dictionary<string, ReorderableList> rlc;
@@ -483,12 +456,7 @@
                     newName = arrayData.name + " " + (++i);
 
                 var types = new List<Type>();
-                if (io == PortIO.Output) {
-                    node.AddInstanceOutput(types, connectionType, newName);
-                }
-                else {
-                    node.AddInstanceInput(types, connectionType, newName);
-                }
+                node.AddPort(newName, types, io, connectionType);
 
                 serializedObject.Update();
                 EditorUtility.SetDirty(node);
@@ -510,7 +478,7 @@
                     }
 
                     // Remove the last instance port, to avoid messing up the indexing
-                    node.RemoveInstancePort(instancePorts[instancePorts.Count() - 1].FieldName);
+                    node.RemovePort(instancePorts[instancePorts.Count() - 1].FieldName);
                     serializedObject.Update();
                     EditorUtility.SetDirty(node);
                     if (hasArrayData) {
@@ -540,12 +508,8 @@
                         newName = arrayData.name + " " + (++i);
                     
                     var types = new List<Type>();
-                    if (io == PortIO.Output) {
-                        node.AddInstanceOutput(types, connectionType, newName);
-                    }
-                    else {
-                        node.AddInstanceInput(types, connectionType, newName);
-                    }
+                    node.AddPort(newName,types,io, connectionType,ShowBackingValue.Always);
+
                     EditorUtility.SetDirty(node);
                     
                     instancePortCount++;

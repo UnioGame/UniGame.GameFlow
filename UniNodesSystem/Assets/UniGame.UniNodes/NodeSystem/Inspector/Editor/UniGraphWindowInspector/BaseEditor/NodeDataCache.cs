@@ -3,16 +3,13 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
-    using UnityEngine;
 
     /// <summary> Precaches reflection data in editor so we won't have to do it runtime </summary>
     public static class NodeDataCache
     {
         private static PortDataCache portDataCache;
 
-        private static bool Initialized {
-            get { return portDataCache != null; }
-        }
+        private static bool Initialized => portDataCache != null;
 
         /// <summary> Update static ports to reflect class fields. </summary>
         public static void UpdatePorts(UniBaseNode node, Dictionary<string, NodePort> ports)
@@ -36,13 +33,13 @@
                 NodePort staticPort;
                 if (staticPorts.TryGetValue(port.FieldName, out staticPort)) {
                     // If port exists but with wrong settings, remove it. Re-add it later.
-                    if (port.ConnectionType != staticPort.ConnectionType || port.IsDynamic || port.Direction != staticPort.Direction) {
+                    if (port.ConnectionType != staticPort.ConnectionType || port.Direction != staticPort.Direction) {
                         ports.Remove(port.FieldName);
                     }
-                    else port.SetValueFilter(staticPort.ValueTypes);
+                    else {
+                        port.SetValueFilter(staticPort.ValueTypes);
+                    }
                 }
-                // If port doesn't exist anymore, remove it
-                else if (port.IsStatic) ports.Remove(port.FieldName);
             }
 
             // Add missing ports
@@ -84,51 +81,13 @@
         {
             var fieldInfo = nodeType.GetFields();
             for (var i = 0; i < fieldInfo.Length; i++) {
-                //Get InputAttribute and OutputAttribute
-                var attribs          = fieldInfo[i].GetCustomAttributes(false);
-                var nodeInputAttrib  = attribs.FirstOrDefault(x => x is NodeInputAttribute) as NodeInputAttribute;
-                var nodeOutputAttrib = attribs.FirstOrDefault(x => x is NodeOutputAttribute) as NodeOutputAttribute;
-
-                if (nodeInputAttrib == null && nodeOutputAttrib == null) continue;
-
-                if (nodeInputAttrib != null && nodeOutputAttrib != null)
-                    Debug.LogError("Field " + fieldInfo[i].Name + " of type " + nodeType.FullName + " cannot be both input and output.");
-                else {
-                    if (!portDataCache.ContainsKey(nodeType)) 
-                        portDataCache.Add(nodeType, new List<NodePort>());
-                    
-                    portDataCache[nodeType].Add(new NodePort(fieldInfo[i]));
-                }
-            }
-        }
-
-        [System.Serializable]
-        private class PortDataCache : Dictionary<System.Type, List<NodePort>>, ISerializationCallbackReceiver
-        {
-            [SerializeField] private List<System.Type>    keys   = new List<System.Type>();
-            [SerializeField] private List<List<NodePort>> values = new List<List<NodePort>>();
-
-            // save the dictionary to lists
-            public void OnBeforeSerialize()
-            {
-                keys.Clear();
-                values.Clear();
-                foreach (var pair in this) {
-                    keys.Add(pair.Key);
-                    values.Add(pair.Value);
-                }
-            }
-
-            // load dictionary from lists
-            public void OnAfterDeserialize()
-            {
-                this.Clear();
-
-                if (keys.Count != values.Count)
-                    throw new System.Exception(string.Format("there are {0} keys and {1} values after deserialization. Make sure that both key and value types are serializable."));
-
-                for (var i = 0; i < keys.Count; i++)
-                    this.Add(keys[i], values[i]);
+                
+                var field = fieldInfo[i];
+                var node = field.CreatePortByAttributes();
+                
+                if (node!=null && !portDataCache.ContainsKey(nodeType)) 
+                    portDataCache.Add(nodeType, new List<NodePort>());
+                
             }
         }
     }

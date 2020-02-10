@@ -23,18 +23,12 @@ namespace UniGreenModules.UniNodeSystem.Runtime.Core
 
         /// <summary> Is this port connected to anytihng? </summary>
         bool IsConnected { get; }
-        bool IsInput { get; }
-        bool IsOutput { get; }
-        
+
         string FieldName { get; }
 
         IReadOnlyList<Type> ValueTypes { get; }
 
         UniBaseNode Node { get; set; }
-        
-        bool IsDynamic { get; }
-        
-        bool IsStatic { get; }
 
         ulong UpdateId();
 

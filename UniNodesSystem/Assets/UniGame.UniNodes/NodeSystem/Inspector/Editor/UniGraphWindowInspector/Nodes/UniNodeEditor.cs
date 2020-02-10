@@ -73,19 +73,9 @@
             var type = target.GetType();
             var fields = type.GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetField | BindingFlags.NonPublic);
             foreach (var fieldInfo in fields) {
-                var attributes = fieldInfo.GetCustomAttributes(false);
-                var fieldType = fieldInfo.FieldType;
 
-                foreach (var attribute in attributes) {
-                    switch (attribute) {
-                        case PortValueFilterAttribute value:
-                            node.UpdatePortValue(value.portName, value.direction, value.connectionType, value.typeFilter);
-                            continue;
-                        case PortValueAttribute value:
-                            node.UpdatePortValue(fieldInfo.Name, value.Direction, value.ConnectionType, new List<Type>(){fieldType});
-                            continue;
-                    }
-                }
+                var portData = fieldInfo.GetPortData();
+                node.UpdatePortValue(portData);
                 
             }
 

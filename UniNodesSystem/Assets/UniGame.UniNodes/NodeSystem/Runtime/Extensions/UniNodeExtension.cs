@@ -7,9 +7,12 @@
     using Interfaces;
     using UniCore.Runtime.ObjectPool.Runtime;
     using UniCore.Runtime.ObjectPool.Runtime.Extensions;
+    using UniCore.Runtime.ProfilerTools;
     using UniCore.Runtime.Rx.Extensions;
     using UniCore.Runtime.Utils;
+    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Core;
     using UniRx;
+    using UnityEngine;
 
     public static class UniNodeExtension
     {
@@ -156,7 +159,6 @@
         
         public static bool IsPortRemoved(this IUniNode node,INodePort port)
         {
-            if (port.IsStatic) return false;
             var value = node.PortValues.FirstOrDefault(x => x.ItemName == port.ItemName && x.Direction == port.Direction);
             return value == null;
         }
@@ -179,35 +181,35 @@
                 AddTo(node.LifeTime);     //stop all subscriptions when node deactivated
         }
 
+        public static IPortValue UpdatePortValue(this IUniNode node , IPortData portData)
+        {
+            return node.UpdatePortValue(
+                portData.FieldName, 
+                portData.Direction, 
+                portData.ConnectionType,
+                ShowBackingValue.Always, 
+                portData.ValueTypes);
+        }
+
         public static IPortValue UpdatePortValue(
             this IUniNode node,
             string portName,
             PortIO direction = PortIO.Output,
             ConnectionType connectionType = ConnectionType.Multiple, 
-            List<Type> types = null)
+            ShowBackingValue showBackingValue = ShowBackingValue.Always,
+            IReadOnlyList<Type> types = null)
         {
-            var nodePort = node.GetPort(portName);
-
-            if (nodePort != null && nodePort.IsDynamic)
-            {      
-                if (nodePort.Direction != direction)
-                {
-                    node.RemoveInstancePort(portName);
-                    nodePort = null;
-                }
-
+            var port = node.GetPort(portName);
+            if (port != null) {
+                return port;
             }
-        
-            if (nodePort == null)
-            {
-                types = types ?? new List<Type>(); 
-                nodePort = direction == PortIO.Output
-                    ? node.AddInstanceOutput(types, connectionType, portName)
-                    : node.AddInstanceInput(types, connectionType, portName);
-                node.AddPortValue(nodePort);
-            }
-            
-            return nodePort;
+
+            types = types ?? new List<Type>();
+            var portValue = node.AddPort(portName, types, direction, connectionType, showBackingValue);
+            var nodeValue = portValue;
+            node.AddPortValue(portValue);
+
+            return nodeValue;
         }
 
     }

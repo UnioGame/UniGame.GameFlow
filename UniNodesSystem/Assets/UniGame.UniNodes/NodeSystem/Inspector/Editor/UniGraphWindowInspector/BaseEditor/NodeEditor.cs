@@ -14,6 +14,9 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
     public class NodeEditor : NodeEditorBase<NodeEditor, CustomNodeEditorAttribute, UniBaseNode>, INodeEditor
     {
 
+        /// <summary>
+        /// nodes port positions
+        /// </summary>
         public static Dictionary<NodePort, Vector2> PortPositions = new Dictionary<NodePort, Vector2>();
 
         /// <summary> Fires every whenever a node was modified through the editor </summary>

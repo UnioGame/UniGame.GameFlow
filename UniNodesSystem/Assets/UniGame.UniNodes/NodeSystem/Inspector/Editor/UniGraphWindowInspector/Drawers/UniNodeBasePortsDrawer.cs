@@ -67,9 +67,13 @@
 
         private void DrawPorts(IUniNode node,IDictionary<string, NodePort> cache)
         {
+            
             for (var i = 0; i < node.Ports.Count; i++)
             {
                 var portValue = node.Ports[i];
+                
+                if(portValue.Dynamic == false) continue;
+                
                 var outputPortName = portValue.ItemName;
                 
                 if (cache.ContainsKey(outputPortName))
