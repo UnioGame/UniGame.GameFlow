@@ -12,14 +12,6 @@
     using UnityEngine;
     using Object = UnityEngine.Object;
 
-    public struct NodeEditorGuiState
-    {
-        public Event        Event;
-        public Vector2      MousePosition;
-        public List<Object> PreSelection;
-        public EventType    EventType;
-    }
-
     /// <summary> Contains GUI methods </summary>
     public partial class NodeEditorWindow
     {
@@ -57,7 +49,7 @@
             DrawZoomedNodes();
             DrawSelectionBox();
             DrawTooltip();
-            DrawGraphsButtons();
+            DrawGraphsControlls();
 
             graphEditor.OnGUI();
 
@@ -345,15 +337,8 @@
                 selectedReroutes = selection;
         }
 
-        private Vector2 _nodeGraphScroll;
-        private bool    _showGraphsList;
-
-        private void DrawGraphsButtons()
+        private void DrawGraphsControlls()
         {
-            if (NodeGraphs == null) {
-                UpdateEditorNodeGraphs();
-            }
-
             DrawTopButtons();
 
             DrawActiveGraphs();

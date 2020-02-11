@@ -6,7 +6,7 @@ namespace UniGreenModules.UniNodeSystem.Runtime.Interfaces
 
     public interface IPortValue : 
         IContext,
-        IConnector<IMessagePublisher>,
+        IReactiveSource,
         INamedItem
     {
 

@@ -30,7 +30,6 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
         [SerializeField] private NodePortReference[] _references = new NodePortReference[0];
         [SerializeField] private Rect[] _rects = new Rect[0];
         
-        public static List<UniGraphAsset> NodeGraphs { get; protected set; } = new List<UniGraphAsset>();
         public static HashSet<NodeEditorWindow> ActiveWindows { get; protected set; } = new HashSet<NodeEditorWindow>();
         
         
@@ -99,12 +98,7 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
             
             return window;
         }
-
-        public static void UpdateEditorNodeGraphs()
-        {
-            NodeGraphs = AssetEditorTools.GetAssets<UniGraphAsset>();
-        }
-
+    
         /// <summary> Repaint all open NodeEditorWindows. </summary>
         public static void RepaintAll()
         {
