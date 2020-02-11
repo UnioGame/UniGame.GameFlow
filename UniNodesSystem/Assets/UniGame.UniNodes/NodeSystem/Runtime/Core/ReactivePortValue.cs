@@ -7,37 +7,24 @@
     using UnityEngine.Serialization;
 
     [Serializable]
-    public class ReactivePortValue<TValue> : 
-        IReactivePortValue<TValue>
+    public class ReactivePortValue<TValue, TType> : 
+        IReactivePortValue<TType>
+        where TValue : class, IReactiveProperty<TType>
     {
         public int Y;
         
         [SerializeReference] 
-        public RecycleReactiveProperty<TValue> value;
-
-        #region concstructor
-        
-        public ReactivePortValue()
-        {
-            this.value = new RecycleReactiveProperty<TValue>();
-        }
-        
-        public ReactivePortValue(TValue value)
-        {
-            this.value = new RecycleReactiveProperty<TValue>(value);
-        }
-        
-        #endregion
+        public TValue value;
         
         public void Publish<T>(T message)
         {
-            if(message is TValue value)
+            if(message is TType value)
                 this.value.Value = value;
         }
     
-        public IDisposable Subscribe(IObserver<TValue> observer) => value.Subscribe(observer);
+        public IDisposable Subscribe(IObserver<TType> observer) => value.Subscribe(observer);
 
-        public TValue Value => value.Value;
+        public TType Value => value.Value;
 
         public bool HasValue => value.HasValue;
 

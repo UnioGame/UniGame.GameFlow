@@ -308,6 +308,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: ReactivePorts
       objectReference: {fileID: 0}
+    - target: {fileID: 4144992777765798208, guid: e9058f32983d8044cb181e2ac92a19cf,
+        type: 3}
+      propertyPath: IntValue1.value.value
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6826818068659486235, guid: e9058f32983d8044cb181e2ac92a19cf,
         type: 3}
       propertyPath: m_LocalPosition.x

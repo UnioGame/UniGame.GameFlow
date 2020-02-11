@@ -138,10 +138,11 @@ MonoBehaviour:
     keys: []
     values: []
   _graph: {fileID: 7215943088033483437}
-  IntReactiveValue:
-    id: 0
   IntValue1:
-    id: 0
+    Y: 0
+    value:
+      id: 0
+    X: 0
   references:
     version: 1
     00000000:

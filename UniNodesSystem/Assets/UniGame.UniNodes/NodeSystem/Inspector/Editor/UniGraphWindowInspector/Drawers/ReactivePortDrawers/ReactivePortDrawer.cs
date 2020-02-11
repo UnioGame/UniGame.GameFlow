@@ -33,7 +33,7 @@ public class ReactivePortDrawer<T> : PropertyDrawer
     
 }
 
-//[UnityEditor.CustomPropertyDrawer(typeof(IntReactivePort))]
+[UnityEditor.CustomPropertyDrawer(typeof(IntReactivePort))]
 public class IntReactivePortDrawer : ReactivePortDrawer<int> { }
 
 [UnityEditor.CustomPropertyDrawer(typeof(FloatReactivePort))]
