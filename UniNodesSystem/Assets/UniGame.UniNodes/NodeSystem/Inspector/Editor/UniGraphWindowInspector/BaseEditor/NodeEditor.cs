@@ -6,12 +6,15 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
     using Drawers.Interfaces;
     using Interfaces;
     using Runtime.Core;
+    using Runtime.Interfaces;
     using UnityEditor;
     using UnityEngine;
 
     /// <summary> Base class to derive custom Node editors from. Use this to create your own custom inspectors and editors for your nodes. </summary>
     [CustomNodeEditor(typeof(UniBaseNode))]
-    public class NodeEditor : NodeEditorBase<NodeEditor, CustomNodeEditorAttribute, UniBaseNode>, INodeEditor
+    public class NodeEditor : 
+        NodeEditorBase<NodeEditor, CustomNodeEditorAttribute, UniBaseNode>, 
+        INodeEditorData
     {
 
         /// <summary>
@@ -22,16 +25,18 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
         /// <summary> Fires every whenever a node was modified through the editor </summary>
         public static Action<UniBaseNode> OnUpdateNode;
         public static int Renaming;
-
-
+        
         protected List<INodeEditorHandler> _bodyDrawers = new List<INodeEditorHandler>();
         
         protected List<INodeEditorHandler> _headerDrawers = new List<INodeEditorHandler>();
 
-        public UniBaseNode Target => target;
+        public INode Target => target;
+
+        public IReadOnlyDictionary<NodePort, Vector2> HandledPorts => PortPositions;
 
         public SerializedObject SerializedObject => serializedObject;
 
+        
         public sealed override void OnEnable()
         {
             
@@ -55,7 +60,8 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
         /// <summary> Draws standard field editors for all public fields </summary>
         public virtual void OnBodyGUI()
         {
-            PortPositions = new Dictionary<NodePort, Vector2>();
+            PortPositions = PortPositions ?? new Dictionary<NodePort, Vector2>();
+            PortPositions.Clear();
             
             serializedObject.Update();
 

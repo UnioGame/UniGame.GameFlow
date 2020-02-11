@@ -6,7 +6,7 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.Drawers.Interfaces
     public interface INodeEditorHandler
     {
         
-        bool Update(INodeEditor editor,UniBaseNode node);
+        bool Update(INodeEditorData editor,UniBaseNode node);
         
     }
 }

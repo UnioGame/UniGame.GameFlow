@@ -7,7 +7,7 @@
 
     public class PortAttributeHandler : INodeEditorHandler
     {
-        public bool Update(INodeEditor editor, UniBaseNode node)
+        public bool Update(INodeEditorData editor, UniBaseNode node)
         {
             
             return true;

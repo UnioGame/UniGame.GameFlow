@@ -15,7 +15,7 @@
         
         public IPortValue OutputPort { get; protected set; }
         
-        public void Initialize(
+        public ConnectedFormatedPairCommand(
             IUniNode node, 
             string input, 
             bool connect = true)

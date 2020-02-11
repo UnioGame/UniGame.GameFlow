@@ -9,7 +9,7 @@
 
     public class BaseHeaderDrawer : INodeEditorHandler
     {
-        public virtual bool Update(INodeEditor editor, UniBaseNode node)
+        public virtual bool Update(INodeEditorData editor, UniBaseNode node)
         {
             var target = node;
             var title = target.GetName();

@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Reflection;
     using BaseEditor;
     using Drawers;
@@ -71,12 +72,17 @@
         public void InitializeNodeAttributes(UniNode node)
         {
             var type = target.GetType();
-            var fields = type.GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetField | BindingFlags.NonPublic);
-            foreach (var fieldInfo in fields) {
+            var fields = type.GetFields(
+                BindingFlags.Public | BindingFlags.Instance | 
+                BindingFlags.GetField | 
+                BindingFlags.NonPublic);
 
-                var portData = fieldInfo.GetPortData();
+            var ports = fields.
+                Select(x => x.GetPortData()).
+                Where(x => x != null);
+            
+            foreach (var portData in ports) {
                 node.UpdatePortValue(portData);
-                
             }
 
         }
@@ -101,7 +107,7 @@
         
         protected virtual List<INodeEditorHandler> InitializeBodyHandlers(List<INodeEditorHandler> drawers)
         {
-            drawers.Add(new UniNodeBasePortsDrawer(new PortStyleSelector()));
+            drawers.Add(new UniPortsDrawer(new PortStyleSelector()));
             return drawers;
         }
 

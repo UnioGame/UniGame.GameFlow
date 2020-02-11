@@ -65,32 +65,6 @@
 
         #region constructor
 
-        // /// <summary>
-        // /// Construct a static targetless nodeport. Used as a template.
-        // /// </summary>
-        // public NodePort(FieldInfo fieldInfo)
-        // {
-        //     _fieldName = fieldInfo.Name;
-        //     _dynamic   = false;
-        //
-        //     var attribs = fieldInfo.GetCustomAttributes(false);
-        //     for (var i = 0; i < attribs.Length; i++) {
-        //         switch (attribs[i]) {
-        //             case NodeInputAttribute atr:
-        //                 _direction      = PortIO.Input;
-        //                 _connectionType = atr.connectionType;
-        //                 break;
-        //             case NodeOutputAttribute atr:
-        //                 _direction      = PortIO.Output;
-        //                 _connectionType = atr.connectionType;
-        //                 break;
-        //         }
-        //     }
-        //
-        //     SetValueFilter(new List<Type>() {fieldInfo.FieldType});
-        //     Initialize();
-        // }
-
         /// <summary>
         /// Copy a nodePort but assign it to another node.
         /// </summary>
@@ -154,24 +128,21 @@
         #region public properties
 
         public IReadOnlyList<Func<NodePort, NodePort, bool>> ConnectionsValidators =>
-            _connectionsValidators == null
-                ? new List<Func<NodePort, NodePort, bool>>() {
-                    (source, to) => to != null && source != null,
-                    (source, to) => to != source,
-                    (source, to) => !source.IsConnectedTo(to),
-                    (source, to) => source.Direction != to.Direction,
-                    (source, to) => source.ValueTypes.Any(to.ValidateValueType),
-                }
-                : _connectionsValidators;
+            _connectionsValidators ?? new List<Func<NodePort, NodePort, bool>>() {
+                (source, to) => to != null && source != null,
+                (source, to) => to != source,
+                (source, to) => !source.IsConnectedTo(to),
+                (source, to) => source.Direction != to.Direction,
+                (source, to) => source.ValueTypes.Any(to.ValidateValueType),
+            };
 
-        public ulong Id => _id = _id == 0 ? 
-            UpdateId() : _id;
+        public ulong Id => _id = _id == 0 ? UpdateId() : _id;
 
         public bool InstancePortList => instancePortList;
 
         public bool Dynamic => isDynamic;
 
-        public IReadOnlyList<Type> ValueTypes => _portValueTypes;
+        public IReadOnlyList<Type> ValueTypes =>  _portValueTypes ?? new List<Type>();
 
         public int ConnectionCount => connections.Count;
 

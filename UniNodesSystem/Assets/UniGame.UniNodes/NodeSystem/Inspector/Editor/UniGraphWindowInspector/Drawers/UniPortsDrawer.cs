@@ -1,6 +1,7 @@
 ﻿namespace UniGreenModules.UniNodeSystem.Inspector.Editor.Drawers
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Text.RegularExpressions;
     using BaseEditor.Interfaces;
     using Interfaces;
@@ -10,25 +11,23 @@
     using Runtime.Interfaces;
     using Styles;
 
-    public class UniNodeBasePortsDrawer : INodeEditorHandler
+    public class UniPortsDrawer : INodeEditorHandler
     {
         private readonly IPortStyleProvider styleSelector;
         
         private Regex bracketsExpr = new Regex(UniNodeExtension.InputPattern);
         private Dictionary<string, NodePort> _drawedPorts = new Dictionary<string, NodePort>();
 
-        public UniNodeBasePortsDrawer(IPortStyleProvider styleProvider)
+        public UniPortsDrawer(IPortStyleProvider styleProvider)
         {
             this.styleSelector = styleProvider;
         }
         
-        public bool Update(INodeEditor editor, UniBaseNode baseNode)
+        public bool Update(INodeEditorData editor, UniBaseNode baseNode)
         {
             _drawedPorts.Clear();
             
-            if (baseNode is IUniNode node) {
-                DrawPorts(node, _drawedPorts);
-            }
+            DrawPorts(editor, _drawedPorts);
 
             return true;
 
@@ -36,7 +35,7 @@
     
         
         public bool DrawPortPair(
-            IUniNode node, 
+            INode node, 
             string inputPortName, 
             string outputPortName)
         {
@@ -50,7 +49,7 @@
             
         }
 
-        public bool DrawPortPair(IUniNode node,NodePort inputPort, NodePort outputPort)
+        public bool DrawPortPair(INode node,NodePort inputPort, NodePort outputPort)
         {
             if (outputPort == null || inputPort == null)
             {
@@ -65,14 +64,16 @@
             return true;
         }
 
-        private void DrawPorts(IUniNode node,IDictionary<string, NodePort> cache)
+        private void DrawPorts(INodeEditorData editor,IDictionary<string, NodePort> cache)
         {
+            var node = editor.Target;
             
             for (var i = 0; i < node.Ports.Count; i++)
             {
                 var portValue = node.Ports[i];
                 
-                if(portValue.Dynamic == false) continue;
+                if(editor.HandledPorts.ContainsKey(portValue))
+                    continue;
                 
                 var outputPortName = portValue.ItemName;
                 

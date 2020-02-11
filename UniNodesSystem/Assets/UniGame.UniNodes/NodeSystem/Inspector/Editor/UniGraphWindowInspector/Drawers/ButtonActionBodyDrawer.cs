@@ -17,7 +17,7 @@
             _action = action;
         }
     
-        public bool Update(INodeEditor editor, UniBaseNode node)
+        public bool Update(INodeEditorData editor, UniBaseNode node)
         {
            
             EditorDrawerUtils.DrawButton(_label,_action);

@@ -181,8 +181,12 @@
                 AddTo(node.LifeTime);     //stop all subscriptions when node deactivated
         }
 
+        
         public static IPortValue UpdatePortValue(this IUniNode node , IPortData portData)
         {
+            if (portData == null)
+                return null;
+            
             return node.UpdatePortValue(
                 portData.FieldName, 
                 portData.Direction, 

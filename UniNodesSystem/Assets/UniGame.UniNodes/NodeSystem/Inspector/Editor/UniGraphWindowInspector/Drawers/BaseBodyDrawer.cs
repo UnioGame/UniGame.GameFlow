@@ -5,7 +5,9 @@
     using BaseEditor.Interfaces;
     using Interfaces;
     using Runtime.Core;
+    using UniCore.Runtime.ProfilerTools;
     using UnityEditor;
+    using UnityEngine;
 
     public class BaseBodyDrawer : INodeEditorHandler
     {
@@ -13,10 +15,11 @@
     
         public BaseBodyDrawer()
         {
+            //TODO remove this old dirty hack
             _excludes = new List<string>(){"m_Script", "graph", "position", "ports"};
         }
     
-        public bool Update(INodeEditor editor, UniBaseNode node)
+        public bool Update(INodeEditorData editor, UniBaseNode node)
         {
             var serializedObject = editor.SerializedObject;
 
@@ -27,9 +30,10 @@
             while (iterator.NextVisible(enterChildren))
             {
                 enterChildren = false;
+                
                 if (_excludes.Contains(iterator.name)) continue;
-            
-                NodeEditorGUILayout.PropertyField(iterator, true);
+                
+                node.DrawNodePropertyField(iterator,new GUIContent(iterator.name,iterator.tooltip),true);
             }
 
             return true;

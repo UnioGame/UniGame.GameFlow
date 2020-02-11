@@ -18,7 +18,11 @@
         
 #endregion
 
-        private ConnectedFormatedPairCommand portPairCommand = new ConnectedFormatedPairCommand();
+#region private properties
+
+        private ConnectedFormatedPairCommand portPairCommand;
+
+#endregion
 
         public PortIO Direction => direction;
 
@@ -34,7 +38,7 @@
         {
             base.UpdateCommands(nodeCommands);
             
-            portPairCommand.Initialize(this, ItemName, bindInOut);
+            portPairCommand =  new ConnectedFormatedPairCommand(this, ItemName, bindInOut);
             PortValue = Direction == PortIO.Input ? 
                 portPairCommand.InputPort : 
                 portPairCommand.OutputPort;

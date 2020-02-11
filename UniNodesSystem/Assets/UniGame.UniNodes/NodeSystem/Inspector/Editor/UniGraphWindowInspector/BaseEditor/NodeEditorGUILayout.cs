@@ -4,9 +4,9 @@
     using System.Collections.Generic;
     using System.Linq;
     using Runtime.Core;
+    using Runtime.Interfaces;
     using UniCore.EditorTools.Editor.Utility;
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Core;
-    using UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Core;
     using UnityEditor;
     using UnityEditorInternal;
     using UnityEngine;
@@ -20,29 +20,39 @@
         private static int reorderableListIndex = -1;
 
         /// <summary> Make a field for a serialized property. Automatically displays relevant node port. </summary>
-        public static void PropertyField(SerializedProperty property, bool includeChildren = true,
-            params GUILayoutOption[] options)
+        public static void DrawNodePropertyField(
+            this INode node,
+            SerializedProperty property,
+            bool includeChildren)
         {
-            PropertyField(property, (GUIContent) null, includeChildren, options);
+            node.DrawNodePropertyField(property, GUIContent.none,includeChildren);
         }
-
+        
         /// <summary> Make a field for a serialized property. Automatically displays relevant node port. </summary>
-        public static void PropertyField(SerializedProperty property, GUIContent label, bool includeChildren = true,
+        public static void DrawNodePropertyField(
+            this INode node,
+            SerializedProperty property,
+            GUIContent label, 
+            bool includeChildren,
             params GUILayoutOption[] options)
         {
-            if (property == null) throw new NullReferenceException();
-            var node = property.serializedObject.targetObject as UniBaseNode;
+            if (property == null || node == null) 
+                throw new NullReferenceException();
+
             var port = node.GetPort(property.name);
-            PropertyField(property, label, port, includeChildren);
+            
+            node.DrawNodePropertyField(property, label, port, includeChildren, options);
         }
 
         /// <summary> Make a field for a serialized property. Manual node port override. </summary>
-        public static void PropertyField(SerializedProperty property, NodePort port,
+        public static void DrawNodePropertyField(
+            this INode node,
+            SerializedProperty property, 
+            NodePort port,
             bool includeChildren = true, params GUILayoutOption[] options)
         {
-            PropertyField(property, null, port, includeChildren, options);
+            node.DrawNodePropertyField(property, null, port, includeChildren, options);
         }
-
         
         public static void ShowBackingValueField(
             SerializedProperty property, 
@@ -77,8 +87,13 @@
 
         
         /// <summary> Make a field for a serialized property. Manual node port override. </summary>
-        public static void PropertyField(SerializedProperty property, GUIContent label, NodePort port,
-            bool includeChildren = true, params GUILayoutOption[] options)
+        public static void DrawNodePropertyField(
+            this INode node,
+            SerializedProperty property, 
+            GUIContent label, 
+            NodePort port,
+            bool includeChildren = true, 
+            params GUILayoutOption[] options)
         {
             if (property == null) throw new NullReferenceException();
 

@@ -21,8 +21,7 @@
         protected override void UpdateCommands(List<ILifeTimeCommand> nodeCommands)
         {
             //make in/out ports
-            var portCommand = new ConnectedFormatedPairCommand();
-            portCommand.Initialize(this,Input,false);
+            var portCommand = new ConnectedFormatedPairCommand(this,Input,false);
             nodeCommands.Add(portCommand);
 
             //register data delay command

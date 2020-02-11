@@ -548,18 +548,10 @@
         {
             if (state.EventType == EventType.Ignore) return;
 
-            try {
-                GUILayout.BeginArea(rectArea);
+            GUILayout.BeginArea(rectArea);
 
-                DrawNodeEditorArea(nodeEditor, node, state);
-
-                DrawNodePorts(node, nodePos, state);
-            }
-            catch (Exception e) {
-                GUILayout.EndArea();
-                GameLog.LogError(e.Message);
-                GUIUtility.ExitGUI();
-            }
+            this.WrapDrawer(() => DrawNodeEditorArea(nodeEditor, node, state));
+            this.WrapDrawer(() => DrawNodePorts(node, nodePos, state));
 
             GUILayout.EndArea();
         }
@@ -629,16 +621,9 @@
                 GUI.color              = nodeEditor.GetTint();
                 GUILayout.BeginVertical(style);
                 GUI.color = NodeEditorPreferences.GetSettings().highlightColor;
-                try {
-                    GUILayout.BeginVertical(new GUIStyle(highlightStyle));
-                }
-                catch (Exception e) {
-                    GameLog.Log($"EventType {state.EventType} EventData[type: {state.Event.type} rawtype: {state.Event.type}");
-                    GameLog.LogWarning(e.Message);
-                    GUILayout.EndVertical();
-                    GUILayout.EndVertical();
-                    GUIUtility.ExitGUI();
-                }
+
+                //TODO fix style
+                GUILayout.BeginVertical(new GUIStyle(highlightStyle));
             }
             else {
                 var style = new GUIStyle(nodeEditor.GetBodyStyle());
@@ -669,12 +654,12 @@
                 if (NodeSizes.ContainsKey(node)) NodeSizes[node] = size;
                 else NodeSizes.Add(node, size);
 
-                foreach (var kvp in NodeEditor.PortPositions) {
-                    var portHandlePos = kvp.Value;
+                foreach (var portPairs in NodeEditor.PortPositions) {
+                    var portHandlePos = portPairs.Value;
                     portHandlePos += node.position;
                     var rect = new Rect(portHandlePos.x - 8, portHandlePos.y - 8, 16, 16);
-                    if (PortConnectionPoints.ContainsKey(kvp.Key)) PortConnectionPoints[kvp.Key] = rect;
-                    else PortConnectionPoints.Add(kvp.Key, rect);
+                    if (PortConnectionPoints.ContainsKey(portPairs.Key)) PortConnectionPoints[portPairs.Key] = rect;
+                    else PortConnectionPoints.Add(portPairs.Key, rect);
                 }
             }
 

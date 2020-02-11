@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 7212427602988102999}
   - component: {fileID: 3666624980242943853}
   - component: {fileID: 6341517157453944093}
-  - component: {fileID: 8520775426397002439}
   - component: {fileID: 1027448284966264346}
   - component: {fileID: 7530481606034183946}
   m_Layer: 0
@@ -55,9 +54,8 @@ MonoBehaviour:
     keys: []
     values: []
   _graph: {fileID: 0}
-  _uniqueId: 232
+  _uniqueId: 244
   nodes:
-  - {fileID: 8520775426397002439}
   - {fileID: 1027448284966264346}
   - {fileID: 7530481606034183946}
 --- !u!114 &6341517157453944093
@@ -73,28 +71,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   graph: {fileID: 3666624980242943853}
---- !u!114 &8520775426397002439
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9055180557488551274}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07d0c7065aa6e1e46be96a27eb24c3cc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _id: 1
-  width: 220
-  nodeName: GraphPort
-  position: {x: 0, y: 0}
-  ports:
-    keys: []
-    values: []
-  _graph: {fileID: 3666624980242943853}
-  direction: 0
-  bindInOut: 1
 --- !u!114 &1027448284966264346
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -110,7 +86,7 @@ MonoBehaviour:
   _id: 12
   width: 220
   nodeName: Int Demo Source Node
-  position: {x: 344, y: -216}
+  position: {x: 264, y: -56}
   ports:
     keys: []
     values: []
@@ -135,7 +111,7 @@ MonoBehaviour:
   _id: 17
   width: 220
   nodeName: Summator Demo Node
-  position: {x: 680, y: -296}
+  position: {x: 568, y: -56}
   ports:
     keys: []
     values: []

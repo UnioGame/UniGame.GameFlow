@@ -1,11 +1,14 @@
 namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor.Interfaces
 {
+    using System.Collections.Generic;
     using Runtime.Core;
+    using Runtime.Interfaces;
     using UniCore.EditorTools.Editor.Interfaces;
     using UnityEngine;
 
-    public interface INodeEditor : IEditorItem
+    public interface INodeEditorData : IEditorItem
     {
+        
         int GetWidth();
         Color GetTint();
         GUIStyle GetBodyStyle();
@@ -13,7 +16,9 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor.Interfaces
 
         bool IsSelected();
         
-        UniBaseNode Target { get; }
+        INode Target { get; }
+
+        IReadOnlyDictionary<NodePort, Vector2> HandledPorts { get; }
 
     }
 }

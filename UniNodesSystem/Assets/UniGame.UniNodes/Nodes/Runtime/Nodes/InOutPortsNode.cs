@@ -25,8 +25,7 @@
 
             for (int i = 0; i < portNames.Count; i++) {
                 var portName = portNames[i];
-                var portCommand = new ConnectedFormatedPairCommand();
-                portCommand.Initialize(this,portName,bindPorts);
+                var portCommand = new ConnectedFormatedPairCommand(this,portName,bindPorts);
                 nodeCommands.Add(portCommand);
                 inOutPorts.Add(portCommand);
             }

@@ -17,8 +17,7 @@
         {
             base.UpdateCommands(nodeCommands);
 
-            var portCommand = new ConnectedFormatedPairCommand();
-            portCommand.Initialize(this,defaultPortName,true);
+            var portCommand = new ConnectedFormatedPairCommand(this,defaultPortName,true);
             nodeCommands.Add(portCommand);
 
             PortPair = portCommand;
