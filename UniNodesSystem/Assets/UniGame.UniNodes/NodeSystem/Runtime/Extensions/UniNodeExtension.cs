@@ -95,7 +95,7 @@
             var outputValue = outputPort;
             
             if(connectInOut)
-                inputValue.Connect(outputValue);
+                inputValue.Bind(outputValue);
         
             return (inputValue,outputValue);
         }
@@ -155,13 +155,6 @@
 
             return item;
         }
-
-        
-        public static bool IsPortRemoved(this IUniNode node,INodePort port)
-        {
-            var value = node.PortValues.FirstOrDefault(x => x.ItemName == port.ItemName && x.Direction == port.Direction);
-            return value == null;
-        }
         
         public static void RegisterPortHandler<TValue>(
             this IUniNode node,
@@ -203,17 +196,16 @@
             ShowBackingValue showBackingValue = ShowBackingValue.Always,
             IReadOnlyList<Type> types = null)
         {
-            var port = node.GetPort(portName);
-            if (port != null) {
-                return port;
+            INodePort port = node.GetPort(portName);
+            
+            if (port == null) {
+                types = types ?? new List<Type>();
+                port = node.AddPort(portName, types, direction, connectionType, showBackingValue);
             }
 
-            types = types ?? new List<Type>();
-            var portValue = node.AddPort(portName, types, direction, connectionType, showBackingValue);
-            var nodeValue = portValue;
-            node.AddPortValue(portValue);
+            node.AddPortValue(port);
 
-            return nodeValue;
+            return port;
         }
 
     }

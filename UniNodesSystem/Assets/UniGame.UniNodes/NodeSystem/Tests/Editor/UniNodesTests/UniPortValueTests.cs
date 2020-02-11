@@ -58,7 +58,7 @@
 
             var testPortValue = "TestPortValue";           
             
-            portValue1.Connect(portValue2);
+            portValue1.Bind(portValue2);
             portValue1.Publish(testPortValue);
 
             var result = portValue2.Get<string>();
@@ -76,7 +76,7 @@
             var testPortValue = "TestPortValue";
             var testPortValue2 = "TestPortValue2";
             
-            portValue1.Connect(portValue2);
+            portValue1.Bind(portValue2);
             
             portValue1.Publish(testPortValue);
             portValue1.Publish(testPortValue2);
@@ -94,7 +94,7 @@
             
             var testPortValue = "TestPortValue";
             
-            portValue1.Connect(portValue2);          
+            portValue1.Bind(portValue2);          
             portValue1.Publish(testPortValue);
 
             Assert.That(portValue1.Get<string>(),Is.EqualTo(testPortValue));

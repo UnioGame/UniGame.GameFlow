@@ -4,7 +4,7 @@ namespace UniGreenModules.UniNodeSystem.Runtime.Interfaces
 
     public interface IConnector<T>
     {
-        IDisposable Connect(T connection);
+        IDisposable Bind(T connection);
         
     }
 }

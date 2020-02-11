@@ -22,7 +22,7 @@ namespace UniGreenModules.UniNodes.Runtime.Commands
         
         public void Execute(ILifeTime lifeTime)
         {
-            connector.Connect(this).AddTo(lifeTime);
+            connector.Bind(this).AddTo(lifeTime);
         }
 
         public void Publish<T>(T message)

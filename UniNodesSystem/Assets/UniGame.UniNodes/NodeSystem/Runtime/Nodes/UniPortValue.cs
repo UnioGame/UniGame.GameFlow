@@ -134,9 +134,9 @@
 
         #region connector
 
-        public IDisposable Connect(IMessagePublisher contextData)
+        public IDisposable Bind(IMessagePublisher contextData)
         {
-            return broadcaster.Connect(contextData);
+            return broadcaster.Bind(contextData);
         }
         
         #endregion

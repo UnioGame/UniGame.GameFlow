@@ -34,7 +34,7 @@
         
         public void Execute(ILifeTime lifeTime)
         {
-            connector.Connect(this).
+            connector.Bind(this).
                 AddTo(lifeTime);
             lifeTime.AddCleanUpAction(() => handler.Cancel());
         }

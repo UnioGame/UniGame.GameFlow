@@ -25,7 +25,8 @@
             var floatSumm = GetPort(nameof(summFloat));
             
             intSumm.Receive<int>().
-                Do(x => this.summInt += x).
+                Do(x => this.summResult += x).
+                Do(x => this.summInt = summResult).
                 Subscribe().
                 AddTo(LifeTime);
             

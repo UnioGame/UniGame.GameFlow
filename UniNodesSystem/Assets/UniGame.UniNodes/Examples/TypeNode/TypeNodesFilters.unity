@@ -121,528 +121,72 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1001 &6341517157453944091
+--- !u!1001 &1321021593
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1027448284966264346, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.keys.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 1027448284966264346, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 1027448284966264346, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[0]._allowedValueTypes.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1027448284966264346, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[1]._allowedValueTypes.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1027448284966264346, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[2]._allowedValueTypes.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1027448284966264346, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: width
-      value: 220
-      objectReference: {fileID: 0}
-    - target: {fileID: 1027448284966264346, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.keys.Array.data[0]
-      value: intOut1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1027448284966264346, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.keys.Array.data[1]
-      value: intOut
-      objectReference: {fileID: 0}
-    - target: {fileID: 1027448284966264346, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.keys.Array.data[2]
-      value: floatOut
-      objectReference: {fileID: 0}
-    - target: {fileID: 1027448284966264346, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[0]._id
-      value: 269
-      objectReference: {fileID: 0}
-    - target: {fileID: 1027448284966264346, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[0]._fieldName
-      value: intOut1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1027448284966264346, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[0]._node
-      value: 
-      objectReference: {fileID: 6341517157453944093}
-    - target: {fileID: 1027448284966264346, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[0]._direction
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1027448284966264346, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[0]._showBackingValue
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1027448284966264346, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[0].isDynamic
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1027448284966264346, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[0]._allowedValueTypes.Array.data[0]
-      value: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-      objectReference: {fileID: 0}
-    - target: {fileID: 1027448284966264346, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[0]._portValue.name
-      value: intOut1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1027448284966264346, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[1]._id
-      value: 270
-      objectReference: {fileID: 0}
-    - target: {fileID: 1027448284966264346, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[1]._fieldName
-      value: intOut
-      objectReference: {fileID: 0}
-    - target: {fileID: 1027448284966264346, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[1]._node
-      value: 
-      objectReference: {fileID: 6341517157453944093}
-    - target: {fileID: 1027448284966264346, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[1]._direction
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1027448284966264346, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[1]._showBackingValue
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1027448284966264346, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[1].isDynamic
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1027448284966264346, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[1]._allowedValueTypes.Array.data[0]
-      value: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-      objectReference: {fileID: 0}
-    - target: {fileID: 1027448284966264346, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[1]._portValue.name
-      value: intOut
-      objectReference: {fileID: 0}
-    - target: {fileID: 1027448284966264346, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[2]._id
-      value: 268
-      objectReference: {fileID: 0}
-    - target: {fileID: 1027448284966264346, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[2]._fieldName
-      value: floatOut
-      objectReference: {fileID: 0}
-    - target: {fileID: 1027448284966264346, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[2]._node
-      value: 
-      objectReference: {fileID: 6341517157453944093}
-    - target: {fileID: 1027448284966264346, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[2]._direction
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1027448284966264346, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[2]._showBackingValue
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1027448284966264346, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[2].isDynamic
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1027448284966264346, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[2]._allowedValueTypes.Array.data[0]
-      value: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-      objectReference: {fileID: 0}
-    - target: {fileID: 1027448284966264346, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[2]._portValue.name
-      value: floatOut
-      objectReference: {fileID: 0}
-    - target: {fileID: 3666624980242943853, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.keys.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3666624980242943853, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3666624980242943853, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.keys.Array.data[0]
-      value: GraphPort
-      objectReference: {fileID: 0}
-    - target: {fileID: 3666624980242943853, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[0]._fieldName
-      value: GraphPort
-      objectReference: {fileID: 0}
-    - target: {fileID: 3666624980242943853, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[0]._node
-      value: 
-      objectReference: {fileID: 6341517157453944094}
-    - target: {fileID: 3666624980242943853, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[0]._showBackingValue
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 3666624980242943853, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[0].isDynamic
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3666624980242943853, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[0]._portValue.name
-      value: GraphPort
-      objectReference: {fileID: 0}
-    - target: {fileID: 7212427602988102999, guid: 3a2d7619aea4da7459fe2a62fa986611,
+    - target: {fileID: 4827794898694014373, guid: 27ee01b19dbdac84ab7ffe771cde6eaa,
         type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7212427602988102999, guid: 3a2d7619aea4da7459fe2a62fa986611,
+    - target: {fileID: 4827794898694014373, guid: 27ee01b19dbdac84ab7ffe771cde6eaa,
         type: 3}
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7212427602988102999, guid: 3a2d7619aea4da7459fe2a62fa986611,
+    - target: {fileID: 4827794898694014373, guid: 27ee01b19dbdac84ab7ffe771cde6eaa,
         type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7212427602988102999, guid: 3a2d7619aea4da7459fe2a62fa986611,
+    - target: {fileID: 4827794898694014373, guid: 27ee01b19dbdac84ab7ffe771cde6eaa,
         type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7212427602988102999, guid: 3a2d7619aea4da7459fe2a62fa986611,
+    - target: {fileID: 4827794898694014373, guid: 27ee01b19dbdac84ab7ffe771cde6eaa,
         type: 3}
       propertyPath: m_LocalRotation.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7212427602988102999, guid: 3a2d7619aea4da7459fe2a62fa986611,
+    - target: {fileID: 4827794898694014373, guid: 27ee01b19dbdac84ab7ffe771cde6eaa,
         type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7212427602988102999, guid: 3a2d7619aea4da7459fe2a62fa986611,
+    - target: {fileID: 4827794898694014373, guid: 27ee01b19dbdac84ab7ffe771cde6eaa,
         type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 7212427602988102999, guid: 3a2d7619aea4da7459fe2a62fa986611,
+    - target: {fileID: 4827794898694014373, guid: 27ee01b19dbdac84ab7ffe771cde6eaa,
         type: 3}
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7212427602988102999, guid: 3a2d7619aea4da7459fe2a62fa986611,
+    - target: {fileID: 4827794898694014373, guid: 27ee01b19dbdac84ab7ffe771cde6eaa,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7212427602988102999, guid: 3a2d7619aea4da7459fe2a62fa986611,
+    - target: {fileID: 4827794898694014373, guid: 27ee01b19dbdac84ab7ffe771cde6eaa,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7212427602988102999, guid: 3a2d7619aea4da7459fe2a62fa986611,
+    - target: {fileID: 4827794898694014373, guid: 27ee01b19dbdac84ab7ffe771cde6eaa,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: ports.keys.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: ports.values.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: ports.keys.Array.data[0]
-      value: '[out]GraphPort'
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: ports.keys.Array.data[1]
-      value: '[in]GraphPort'
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: ports.values.Array.data[0]._fieldName
-      value: '[out]GraphPort'
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: ports.values.Array.data[0]._node
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: ports.values.Array.data[0]._direction
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: ports.values.Array.data[0]._showBackingValue
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: ports.values.Array.data[0].isDynamic
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: ports.values.Array.data[0]._portValue.name
-      value: '[out]GraphPort'
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: ports.values.Array.data[1]._fieldName
-      value: '[in]GraphPort'
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: ports.values.Array.data[1]._node
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: ports.values.Array.data[1]._showBackingValue
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: ports.values.Array.data[1].isDynamic
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: ports.values.Array.data[1]._portValue.name
-      value: '[in]GraphPort'
-      objectReference: {fileID: 0}
-    - target: {fileID: 7530481606034183946, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.keys.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 7530481606034183946, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 7530481606034183946, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[0]._allowedValueTypes.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7530481606034183946, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[1]._allowedValueTypes.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7530481606034183946, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[2]._allowedValueTypes.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7530481606034183946, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: width
-      value: 220
-      objectReference: {fileID: 0}
-    - target: {fileID: 7530481606034183946, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.keys.Array.data[0]
-      value: summFloat
-      objectReference: {fileID: 0}
-    - target: {fileID: 7530481606034183946, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.keys.Array.data[1]
-      value: summResult
-      objectReference: {fileID: 0}
-    - target: {fileID: 7530481606034183946, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.keys.Array.data[2]
-      value: summInt
-      objectReference: {fileID: 0}
-    - target: {fileID: 7530481606034183946, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[0]._id
-      value: 273
-      objectReference: {fileID: 0}
-    - target: {fileID: 7530481606034183946, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[0]._fieldName
-      value: summFloat
-      objectReference: {fileID: 0}
-    - target: {fileID: 7530481606034183946, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[0]._node
-      value: 
-      objectReference: {fileID: 6341517157453944092}
-    - target: {fileID: 7530481606034183946, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[0]._showBackingValue
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7530481606034183946, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[0].isDynamic
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7530481606034183946, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[0]._allowedValueTypes.Array.data[0]
-      value: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-      objectReference: {fileID: 0}
-    - target: {fileID: 7530481606034183946, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[0]._portValue.name
-      value: summFloat
-      objectReference: {fileID: 0}
-    - target: {fileID: 7530481606034183946, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[1]._id
-      value: 271
-      objectReference: {fileID: 0}
-    - target: {fileID: 7530481606034183946, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[1]._fieldName
-      value: summResult
-      objectReference: {fileID: 0}
-    - target: {fileID: 7530481606034183946, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[1]._node
-      value: 
-      objectReference: {fileID: 6341517157453944092}
-    - target: {fileID: 7530481606034183946, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[1]._direction
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7530481606034183946, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[1]._showBackingValue
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7530481606034183946, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[1].isDynamic
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7530481606034183946, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[1]._allowedValueTypes.Array.data[0]
-      value: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-      objectReference: {fileID: 0}
-    - target: {fileID: 7530481606034183946, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[1]._portValue.name
-      value: summResult
-      objectReference: {fileID: 0}
-    - target: {fileID: 7530481606034183946, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[2]._id
-      value: 272
-      objectReference: {fileID: 0}
-    - target: {fileID: 7530481606034183946, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[2]._fieldName
-      value: summInt
-      objectReference: {fileID: 0}
-    - target: {fileID: 7530481606034183946, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[2]._node
-      value: 
-      objectReference: {fileID: 6341517157453944092}
-    - target: {fileID: 7530481606034183946, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[2]._showBackingValue
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7530481606034183946, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[2].isDynamic
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7530481606034183946, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[2]._allowedValueTypes.Array.data[0]
-      value: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-      objectReference: {fileID: 0}
-    - target: {fileID: 7530481606034183946, guid: 3a2d7619aea4da7459fe2a62fa986611,
-        type: 3}
-      propertyPath: ports.values.Array.data[2]._portValue.name
-      value: summInt
-      objectReference: {fileID: 0}
-    - target: {fileID: 9055180557488551274, guid: 3a2d7619aea4da7459fe2a62fa986611,
+    - target: {fileID: 8524580162203354593, guid: 27ee01b19dbdac84ab7ffe771cde6eaa,
         type: 3}
       propertyPath: m_Name
-      value: TypeNodeFilters
+      value: SimpleTypeGraph
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 3a2d7619aea4da7459fe2a62fa986611, type: 3}
---- !u!114 &6341517157453944092 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7530481606034183946, guid: 3a2d7619aea4da7459fe2a62fa986611,
-    type: 3}
-  m_PrefabInstance: {fileID: 6341517157453944091}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55f6ec6d932a48040a4a828ef7880ba9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &6341517157453944093 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1027448284966264346, guid: 3a2d7619aea4da7459fe2a62fa986611,
-    type: 3}
-  m_PrefabInstance: {fileID: 6341517157453944091}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 242b893caa6457547b5a46e8b09ff42e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &6341517157453944094 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3666624980242943853, guid: 3a2d7619aea4da7459fe2a62fa986611,
-    type: 3}
-  m_PrefabInstance: {fileID: 6341517157453944091}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 782945db79ce44748b3f294e0edf364e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_SourcePrefab: {fileID: 100100000, guid: 27ee01b19dbdac84ab7ffe771cde6eaa, type: 3}

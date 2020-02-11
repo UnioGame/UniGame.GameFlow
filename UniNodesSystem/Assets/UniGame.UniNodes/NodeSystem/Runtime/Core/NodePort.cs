@@ -11,6 +11,7 @@
     using UniCore.Runtime.ObjectPool.Runtime;
     using UniCore.Runtime.ObjectPool.Runtime.Extensions;
     using UniCore.Runtime.ProfilerTools;
+    using UniCore.Runtime.Rx.Extensions;
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Core;
     using UniRx;
     using UnityEditor;
@@ -77,7 +78,10 @@
                 nodePort.ShowBackingValue,
                 nodePort.ValueTypes)
         {
-            connections = nodePort.connections;
+            GameLog.Log("NodePort FROM NODE");
+            connections.Clear();
+            connections.AddRange(nodePort.connections);
+
             _id = nodePort._id;
             _allowedValueTypes = nodePort._allowedValueTypes;
         }
@@ -133,7 +137,9 @@
                 (source, to) => to != source,
                 (source, to) => !source.IsConnectedTo(to),
                 (source, to) => source.Direction != to.Direction,
-                (source, to) => source.ValueTypes.Any(to.ValidateValueType),
+                (source, to) => 
+                    to.ValueTypes.Count == 0 ||
+                    source.ValueTypes.Any(to.ValidateValueType),
             };
 
         public ulong Id => _id = _id == 0 ? UpdateId() : _id;
@@ -216,7 +222,7 @@
 
         public IObservable<T> Receive<T>() => GetObservable<T>();
 
-        public IDisposable Connect(IMessagePublisher publisher) => _portValue.Connect(publisher);
+        public IDisposable Bind(IMessagePublisher publisher) => _portValue.Bind(publisher);
 
         public void SetValueFilter(IReadOnlyList<Type> allowedTypes)
         {
@@ -253,7 +259,6 @@
         {
             _lifetime = _lifetime ?? new LifeTimeDefinition();
             _lifetime.Release();
-
             _portValue.Initialize(_fieldName, _lifetime.LifeTime, ValidateValueType);
 
             InitializeTypeFilter();
@@ -532,7 +537,8 @@
             if (_portValueSubscriptions.Add(type)) {
                 for (var i = 0; i < connections.Count; i++) {
                     var connection = connections[i];
-                    connection.Port.Connect(this);
+                    connection.Port.Bind(this).
+                        AddTo(LifeTime);
                 }
             }
 

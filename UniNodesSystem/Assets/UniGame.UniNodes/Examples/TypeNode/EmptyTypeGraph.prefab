@@ -1,0 +1,346 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8524580162203354593
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4827794898694014373}
+  - component: {fileID: 3236515198814598941}
+  - component: {fileID: 5986189757105480884}
+  - component: {fileID: 1321021597}
+  - component: {fileID: 8971114007457857471}
+  - component: {fileID: 1321021596}
+  - component: {fileID: 7847890153566444039}
+  m_Layer: 0
+  m_Name: EmptyTypeGraph
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4827794898694014373
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8524580162203354593}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3236515198814598941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8524580162203354593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 782945db79ce44748b3f294e0edf364e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _id: 0
+  width: 220
+  nodeName: 
+  position: {x: 0, y: 0}
+  ports:
+    keys:
+    - input
+    values:
+    - _id: 0
+      _fieldName: input
+      _node: {fileID: 3236515198814598941}
+      _direction: 0
+      _connectionType: 0
+      _showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      _allowedValueTypes: []
+      _portValue:
+        name: input
+      connections: []
+  _graph: {fileID: 0}
+  _uniqueId: 87
+  nodes:
+  - {fileID: 5986189757105480884}
+  - {fileID: 1321021597}
+  - {fileID: 8971114007457857471}
+  - {fileID: 1321021596}
+  - {fileID: 7847890153566444039}
+--- !u!114 &5986189757105480884
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8524580162203354593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07d0c7065aa6e1e46be96a27eb24c3cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _id: 1
+  width: 220
+  nodeName: input
+  position: {x: 0, y: 0}
+  ports:
+    keys:
+    - '[out]data'
+    - '[in]data'
+    values:
+    - _id: 3
+      _fieldName: '[out]data'
+      _node: {fileID: 5986189757105480884}
+      _direction: 1
+      _connectionType: 0
+      _showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      _allowedValueTypes: []
+      _portValue:
+        name: '[out]data'
+      connections: []
+    - _id: 2
+      _fieldName: '[in]data'
+      _node: {fileID: 5986189757105480884}
+      _direction: 0
+      _connectionType: 0
+      _showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      _allowedValueTypes: []
+      _portValue:
+        name: '[in]data'
+      connections: []
+  _graph: {fileID: 3236515198814598941}
+  direction: 0
+  bindInOut: 1
+--- !u!114 &1321021597
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8524580162203354593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23f9640bdcee91f44b837897ec957069, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _id: 4
+  width: 220
+  nodeName: Log Node
+  position: {x: 360, y: -40}
+  ports:
+    keys:
+    - log
+    values:
+    - _id: 5
+      _fieldName: log
+      _node: {fileID: 1321021597}
+      _direction: 0
+      _connectionType: 0
+      _showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      _allowedValueTypes: []
+      _portValue:
+        name: log
+      connections:
+      - fieldName: intOut
+        node: {fileID: 8971114007457857471}
+        reroutePoints: []
+  _graph: {fileID: 3236515198814598941}
+  mode: 1
+  message: LogNode
+--- !u!114 &8971114007457857471
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8524580162203354593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 242b893caa6457547b5a46e8b09ff42e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _id: 6
+  width: 220
+  nodeName: Int Demo Source Node
+  position: {x: -8, y: -264}
+  ports:
+    keys:
+    - intOut1
+    - intOut
+    - floatOut
+    values:
+    - _id: 82
+      _fieldName: intOut1
+      _node: {fileID: 8971114007457857471}
+      _direction: 1
+      _connectionType: 0
+      _showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      _allowedValueTypes:
+      - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      _portValue:
+        name: intOut1
+      connections: []
+    - _id: 83
+      _fieldName: intOut
+      _node: {fileID: 8971114007457857471}
+      _direction: 1
+      _connectionType: 0
+      _showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      _allowedValueTypes:
+      - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      _portValue:
+        name: intOut
+      connections:
+      - fieldName: summInt
+        node: {fileID: 1321021596}
+        reroutePoints: []
+      - fieldName: log
+        node: {fileID: 1321021597}
+        reroutePoints: []
+    - _id: 84
+      _fieldName: floatOut
+      _node: {fileID: 8971114007457857471}
+      _direction: 1
+      _connectionType: 0
+      _showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      _allowedValueTypes:
+      - System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      _portValue:
+        name: floatOut
+      connections: []
+  _graph: {fileID: 3236515198814598941}
+  floatOut: 0
+  intOut: 0
+  intOut1: 0
+  interval: 1
+  delay: 1
+--- !u!114 &1321021596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8524580162203354593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55f6ec6d932a48040a4a828ef7880ba9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _id: 10
+  width: 220
+  nodeName: Summator Demo Node
+  position: {x: 360, y: -312}
+  ports:
+    keys:
+    - summFloat
+    - summResult
+    - summInt
+    values:
+    - _id: 87
+      _fieldName: summFloat
+      _node: {fileID: 1321021596}
+      _direction: 0
+      _connectionType: 0
+      _showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      _allowedValueTypes:
+      - System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      _portValue:
+        name: summFloat
+      connections: []
+    - _id: 85
+      _fieldName: summResult
+      _node: {fileID: 1321021596}
+      _direction: 1
+      _connectionType: 0
+      _showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      _allowedValueTypes:
+      - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      _portValue:
+        name: summResult
+      connections:
+      - fieldName: log
+        node: {fileID: 7847890153566444039}
+        reroutePoints: []
+    - _id: 86
+      _fieldName: summInt
+      _node: {fileID: 1321021596}
+      _direction: 0
+      _connectionType: 0
+      _showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      _allowedValueTypes:
+      - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      _portValue:
+        name: summInt
+      connections:
+      - fieldName: intOut
+        node: {fileID: 8971114007457857471}
+        reroutePoints: []
+  _graph: {fileID: 3236515198814598941}
+  summInt: 0
+  summResult: 0
+  summFloat: 0
+--- !u!114 &7847890153566444039
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8524580162203354593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23f9640bdcee91f44b837897ec957069, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _id: 57
+  width: 220
+  nodeName: Log Node
+  position: {x: 664, y: -200}
+  ports:
+    keys:
+    - log
+    values:
+    - _id: 0
+      _fieldName: log
+      _node: {fileID: 7847890153566444039}
+      _direction: 0
+      _connectionType: 0
+      _showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      _allowedValueTypes: []
+      _portValue:
+        name: log
+      connections:
+      - fieldName: summResult
+        node: {fileID: 1321021596}
+        reroutePoints: []
+  _graph: {fileID: 3236515198814598941}
+  mode: 1
+  message: LogNode

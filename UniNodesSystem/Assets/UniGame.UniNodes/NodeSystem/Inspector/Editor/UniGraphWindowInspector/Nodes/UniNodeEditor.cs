@@ -9,10 +9,13 @@
     using Drawers.Interfaces;
     using Runtime;
     using Runtime.Attributes;
+    using Runtime.Core;
     using Runtime.Extensions;
     using Runtime.Interfaces;
     using Styles;
     using UniCore.EditorTools.Editor.Utility;
+    using UniCore.Runtime.Extension;
+    using UniCore.Runtime.ProfilerTools;
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Attributes;
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Nodes;
     using UnityEngine;
@@ -66,7 +69,21 @@
 
             DrawPorts(node);
 
+            node.Ports.RemoveItems(x => IsPortRemoved(node,x), node.RemovePort);
+            
             serializedObject.ApplyModifiedPropertiesWithoutUndo();
+        }
+        
+                
+        public bool IsPortRemoved(IUniNode node,INodePort port)
+        {
+            var value = node.PortValues.
+                FirstOrDefault(x => x.ItemName == port.ItemName && x.Direction == port.Direction);
+            if (value == null) {
+                GameLog.Log($"REMOVE PORT {port.FieldName} and Clear");
+            }
+            
+            return value == null;
         }
 
         public void InitializeNodeAttributes(UniNode node)

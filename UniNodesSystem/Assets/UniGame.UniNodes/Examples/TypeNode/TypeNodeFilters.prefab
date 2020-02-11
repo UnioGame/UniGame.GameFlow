@@ -54,7 +54,7 @@ MonoBehaviour:
     keys: []
     values: []
   _graph: {fileID: 0}
-  _uniqueId: 244
+  _uniqueId: 305
   nodes:
   - {fileID: 1027448284966264346}
   - {fileID: 7530481606034183946}
@@ -86,7 +86,7 @@ MonoBehaviour:
   _id: 12
   width: 220
   nodeName: Int Demo Source Node
-  position: {x: 264, y: -56}
+  position: {x: 216, y: -24}
   ports:
     keys: []
     values: []

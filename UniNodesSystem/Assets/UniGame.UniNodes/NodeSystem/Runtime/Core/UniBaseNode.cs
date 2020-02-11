@@ -9,25 +9,6 @@
     using UnityEngine;
     using UnityEngine.Serialization;
 
-    /// <summary>
-    /// Base class for all nodes
-    /// </summary>
-    /// <example>
-    /// Classes extending this class will be considered as valid nodes by UniNodeSystem.
-    /// <code>
-    /// [System.Serializable]
-    /// public class Adder : Node {
-    ///     [Input] public float a;
-    ///     [Input] public float b;
-    ///     [Output] public float result;
-    ///
-    ///     // GetValue should be overridden to return a value for any specified output port
-    ///     public override object GetValue(NodePort port) {
-    ///         return a + b;
-    ///     }
-    /// }
-    /// </code>
-    /// </example>
     [Serializable]
     public abstract class UniBaseNode : MonoBehaviour, INode
     {

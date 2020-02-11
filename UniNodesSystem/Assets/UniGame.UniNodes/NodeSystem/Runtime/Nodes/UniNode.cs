@@ -77,8 +77,6 @@
             OnInitialize();
             //initialize all node commands
             InitializeCommands();
-            //remove deleted ports
-            Ports.RemoveItems(this.IsPortRemoved, RemovePort);
         }
 
         public bool AddPortValue(INodePort portValue)
@@ -178,9 +176,7 @@
         [Conditional("UNITY_EDITOR")]
         protected virtual void OnValidate()
         {
-            if(Application.isPlaying == false)
-                Initialize();
-
+            Initialize();
             foreach (var port in Ports) {
                 port.Validate();
             }

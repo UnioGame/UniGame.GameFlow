@@ -104,46 +104,54 @@
                 EditorGUILayout.PropertyField(property, label, includeChildren, GUILayout.MinWidth(30));
             }
             else {
-                var rect = new Rect();
-
-                var portData = port.GetPortDataWithAttributes(property.name);
-                
-                if (portData.InstancePortList) {
-                    InstancePortList(property.name, 
-                        port.ValueType, 
-                        property.serializedObject, 
-                        portData.Direction,
-                        portData.ConnectionType);
-                    return;
-                }
-
-                ShowBackingValueField(property, label, includeChildren, port.IsConnected, portData.ShowBackingValue);
-                
-                rect = GUILayoutUtility.GetLastRect();
-                rect.position = port.Direction == PortIO.Input ?
-                    rect.position - new Vector2(16, 0) :
-                    rect.position + new Vector2(rect.width, 0);
-
-                rect.size = new Vector2(16, 16);
-
-                Color backgroundColor = new Color32(90, 97, 105, 255);
-                if (NodeEditorWindow.nodeTint.TryGetValue(port.Node.GetType(), out var tint)) {
-                    backgroundColor *= tint;
-                }
-                
-                var col                                                                                   = NodeEditorWindow.Current.graphEditor.GetTypeColor(port.ValueType);
-                DrawPortHandle(rect, backgroundColor, col);
-
-                // Register the handle position
-                var portPos = rect.center;
-                
-                if (NodeEditor.PortPositions.ContainsKey(port)) 
-                    NodeEditor.PortPositions[port] = portPos;
-                else 
-                    NodeEditor.PortPositions.Add(port, portPos);
+                DrawFieldPort(property,label,port,includeChildren,options);
             }
         }
 
+        private static void DrawFieldPort(
+            SerializedProperty property, 
+            GUIContent label, 
+            NodePort port,
+            bool includeChildren = true, 
+            params GUILayoutOption[] options)
+        {
+            var rect = new Rect();
+
+            var portData = port.GetPortDataWithAttributes(property.name);
+                
+            if (portData.InstancePortList) {
+                InstancePortList(property.name, 
+                    port.ValueType, 
+                    property.serializedObject, 
+                    portData.Direction,
+                    portData.ConnectionType);
+                return;
+            }
+
+            ShowBackingValueField(property, label, includeChildren, port.IsConnected, portData.ShowBackingValue);
+                
+            rect = GUILayoutUtility.GetLastRect();
+            rect.position = port.Direction == PortIO.Input ?
+                rect.position - new Vector2(16, 0) :
+                rect.position + new Vector2(rect.width, 0);
+
+            rect.size = new Vector2(16, 16);
+
+            Color backgroundColor = new Color32(90, 97, 105, 255);
+            if (NodeEditorWindow.nodeTint.TryGetValue(port.Node.GetType(), out var tint)) {
+                backgroundColor *= tint;
+            }
+                
+            var col = NodeEditorWindow.Current.graphEditor.GetTypeColor(port.ValueType);
+            DrawPortHandle(rect, backgroundColor, col);
+
+            // Register the handle position
+            var portPos = rect.center;
+                
+            //TODO REMOTE
+            NodeEditor.PortPositions[port] = portPos;
+        }
+        
         private static Type GetType(SerializedProperty property)
         {
             var parentType = property.serializedObject.targetObject.GetType();
@@ -488,7 +496,7 @@
                         for (var j = 0; j < instancePorts[k].ConnectionCount; j++) {
                             var other = instancePorts[k].GetConnection(j);
                             instancePorts[k].Disconnect(other as NodePort);
-                            instancePorts[k - 1].Connect(other);
+                            instancePorts[k - 1].Bind(other);
                         }
                     }
 

@@ -74,12 +74,12 @@
                       
             inputs.ForEach(x => 
                 GetPort(x.ItemName).
-                Connect(x.PortValue).
+                Bind(x.PortValue).
                 AddTo(LifeTime) );
             
             outputs.ForEach(x => 
                 GetPort(x.ItemName).
-                Connect(x.PortValue).
+                Bind(x.PortValue).
                 AddTo(LifeTime) );
 
         }

@@ -20,11 +20,11 @@
             var hasData = portValue != null && portValue.HasValue;
 
             portStyle.Name       = port.FieldName;
-            portStyle.Background = Color.red;
-            portStyle.Color = port.Direction == PortIO.Input ? 
+            portStyle.Background = port.Direction == PortIO.Input ? 
                 hasData ? new Color(128, 128, 0) : Color.green :
                 hasData ? new Color(128, 128, 0) : Color.blue;
-
+            portStyle.Color = NodeEditorWindow.Current.graphEditor.GetTypeColor(port.ValueType);
+            
             return portStyle;
         }
  

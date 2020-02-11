@@ -560,7 +560,7 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
                                 outputPort = newNodeOut.GetOutputPort(outputPort.FieldName);
                             }
 
-                            if (!inputPort.IsConnectedTo(outputPort as NodePort)) inputPort.Connect(outputPort);
+                            if (!inputPort.IsConnectedTo(outputPort as NodePort)) inputPort.Bind(outputPort);
                         }
                     }
                 }

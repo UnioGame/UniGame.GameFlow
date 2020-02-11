@@ -43,7 +43,7 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nod
         #endregion
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public IDisposable Connect(IMessagePublisher connection)
+        public IDisposable Bind(IMessagePublisher connection)
         {
             if (!_registeredItems.Contains(connection))
                 _registeredItems.Add(connection);

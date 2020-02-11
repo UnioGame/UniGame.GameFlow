@@ -59,7 +59,7 @@
             var source    = direction == PortIO.Input ? sourcePort : targetPort;
             var target    = direction == PortIO.Input ? targetPort : sourcePort;
 
-            source.Connect(target).
+            source.Bind(target).
                 AddTo(LifeTime);
         }
         

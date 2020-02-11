@@ -38,7 +38,7 @@
         {
             base.UpdateCommands(nodeCommands);
             
-            portPairCommand =  new ConnectedFormatedPairCommand(this, ItemName, bindInOut);
+            portPairCommand =  new ConnectedFormatedPairCommand(this, "data", bindInOut);
             PortValue = Direction == PortIO.Input ? 
                 portPairCommand.InputPort : 
                 portPairCommand.OutputPort;

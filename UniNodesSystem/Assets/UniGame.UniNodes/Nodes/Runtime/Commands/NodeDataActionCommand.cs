@@ -26,7 +26,7 @@
         
         public void Execute(ILifeTime lifeTime)
         {
-            port.Connect(this).
+            port.Bind(this).
                 AddTo(lifeTime);
         }
 
