@@ -1,6 +1,6 @@
-# Unity Node system
+# Reactive Unity Node system
 
-UniGame Node System for Unity
+UniGame Reactive Node System for Unity
 
 ## How To Install
 
