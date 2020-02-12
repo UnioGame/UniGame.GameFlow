@@ -1,4 +1,4 @@
-# Reactive Unity Node system
+# Reactive Node system
 
 UniGame Reactive Node System for Unity
 
