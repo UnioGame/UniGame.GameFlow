@@ -12,19 +12,19 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nod
 
     public static class PortNodeExtensions 
     {
-        public static IPortData GetPortData(this INode node, Type type, string fieldName)
+        public static NodeFieldData GetPortData(this INode node, Type type, string fieldName)
         {
             var field = type.GetField(fieldName);
             return node.GetPortData(field, fieldName);
         }
 
-        public static IPortData GetPortData(this INode node,FieldInfo info,string portName = "")
+        public static NodeFieldData GetPortData(this INode node,FieldInfo info,string portName = "")
         {
             var field      = info.FieldType;
             var attributes = info.GetCustomAttributes(false).ToList();
         
             var portData = attributes.FirstOrDefault(x => x is IPortData) as IPortData;
-            if (portData == null) return null;
+            if (portData == null) return new NodeFieldData();
 
             var name          = string.IsNullOrEmpty(portData.FieldName) ? portName : portData.FieldName;
             var direction     = portData.Direction;
@@ -56,7 +56,11 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nod
                 showBackingValue = showBackValue,
             };
             
-            return result;
+            return new NodeFieldData() {
+                Value = value,
+                FieldInfo = info,
+                PortData = result,
+            };
         }
 
 

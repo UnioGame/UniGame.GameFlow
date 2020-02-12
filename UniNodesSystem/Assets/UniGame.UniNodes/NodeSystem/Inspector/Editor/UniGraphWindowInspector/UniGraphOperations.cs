@@ -32,6 +32,8 @@
 			
 			var graph = new GameObject().AddComponent<UniGraph>();
 			
+			graph.Graph = graph;
+			
 			//add main root node
 			var root = graph.AddNode<UniPortNode>("input");
 			root.name = "input";

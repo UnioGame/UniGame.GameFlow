@@ -6,6 +6,7 @@
     using BaseEditor;
     using Drawers;
     using Drawers.Interfaces;
+    using Runtime.Core;
     using Runtime.Extensions;
     using Runtime.Interfaces;
     using Styles;
@@ -55,7 +56,7 @@
         public override void OnBodyGUI()
         {
             var node = target as UniNode;
-
+            
             UpdatePortAttributes(node);
             
             node.Initialize();
@@ -66,16 +67,24 @@
 
             DrawPorts(node);
 
-            node.Ports.RemoveItems(x => IsPortRemoved(node,x), node.RemovePort);
-            
+            VerifyNode(node);
+
             serializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
-        
-                
+
+        public virtual void UpdateData(UniNode node) { }
+
+        public void VerifyNode(UniNode node)
+        {
+            node.Ports.RemoveItems(x => IsPortRemoved(node,x), node.RemovePort);
+            node.Validate();
+        }
+
         public bool IsPortRemoved(IUniNode node,INodePort port)
         {
             var value = node.PortValues.
                 FirstOrDefault(x => x.ItemName == port.ItemName && x.Direction == port.Direction);
+            
             if (value == null) {
                 GameLog.Log($"REMOVE PORT {port.FieldName} and Clear");
             }
@@ -88,29 +97,37 @@
             var type = node.GetType();
             var fields = type.GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
 
-            //remove all temp commands
-            node.nodeSerializableCommands.RemoveAll(x => x.isUpdatable);
-            
             foreach (var portField in fields) {
                 var data = node.GetPortData(portField, portField.Name);
-                if(data == null)
+                if(data.PortData == null)
                     continue;
                 
-                var port = node.UpdatePortValue(data);
+                node.UpdatePortValue(data.PortData);
                 
                 var value = portField.GetValue(node);
-                if (value is IReactiveSource reactiveSource) {
-                    var reactiveSourceCommand = new ReactiveValuePortCommand(port.ItemName, reactiveSource, data , true);
-                    node.nodeSerializableCommands.Add(reactiveSourceCommand);
-                }
 
+                UpdateSerializedCommands(node,data.PortData, value, portField);
             }
 
         }
 
-        public virtual void UpdateData(UniNode node)
+        public void UpdateSerializedCommands(UniNode node,IPortData portData, object value, FieldInfo info)
         {
-            
+            if (value == null) return;
+            switch (value) {
+                case IReactiveSource reactiveSource:
+                    var command = node.serializableCommands.
+                        OfType<ReactiveValuePortCommand>().
+                        FirstOrDefault(x => 
+                            x.node.Id == node.Id && x.fieldName == portData.FieldName);
+                    
+                    if(command!=null) return;
+                    
+                    command = new ReactiveValuePortCommand();
+                    command.Initialize(node,reactiveSource, portData);
+                    node.serializableCommands.Add(command);
+                    break;
+            }
         }
 
         public void DrawPorts(UniNode node)

@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Diagnostics;
     using Attributes;
+    using Core.Commands;
     using Interfaces;
     using UniCore.Runtime.DataFlow;
     using UniCore.Runtime.DataFlow.Interfaces;
@@ -15,6 +16,7 @@
     using UniNodeSystem.Runtime.Extensions;
     using UniNodeSystem.Runtime.Interfaces;
     using UnityEngine;
+    using Object = UnityEngine.Object;
 
     [HideNode]
     [Serializable]
@@ -22,16 +24,15 @@
     {       
         #region inspector fields
 
-        [SerializeField]
-        [HideNodeInspector]
-        public List<SerializedNodeCommand> nodeSerializableCommands = new List<SerializedNodeCommand>();
+      //  [HideNodeInspector]
+        [SerializeReference]
+        public List<ILifeTimeCommandSource> serializableCommands = new List<ILifeTimeCommandSource>();
 
         #endregion
         
         #region private fields
 
-        [NonSerialized] protected HashSet<INodePort> portValues = 
-            new HashSet<INodePort>();
+        [NonSerialized] protected HashSet<INodePort> portValues = new HashSet<INodePort>();
         
         [NonSerialized] protected List<ILifeTimeCommand> commands = 
             new List<ILifeTimeCommand>();
@@ -152,8 +153,8 @@
             commands.Clear();
             
             //register all backed commands to main list
-            for (var i = 0; i < nodeSerializableCommands.Count; i++) {
-                var command = nodeSerializableCommands[i];
+            for (var i = 0; i < serializableCommands.Count; i++) {
+                var command = serializableCommands[i];
                 if(command!=null) 
                     commands.Add(command.Create(this));
             }
@@ -168,7 +169,16 @@
         private void OnDisable() => Exit();
 
 #region inspector call
-        
+
+        [Conditional("UNITY_EDITOR")]
+        public void Validate()
+        { 
+            foreach (var port in Ports) {
+                port.Validate();
+            }
+            CleanUpSerializableCommands();
+        }
+
         [Conditional("UNITY_EDITOR")]
         private void LogMessage(string message)
         {
@@ -178,10 +188,15 @@
         [Conditional("UNITY_EDITOR")]
         protected virtual void OnValidate()
         {
-            Initialize();
-            foreach (var port in Ports) {
-                port.Validate();
-            }
+            Validate();
+        }
+        
+        [Conditional("UNITY_EDITOR")]
+        public void CleanUpSerializableCommands()
+        {
+            //remove all temp commands
+            serializableCommands.RemoveAll(x => x == null || x.Validate() == false);
+
         }
         
 #endregion

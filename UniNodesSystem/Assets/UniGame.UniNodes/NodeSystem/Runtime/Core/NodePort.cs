@@ -27,12 +27,17 @@
         [ReadOnlyValue]
         [SerializeField] protected ulong _id;
         [SerializeField] protected string               _fieldName;
-        [SerializeField] protected UniBaseNode          _node;
         [SerializeField] protected PortIO               _direction = PortIO.Input;
         [SerializeField] protected ConnectionType       _connectionType = ConnectionType.Multiple;
         [SerializeField] protected ShowBackingValue     _showBackingValue = ShowBackingValue.Always;
         [SerializeField] protected bool isDynamic = true;
         [SerializeField] protected bool isInstancePortList = false;
+        
+        [SerializeField]
+#if ODIN_INSPECTOR
+        [Sirenix.OdinInspector.InlineEditor()]
+#endif
+        protected UniBaseNode _node;
         
         /// <summary>
         /// allowed port value types
@@ -69,8 +74,7 @@
         /// Copy a nodePort but assign it to another node.
         /// </summary>
         public NodePort(NodePort nodePort, UniBaseNode node) :
-            this(
-                node,
+            this(node,
                 nodePort.FieldName,
                 nodePort.Direction,
                 nodePort.ConnectionType,
@@ -78,10 +82,13 @@
                 nodePort.ValueTypes)
         {
             GameLog.Log("NodePort FROM NODE");
+            _node = node;
+
             connections.Clear();
             connections.AddRange(nodePort.connections);
 
-            _id = nodePort._id;
+            UpdateId();
+            
             _allowedValueTypes = nodePort._allowedValueTypes;
         }
 
@@ -123,6 +130,8 @@
             _showBackingValue = showBackingValue;
 
             SetValueFilter(types ?? new List<Type>());
+            
+            UpdateId();
             Initialize();
         }
 
@@ -137,7 +146,7 @@
                 (source, to) => !source.IsConnectedTo(to),
                 (source, to) => source.Direction != to.Direction,
                 (source, to) => 
-                    to.ValueTypes.Count == 0 ||
+                    to.ValueTypes.Count == 0 || source.ValueTypes.Count == 0 ||
                     source.ValueTypes.Any(to.ValidateValueType),
             };
 
@@ -183,7 +192,7 @@
                 if (_node == value)
                     return;
                 _node = value;
-                _id   = _node.Graph.GetId();
+                UpdateId();
             }
         }
 
@@ -259,7 +268,6 @@
             _lifetime = _lifetime ?? new LifeTimeDefinition();
             _lifetime.Release();
             _portValue.Initialize(_fieldName, _lifetime.LifeTime, ValidateValueType);
-
             InitializeTypeFilter();
         }
 
@@ -276,13 +284,19 @@
         /// <summary> Checks all connections for invalid references, and removes them. </summary>
         public void VerifyConnections()
         {
+            var removedConnections = ClassPool.Spawn<List<PortConnection>>();
+            
             for (var i = connections.Count - 1; i >= 0; i--) {
-                if (connections[i].node != null &&
-                    !string.IsNullOrEmpty(connections[i].fieldName) &&
-                    connections[i].node.GetPort(connections[i].fieldName) != null)
+                var connection = connections[i];
+                var targetPort = connection.node?.GetPort(connection.fieldName);
+                
+                if (targetPort != null)
                     continue;
-                connections.RemoveAt(i);
+                removedConnections.Add(connection);
             }
+            
+            removedConnections.ForEach(x => connections.Remove(x));
+            removedConnections.DespawnCollection();
         }
 
         /// <summary> Connect this <see cref="NodePort"/> to another </summary>
@@ -292,7 +306,7 @@
             if (connections == null) connections = new List<PortConnection>();
 
             if (!ConnectionsValidators.All(x => x(this, port))) {
-                GameLog.LogError("Port Connection Error");
+                GameLog.LogError($"{_node.Graph.name}:{_node.name}:{FieldName} Connection Error. Validation Failed");
                 return;
             }
 
@@ -354,6 +368,9 @@
             }
 
             tempConnections.DespawnCollection();
+            
+            VerifyConnections();
+
         }
 
         /// <summary> Get index of the connection connecting this and specified ports </summary>
@@ -368,11 +385,16 @@
 
         public bool IsConnectedTo(NodePort port)
         {
+            var result = false;
             for (var i = 0; i < connections.Count; i++) {
-                if (connections[i].Port == port) return true;
+                if (connections[i].Port.Id != port.Id) {
+                    continue;
+                }
+                result = true;
+                break;
             }
-
-            return false;
+            
+            return result;
         }
 
         /// <summary> Disconnect this port from another port </summary>

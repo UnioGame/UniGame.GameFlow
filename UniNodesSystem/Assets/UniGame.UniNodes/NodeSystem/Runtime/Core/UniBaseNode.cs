@@ -2,13 +2,16 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
     using Interfaces;
     using UniCore.Runtime.Attributes;
+    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Attributes;
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Core;
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Interfaces;
     using UnityEngine;
     using UnityEngine.Serialization;
+    using Debug = UnityEngine.Debug;
 
     [Serializable]
     public abstract class UniBaseNode : MonoBehaviour, INode
@@ -16,16 +19,13 @@
 
         [HideInInspector] 
         [ReadOnlyValue] 
-        [SerializeField] 
-        private ulong _id;
+        [SerializeField] private ulong _id;
 
-        [HideInInspector]
-        [SerializeField]
-        public int width = 220;
+        [HideNodeInspector]
+        [SerializeField] public int width = 220;
 
-        [HideInInspector]
-        [SerializeField] 
-        public string nodeName;
+        [HideNodeInspector]
+        [SerializeField] public string nodeName;
         
         /// <summary> Position on the <see cref="NodeGraph"/> </summary>
         [SerializeField] public Vector2 position;
@@ -115,22 +115,6 @@
             }
         }
 
-        // protected void OnEnable()
-        // {
-        //     UpdateStaticPorts();
-        // }
-        // /// <summary> Update static ports to reflect class fields. This happens automatically on enable. </summary>
-        // public void UpdateStaticPorts()
-        // {
-        //     NodeDataCache.UpdatePorts(this, ports);
-        // }
-
-        /// <summary> Checks all connections for invalid references, and removes them. </summary>
-        public void VerifyConnections()
-        {
-            foreach (var port in Ports) port.VerifyConnections();
-        }
-
         #region Instance Ports
 
         /// <summary> Add a serialized port to this node. </summary>
@@ -194,9 +178,10 @@
         /// <summary> Returns port which matches fieldName </summary>
         public NodePort GetPort(string fieldName)
         {
-            NodePort port;
-            if (ports.TryGetValue(fieldName, out port)) return port;
-            else return null;
+            if (string.IsNullOrEmpty(fieldName))
+                return null;
+
+            return ports.TryGetValue(fieldName, out var port) ? port : null;
         }
 
         public bool HasPort(string fieldName)
@@ -224,16 +209,6 @@
             foreach (var port in Ports) port.ClearConnections();
         }
 
-        public override int GetHashCode()
-        {
-            if (Application.isPlaying)
-            {
-                var id = base.GetHashCode();
-                return id;
-            }
-
-            return JsonUtility.ToJson(this).GetHashCode();
-        }
-
+        public override int GetHashCode() => (int)_id;
     }
 }

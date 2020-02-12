@@ -8,6 +8,7 @@
     using UniCore.EditorTools.Editor.PropertiesDrawers;
     using UniCore.EditorTools.Editor.Utility;
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.BaseEditor.Extensions;
+    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.Drawers.ReactivePortDrawers;
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Core;
     using UnityEditor;
     using UnityEditorInternal;
@@ -57,38 +58,40 @@
         }
         
         public static void ShowBackingValueField(
-            object field,
+            NodeFieldData data,
             SerializedProperty property, 
-            IPortData portData,
             bool isConnected,
             bool includeChildren,
-            GUIStyle style = null)
+            GUIStyle style = null,params GUILayoutOption[] options)
         {
-            var labelContent = portData.FieldName != null ? new GUIContent(portData.FieldName) : new GUIContent(property.displayName);
+            var portData = data.PortData;
+            var labelContent = portData.FieldName != null ? 
+                new GUIContent(portData.FieldName) : 
+                new GUIContent(property.displayName);
+
             switch (portData.ShowBackingValue) {
                 case ShowBackingValue.Unconnected:
                     // Display a label if port is connected
                     if (isConnected) {
-                        EditorDrawerUtils.DrawLabelField(labelContent, style, GUILayout.MinWidth(30));
+                        EditorDrawerUtils.DrawLabelField(labelContent, style, options);
                     }
                     // Display an editable property field if port is not connected
-                    else
-                        EditorGUILayout.PropertyField(property, labelContent, includeChildren, GUILayout.MinWidth(30));
+                    else {
+                        ReactivePortDrawer.DrawPropertyValue(data.Value,property,labelContent);
+                    }
                     break;
                 case ShowBackingValue.Never:
                     // Display a label
-                    EditorDrawerUtils.DrawLabelField(labelContent, style, GUILayout.MinWidth(30));
+                    EditorDrawerUtils.DrawLabelField(labelContent, style, options);
                     break;
                 case ShowBackingValue.Always:
-                    
-                    var drawer = field.GetTypeDrawer();
-                    drawer.OnGUI();
                     // Display an editable property field
-                    EditorGUILayout.PropertyField(property, labelContent, includeChildren, GUILayout.MinWidth(30));
+                    ReactivePortDrawer.DrawPropertyValue(data.Value,property,labelContent);
                     break;
             }
 
         }
+
 
         
         /// <summary> Make a field for a serialized property. Manual node port override. </summary>
@@ -123,8 +126,9 @@
             var rect = new Rect();
 
             var node = port.Node;
-            var portData = port.Node.GetPortData(node.GetType(),property.name);
-                
+            var data = port.Node.GetPortData(node.GetType(),property.name);
+            var portData = data.PortData;
+            
             if (portData.InstancePortList) {
                 InstancePortList(property.name, 
                     port.ValueType, 
@@ -134,7 +138,7 @@
                 return;
             }
 
-            ShowBackingValueField(property, label, includeChildren, port.IsConnected, portData.ShowBackingValue);
+            ShowBackingValueField(data, property,  port.IsConnected,includeChildren,null,GUILayout.MinWidth(30));
                 
             rect = GUILayoutUtility.GetLastRect();
             rect.position = port.Direction == PortIO.Input ?
@@ -406,7 +410,7 @@
             var list         = new ReorderableList(instancePorts, null, true, true, true, true);
 
             list.drawElementCallback =
-                (Rect rect, int index, bool isActive, bool isFocused) => {
+                (rect, index, isActive, isFocused) => {
                     var port = node.GetPort(arrayData.name + " " + index);
                     if (hasArrayData) {
                         var itemData = arrayData.GetArrayElementAtIndex(index);
@@ -418,7 +422,7 @@
                     PortField(pos, port);
                 };
             list.elementHeightCallback =
-                (int index) => {
+                index => {
                     if (hasArrayData) {
                         var itemData = arrayData.GetArrayElementAtIndex(index);
                         return EditorGUI.GetPropertyHeight(itemData);
@@ -426,23 +430,25 @@
                     else return EditorGUIUtility.singleLineHeight;
                 };
             list.drawHeaderCallback =
-                (Rect rect) => { EditorGUI.LabelField(rect, label); };
+                rect => { EditorGUI.LabelField(rect, label); };
             list.onSelectCallback =
-                (ReorderableList rl) => { reorderableListIndex = rl.index; };
+                rl => { reorderableListIndex = rl.index; };
             list.onReorderCallback =
-                (ReorderableList rl) => {
+                rl => {
                     // Move up
                     if (rl.index > reorderableListIndex) {
                         for (var i = reorderableListIndex; i < rl.index; ++i) {
                             var port     = node.GetPort(arrayData.name + " " + i);
                             var nextPort = node.GetPort(arrayData.name + " " + (i + 1));
+                            var id = port.Id;
+                            
                             port.SwapConnections(nextPort);
 
                             // Swap cached positions to mitigate twitching
-                            var rect = NodeEditorWindow.Current.PortConnectionPoints[port];
-                            NodeEditorWindow.Current.PortConnectionPoints[port] =
-                                NodeEditorWindow.Current.PortConnectionPoints[nextPort];
-                            NodeEditorWindow.Current.PortConnectionPoints[nextPort] = rect;
+                            var rect = NodeEditorWindow.Current.PortConnectionPoints[id];
+                            NodeEditorWindow.Current.PortConnectionPoints[id] =
+                                NodeEditorWindow.Current.PortConnectionPoints[id];
+                            NodeEditorWindow.Current.PortConnectionPoints[id] = rect;
                         }
                     }
                     // Move down
@@ -452,11 +458,12 @@
                             var nextPort = node.GetPort(arrayData.name + " " + (i - 1));
                             port.SwapConnections(nextPort);
 
+                            var id = port.Id;
                             // Swap cached positions to mitigate twitching
-                            var rect = NodeEditorWindow.Current.PortConnectionPoints[port];
-                            NodeEditorWindow.Current.PortConnectionPoints[port] =
-                                NodeEditorWindow.Current.PortConnectionPoints[nextPort];
-                            NodeEditorWindow.Current.PortConnectionPoints[nextPort] = rect;
+                            var rect = NodeEditorWindow.Current.PortConnectionPoints[id];
+                            NodeEditorWindow.Current.PortConnectionPoints[id] =
+                                NodeEditorWindow.Current.PortConnectionPoints[id];
+                            NodeEditorWindow.Current.PortConnectionPoints[id] = rect;
                         }
                     }
 
@@ -477,7 +484,7 @@
 
                     EditorApplication.delayCall += NodeEditorWindow.Current.Repaint;
                 };
-            list.onAddCallback = (ReorderableList rl) => {
+            list.onAddCallback = rl => {
                 // Add instance port postfixed with an index number
                 var newName                           = arrayData.name + " 0";
                 var i                                 = 0;
@@ -493,7 +500,7 @@
                 serializedObject.ApplyModifiedProperties();
             };
             list.onRemoveCallback =
-                (ReorderableList rl) => {
+                rl => {
                     var index = rl.index;
                     // Clear the removed ports connections
                     instancePorts[index].ClearConnections();

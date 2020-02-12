@@ -6,6 +6,7 @@
     using System.Reflection;
     using Runtime.Core;
     using UniCore.EditorTools.Editor.Utility;
+    using UniCore.Runtime.ProfilerTools;
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Attributes;
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Interfaces;
     using UnityEditor;
@@ -21,7 +22,8 @@
 
         private List<UniBaseNode> _regularNodes  = new List<UniBaseNode>();
         private List<UniBaseNode> _selectedNodes = new List<UniBaseNode>();
-
+        private HashSet<ulong> idHash = new HashSet<ulong>();
+        
         private int topPadding => isDocked() ? 19 : 22;
 
         private void OnGUI()
@@ -51,7 +53,19 @@
 
             graphEditor.OnGUI();
 
+            VerifyNodes();
+            
             GUI.matrix = m;
+        }
+
+        public void VerifyNodes()
+        {
+            idHash.Clear();
+            foreach (var node in ActiveGraph.nodes) {
+                if (idHash.Add(node.Id) == false) {
+                    node.UpdateId();
+                }
+            }
         }
 
         public static void BeginZoomed(Rect rect, float zoom, float topPadding)
@@ -274,8 +288,10 @@
                 // Draw full connections and output > reroute
                 foreach (var output in node.Outputs) {
                     //Needs cleanup. Null checks are ugly
-                    var item = _portConnectionPoints.FirstOrDefault(x => x.Key.Id == output.Id);
-                    if (item.Key == null) continue;
+                    var item = _portConnectionPoints.
+                        FirstOrDefault(x => x.Key == output.Id);
+                    
+                    if (item.Key == 0) continue;
 
                     if (output == null)
                         continue;
@@ -289,9 +305,12 @@
                         // Error handling
                         if (input == null)
                             continue; //If a script has been updated and the port doesn't exist, it is removed and null is returned. If this happens, return.
-                        if (!input.IsConnectedTo(output)) input.Connect(output);
+                        if (!input.IsConnectedTo(output)) {
+                            input.Connect(output);
+                        }
+                        
                         Rect toRect;
-                        if (!_portConnectionPoints.TryGetValue(input as NodePort, out toRect)) continue;
+                        if (!_portConnectionPoints.TryGetValue(input.Id, out toRect)) continue;
 
                         var from          = fromRect.center;
                         var to            = Vector2.zero;
@@ -502,7 +521,7 @@
             }
 
             if (state.EventType == EventType.Repaint) {
-                _portConnectionPoints = _portConnectionPoints.Where(x => x.Key.Node != node)
+                _portConnectionPoints = _portConnectionPoints.Where(x => x.Key != node.Id)
                     .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
             }
 
@@ -568,16 +587,16 @@
             //Check input ports
             foreach (var input in node.Inputs) {
                 //Check if port rect is available
-                if (!PortConnectionPoints.ContainsKey(input)) continue;
-                var r                                 = GridToWindowRectNoClipped(PortConnectionPoints[input]);
+                if (!PortConnectionPoints.ContainsKey(input.Id)) continue;
+                var r                                 = GridToWindowRectNoClipped(PortConnectionPoints[input.Id]);
                 if (r.Contains(mousePos)) hoveredPort = input;
             }
 
             //Check all output ports
             foreach (var output in node.Outputs) {
                 //Check if port rect is available
-                if (!PortConnectionPoints.ContainsKey(output)) continue;
-                var r                                 = GridToWindowRectNoClipped(PortConnectionPoints[output]);
+                if (!PortConnectionPoints.ContainsKey(output.Id)) continue;
+                var r                                 = GridToWindowRectNoClipped(PortConnectionPoints[output.Id]);
                 if (r.Contains(mousePos)) hoveredPort = output;
             }
         }
@@ -638,11 +657,12 @@
                 else NodeSizes.Add(node, size);
 
                 foreach (var portPairs in NodeEditor.PortPositions) {
+                    var id = portPairs.Key.Id;
                     var portHandlePos = portPairs.Value;
                     portHandlePos += node.position;
                     var rect = new Rect(portHandlePos.x - 8, portHandlePos.y - 8, 16, 16);
-                    if (PortConnectionPoints.ContainsKey(portPairs.Key)) PortConnectionPoints[portPairs.Key] = rect;
-                    else PortConnectionPoints.Add(portPairs.Key, rect);
+                    if (PortConnectionPoints.ContainsKey(id)) PortConnectionPoints[id] = rect;
+                    else PortConnectionPoints.Add(id, rect);
                 }
             }
 

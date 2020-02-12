@@ -21,7 +21,7 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
         public static NodeGraph LastEditorGraph;
         
         private Dictionary<ulong, NodePort> _portsIds = new Dictionary<ulong, NodePort>();
-        private Dictionary<NodePort, Rect> _portConnectionPoints = new Dictionary<NodePort, Rect>();
+        private Dictionary<ulong, Rect> _portConnectionPoints = new Dictionary<ulong, Rect>();
         private Dictionary<UniBaseNode, Vector2> _nodeSizes = new Dictionary<UniBaseNode, Vector2>();
 
         private float _zoom = 1;
@@ -36,7 +36,7 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
         public NodeGraph ActiveGraph;
 
         /// <summary> Stores node positions for all nodePorts. </summary>
-        public Dictionary<NodePort, Rect> PortConnectionPoints => _portConnectionPoints;
+        public Dictionary<ulong, Rect> PortConnectionPoints => _portConnectionPoints;
 
         public Dictionary<UniBaseNode, Vector2> NodeSizes => _nodeSizes;
 
@@ -191,7 +191,7 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
             return new Vector2(xOffset, yOffset);
         }
 
-        public void SelectNode(UniBaseNode node, bool add)
+        public void AddToEditorSelection(Object node, bool add)
         {
             if (add)
             {
@@ -202,7 +202,7 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
             else Selection.objects = new Object[] {node};
         }
 
-        public void DeselectNode(UniBaseNode node)
+        public void DeselectFromEditor(Object node)
         {
             var selection = new List<Object>(Selection.objects);
             selection.Remove(node);
@@ -246,11 +246,13 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
             _rects = new Rect[count];
             var index = 0;
             
-            foreach (var portConnectionPoint in PortConnectionPoints)
-            {
-                _references[index] = new NodePortReference(portConnectionPoint.Key);
-                _rects[index] = portConnectionPoint.Value;
-                index++;
+            foreach (var portConnectionPoint in PortConnectionPoints) {
+                if(_portsIds.TryGetValue(portConnectionPoint.Key, out var port))
+                {
+                    _references[index] = new NodePortReference(port);
+                    _rects[index]      = portConnectionPoint.Value;
+                    index++;
+                }
             }
         }
         
@@ -291,7 +293,7 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
                     if (nodePort != null)
                     {
                         _portsIds[nodePort.Id] = nodePort;
-                        _portConnectionPoints.Add(nodePort, _rects[i]);
+                        _portConnectionPoints[nodePort.Id] = _rects[i];
                     }
                 }
             }

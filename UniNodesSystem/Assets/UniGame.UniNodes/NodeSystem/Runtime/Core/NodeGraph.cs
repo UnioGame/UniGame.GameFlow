@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using Interfaces;
+    using UniCore.Runtime.Attributes;
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Nodes;
     using UnityEngine;
 
@@ -16,7 +17,7 @@
 
         #endregion
 
-        [HideInInspector] 
+        [ReadOnlyValue]
         [SerializeField] private ulong _uniqueId;
 
         /// <summary> All nodes in the graph. <para/>
@@ -49,12 +50,12 @@
             var nodeAsset = gameObject.AddComponent(type);
             var node      = nodeAsset as UniBaseNode;
             if (node == null) {
-                DestroyImmediate(nodeAsset);
+                DestroyImmediate(nodeAsset,true);
                 return null;
             }
 
-            node.nodeName = itemName;
             node.Graph = this;
+            node.nodeName = itemName;
             nodes.Add(node);
             
             return node;
@@ -69,7 +70,7 @@
         /// <summary> Creates a copy of the original node in the graph </summary>
         public virtual UniBaseNode CopyNode(UniBaseNode original)
         {
-            var node = ScriptableObject.Instantiate(original);
+            var node = Instantiate(original);
             node.UpdateId();
             node.ClearConnections();
             nodes.Add(node);
@@ -134,18 +135,5 @@
             Clear();
         }
 
-        #region editor
-
-        protected override void OnValidate()
-        {
-            base.OnValidate();
-
-            //remove all empty nodes
-            if (nodes.RemoveAll(x => !x) > 0) {
-                Debug.LogError($"NULL node found at {name}");
-            }
-        }
-
-        #endregion
     }
 }

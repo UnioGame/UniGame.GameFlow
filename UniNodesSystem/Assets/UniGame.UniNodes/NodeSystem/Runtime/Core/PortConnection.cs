@@ -8,6 +8,10 @@
     public class PortConnection
     {
         [SerializeField] public string      fieldName;
+
+#if ODIN_INSPECTOR
+        [Sirenix.OdinInspector.InlineEditor]
+#endif
         [SerializeField] public UniBaseNode node;
 
         [NonSerialized] private NodePort port;

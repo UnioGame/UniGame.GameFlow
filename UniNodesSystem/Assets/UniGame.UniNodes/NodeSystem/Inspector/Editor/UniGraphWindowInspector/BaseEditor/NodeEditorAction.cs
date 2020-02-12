@@ -146,22 +146,21 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
                                     {
                                         foreach (var output in node.Outputs)
                                         {
-                                            Rect rect;
-                                            if (PortConnectionPoints.TryGetValue(output, out rect))
+                                            if (PortConnectionPoints.TryGetValue(output.Id, out var rect))
                                             {
                                                 rect.position += offset;
-                                                PortConnectionPoints[output] = rect;
+                                                PortConnectionPoints[output.Id] = rect;
                                             }
                                         }
 
                                         foreach (var input in node.Inputs)
                                         {
-                                            Rect rect;
-                                            if (PortConnectionPoints.TryGetValue(input, out rect))
-                                            {
-                                                rect.position += offset;
-                                                PortConnectionPoints[input] = rect;
+                                            if (!PortConnectionPoints.TryGetValue(input.Id, out var rect)) {
+                                                continue;
                                             }
+
+                                            rect.position                  += offset;
+                                            PortConnectionPoints[input.Id] =  rect;
                                         }
                                     }
                                 }
@@ -255,10 +254,10 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
                             // If mousedown on node header, select or deselect
                             if (!Selection.Contains(hoveredNode))
                             {
-                                SelectNode(hoveredNode, e.control || e.shift);
+                                AddToEditorSelection(hoveredNode, e.control || e.shift);
                                 if (!e.control && !e.shift) selectedReroutes.Clear();
                             }
-                            else if (e.control || e.shift) DeselectNode(hoveredNode);
+                            else if (e.control || e.shift) DeselectFromEditor(hoveredNode);
 
                             e.Use();
                             currentActivity = NodeActivity.HoldNode;
@@ -346,7 +345,7 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
                         if (currentActivity == NodeActivity.HoldNode && !(e.control || e.shift))
                         {
                             selectedReroutes.Clear();
-                            SelectNode(hoveredNode, false);
+                            AddToEditorSelection(hoveredNode, false);
                         }
 
                         // If click reroute, select it.
@@ -384,7 +383,7 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
                             }
                             else if (IsHoveringNode && IsHoveringTitle(hoveredNode))
                             {
-                                if (!Selection.Contains(hoveredNode)) SelectNode(hoveredNode, false);
+                                if (!Selection.Contains(hoveredNode)) AddToEditorSelection(hoveredNode, false);
                                 ShowNodeContextMenu();
                             }
                             else if (!IsHoveringNode)
@@ -577,7 +576,7 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
                 var col = NodeEditorPreferences.GetTypeColor(draggedOutput.ValueType);
 
                 Rect fromRect;
-                if (!_portConnectionPoints.TryGetValue(draggedOutput, out fromRect)) return;
+                if (!_portConnectionPoints.TryGetValue(draggedOutput.Id, out fromRect)) return;
                 var from = fromRect.center;
                 col.a = 0.6f;
                 var to = Vector2.zero;
@@ -589,7 +588,7 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
                 }
 
                 to = draggedOutputTarget != null
-                    ? PortConnectionPoints[draggedOutputTarget].center
+                    ? PortConnectionPoints[draggedOutputTarget.Id].center
                     : WindowToGridPosition(Event.current.mousePosition);
                 DrawConnection(from, to, col);
 

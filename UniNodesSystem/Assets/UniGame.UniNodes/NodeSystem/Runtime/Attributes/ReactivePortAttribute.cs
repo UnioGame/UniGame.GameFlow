@@ -6,8 +6,10 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nod
     using Core;
     using Core.Interfaces;
     using UniNodeSystem.Runtime.Core;
+    using UnityEditor;
+    using UnityEngine;
 
-    public class ReactivePortAttribute : Attribute , IReactivePortData
+    public class ReactivePortAttribute : PropertyAttribute , IReactivePortData
     {
         public bool                instancePortList = false;
         public string              fieldName        = string.Empty;

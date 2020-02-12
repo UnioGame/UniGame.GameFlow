@@ -7,10 +7,10 @@
     [Serializable]
     public class ReactivePortValue<TValue, TType> : 
         IReactivePortValue<TType>
-        where TValue : class, IReactiveProperty<TType>
+        where TValue : class, IReactiveProperty<TType>, new()
     {
         [SerializeReference] 
-        public TValue value;
+        public TValue value = new TValue();
 
         public Type ValueType => typeof(TType);
         

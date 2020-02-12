@@ -4,10 +4,11 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nod
 {
     using System;
     using UniContextData.Runtime.Entities;
+    using UniGreenModules.UniGame.Core.Runtime.Rx;
     using UniRx;
 
     [Serializable]
-    public class IntReactivePort : ReactivePortValue<IntReactiveProperty,int>{}
+    public class IntReactivePort : ReactivePortValue<IntRecycleReactiveProperty,int>{}
     
     [Serializable]
     public class StringReactivePort : ReactivePortValue<StringReactiveProperty,string> {}

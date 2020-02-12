@@ -12,42 +12,58 @@ using UnityEngine;
 
 namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Core.Commands
 {
+    using Nodes;
+
     [Serializable]
     public class ReactiveValuePortCommand : SerializedNodeCommand, ILifeTimeCommand
     {
         #region inspector
-    
-        [SerializeField]
-        protected string portName;
-        [SerializeReference]
-        protected IReactiveSource target;
-        [SerializeReference]
-        protected IPortData portData;
+
+#if ODIN_INSPECTOR
+        [Sirenix.OdinInspector.InlineEditor]
+#endif
+        [SerializeField] public UniNode      node;
+        [SerializeField] public NodePortData portData;
+        [SerializeField] public bool         isUpdatable = true;
+        [SerializeField] public string fieldName;
+
+        [SerializeReference] public IReactiveSource targetSource;
 
         #endregion
-    
+
         protected IPortValue port;
-    
-        public ReactiveValuePortCommand(string portName,IReactiveSource target, IPortData portData, bool updatable = true)
+
+        public override bool IsUpdatable => isUpdatable;
+
+        public void Initialize(UniNode target, IReactiveSource source, IPortData portData, bool updatable = true)
         {
-            this.portName    = portName;
-            this.target      = target;
-            this.portData    = portData;
-            this.isUpdatable = updatable;
+            this.node       = target;
+            this.portData     = new NodePortData(portData);
+            this.targetSource = source;
+            this.isUpdatable  = updatable;
+            this.fieldName = portData.FieldName;
         }
-    
+
         public override ILifeTimeCommand Create(IUniNode node)
         {
             port = node.UpdatePortValue(portData);
             return this;
         }
 
+        public override bool Validate()
+        {
+            return string.IsNullOrEmpty(portData.FieldName) == false &&
+                   node != null &&
+                   node.GetPort(portData.FieldName) != null;
+        }
+
         public void Execute(ILifeTime lifeTime)
         {
             var portDirection = portData.Direction;
-            var source        = portDirection == PortIO.Input ? (IConnector<IMessagePublisher>)port : target;
-            var targetValue   = portDirection == PortIO.Input ? target : (IMessagePublisher)port;
-        
+
+            var source      = portDirection == PortIO.Input ? (IConnector<IMessagePublisher>) port : targetSource;
+            var targetValue = portDirection == PortIO.Input ? targetSource : (IMessagePublisher) port;
+
             source.Bind(targetValue).AddTo(lifeTime);
         }
     }

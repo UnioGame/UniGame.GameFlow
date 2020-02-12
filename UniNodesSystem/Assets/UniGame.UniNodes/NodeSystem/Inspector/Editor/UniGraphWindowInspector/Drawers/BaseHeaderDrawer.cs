@@ -31,19 +31,18 @@
                     NodeEditor.Renaming = 2;
                 }
 
-                target.name = EditorGUILayout.TextField(target.name, NodeEditorResources.styles.nodeHeader,
+                target.nodeName = EditorGUILayout.TextField(target.name, NodeEditorResources.styles.nodeHeader,
                     GUILayout.Height(30));
                 
                 if (!EditorGUIUtility.editingTextField)
                 {
-                    editor.Rename(target.name);
+                    editor.Rename(target.ItemName);
                     NodeEditor.Renaming = 0;
                 }
             }
             else
             {
                 GUILayout.Label(title, NodeEditorResources.styles.nodeHeader, GUILayout.Height(30));
-                node.width = (int)EditorGUILayout.Slider(node.width, 220, 1000);
             }
 
             return true;
