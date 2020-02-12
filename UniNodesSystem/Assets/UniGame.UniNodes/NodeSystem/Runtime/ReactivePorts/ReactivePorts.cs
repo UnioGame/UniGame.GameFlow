@@ -8,7 +8,7 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nod
     using UniRx;
 
     [Serializable]
-    public class IntReactivePort : ReactivePortValue<IntRecycleReactiveProperty,int>{}
+    public class IntReactivePort : ReactivePortValue<IntReactiveProperty,int>{}
     
     [Serializable]
     public class StringReactivePort : ReactivePortValue<StringReactiveProperty,string> {}
