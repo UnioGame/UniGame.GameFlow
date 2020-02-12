@@ -5,6 +5,9 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Exa
 {
     using NodeSystem.Runtime.Attributes;
     using NodeSystem.Runtime.ReactivePorts;
+    using UniCore.Runtime.ProfilerTools;
+    using UniCore.Runtime.Rx.Extensions;
+    using UniRx;
 
     [CreateNodeMenu("Examples/ReactivePortDemo/ReactiveSumm","ReactiveSumm")]
     public class DemoValueSummReactiveNode : UniNode
@@ -20,8 +23,17 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Exa
         {
             
             base.OnExecute();
-            IntIn.Bind(IntResult);
 
+            IntIn.
+                Do(value => IntResult.Publish(value + IntResult.Value)).
+                Subscribe().
+                AddTo(LifeTime);
+            
+            IntResult.
+                Do(x => GameLog.Log($"{nodeName} SUMM VALUE = {x}")).
+                Subscribe().
+                AddTo(LifeTime);
+            
         }
     }
 }

@@ -4,29 +4,28 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nod
 {
     using System;
     using UniContextData.Runtime.Entities;
-    using UniGreenModules.UniGame.Core.Runtime.Rx;
     using UniRx;
 
     [Serializable]
-    public class IntReactivePort : ReactivePortValue<IntReactiveProperty,int>{}
+    public class IntReactivePort : ReactivePropertyPort<IntReactiveProperty,int>{}
     
     [Serializable]
-    public class StringReactivePort : ReactivePortValue<StringReactiveProperty,string> {}
+    public class StringReactivePort : ReactivePropertyPort<StringReactiveProperty,string> {}
     
     [Serializable]
-    public class FloatReactivePort : ReactivePortValue<FloatReactiveProperty,float> {}
+    public class FloatReactivePort : ReactivePropertyPort<FloatReactiveProperty,float> {}
     
     [Serializable]
-    public class DoubleReactivePort : ReactivePortValue<DoubleReactiveProperty,double> {}
+    public class DoubleReactivePort : ReactivePropertyPort<DoubleReactiveProperty,double> {}
     
     [Serializable]
-    public class ByteReactivePort : ReactivePortValue<ByteReactiveProperty,byte> {}
+    public class ByteReactivePort : ReactivePropertyPort<ByteReactiveProperty,byte> {}
     
     [Serializable]
-    public class BoolReactivePort : ReactivePortValue<BoolReactiveProperty,bool> {}
+    public class BoolReactivePort : ReactivePropertyPort<BoolReactiveProperty,bool> {}
     
     [Serializable]
-    public class ContextReactivePort : ReactivePortValue<ContextReactiveProperty,EntityContext> {}
+    public class ContextReactivePort : ReactivePropertyPort<ContextReactiveProperty,EntityContext> {}
 
     [Serializable]
     public class ContextReactiveProperty : ReactiveProperty<EntityContext>{}

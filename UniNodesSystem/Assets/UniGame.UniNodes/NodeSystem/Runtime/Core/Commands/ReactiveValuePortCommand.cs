@@ -61,10 +61,18 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nod
         {
             var portDirection = portData.Direction;
 
+            switch (portDirection) {
+                case PortIO.Input:
+                    port.Receive<>()
+                    break;
+                case PortIO.Output:
+                    targetSource.Bind(port).
+                        AddTo(lifeTime);
+                    break;
+            }
             var source      = portDirection == PortIO.Input ? (IConnector<IMessagePublisher>) port : targetSource;
             var targetValue = portDirection == PortIO.Input ? targetSource : (IMessagePublisher) port;
 
-            source.Bind(targetValue).AddTo(lifeTime);
         }
     }
 }

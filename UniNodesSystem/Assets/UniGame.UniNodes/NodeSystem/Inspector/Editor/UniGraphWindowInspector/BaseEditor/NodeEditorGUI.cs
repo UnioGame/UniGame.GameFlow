@@ -552,8 +552,8 @@
 
             GUILayout.BeginArea(rectArea);
 
-            this.WrapDrawer(() => DrawNodeEditorArea(nodeEditor, node, state));
-            this.WrapDrawer(() => DrawNodePorts(node, nodePos, state));
+            this.WrapDrawer(() => DrawNodeEditorArea(nodeEditor, node, state),true);
+            this.WrapDrawer(() => DrawNodePorts(node, nodePos, state),true);
 
             GUILayout.EndArea();
         }

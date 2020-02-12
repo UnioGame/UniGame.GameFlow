@@ -14,25 +14,13 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
         public static bool isPanning { get; private set; }
         public static Vector2[] dragOffset;
 
-        private bool IsDraggingPort
-        {
-            get { return draggedOutput != null; }
-        }
+        private bool IsDraggingPort => draggedOutput != null;
 
-        private bool IsHoveringPort
-        {
-            get { return hoveredPort != null; }
-        }
+        private bool IsHoveringPort => hoveredPort != null;
 
-        private bool IsHoveringNode
-        {
-            get { return hoveredNode != null; }
-        }
+        private bool IsHoveringNode => hoveredNode != null;
 
-        private bool IsHoveringReroute
-        {
-            get { return hoveredReroute.port != null; }
-        }
+        private bool IsHoveringReroute => hoveredReroute.port != null;
 
         private UniBaseNode hoveredNode;
         [NonSerialized] private NodePort hoveredPort;

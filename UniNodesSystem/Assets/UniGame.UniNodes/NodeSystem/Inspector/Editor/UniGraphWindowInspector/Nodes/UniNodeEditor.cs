@@ -56,19 +56,23 @@
         public override void OnBodyGUI()
         {
             var node = target as UniNode;
-            
-            UpdatePortAttributes(node);
-            
-            node.Initialize();
 
-            UpdateData(node);
+            if (Application.isPlaying == false) {
+                    
+                UpdatePortAttributes(node);
+            
+                node.Initialize();
 
+                UpdateData(node);
+
+                VerifyNode(node);
+
+            }
+            
             base.OnBodyGUI();
 
             DrawPorts(node);
-
-            VerifyNode(node);
-
+            
             serializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
 

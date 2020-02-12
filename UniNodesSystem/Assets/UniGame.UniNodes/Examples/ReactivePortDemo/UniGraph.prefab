@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3684159990570092546}
   - component: {fileID: 7009446666381924808}
-  - component: {fileID: 5203789152170107061}
   - component: {fileID: 115054199971061112}
   - component: {fileID: 1909121160466111395}
   - component: {fileID: 18125909105642779}
@@ -59,61 +58,9 @@ MonoBehaviour:
   serializableCommands: []
   _uniqueId: 32
   nodes:
-  - {fileID: 5203789152170107061}
   - {fileID: 115054199971061112}
   - {fileID: 1909121160466111395}
   - {fileID: 18125909105642779}
-  references:
-    version: 1
---- !u!114 &5203789152170107061
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8394431385733385222}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07d0c7065aa6e1e46be96a27eb24c3cc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _id: 2
-  width: 220
-  nodeName: input
-  position: {x: 152, y: 24}
-  ports:
-    keys:
-    - '[out]data'
-    - '[in]data'
-    values:
-    - _id: 3
-      _fieldName: '[out]data'
-      _direction: 1
-      _connectionType: 0
-      _showBackingValue: 2
-      isDynamic: 1
-      isInstancePortList: 0
-      _node: {fileID: 5203789152170107061}
-      _allowedValueTypes: []
-      _portValue:
-        name: '[out]data'
-      connections: []
-    - _id: 4
-      _fieldName: '[in]data'
-      _direction: 0
-      _connectionType: 0
-      _showBackingValue: 2
-      isDynamic: 1
-      isInstancePortList: 0
-      _node: {fileID: 5203789152170107061}
-      _allowedValueTypes: []
-      _portValue:
-        name: '[in]data'
-      connections: []
-  _graph: {fileID: 7009446666381924808}
-  serializableCommands: []
-  direction: 0
-  bindInOut: 1
   references:
     version: 1
 --- !u!114 &115054199971061112

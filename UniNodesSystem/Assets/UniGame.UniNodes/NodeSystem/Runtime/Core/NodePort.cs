@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
+    using System.Runtime.CompilerServices;
     using UniCore.Runtime.Attributes;
     using UniCore.Runtime.DataFlow;
     using UniCore.Runtime.DataFlow.Interfaces;
@@ -541,31 +542,44 @@
         {
             _portValueTypes = _portValueTypes ?? new List<Type>();
             _portValueTypes.Clear();
-            _portValueTypes.AddRange(_allowedValueTypes.Select(x => Type.GetType(x, false)).Where(x => x != null).ToList());
+            _portValueTypes.AddRange(_allowedValueTypes.
+                Select(x => Type.GetType(x, false)).
+                Where(x => x != null).ToList());
         }
-
-
+        
         /// <summary>
         /// Create connection between valid nodes 
         /// </summary>
         /// <typeparam name="TValue">Target connection</typeparam>
         /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private IObservable<TValue> GetObservable<TValue>()
         {
-            _portValueSubscriptions = _portValueSubscriptions ?? new HashSet<Type>();
-
-            var type = typeof(TValue);
-            if (_portValueSubscriptions.Add(type)) {
-                for (var i = 0; i < connections.Count; i++) {
-                    var connection = connections[i];
-                    connection.Port.Bind(this).
-                        AddTo(LifeTime);
-                }
-            }
+            UpdatePortDataSource(typeof(TValue));
 
             return _portValue.Receive<TValue>();
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void UpdatePortDataSource(Type type)
+        {
+            _portValueSubscriptions = _portValueSubscriptions ?? new HashSet<Type>();
+
+            //data source connections allowed only for input ports
+            if (_direction != PortIO.Input || !_portValueSubscriptions.Add(type)) {
+                return;
+            }
+
+            for (var i = 0; i < connections.Count; i++) {
+                var connection = connections[i];
+                var port       = connection.Port;
+                if(port.Direction == PortIO.Input)
+                    continue;
+                connection.Port.Bind(this).
+                    AddTo(LifeTime);
+            }
+        }
+        
         #region Unity Methods
 
         [Conditional("UNITY_EDITOR")]

@@ -16,8 +16,8 @@
         
         public void Publish<T>(T message)
         {
-            if(message is TType value)
-                this.value.Value = value;
+            if(message is TType messageValue)
+                value.Value = messageValue;
         }
     
         public IDisposable Subscribe(IObserver<TType> observer) => value.Subscribe(observer);
@@ -33,3 +33,5 @@
 
     }
 }
+
+

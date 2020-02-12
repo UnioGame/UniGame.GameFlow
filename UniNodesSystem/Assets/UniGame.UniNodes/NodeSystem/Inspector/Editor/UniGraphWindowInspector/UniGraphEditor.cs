@@ -16,7 +16,10 @@
 		{
 			base.OnEnable();
 			graph = target as UniGraph;
-			Validate();
+			if (Application.isPlaying == false) {
+				Validate();
+			}
+			
 		}
 		
 		private void Validate()

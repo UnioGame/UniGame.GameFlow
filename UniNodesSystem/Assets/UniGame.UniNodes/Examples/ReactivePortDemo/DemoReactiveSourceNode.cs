@@ -4,10 +4,10 @@ using UniGreenModules.UniNodeSystem.Runtime.Core;
 namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Examples.ReactivePortDemo
 {
     using System.Collections;
-    using System.Collections.Generic;
     using NodeSystem.Runtime.Attributes;
-    using NodeSystem.Runtime.Core.Commands;
     using NodeSystem.Runtime.ReactivePorts;
+    using UniCore.Runtime.ProfilerTools;
+    using UniCore.Runtime.Rx.Extensions;
     using UniRoutine.Runtime;
     using UniRoutine.Runtime.Extension;
     using UniRx;
@@ -38,14 +38,14 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Exa
                 AddTo(LifeTime);
         }
 
-        private IEnumerator Generate(float delay, Vector2Int range, IMessagePublisher messagePublisher)
+        private IEnumerator Generate(float delayTime, Vector2Int rangeValue, IMessagePublisher messagePublisher)
         {
             while (isActiveAndEnabled) {
 
-                var value = Random.Range(range.x, range.y);
+                var value = Random.Range(rangeValue.x, rangeValue.y);
                 messagePublisher.Publish(value);
                 
-                yield return this.WaitForSecond(delay);
+                yield return this.WaitForSecond(delayTime);
 
             }
         }
