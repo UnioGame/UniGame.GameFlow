@@ -1,10 +1,9 @@
-namespace UniGreenModules.UniNodeSystem.Runtime.Core
+namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Interfaces
 {
     using System;
     using System.Collections.Generic;
-    using Interfaces;
-    using UniCore.Runtime.Interfaces;
-    using UniRx;
+    using UniNodeSystem.Runtime.Core;
+    using UniNodeSystem.Runtime.Interfaces;
     using UnityEngine;
 
     public interface INodePort : 

@@ -3,6 +3,8 @@ using UniGreenModules.UniNodeSystem.Runtime.Core;
 
 namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Examples.ReactivePortDemo
 {
+    using System;
+    using NodeSystem.Runtime.Attributes;
     using NodeSystem.Runtime.ReactivePorts;
     using UnityEngine;
 
@@ -10,8 +12,13 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Exa
     public class DemoIntReactiveNode : UniNode
     {
 
+        [ReactivePort()]
         [SerializeField]
-        public IntReactivePort IntValue1 = new IntReactivePort();
+        public IntReactivePort IntValueIn = new IntReactivePort();
+
+        [ReactivePort(PortIO.Output)]
+        [SerializeField]
+        public IntReactivePort IntValueOut = new IntReactivePort();
         
     }
 }

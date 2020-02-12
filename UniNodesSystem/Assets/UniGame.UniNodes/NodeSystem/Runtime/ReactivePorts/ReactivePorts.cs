@@ -3,13 +3,11 @@
 namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.ReactivePorts
 {
     using System;
+    using UniContextData.Runtime.Entities;
     using UniRx;
 
     [Serializable]
-    public class IntReactivePort : ReactivePortValue<IntReactiveProperty,int>
-    {
-        public int X;
-    }
+    public class IntReactivePort : ReactivePortValue<IntReactiveProperty,int>{}
     
     [Serializable]
     public class StringReactivePort : ReactivePortValue<StringReactiveProperty,string> {}
@@ -25,4 +23,10 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nod
     
     [Serializable]
     public class BoolReactivePort : ReactivePortValue<BoolReactiveProperty,bool> {}
+    
+    [Serializable]
+    public class ContextReactivePort : ReactivePortValue<ContextReactiveProperty,EntityContext> {}
+
+    [Serializable]
+    public class ContextReactiveProperty : ReactiveProperty<EntityContext>{}
 }

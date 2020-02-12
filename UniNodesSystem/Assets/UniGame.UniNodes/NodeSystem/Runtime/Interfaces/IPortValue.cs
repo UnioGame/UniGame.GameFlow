@@ -2,11 +2,12 @@ namespace UniGreenModules.UniNodeSystem.Runtime.Interfaces
 {
     using System;
     using UniCore.Runtime.Interfaces;
+    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Core.Interfaces;
     using UniRx;
 
     public interface IPortValue : 
         IContext,
-        IReactiveSource,
+        IConnector<IMessagePublisher>,
         INamedItem
     {
 

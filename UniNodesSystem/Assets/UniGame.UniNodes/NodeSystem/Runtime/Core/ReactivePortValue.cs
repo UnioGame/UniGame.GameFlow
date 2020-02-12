@@ -1,20 +1,18 @@
 ﻿namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Core
 {
     using System;
-    using UniGreenModules.UniGame.Core.Runtime.Rx;
     using UniRx;
     using UnityEngine;
-    using UnityEngine.Serialization;
 
     [Serializable]
     public class ReactivePortValue<TValue, TType> : 
         IReactivePortValue<TType>
         where TValue : class, IReactiveProperty<TType>
     {
-        public int Y;
-        
         [SerializeReference] 
         public TValue value;
+
+        public Type ValueType => typeof(TType);
         
         public void Publish<T>(T message)
         {

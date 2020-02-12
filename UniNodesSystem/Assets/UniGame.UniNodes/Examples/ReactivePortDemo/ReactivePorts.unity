@@ -308,10 +308,50 @@ PrefabInstance:
       propertyPath: m_Name
       value: ReactivePorts
       objectReference: {fileID: 0}
+    - target: {fileID: 2494029627694458934, guid: e9058f32983d8044cb181e2ac92a19cf,
+        type: 3}
+      propertyPath: ports.values.Array.data[0].connections.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2494029627694458934, guid: e9058f32983d8044cb181e2ac92a19cf,
+        type: 3}
+      propertyPath: nodeSerializableCommands.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2494029627694458934, guid: e9058f32983d8044cb181e2ac92a19cf,
+        type: 3}
+      propertyPath: ports.values.Array.data[0].connections.Array.data[1].fieldName
+      value: IntValueOut
+      objectReference: {fileID: 0}
+    - target: {fileID: 2494029627694458934, guid: e9058f32983d8044cb181e2ac92a19cf,
+        type: 3}
+      propertyPath: ports.values.Array.data[0].connections.Array.data[1].node
+      value: 
+      objectReference: {fileID: 2494029627694458931}
+    - target: {fileID: 2494029627694458934, guid: e9058f32983d8044cb181e2ac92a19cf,
+        type: 3}
+      propertyPath: nodeSerializableCommands.Array.data[0].isUpdatable
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2494029627694458934, guid: e9058f32983d8044cb181e2ac92a19cf,
+        type: 3}
+      propertyPath: nodeSerializableCommands.Array.data[1].isUpdatable
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4144992777765798208, guid: e9058f32983d8044cb181e2ac92a19cf,
         type: 3}
-      propertyPath: IntValue1.value.value
-      value: 0
+      propertyPath: nodeSerializableCommands.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4144992777765798208, guid: e9058f32983d8044cb181e2ac92a19cf,
+        type: 3}
+      propertyPath: nodeSerializableCommands.Array.data[0].isUpdatable
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4144992777765798208, guid: e9058f32983d8044cb181e2ac92a19cf,
+        type: 3}
+      propertyPath: nodeSerializableCommands.Array.data[1].isUpdatable
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6826818068659486235, guid: e9058f32983d8044cb181e2ac92a19cf,
         type: 3}
@@ -370,3 +410,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e9058f32983d8044cb181e2ac92a19cf, type: 3}
+--- !u!114 &2494029627694458931 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4144992777765798208, guid: e9058f32983d8044cb181e2ac92a19cf,
+    type: 3}
+  m_PrefabInstance: {fileID: 2494029627694458930}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 620ad14d07f226747a9b5c5c8f7686a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

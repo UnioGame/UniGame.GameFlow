@@ -58,7 +58,6 @@
 
         #endregion
         
-        
         public void Initialize(string portName, ILifeTime lifeTimeScope, Func<Type,bool> valueFilter = null)
         {
             name = portName;

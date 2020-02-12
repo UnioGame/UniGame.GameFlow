@@ -5,7 +5,9 @@
     using System.Linq;
     using Runtime.Core;
     using Runtime.Interfaces;
+    using UniCore.EditorTools.Editor.PropertiesDrawers;
     using UniCore.EditorTools.Editor.Utility;
+    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.BaseEditor.Extensions;
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Core;
     using UnityEditor;
     using UnityEditorInternal;
@@ -55,15 +57,15 @@
         }
         
         public static void ShowBackingValueField(
+            object field,
             SerializedProperty property, 
-            GUIContent label, 
-            bool includeChildren,
+            IPortData portData,
             bool isConnected,
-            ShowBackingValue showBacking,
+            bool includeChildren,
             GUIStyle style = null)
         {
-            var labelContent = label != null ? label : new GUIContent(property.displayName);
-            switch (showBacking) {
+            var labelContent = portData.FieldName != null ? new GUIContent(portData.FieldName) : new GUIContent(property.displayName);
+            switch (portData.ShowBackingValue) {
                 case ShowBackingValue.Unconnected:
                     // Display a label if port is connected
                     if (isConnected) {
@@ -71,15 +73,18 @@
                     }
                     // Display an editable property field if port is not connected
                     else
-                        EditorGUILayout.PropertyField(property, label, includeChildren, GUILayout.MinWidth(30));
+                        EditorGUILayout.PropertyField(property, labelContent, includeChildren, GUILayout.MinWidth(30));
                     break;
                 case ShowBackingValue.Never:
                     // Display a label
                     EditorDrawerUtils.DrawLabelField(labelContent, style, GUILayout.MinWidth(30));
                     break;
                 case ShowBackingValue.Always:
+                    
+                    var drawer = field.GetTypeDrawer();
+                    drawer.OnGUI();
                     // Display an editable property field
-                    EditorGUILayout.PropertyField(property, label, includeChildren, GUILayout.MinWidth(30));
+                    EditorGUILayout.PropertyField(property, labelContent, includeChildren, GUILayout.MinWidth(30));
                     break;
             }
 
@@ -95,7 +100,7 @@
             bool includeChildren = true, 
             params GUILayoutOption[] options)
         {
-            if (property == null) throw new NullReferenceException();
+            if (property == null) return;
 
             label = label ?? new GUIContent(property.name); 
             
@@ -117,7 +122,8 @@
         {
             var rect = new Rect();
 
-            var portData = port.GetPortDataWithAttributes(property.name);
+            var node = port.Node;
+            var portData = port.Node.GetPortData(node.GetType(),property.name);
                 
             if (portData.InstancePortList) {
                 InstancePortList(property.name, 

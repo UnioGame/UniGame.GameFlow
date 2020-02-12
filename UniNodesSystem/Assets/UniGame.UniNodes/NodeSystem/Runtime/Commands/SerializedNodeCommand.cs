@@ -4,11 +4,15 @@
     using Interfaces;
     using UniCore.Runtime.Interfaces;
 
+    
     [Serializable]
-    public abstract class SerializedNodeCommand 
+    public class SerializedNodeCommand
     {
+        public bool isUpdatable = false;
 
-        public abstract ILifeTimeCommand Create(IUniNode node);
-        
+        public bool IsUpdatable => isUpdatable;
+
+        public virtual ILifeTimeCommand Create(IUniNode node) => null;
+
     }
 }

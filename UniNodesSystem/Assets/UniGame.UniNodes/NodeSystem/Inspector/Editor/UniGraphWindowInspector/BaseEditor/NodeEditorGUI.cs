@@ -6,8 +6,8 @@
     using System.Reflection;
     using Runtime.Core;
     using UniCore.EditorTools.Editor.Utility;
-    using UniCore.Runtime.ProfilerTools;
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Attributes;
+    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Interfaces;
     using UnityEditor;
     using UnityEngine;
     using Object = UnityEngine.Object;
@@ -22,9 +22,7 @@
         private List<UniBaseNode> _regularNodes  = new List<UniBaseNode>();
         private List<UniBaseNode> _selectedNodes = new List<UniBaseNode>();
 
-        private int topPadding {
-            get { return isDocked() ? 19 : 22; }
-        }
+        private int topPadding => isDocked() ? 19 : 22;
 
         private void OnGUI()
         {

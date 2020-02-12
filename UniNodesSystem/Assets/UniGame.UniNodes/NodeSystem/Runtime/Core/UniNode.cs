@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Diagnostics;
     using Attributes;
+    using Interfaces;
     using UniCore.Runtime.DataFlow;
     using UniCore.Runtime.DataFlow.Interfaces;
     using UniCore.Runtime.Extension;
@@ -22,7 +23,8 @@
         #region inspector fields
 
         [SerializeField]
-        public List<SerializedNodeCommand> nodeSavedCommands = new List<SerializedNodeCommand>();
+        [HideNodeInspector]
+        public List<SerializedNodeCommand> nodeSerializableCommands = new List<SerializedNodeCommand>();
 
         #endregion
         
@@ -150,8 +152,8 @@
             commands.Clear();
             
             //register all backed commands to main list
-            for (var i = 0; i < nodeSavedCommands.Count; i++) {
-                var command = nodeSavedCommands[i];
+            for (var i = 0; i < nodeSerializableCommands.Count; i++) {
+                var command = nodeSerializableCommands[i];
                 if(command!=null) 
                     commands.Add(command.Create(this));
             }

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7215943088033483437}
   - component: {fileID: 8247193827458472228}
   - component: {fileID: 4144992777765798208}
+  - component: {fileID: 2494029627694458934}
   m_Layer: 0
   m_Name: ReactivePorts
   m_TagString: Untagged
@@ -66,10 +67,11 @@ MonoBehaviour:
         name: input
       connections: []
   _graph: {fileID: 0}
-  _uniqueId: 4
+  _uniqueId: 14
   nodes:
   - {fileID: 8247193827458472228}
   - {fileID: 4144992777765798208}
+  - {fileID: 2494029627694458934}
 --- !u!114 &8247193827458472228
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -133,16 +135,109 @@ MonoBehaviour:
   _id: 4
   width: 220
   nodeName: Demo Int Reactive Node
-  position: {x: 328, y: -88}
+  position: {x: 360, y: -104}
   ports:
-    keys: []
-    values: []
+    keys:
+    - IntValueIn
+    - IntValueOut
+    values:
+    - _id: 11
+      _fieldName: IntValueIn
+      _node: {fileID: 4144992777765798208}
+      _direction: 0
+      _connectionType: 0
+      _showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      _allowedValueTypes:
+      - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      _portValue:
+        name: IntValueIn
+      connections: []
+    - _id: 10
+      _fieldName: IntValueOut
+      _node: {fileID: 4144992777765798208}
+      _direction: 1
+      _connectionType: 0
+      _showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      _allowedValueTypes:
+      - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      _portValue:
+        name: IntValueOut
+      connections:
+      - fieldName: IntValueIn
+        node: {fileID: 2494029627694458934}
+        reroutePoints: []
   _graph: {fileID: 7215943088033483437}
-  IntValue1:
-    Y: 0
+  IntValueIn:
     value:
       id: 0
-    X: 0
+  IntValueOut:
+    value:
+      id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: , ns: , asm: }
+--- !u!114 &2494029627694458934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 359465522233442938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 620ad14d07f226747a9b5c5c8f7686a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _id: 12
+  width: 220
+  nodeName: Demo Int Reactive Node
+  position: {x: 737, y: -35}
+  ports:
+    keys:
+    - IntValueIn
+    - IntValueOut
+    values:
+    - _id: 14
+      _fieldName: IntValueIn
+      _node: {fileID: 2494029627694458934}
+      _direction: 0
+      _connectionType: 0
+      _showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      _allowedValueTypes:
+      - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      _portValue:
+        name: IntValueIn
+      connections:
+      - fieldName: IntValueOut
+        node: {fileID: 4144992777765798208}
+        reroutePoints: []
+    - _id: 13
+      _fieldName: IntValueOut
+      _node: {fileID: 2494029627694458934}
+      _direction: 1
+      _connectionType: 0
+      _showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      _allowedValueTypes:
+      - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      _portValue:
+        name: IntValueOut
+      connections: []
+  _graph: {fileID: 7215943088033483437}
+  IntValueIn:
+    value:
+      id: 0
+  IntValueOut:
+    value:
+      id: 0
   references:
     version: 1
     00000000:

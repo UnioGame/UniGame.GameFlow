@@ -3,10 +3,8 @@
 namespace UniGreenModules.UniGameSystems.Examples.ServiceNode
 {
     using System.Collections;
-    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nodes.Runtime.Nodes;
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Attributes;
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Nodes;
-    using UniNodeSystem.Runtime.Attributes;
     using UniNodeSystem.Runtime.Core;
     using UniRoutine.Runtime;
     using UniRoutine.Runtime.Extension;

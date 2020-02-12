@@ -1,22 +1,21 @@
 ﻿namespace UniGreenModules.UniNodeSystem.Inspector.Editor.Nodes
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
     using BaseEditor;
     using Drawers;
     using Drawers.Interfaces;
-    using Runtime;
-    using Runtime.Attributes;
-    using Runtime.Core;
     using Runtime.Extensions;
     using Runtime.Interfaces;
     using Styles;
     using UniCore.EditorTools.Editor.Utility;
     using UniCore.Runtime.Extension;
     using UniCore.Runtime.ProfilerTools;
-    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Attributes;
+    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.BaseEditor.Extensions;
+    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Core.Commands;
+    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Core.Interfaces;
+    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Interfaces;
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Nodes;
     using UnityEngine;
 
@@ -39,9 +38,7 @@
         public override bool IsSelected()
         {
             var node = target as UniNode;
-            if (!node)
-                return false;
-            return node.IsActive;
+            return node && node.IsActive;
         }
 
         public override void OnHeaderGUI()
@@ -59,7 +56,7 @@
         {
             var node = target as UniNode;
 
-            InitializeNodeAttributes(node);
+            UpdatePortAttributes(node);
             
             node.Initialize();
 
@@ -86,25 +83,31 @@
             return value == null;
         }
 
-        public void InitializeNodeAttributes(UniNode node)
+        public void UpdatePortAttributes(UniNode node)
         {
-            var type = target.GetType();
-            var fields = type.GetFields(
-                BindingFlags.Public | BindingFlags.Instance | 
-                BindingFlags.GetField | 
-                BindingFlags.NonPublic);
+            var type = node.GetType();
+            var fields = type.GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
 
-            var ports = fields.
-                Select(x => x.GetPortData()).
-                Where(x => x != null);
+            //remove all temp commands
+            node.nodeSerializableCommands.RemoveAll(x => x.isUpdatable);
             
-            foreach (var portData in ports) {
-                node.UpdatePortValue(portData);
+            foreach (var portField in fields) {
+                var data = node.GetPortData(portField, portField.Name);
+                if(data == null)
+                    continue;
+                
+                var port = node.UpdatePortValue(data);
+                
+                var value = portField.GetValue(node);
+                if (value is IReactiveSource reactiveSource) {
+                    var reactiveSourceCommand = new ReactiveValuePortCommand(port.ItemName, reactiveSource, data , true);
+                    node.nodeSerializableCommands.Add(reactiveSourceCommand);
+                }
+
             }
 
         }
-        
-        
+
         public virtual void UpdateData(UniNode node)
         {
             
