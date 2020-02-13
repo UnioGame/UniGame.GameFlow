@@ -173,7 +173,7 @@
                 var portValue = GetPort(slot.SlotName);
 
                 //connect to ui module data
-                slot.Value.Bind(portValue).
+                slot.Value.Bind(portValue.Value).
                     AddTo(lifetime);
 
                 //add new placement value

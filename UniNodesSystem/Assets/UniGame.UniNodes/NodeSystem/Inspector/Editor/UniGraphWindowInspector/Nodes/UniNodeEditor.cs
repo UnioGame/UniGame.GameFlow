@@ -87,7 +87,8 @@
         public bool IsPortRemoved(IUniNode node,INodePort port)
         {
             var value = node.PortValues.
-                FirstOrDefault(x => x.ItemName == port.ItemName && x.Direction == port.Direction);
+                FirstOrDefault(x => x.FieldName == port.FieldName && 
+                                    x.Direction == port.Direction);
             
             if (value == null) {
                 GameLog.Log($"REMOVE PORT {node.ItemName} : {port.FieldName} and Clear");

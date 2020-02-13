@@ -508,7 +508,7 @@
                         for (var j = 0; j < instancePorts[k].ConnectionCount; j++) {
                             var other = instancePorts[k].GetConnection(j);
                             instancePorts[k].Disconnect(other as NodePort);
-                            instancePorts[k - 1].Bind(other);
+                            instancePorts[k - 1].Connect(other as NodePort);
                         }
                     }
 

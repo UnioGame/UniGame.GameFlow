@@ -49,73 +49,54 @@ MonoBehaviour:
   position: {x: 728, y: 120}
   ports:
     keys:
-    - '[out]IContext'
-    - '[in]IContext'
     - '[out]context'
     - '[in]context'
     values:
-    - _id: 44
-      _fieldName: '[out]IContext'
-      _node: {fileID: 2059202639}
-      connections: []
-      _direction: 1
-      _connectionType: 0
-      _dynamic: 1
-      _allowedValueTypes: []
-      _portValue:
-        name: '[out]IContext'
-    - _id: 45
-      _fieldName: '[in]IContext'
-      _node: {fileID: 2059202639}
-      connections:
-      - fieldName: '[out]IContext'
-        node: {fileID: 6930921118652744092}
-        reroutePoints: []
-      - fieldName: '[out]IContext'
-        node: {fileID: 2388735112629393624}
-        reroutePoints: []
-      - fieldName: '[out]IContext'
-        node: {fileID: 8037306991772341070}
-        reroutePoints: []
-      - fieldName: '[out]IContext'
-        node: {fileID: 7014688245974289662}
-        reroutePoints: []
-      _direction: 0
-      _connectionType: 0
-      _dynamic: 1
-      _allowedValueTypes: []
-      _portValue:
-        name: '[in]IContext'
-    - _id: 56
+    - _id: 66
       _fieldName: '[out]context'
-      _node: {fileID: 2059202639}
-      connections: []
       _direction: 1
       _connectionType: 0
-      _dynamic: 1
-      _allowedValueTypes:
-      - UniGreenModules.UniNodeSystem.Runtime.UniPortValue, unigame.nodesystem.runtime,
-        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      _showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      _node: {fileID: 2059202639}
+      _allowedValueTypes: []
       _portValue:
         name: '[out]context'
-    - _id: 57
-      _fieldName: '[in]context'
-      _node: {fileID: 2059202639}
       connections: []
+    - _id: 67
+      _fieldName: '[in]context'
       _direction: 0
       _connectionType: 0
-      _dynamic: 1
-      _allowedValueTypes:
-      - UniGreenModules.UniNodeSystem.Runtime.UniPortValue, unigame.nodesystem.runtime,
-        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      _showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      _node: {fileID: 2059202639}
+      _allowedValueTypes: []
       _portValue:
         name: '[in]context'
+      connections:
+      - fieldName: '[out]context'
+        node: {fileID: 6930921118652744092}
+        reroutePoints: []
+      - fieldName: '[out]context'
+        node: {fileID: 8037306991772341070}
+        reroutePoints: []
+      - fieldName: '[out]context'
+        node: {fileID: 2388735112629393624}
+        reroutePoints: []
+      - fieldName: '[out]context'
+        node: {fileID: 7014688245974289662}
+        reroutePoints: []
   _graph: {fileID: 3947279238786959826}
+  serializableCommands: []
   distinctInput: 1
   bindInOut: 0
   isComplete:
     value: 0
   isGameReady: 0
+  references:
+    version: 1
 --- !u!1 &577861545461902430
 GameObject:
   m_ObjectHideFlags: 0
@@ -165,68 +146,49 @@ MonoBehaviour:
   position: {x: 296, y: 520}
   ports:
     keys:
-    - '[out]IContext'
-    - '[in]IContext'
     - '[out]context'
     - '[in]context'
     values:
-    - _id: 24
-      _fieldName: '[out]IContext'
-      _node: {fileID: 7014688245974289662}
-      connections:
-      - fieldName: '[in]IContext'
-        node: {fileID: 2059202639}
-        reroutePoints: []
+    - _id: 70
+      _fieldName: '[out]context'
       _direction: 1
       _connectionType: 0
-      _dynamic: 1
+      _showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      _node: {fileID: 7014688245974289662}
       _allowedValueTypes: []
       _portValue:
-        name: '[out]IContext'
-    - _id: 25
-      _fieldName: '[in]IContext'
+        name: '[out]context'
+      connections:
+      - fieldName: '[in]context'
+        node: {fileID: 2059202639}
+        reroutePoints: []
+    - _id: 71
+      _fieldName: '[in]context'
+      _direction: 0
+      _connectionType: 0
+      _showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
       _node: {fileID: 7014688245974289662}
+      _allowedValueTypes: []
+      _portValue:
+        name: '[in]context'
       connections:
       - fieldName: '[out]data'
         node: {fileID: 991473993277028984}
         reroutePoints: []
-      _direction: 0
-      _connectionType: 0
-      _dynamic: 1
-      _allowedValueTypes: []
-      _portValue:
-        name: '[in]IContext'
-    - _id: 54
-      _fieldName: '[out]context'
-      _node: {fileID: 7014688245974289662}
-      connections: []
-      _direction: 1
-      _connectionType: 0
-      _dynamic: 1
-      _allowedValueTypes:
-      - UniGreenModules.UniNodeSystem.Runtime.UniPortValue, unigame.nodesystem.runtime,
-        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      _portValue:
-        name: '[out]context'
-    - _id: 55
-      _fieldName: '[in]context'
-      _node: {fileID: 7014688245974289662}
-      connections: []
-      _direction: 0
-      _connectionType: 0
-      _dynamic: 1
-      _allowedValueTypes:
-      - UniGreenModules.UniNodeSystem.Runtime.UniPortValue, unigame.nodesystem.runtime,
-        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      _portValue:
-        name: '[in]context'
   _graph: {fileID: 3947279238786959826}
+  serializableCommands: []
   distinctInput: 1
   bindInOut: 0
   isComplete:
     value: 0
   isReady: 0
   waitForServiceReady: 1
+  references:
+    version: 1
 --- !u!1 &1934318856891791380
 GameObject:
   m_ObjectHideFlags: 0
@@ -276,68 +238,49 @@ MonoBehaviour:
   position: {x: 296, y: -424}
   ports:
     keys:
-    - '[out]IContext'
-    - '[in]IContext'
     - '[out]context'
     - '[in]context'
     values:
-    - _id: 5
-      _fieldName: '[out]IContext'
-      _node: {fileID: 6930921118652744092}
-      connections:
-      - fieldName: '[in]IContext'
-        node: {fileID: 2059202639}
-        reroutePoints: []
+    - _id: 60
+      _fieldName: '[out]context'
       _direction: 1
       _connectionType: 0
-      _dynamic: 1
+      _showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      _node: {fileID: 6930921118652744092}
       _allowedValueTypes: []
       _portValue:
-        name: '[out]IContext'
-    - _id: 6
-      _fieldName: '[in]IContext'
+        name: '[out]context'
+      connections:
+      - fieldName: '[in]context'
+        node: {fileID: 2059202639}
+        reroutePoints: []
+    - _id: 61
+      _fieldName: '[in]context'
+      _direction: 0
+      _connectionType: 0
+      _showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
       _node: {fileID: 6930921118652744092}
+      _allowedValueTypes: []
+      _portValue:
+        name: '[in]context'
       connections:
       - fieldName: '[out]data'
         node: {fileID: 991473993277028984}
         reroutePoints: []
-      _direction: 0
-      _connectionType: 0
-      _dynamic: 1
-      _allowedValueTypes: []
-      _portValue:
-        name: '[in]IContext'
-    - _id: 48
-      _fieldName: '[out]context'
-      _node: {fileID: 6930921118652744092}
-      connections: []
-      _direction: 1
-      _connectionType: 0
-      _dynamic: 1
-      _allowedValueTypes:
-      - UniGreenModules.UniNodeSystem.Runtime.UniPortValue, unigame.nodesystem.runtime,
-        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      _portValue:
-        name: '[out]context'
-    - _id: 49
-      _fieldName: '[in]context'
-      _node: {fileID: 6930921118652744092}
-      connections: []
-      _direction: 0
-      _connectionType: 0
-      _dynamic: 1
-      _allowedValueTypes:
-      - UniGreenModules.UniNodeSystem.Runtime.UniPortValue, unigame.nodesystem.runtime,
-        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      _portValue:
-        name: '[in]context'
   _graph: {fileID: 3947279238786959826}
+  serializableCommands: []
   distinctInput: 1
   bindInOut: 0
   isComplete:
     value: 0
   isReady: 0
   waitForServiceReady: 1
+  references:
+    version: 1
 --- !u!1 &3173182001011437811
 GameObject:
   m_ObjectHideFlags: 0
@@ -394,46 +337,23 @@ MonoBehaviour:
   position: {x: 0, y: 0}
   ports:
     keys:
-    - input
     - 
-    - GraphPort
     values:
     - _id: 0
-      _fieldName: input
-      _node: {fileID: 3947279238786959826}
-      connections: []
+      _fieldName: 
       _direction: 0
       _connectionType: 0
-      _dynamic: 1
+      _showBackingValue: 0
+      isDynamic: 0
+      isInstancePortList: 0
+      _node: {fileID: 0}
       _allowedValueTypes: []
       _portValue:
-        name: input
-    - _id: 0
-      _fieldName: 
-      _node: {fileID: 3947279238786959826}
-      connections: []
-      _direction: 0
-      _connectionType: 0
-      _dynamic: 1
-      _allowedValueTypes:
-      - UniGreenModules.UniNodeSystem.Runtime.UniPortValue, unigame.nodesystem.runtime,
-        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      _portValue:
         name: 
-    - _id: 0
-      _fieldName: GraphPort
-      _node: {fileID: 3947279238786959826}
       connections: []
-      _direction: 0
-      _connectionType: 0
-      _dynamic: 1
-      _allowedValueTypes:
-      - UniGreenModules.UniNodeSystem.Runtime.UniPortValue, unigame.nodesystem.runtime,
-        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      _portValue:
-        name: 
   _graph: {fileID: 0}
-  _uniqueId: 57
+  serializableCommands: []
+  _uniqueId: 71
   nodes:
   - {fileID: 6208779352982914149}
   - {fileID: 6930921118652744092}
@@ -442,6 +362,8 @@ MonoBehaviour:
   - {fileID: 7014688245974289662}
   - {fileID: 2059202639}
   - {fileID: 991473993277028984}
+  references:
+    version: 1
 --- !u!1 &5183761810912439007
 GameObject:
   m_ObjectHideFlags: 0
@@ -491,68 +413,49 @@ MonoBehaviour:
   position: {x: 296, y: -104}
   ports:
     keys:
-    - '[out]IContext'
-    - '[in]IContext'
     - '[out]context'
     - '[in]context'
     values:
-    - _id: 8
-      _fieldName: '[out]IContext'
-      _node: {fileID: 2388735112629393624}
-      connections:
-      - fieldName: '[in]IContext'
-        node: {fileID: 2059202639}
-        reroutePoints: []
+    - _id: 62
+      _fieldName: '[out]context'
       _direction: 1
       _connectionType: 0
-      _dynamic: 1
+      _showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      _node: {fileID: 2388735112629393624}
       _allowedValueTypes: []
       _portValue:
-        name: '[out]IContext'
-    - _id: 9
-      _fieldName: '[in]IContext'
+        name: '[out]context'
+      connections:
+      - fieldName: '[in]context'
+        node: {fileID: 2059202639}
+        reroutePoints: []
+    - _id: 63
+      _fieldName: '[in]context'
+      _direction: 0
+      _connectionType: 0
+      _showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
       _node: {fileID: 2388735112629393624}
+      _allowedValueTypes: []
+      _portValue:
+        name: '[in]context'
       connections:
       - fieldName: '[out]data'
         node: {fileID: 991473993277028984}
         reroutePoints: []
-      _direction: 0
-      _connectionType: 0
-      _dynamic: 1
-      _allowedValueTypes: []
-      _portValue:
-        name: '[in]IContext'
-    - _id: 50
-      _fieldName: '[out]context'
-      _node: {fileID: 2388735112629393624}
-      connections: []
-      _direction: 1
-      _connectionType: 0
-      _dynamic: 1
-      _allowedValueTypes:
-      - UniGreenModules.UniNodeSystem.Runtime.UniPortValue, unigame.nodesystem.runtime,
-        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      _portValue:
-        name: '[out]context'
-    - _id: 51
-      _fieldName: '[in]context'
-      _node: {fileID: 2388735112629393624}
-      connections: []
-      _direction: 0
-      _connectionType: 0
-      _dynamic: 1
-      _allowedValueTypes:
-      - UniGreenModules.UniNodeSystem.Runtime.UniPortValue, unigame.nodesystem.runtime,
-        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      _portValue:
-        name: '[in]context'
   _graph: {fileID: 3947279238786959826}
+  serializableCommands: []
   distinctInput: 1
   bindInOut: 0
   isComplete:
     value: 0
   isReady: 0
   waitForServiceReady: 1
+  references:
+    version: 1
 --- !u!1 &5857939353232338133
 GameObject:
   m_ObjectHideFlags: 0
@@ -602,87 +505,42 @@ MonoBehaviour:
   position: {x: -520, y: -200}
   ports:
     keys:
-    - '[out]input'
-    - '[in]input'
-    - '[out]'
-    - '[in]'
-    - '[out]GraphPort'
-    - '[in]GraphPort'
+    - '[out]data'
+    - '[in]data'
     values:
-    - _id: 21
-      _fieldName: '[out]input'
+    - _id: 58
+      _fieldName: '[out]data'
+      _direction: 1
+      _connectionType: 0
+      _showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
       _node: {fileID: 6208779352982914149}
+      _allowedValueTypes: []
+      _portValue:
+        name: '[out]data'
       connections:
       - fieldName: '[in]data'
         node: {fileID: 991473993277028984}
         reroutePoints: []
-      _direction: 1
+    - _id: 59
+      _fieldName: '[in]data'
+      _direction: 0
       _connectionType: 0
-      _dynamic: 1
+      _showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      _node: {fileID: 6208779352982914149}
       _allowedValueTypes: []
       _portValue:
-        name: '[out]input'
-    - _id: 20
-      _fieldName: '[in]input'
-      _node: {fileID: 6208779352982914149}
+        name: '[in]data'
       connections: []
-      _direction: 0
-      _connectionType: 0
-      _dynamic: 1
-      _allowedValueTypes: []
-      _portValue:
-        name: '[in]input'
-    - _id: 46
-      _fieldName: '[out]'
-      _node: {fileID: 6208779352982914149}
-      connections: []
-      _direction: 1
-      _connectionType: 0
-      _dynamic: 1
-      _allowedValueTypes:
-      - UniGreenModules.UniNodeSystem.Runtime.UniPortValue, unigame.nodesystem.runtime,
-        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      _portValue:
-        name: '[out]'
-    - _id: 47
-      _fieldName: '[in]'
-      _node: {fileID: 6208779352982914149}
-      connections: []
-      _direction: 0
-      _connectionType: 0
-      _dynamic: 1
-      _allowedValueTypes:
-      - UniGreenModules.UniNodeSystem.Runtime.UniPortValue, unigame.nodesystem.runtime,
-        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      _portValue:
-        name: '[in]'
-    - _id: 0
-      _fieldName: '[out]GraphPort'
-      _node: {fileID: 6208779352982914149}
-      connections: []
-      _direction: 1
-      _connectionType: 0
-      _dynamic: 1
-      _allowedValueTypes:
-      - UniGreenModules.UniNodeSystem.Runtime.UniPortValue, unigame.nodesystem.runtime,
-        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      _portValue:
-        name: 
-    - _id: 0
-      _fieldName: '[in]GraphPort'
-      _node: {fileID: 6208779352982914149}
-      connections: []
-      _direction: 0
-      _connectionType: 0
-      _dynamic: 1
-      _allowedValueTypes:
-      - UniGreenModules.UniNodeSystem.Runtime.UniPortValue, unigame.nodesystem.runtime,
-        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      _portValue:
-        name: 
   _graph: {fileID: 3947279238786959826}
+  serializableCommands: []
   direction: 0
   bindInOut: 1
+  references:
+    version: 1
 --- !u!1 &6098447404668877688
 GameObject:
   m_ObjectHideFlags: 0
@@ -732,68 +590,49 @@ MonoBehaviour:
   position: {x: 296, y: 216}
   ports:
     keys:
-    - '[out]IContext'
-    - '[in]IContext'
     - '[out]context'
     - '[in]context'
     values:
-    - _id: 11
-      _fieldName: '[out]IContext'
-      _node: {fileID: 8037306991772341070}
-      connections:
-      - fieldName: '[in]IContext'
-        node: {fileID: 2059202639}
-        reroutePoints: []
+    - _id: 64
+      _fieldName: '[out]context'
       _direction: 1
       _connectionType: 0
-      _dynamic: 1
+      _showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      _node: {fileID: 8037306991772341070}
       _allowedValueTypes: []
       _portValue:
-        name: '[out]IContext'
-    - _id: 12
-      _fieldName: '[in]IContext'
+        name: '[out]context'
+      connections:
+      - fieldName: '[in]context'
+        node: {fileID: 2059202639}
+        reroutePoints: []
+    - _id: 65
+      _fieldName: '[in]context'
+      _direction: 0
+      _connectionType: 0
+      _showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
       _node: {fileID: 8037306991772341070}
+      _allowedValueTypes: []
+      _portValue:
+        name: '[in]context'
       connections:
       - fieldName: '[out]data'
         node: {fileID: 991473993277028984}
         reroutePoints: []
-      _direction: 0
-      _connectionType: 0
-      _dynamic: 1
-      _allowedValueTypes: []
-      _portValue:
-        name: '[in]IContext'
-    - _id: 52
-      _fieldName: '[out]context'
-      _node: {fileID: 8037306991772341070}
-      connections: []
-      _direction: 1
-      _connectionType: 0
-      _dynamic: 1
-      _allowedValueTypes:
-      - UniGreenModules.UniNodeSystem.Runtime.UniPortValue, unigame.nodesystem.runtime,
-        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      _portValue:
-        name: '[out]context'
-    - _id: 53
-      _fieldName: '[in]context'
-      _node: {fileID: 8037306991772341070}
-      connections: []
-      _direction: 0
-      _connectionType: 0
-      _dynamic: 1
-      _allowedValueTypes:
-      - UniGreenModules.UniNodeSystem.Runtime.UniPortValue, unigame.nodesystem.runtime,
-        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      _portValue:
-        name: '[in]context'
   _graph: {fileID: 3947279238786959826}
+  serializableCommands: []
   distinctInput: 1
   bindInOut: 0
   isComplete:
     value: 0
   isReady: 0
   waitForServiceReady: 1
+  references:
+    version: 1
 --- !u!1 &6496434285127464261
 GameObject:
   m_ObjectHideFlags: 0
@@ -846,42 +685,47 @@ MonoBehaviour:
     - '[out]data'
     - '[in]data'
     values:
-    - _id: 42
+    - _id: 68
       _fieldName: '[out]data'
-      _node: {fileID: 991473993277028984}
-      connections:
-      - fieldName: '[in]IContext'
-        node: {fileID: 6930921118652744092}
-        reroutePoints: []
-      - fieldName: '[in]IContext'
-        node: {fileID: 2388735112629393624}
-        reroutePoints: []
-      - fieldName: '[in]IContext'
-        node: {fileID: 8037306991772341070}
-        reroutePoints: []
-      - fieldName: '[in]IContext'
-        node: {fileID: 7014688245974289662}
-        reroutePoints: []
       _direction: 1
       _connectionType: 0
-      _dynamic: 1
+      _showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      _node: {fileID: 991473993277028984}
       _allowedValueTypes: []
       _portValue:
         name: '[out]data'
-    - _id: 43
-      _fieldName: '[in]data'
-      _node: {fileID: 991473993277028984}
       connections:
-      - fieldName: '[out]input'
-        node: {fileID: 6208779352982914149}
+      - fieldName: '[in]context'
+        node: {fileID: 6930921118652744092}
         reroutePoints: []
+      - fieldName: '[in]context'
+        node: {fileID: 2388735112629393624}
+        reroutePoints: []
+      - fieldName: '[in]context'
+        node: {fileID: 8037306991772341070}
+        reroutePoints: []
+      - fieldName: '[in]context'
+        node: {fileID: 7014688245974289662}
+        reroutePoints: []
+    - _id: 69
+      _fieldName: '[in]data'
       _direction: 0
       _connectionType: 0
-      _dynamic: 1
+      _showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      _node: {fileID: 991473993277028984}
       _allowedValueTypes: []
       _portValue:
         name: '[in]data'
+      connections:
+      - fieldName: '[out]data'
+        node: {fileID: 6208779352982914149}
+        reroutePoints: []
   _graph: {fileID: 3947279238786959826}
+  serializableCommands: []
   bindInOut: 0
   contextAsset:
     m_AssetGUID: 7ac5f3a92dc42094b9fbb6a31ecd86be
@@ -889,3 +733,5 @@ MonoBehaviour:
   contextDataSources:
     m_AssetGUID: afd7adc1bde95bd4a859bcbbff8e1f1b
     m_SubObjectName: 
+  references:
+    version: 1

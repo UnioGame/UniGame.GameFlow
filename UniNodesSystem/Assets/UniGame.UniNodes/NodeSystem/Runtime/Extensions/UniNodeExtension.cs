@@ -206,7 +206,7 @@
 
             node.AddPortValue(port);
 
-            return port;
+            return port.Value;
         }
 
     }

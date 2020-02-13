@@ -5,6 +5,7 @@
     using System.Diagnostics;
     using System.Linq;
     using System.Runtime.CompilerServices;
+    using Interfaces;
     using UniCore.Runtime.Attributes;
     using UniCore.Runtime.DataFlow;
     using UniCore.Runtime.DataFlow.Interfaces;
@@ -39,12 +40,7 @@
         [Sirenix.OdinInspector.InlineEditor()]
 #endif
         protected UniBaseNode _node;
-        
-        /// <summary>
-        /// allowed port value types
-        /// </summary>
-        [SerializeField] protected List<string> _allowedValueTypes;
-        
+
         /// <summary>
         /// port container value
         /// </summary>
@@ -57,14 +53,13 @@
 
         #endregion
 
-        private LifeTimeDefinition _lifetime = new LifeTimeDefinition();
-
-        private List<Type> _portValueTypes = new List<Type>();
+        private LifeTimeDefinition _lifetime;
 
         /// <summary>
         /// draft validator refactoring. Move rule to SO files
         /// </summary>
         private IReadOnlyList<Func<NodePort, NodePort, bool>> _connectionsValidators;
+        
         private bool instancePortList;
 
         #region constructor
@@ -78,7 +73,7 @@
                 nodePort.Direction,
                 nodePort.ConnectionType,
                 nodePort.ShowBackingValue,
-                nodePort.ValueTypes)
+                nodePort.Value.ValueTypes)
         {
             GameLog.Log("NodePort FROM NODE");
             _node = node;
@@ -88,7 +83,6 @@
 
             UpdateId();
             
-            _allowedValueTypes = nodePort._allowedValueTypes;
         }
 
         public NodePort(UniBaseNode node,IPortData portData) : 
@@ -127,10 +121,11 @@
             _node           = node;
             _connectionType = connectionType;
             _showBackingValue = showBackingValue;
-
-            SetValueFilter(types ?? new List<Type>());
             
+            _portValue.SetValueTypeFilter(types);
+
             UpdateId();
+            
             Initialize();
         }
 
@@ -146,16 +141,16 @@
                 (source, to) => source.Direction != to.Direction,
                 (source, to) => 
                     to.ValueTypes.Count == 0 || source.ValueTypes.Count == 0 ||
-                    source.ValueTypes.Any(to.ValidateValueType),
+                    source.ValueTypes.Any(to.Value.IsValidPortValueType),
             };
 
         public ulong Id => _id = _id == 0 ? UpdateId() : _id;
 
         public bool InstancePortList => instancePortList;
 
-        public bool Dynamic => isDynamic;
+        public IReadOnlyList<Type> ValueTypes => _portValue.ValueTypes;
 
-        public IReadOnlyList<Type> ValueTypes =>  _portValueTypes ?? new List<Type>();
+        public bool Dynamic => isDynamic;
 
         public int ConnectionCount => connections.Count;
 
@@ -169,6 +164,8 @@
                 return null;
             }
         }
+
+        public IPortValue Value => _portValue;
 
         public PortIO         Direction      => _direction;
         public ConnectionType ConnectionType => _connectionType;
@@ -195,9 +192,7 @@
             }
         }
 
-        public Type ValueType => ValueTypes.FirstOrDefault();
-
-        public bool HasValue => _portValue.HasValue;
+        public Type ValueType => _portValue.ValueTypes.FirstOrDefault();
 
         public ILifeTime LifeTime => _lifetime.LifeTime;
 
@@ -208,16 +203,18 @@
         public void SetPortData(IPortData portData)
         {
             _fieldName = portData.FieldName;
-            _portValueTypes.Clear();
-            _portValueTypes.AddRange(portData.ValueTypes);
             _direction = portData.Direction;
             _connectionType = portData.ConnectionType;
             _showBackingValue = portData.ShowBackingValue;
+            
+            _portValue.SetValueTypeFilter(portData.ValueTypes);
         }
         
         public void Dispose() => Release();
 
         public IObservable<Unit> PortValueChanged => _portValue.PortValueChanged;
+        
+        public bool HasValue => _portValue.HasValue;
 
         public TData Get<TData>() => _portValue.Get<TData>();
 
@@ -227,38 +224,14 @@
 
         public void Publish<T>(T message) => _portValue.Publish(message);
 
-        public IObservable<T> Receive<T>() => GetObservable<T>();
-
         public IDisposable Bind(IMessagePublisher publisher) => _portValue.Bind(publisher);
 
-        public void SetValueFilter(IReadOnlyList<Type> allowedTypes)
-        {
-            _portValueTypes = _portValueTypes == null ? new List<Type>() : _portValueTypes;
-            _portValueTypes.Clear();
-            _portValueTypes.AddRange(allowedTypes);
-            UpdateSerializedFilter(allowedTypes);
-        }
-
-        public bool ValidateValueType<T>()
-        {
-            return ValidateValueType(typeof(T));
-        }
+        public IObservable<T> Receive<T>() => GetObservable<T>();
 
         /// <summary>
         /// is target type value valid for this port
         /// </summary>
-        public bool ValidateValueType(Type targetType)
-        {
-            if (_portValueTypes == null || _portValueTypes.Count == 0)
-                return true;
-
-            for (var i = 0; i < _portValueTypes.Count; i++) {
-                var type = _portValueTypes[i];
-                if (type == targetType) return true;
-            }
-
-            return false;
-        }
+        public bool IsValidPortValueType(Type targetType) => _portValue.IsValidPortValueType(targetType);
 
         #endregion
 
@@ -266,8 +239,8 @@
         {
             _lifetime = _lifetime ?? new LifeTimeDefinition();
             _lifetime.Release();
-            _portValue.Initialize(_fieldName, _lifetime.LifeTime, ValidateValueType);
-            InitializeTypeFilter();
+            _portValue.Initialize(_fieldName, _lifetime.LifeTime);
+            
             BindToConnectedSources(_portValue);
         }
 
@@ -535,20 +508,11 @@
                 (source, to) => to != source,
                 (source, to) => !source.IsConnectedTo(to),
                 (source, to) => source.Direction != to.Direction,
-                (source, to) => source.ValueTypes.Any(to.ValidateValueType),
+                (source, to) => source.ValueTypes.Any(to.Value.IsValidPortValueType),
             };
             return validators;
         }
 
-        private void InitializeTypeFilter()
-        {
-            _portValueTypes = _portValueTypes ?? new List<Type>();
-            _portValueTypes.Clear();
-            _portValueTypes.AddRange(_allowedValueTypes.
-                Select(x => Type.GetType(x, false)).
-                Where(x => x != null).ToList());
-        }
-        
         /// <summary>
         /// Create connection between valid nodes 
         /// </summary>
@@ -577,30 +541,6 @@
                     AddTo(LifeTime);
             }
         }
-        
-        #region Unity Methods
-
-        [Conditional("UNITY_EDITOR")]
-        private void UpdateSerializedFilter(IReadOnlyList<Type> filter)
-        {
-            UpdateValueFilter(filter.Select(x => x.AssemblyQualifiedName).ToList());
-        }
-
-        [Conditional("UNITY_EDITOR")]
-        private void UpdateValueFilter(List<string> valueTypes)
-        {
-            _allowedValueTypes = _allowedValueTypes ?? new List<string>();
-            _allowedValueTypes.Clear();
-
-            for (var i = 0; i < valueTypes.Count; i++) {
-                var typeFilter = valueTypes[i];
-                var type       = Type.GetType(typeFilter, false, true);
-                if (type != null)
-                    _allowedValueTypes.Add(typeFilter);
-            }
-        }
-
-        #endregion
 
         #endregion
     }

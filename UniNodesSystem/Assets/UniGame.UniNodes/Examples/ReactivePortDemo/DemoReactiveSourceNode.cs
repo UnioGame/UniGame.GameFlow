@@ -3,6 +3,7 @@ using UniGreenModules.UniNodeSystem.Runtime.Core;
 
 namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Examples.ReactivePortDemo
 {
+    using System;
     using System.Collections;
     using NodeSystem.Runtime.Attributes;
     using NodeSystem.Runtime.Core.Interfaces;
@@ -34,20 +35,11 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Exa
 
         protected override void OnExecute()
         {
-            Generate(IntOut).
-                Execute().
+            Observable.Interval(TimeSpan.FromSeconds(delay)).
+                Do(x => IntOut.SetValue(value)).
+                Subscribe().
                 AddTo(LifeTime);
         }
 
-        private IEnumerator Generate(IReactivePortValue<int> reactivePort)
-        {
-            while (isActiveAndEnabled) {
-
-                reactivePort.SetValue(value);
-                
-                yield return this.WaitForSecond(delay);
-
-            }
-        }
     }
 }

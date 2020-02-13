@@ -1,0 +1,304 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &512704875213271262
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3602875647241057990}
+  - component: {fileID: 2285024171325816328}
+  - component: {fileID: 5731486205000819630}
+  - component: {fileID: 7906159257936419607}
+  - component: {fileID: 4218738910056644367}
+  - component: {fileID: 1551255790007718190}
+  - component: {fileID: 1940648519}
+  m_Layer: 0
+  m_Name: UniGraph
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3602875647241057990
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 512704875213271262}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2285024171325816328
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 512704875213271262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 782945db79ce44748b3f294e0edf364e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _id: 1
+  width: 220
+  nodeName: 
+  position: {x: 0, y: 0}
+  ports:
+    keys: []
+    values: []
+  _graph: {fileID: 2285024171325816328}
+  serializableCommands: []
+  _uniqueId: 15
+  nodes:
+  - {fileID: 5731486205000819630}
+  - {fileID: 7906159257936419607}
+  - {fileID: 4218738910056644367}
+  - {fileID: 1551255790007718190}
+  references:
+    version: 1
+--- !u!114 &5731486205000819630
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 512704875213271262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7817cc805a3da8143902915bc1728ac3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _id: 5
+  width: 220
+  nodeName: Demo Context Source Node
+  position: {x: 280, y: 104}
+  ports:
+    keys:
+    - contextValue
+    values:
+    - _id: 7
+      _fieldName: contextValue
+      _direction: 1
+      _connectionType: 0
+      _showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      _node: {fileID: 5731486205000819630}
+      _allowedValueTypes:
+      - UniGreenModules.UniContextData.Runtime.Entities.EntityContext, unigame.contextdata.runtime,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      _portValue:
+        name: contextValue
+      connections:
+      - fieldName: '[in]context'
+        node: {fileID: 4218738910056644367}
+        reroutePoints: []
+      - fieldName: '[in]context'
+        node: {fileID: 1551255790007718190}
+        reroutePoints: []
+  _graph: {fileID: 2285024171325816328}
+  serializableCommands: []
+  contextValue:
+    sendByBind: 1
+    target: {fileID: 5731486205000819630}
+    portName: contextValue
+  onFireContext:
+    value: 0
+  intValue: 1
+  floatValule: 1
+  references:
+    version: 1
+--- !u!114 &7906159257936419607
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 512704875213271262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7817cc805a3da8143902915bc1728ac3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _id: 8
+  width: 220
+  nodeName: Demo Context Source Node
+  position: {x: 280, y: 264}
+  ports:
+    keys:
+    - contextValue
+    values:
+    - _id: 9
+      _fieldName: contextValue
+      _direction: 1
+      _connectionType: 0
+      _showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      _node: {fileID: 7906159257936419607}
+      _allowedValueTypes:
+      - UniGreenModules.UniCore.Runtime.Interfaces.IContext, unigame.unicore.runtime,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      _portValue:
+        name: contextValue
+      connections:
+      - fieldName: '[in]context'
+        node: {fileID: 4218738910056644367}
+        reroutePoints: []
+      - fieldName: '[in]context'
+        node: {fileID: 1551255790007718190}
+        reroutePoints: []
+  _graph: {fileID: 2285024171325816328}
+  serializableCommands: []
+  contextValue:
+    sendByBind: 1
+    target: {fileID: 7906159257936419607}
+    portName: contextValue
+  onFireContext:
+    value: 0
+  intValue: 5
+  floatValule: 5
+  references:
+    version: 1
+--- !u!114 &4218738910056644367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 512704875213271262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca1f155657ecf4e41af11e823b11f876, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _id: 10
+  width: 220
+  nodeName: Float Contex Resourcet Node
+  position: {x: 696, y: -72}
+  ports:
+    keys:
+    - '[out]context'
+    - '[in]context'
+    values:
+    - _id: 11
+      _fieldName: '[out]context'
+      _direction: 1
+      _connectionType: 0
+      _showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      _node: {fileID: 4218738910056644367}
+      _allowedValueTypes: []
+      _portValue:
+        name: '[out]context'
+      connections: []
+    - _id: 12
+      _fieldName: '[in]context'
+      _direction: 0
+      _connectionType: 0
+      _showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      _node: {fileID: 4218738910056644367}
+      _allowedValueTypes: []
+      _portValue:
+        name: '[in]context'
+      connections:
+      - fieldName: contextValue
+        node: {fileID: 5731486205000819630}
+        reroutePoints: []
+      - fieldName: contextValue
+        node: {fileID: 7906159257936419607}
+        reroutePoints: []
+  _graph: {fileID: 2285024171325816328}
+  serializableCommands: []
+  distinctInput: 1
+  bindInOut: 0
+  isFinalyze: 0
+  currentIntSummValue: 0
+  lastIntValue: 0
+  references:
+    version: 1
+--- !u!114 &1551255790007718190
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 512704875213271262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b54616ddae6f0441a3147198bda1359, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _id: 13
+  width: 220
+  nodeName: Int Context Resource Node
+  position: {x: 696, y: 280}
+  ports:
+    keys:
+    - '[out]context'
+    - '[in]context'
+    values:
+    - _id: 14
+      _fieldName: '[out]context'
+      _direction: 1
+      _connectionType: 0
+      _showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      _node: {fileID: 1551255790007718190}
+      _allowedValueTypes: []
+      _portValue:
+        name: '[out]context'
+      connections: []
+    - _id: 15
+      _fieldName: '[in]context'
+      _direction: 0
+      _connectionType: 0
+      _showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      _node: {fileID: 1551255790007718190}
+      _allowedValueTypes: []
+      _portValue:
+        name: '[in]context'
+      connections:
+      - fieldName: contextValue
+        node: {fileID: 5731486205000819630}
+        reroutePoints: []
+      - fieldName: contextValue
+        node: {fileID: 7906159257936419607}
+        reroutePoints: []
+  _graph: {fileID: 2285024171325816328}
+  serializableCommands: []
+  distinctInput: 1
+  bindInOut: 0
+  isFinalyze: 0
+  currentIntSummValue: 0
+  lastIntValue: 0
+  references:
+    version: 1
+--- !u!114 &1940648519
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 512704875213271262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff87142bf9c884741bbcd295bab90ce7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  graph: {fileID: 0}

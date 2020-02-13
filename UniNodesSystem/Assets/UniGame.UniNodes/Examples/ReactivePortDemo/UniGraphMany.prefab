@@ -143,10 +143,7 @@ MonoBehaviour:
       - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
       _portValue:
         name: IntResult
-      connections:
-      - fieldName: log
-        node: {fileID: 18125909105642779}
-        reroutePoints: []
+      connections: []
     - _id: 52
       _fieldName: IntIn
       _direction: 0
@@ -208,10 +205,7 @@ MonoBehaviour:
       _allowedValueTypes: []
       _portValue:
         name: log
-      connections:
-      - fieldName: IntResult
-        node: {fileID: 1909121160466111395}
-        reroutePoints: []
+      connections: []
   _graph: {fileID: 7009446666381924808}
   serializableCommands: []
   mode: 1

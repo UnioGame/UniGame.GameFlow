@@ -25,6 +25,18 @@
         [SerializeField]
         public string portName;
         
+        #region constructor
+        
+        public ReactivePortValue(){}
+
+        public ReactivePortValue(TValue value)
+        {
+            this.value = value;
+        }
+        
+        #endregion
+        
+        
         #endregion
 
         private IMessageBroker broker;
@@ -69,7 +81,7 @@
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private IMessageBroker GetBroker()
         {
-            return broker = broker ?? target.GetPort(portName);
+            return broker = broker ?? target.GetPort(portName).Value;
         }
     }
 }

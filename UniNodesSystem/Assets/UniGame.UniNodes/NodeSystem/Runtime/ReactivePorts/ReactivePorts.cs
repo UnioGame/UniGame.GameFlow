@@ -4,6 +4,7 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nod
 {
     using System;
     using UniContextData.Runtime.Entities;
+    using UniCore.Runtime.Interfaces;
     using UniRx;
 
     [Serializable]
@@ -23,10 +24,8 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nod
     
     [Serializable]
     public class BoolReactivePort : ReactivePortValue<bool> {}
-    
-    [Serializable]
-    public class ContextReactivePort : ReactivePortValue<EntityContext> {}
 
     [Serializable]
-    public class ContextReactiveProperty : ReactiveProperty<EntityContext>{}
+    public class ContextReactivePort : ReactivePortValue<IContext> { }
+
 }

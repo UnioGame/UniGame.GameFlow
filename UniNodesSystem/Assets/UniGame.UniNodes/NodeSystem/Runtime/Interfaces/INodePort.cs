@@ -6,8 +6,7 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nod
     using UniNodeSystem.Runtime.Interfaces;
     using UnityEngine;
 
-    public interface INodePort : 
-        IPortValue
+    public interface INodePort
     {
         ulong Id { get; }
         
@@ -15,6 +14,8 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nod
 
         /// <summary> Return the first non-null connection </summary>
         INodePort Connection { get; }
+
+        IPortValue Value { get; }
 
         PortIO Direction { get; }
         
@@ -24,8 +25,6 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nod
         bool IsConnected { get; }
 
         string FieldName { get; }
-
-        IReadOnlyList<Type> ValueTypes { get; }
 
         UniBaseNode Node { get; set; }
 

@@ -1,5 +1,6 @@
 ﻿namespace UniGreenModules.UniGameSystems.Examples.SimpleSystem
 {
+    using System;
     using UniNodeSystem.Nodes;
     using UniNodeSystem.Runtime.Interfaces;
     using UnityEngine;
@@ -10,9 +11,13 @@
 
         public UniGraph graph;
 
-        private void OnEnable()
+        private void Awake()
         {
-            targetGraph = graph ? GetComponent<IUniGraph>() : graph;
+            targetGraph = graph ? graph : GetComponent<IUniGraph>();
+        }
+
+        private void Start()
+        {
             targetGraph?.Execute();
         }
 

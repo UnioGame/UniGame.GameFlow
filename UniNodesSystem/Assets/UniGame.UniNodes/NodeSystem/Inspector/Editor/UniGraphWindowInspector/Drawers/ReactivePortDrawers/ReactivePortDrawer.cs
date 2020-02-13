@@ -57,6 +57,12 @@
                 property = property.FindPropertyRelative(ValueFieldName);
             }
 
+            // Create property fields.
+            if (property == null) {
+                EditorGUILayout.LabelField(new GUIContent($"{sourceProperty.displayName}: NULL Value"));
+                return;    
+            }
+            
             if (EditorGUILayout.PropertyField(property, label)) {
                 sourceProperty?.serializedObject.ApplyModifiedProperties(); 
             }
