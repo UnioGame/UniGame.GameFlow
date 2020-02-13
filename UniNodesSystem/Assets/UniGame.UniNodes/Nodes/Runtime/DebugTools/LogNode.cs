@@ -10,15 +10,19 @@ namespace UniGreenModules.UniNodeSystem.Nodes.DebugTools
     using Runtime.Interfaces;
     using UniCore.Runtime.Interfaces;
     using UniCore.Runtime.ProfilerTools;
+    using UniCore.Runtime.Rx.Extensions;
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Nodes;
     using UniNodes.Runtime.Commands;
+    using UniRx;
     using UnityEngine;
 
     [Serializable]
     [CreateNodeMenu("Debug/Log","Log")]
-    public class LogNode : UniNode
+    public class LogNode : UniNode , IMessagePublisher
     {
         private const string logPortName = "log";
+
+        private IPortValue logPort;
         
         public LogMode mode = LogMode.Log;
 
@@ -27,16 +31,14 @@ namespace UniGreenModules.UniNodeSystem.Nodes.DebugTools
         protected override void OnExecute()
         {
             PrintLog(GetMessage(), mode);
+            logPort.Bind(this).
+                AddTo(LifeTime);
         }
 
         protected override void UpdateCommands(List<ILifeTimeCommand> nodeCommands)
         {
             base.UpdateCommands(nodeCommands);
-            
-            var inputMessagePort = this.UpdatePortValue(logPortName, PortIO.Input);
-            
-            nodeCommands.Add(new ContextBroadCastCommand<object>(x => 
-                PrintLog($"GRAPH {Graph.name} NODE {name} \n\t {x.GetType().Name} : {x}", mode),inputMessagePort));
+            logPort = this.UpdatePortValue(logPortName, PortIO.Input);
         }
 
         protected virtual string GetMessage()
@@ -44,6 +46,11 @@ namespace UniGreenModules.UniNodeSystem.Nodes.DebugTools
             return message;
         }
 
+        public void Publish<T>(T value)
+        {
+            PrintLog($"{message}: GRAPH:{Graph.name} : {name} \n\t {value.GetType().Name} : {value}", mode);
+        }
+        
         private void PrintLog(string messageData, LogMode logMode)
         {
             switch (logMode) {

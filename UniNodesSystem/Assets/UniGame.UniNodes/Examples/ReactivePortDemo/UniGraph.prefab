@@ -56,7 +56,7 @@ MonoBehaviour:
     values: []
   _graph: {fileID: 7009446666381924808}
   serializableCommands: []
-  _uniqueId: 32
+  _uniqueId: 54
   nodes:
   - {fileID: 115054199971061112}
   - {fileID: 1909121160466111395}
@@ -83,7 +83,7 @@ MonoBehaviour:
     keys:
     - IntOut
     values:
-    - _id: 30
+    - _id: 54
       _fieldName: IntOut
       _direction: 1
       _connectionType: 0
@@ -100,81 +100,16 @@ MonoBehaviour:
         node: {fileID: 1909121160466111395}
         reroutePoints: []
   _graph: {fileID: 7009446666381924808}
-  serializableCommands:
-  - id: 0
-  delay: 2
-  range: {x: 1, y: 2}
+  serializableCommands: []
+  delay: 1
+  value: 1
   IntOut:
     sendByBind: 1
     value: 0
-    target:
-      id: 1
+    target: {fileID: 115054199971061112}
+    portName: IntOut
   references:
     version: 1
-    00000000:
-      type: {class: ReactiveValuePortCommand, ns: UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Core.Commands,
-        asm: unigame.nodesystem.runtime}
-      data:
-        node: {fileID: 115054199971061112}
-        portData:
-          typesValues:
-          - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-          fieldName: IntOut
-          direction: 1
-          connectionType: 0
-          isDynamic: 1
-          showBackingValue: 2
-          instancePortList: 0
-        isUpdatable: 1
-        fieldName: IntOut
-        targetSource:
-          id: 2
-    00000001:
-      type: {class: NodePort, ns: UniGreenModules.UniNodeSystem.Runtime.Core, asm: unigame.nodesystem.runtime}
-      data:
-        _id: 30
-        _fieldName: IntOut
-        _direction: 1
-        _connectionType: 0
-        _showBackingValue: 2
-        isDynamic: 1
-        isInstancePortList: 0
-        _node: {fileID: 115054199971061112}
-        _allowedValueTypes:
-        - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-        _portValue:
-          name: IntOut
-        connections:
-        - fieldName: IntIn
-          node: {fileID: 1909121160466111395}
-          reroutePoints: []
-    00000002:
-      type: {class: IntReactivePort, ns: UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.ReactivePorts,
-        asm: unigame.nodesystem.runtime}
-      data:
-        sendByBind: 0
-        value: 0
-        target:
-          id: 3
-    00000003:
-      type: {class: NodePort, ns: UniGreenModules.UniNodeSystem.Runtime.Core, asm: unigame.nodesystem.runtime}
-      data:
-        _id: 30
-        _fieldName: IntOut
-        _direction: 1
-        _connectionType: 0
-        _showBackingValue: 2
-        isDynamic: 1
-        isInstancePortList: 0
-        _node: {fileID: 115054199971061112}
-        _allowedValueTypes:
-        - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-        _portValue:
-          name: IntOut
-        connections:
-        - fieldName: IntIn
-          node: {fileID: 1909121160466111395}
-          reroutePoints: []
 --- !u!114 &1909121160466111395
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -196,7 +131,7 @@ MonoBehaviour:
     - IntResult
     - IntIn
     values:
-    - _id: 32
+    - _id: 53
       _fieldName: IntResult
       _direction: 1
       _connectionType: 0
@@ -212,7 +147,7 @@ MonoBehaviour:
       - fieldName: log
         node: {fileID: 18125909105642779}
         reroutePoints: []
-    - _id: 31
+    - _id: 52
       _fieldName: IntIn
       _direction: 0
       _connectionType: 0
@@ -229,149 +164,19 @@ MonoBehaviour:
         node: {fileID: 115054199971061112}
         reroutePoints: []
   _graph: {fileID: 7009446666381924808}
-  serializableCommands:
-  - id: 0
-  - id: 1
+  serializableCommands: []
   IntIn:
     sendByBind: 1
     value: 0
-    target:
-      id: 2
+    target: {fileID: 1909121160466111395}
+    portName: IntIn
   IntResult:
     sendByBind: 1
     value: 0
-    target:
-      id: 3
+    target: {fileID: 1909121160466111395}
+    portName: IntResult
   references:
     version: 1
-    00000000:
-      type: {class: ReactiveValuePortCommand, ns: UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Core.Commands,
-        asm: unigame.nodesystem.runtime}
-      data:
-        node: {fileID: 1909121160466111395}
-        portData:
-          typesValues:
-          - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-          fieldName: IntIn
-          direction: 0
-          connectionType: 0
-          isDynamic: 1
-          showBackingValue: 2
-          instancePortList: 0
-        isUpdatable: 1
-        fieldName: IntIn
-        targetSource:
-          id: 4
-    00000001:
-      type: {class: ReactiveValuePortCommand, ns: UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Core.Commands,
-        asm: unigame.nodesystem.runtime}
-      data:
-        node: {fileID: 1909121160466111395}
-        portData:
-          typesValues:
-          - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-          fieldName: IntResult
-          direction: 1
-          connectionType: 0
-          isDynamic: 1
-          showBackingValue: 2
-          instancePortList: 0
-        isUpdatable: 1
-        fieldName: IntResult
-        targetSource:
-          id: 5
-    00000002:
-      type: {class: NodePort, ns: UniGreenModules.UniNodeSystem.Runtime.Core, asm: unigame.nodesystem.runtime}
-      data:
-        _id: 31
-        _fieldName: IntIn
-        _direction: 0
-        _connectionType: 0
-        _showBackingValue: 2
-        isDynamic: 1
-        isInstancePortList: 0
-        _node: {fileID: 1909121160466111395}
-        _allowedValueTypes:
-        - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-        _portValue:
-          name: IntIn
-        connections:
-        - fieldName: IntOut
-          node: {fileID: 115054199971061112}
-          reroutePoints: []
-    00000003:
-      type: {class: NodePort, ns: UniGreenModules.UniNodeSystem.Runtime.Core, asm: unigame.nodesystem.runtime}
-      data:
-        _id: 32
-        _fieldName: IntResult
-        _direction: 1
-        _connectionType: 0
-        _showBackingValue: 2
-        isDynamic: 1
-        isInstancePortList: 0
-        _node: {fileID: 1909121160466111395}
-        _allowedValueTypes:
-        - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-        _portValue:
-          name: IntResult
-        connections:
-        - fieldName: log
-          node: {fileID: 18125909105642779}
-          reroutePoints: []
-    00000004:
-      type: {class: IntReactivePort, ns: UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.ReactivePorts,
-        asm: unigame.nodesystem.runtime}
-      data:
-        sendByBind: 0
-        value: 0
-        target:
-          id: 6
-    00000005:
-      type: {class: IntReactivePort, ns: UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.ReactivePorts,
-        asm: unigame.nodesystem.runtime}
-      data:
-        sendByBind: 0
-        value: 0
-        target:
-          id: 7
-    00000006:
-      type: {class: NodePort, ns: UniGreenModules.UniNodeSystem.Runtime.Core, asm: unigame.nodesystem.runtime}
-      data:
-        _id: 31
-        _fieldName: IntIn
-        _direction: 0
-        _connectionType: 0
-        _showBackingValue: 2
-        isDynamic: 1
-        isInstancePortList: 0
-        _node: {fileID: 1909121160466111395}
-        _allowedValueTypes:
-        - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-        _portValue:
-          name: IntIn
-        connections:
-        - fieldName: IntOut
-          node: {fileID: 115054199971061112}
-          reroutePoints: []
-    00000007:
-      type: {class: NodePort, ns: UniGreenModules.UniNodeSystem.Runtime.Core, asm: unigame.nodesystem.runtime}
-      data:
-        _id: 32
-        _fieldName: IntResult
-        _direction: 1
-        _connectionType: 0
-        _showBackingValue: 2
-        isDynamic: 1
-        isInstancePortList: 0
-        _node: {fileID: 1909121160466111395}
-        _allowedValueTypes:
-        - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-        _portValue:
-          name: IntResult
-        connections:
-        - fieldName: log
-          node: {fileID: 18125909105642779}
-          reroutePoints: []
 --- !u!114 &18125909105642779
 MonoBehaviour:
   m_ObjectHideFlags: 0

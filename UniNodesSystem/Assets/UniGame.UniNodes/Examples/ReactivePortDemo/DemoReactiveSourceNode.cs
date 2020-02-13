@@ -24,7 +24,7 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Exa
         private float delay = 2f;
         
         [SerializeField]
-        private Vector2Int range = new Vector2Int();
+        private int value = 1;
         
         #endregion
         
@@ -34,19 +34,18 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Exa
 
         protected override void OnExecute()
         {
-            Generate(delay,range,IntOut).
+            Generate(IntOut).
                 Execute().
                 AddTo(LifeTime);
         }
 
-        private IEnumerator Generate(float delayTime, Vector2Int rangeValue, IReactivePortValue<int> reactivePort)
+        private IEnumerator Generate(IReactivePortValue<int> reactivePort)
         {
             while (isActiveAndEnabled) {
 
-                var value = Random.Range(rangeValue.x, rangeValue.y);
                 reactivePort.SetValue(value);
                 
-                yield return this.WaitForSecond(delayTime);
+                yield return this.WaitForSecond(delay);
 
             }
         }

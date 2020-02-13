@@ -4,13 +4,14 @@ using UniRx;
 namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Core.Interfaces
 {
     using System;
+    using UniNodeSystem.Runtime.Core;
 
     public interface IReactiveSource
     {
         
         Type ValueType { get; }
 
-        void Bind(IMessageBroker broker);
-        
+        void Bind(UniBaseNode node, string portName);
+
     }
 }

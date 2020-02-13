@@ -24,7 +24,7 @@
     {       
         #region inspector fields
 
-      //  [HideNodeInspector]
+        [HideNodeInspector]
         [SerializeReference]
         public List<ILifeTimeCommandSource> serializableCommands = new List<ILifeTimeCommandSource>();
 

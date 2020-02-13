@@ -61,8 +61,6 @@
 
         private List<Type> _portValueTypes = new List<Type>();
 
-        private HashSet<Type> _portValueSubscriptions = new HashSet<Type>();
-
         /// <summary>
         /// draft validator refactoring. Move rule to SO files
         /// </summary>
@@ -270,12 +268,12 @@
             _lifetime.Release();
             _portValue.Initialize(_fieldName, _lifetime.LifeTime, ValidateValueType);
             InitializeTypeFilter();
+            BindToConnectedSources(_portValue);
         }
 
         public void Release()
         {
             _lifetime.Terminate();
-            _portValueSubscriptions.Clear();
         }
 
         #region node methods
@@ -526,6 +524,10 @@
 
         #region private methods
 
+        /// <summary>
+        /// TODO MOVE TO  GRAPH RULES SO
+        /// </summary>
+        /// <returns></returns>
         private IReadOnlyList<Func<NodePort, NodePort, bool>> CreateConnectionValidators()
         {
             var validators = new List<Func<NodePort, NodePort, bool>>() {
@@ -555,27 +557,23 @@
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private IObservable<TValue> GetObservable<TValue>()
         {
-            UpdatePortDataSource(typeof(TValue));
-
             return _portValue.Receive<TValue>();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void UpdatePortDataSource(Type type)
+        private void BindToConnectedSources(IMessagePublisher publisher)
         {
-            _portValueSubscriptions = _portValueSubscriptions ?? new HashSet<Type>();
-
             //data source connections allowed only for input ports
-            if (_direction != PortIO.Input || !_portValueSubscriptions.Add(type)) {
+            if (_direction != PortIO.Input) {
                 return;
             }
 
             for (var i = 0; i < connections.Count; i++) {
                 var connection = connections[i];
                 var port       = connection.Port;
-                if(port.Direction == PortIO.Input)
+                if(port.Direction == PortIO.Input || port.Id == Id)
                     continue;
-                connection.Port.Bind(this).
+                connection.Port.Bind(publisher).
                     AddTo(LifeTime);
             }
         }

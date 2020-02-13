@@ -58,10 +58,10 @@
             var node = target as UniNode;
 
             if (Application.isPlaying == false) {
+
+                node.Initialize();
                     
                 UpdatePortAttributes(node);
-            
-                node.Initialize();
 
                 UpdateData(node);
 
@@ -90,7 +90,7 @@
                 FirstOrDefault(x => x.ItemName == port.ItemName && x.Direction == port.Direction);
             
             if (value == null) {
-                GameLog.Log($"REMOVE PORT {port.FieldName} and Clear");
+                GameLog.Log($"REMOVE PORT {node.ItemName} : {port.FieldName} and Clear");
             }
             
             return value == null;
@@ -106,24 +106,20 @@
                 if(data.PortData == null)
                     continue;
                 
-                node.UpdatePortValue(data.PortData);
-                
+                var port = node.UpdatePortValue(data.PortData);
                 var value = portField.GetValue(node);
 
-                UpdateSerializedCommands(node,data.PortData, value, portField);
+                UpdateSerializedCommands(node,port,data.PortData, value, portField);
             }
 
         }
 
-        public void UpdateSerializedCommands(UniNode node,IPortData portData, object value, FieldInfo info)
+        public void UpdateSerializedCommands(UniNode node,IPortValue port,
+            IPortData portData, object value, FieldInfo info)
         {
-            if (value == null) return;
             switch (value) {
                 case IReactiveSource reactiveSource:
-
-                    var port = node.UpdatePortValue(portData);
-                    reactiveSource.Bind(port);
-                    
+                    reactiveSource.Bind(node,port.ItemName);
                     break;
             }
         }

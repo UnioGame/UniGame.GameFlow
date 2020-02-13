@@ -24,13 +24,7 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Exa
             
             base.OnExecute();
 
-            IntIn.
-                Do(value => IntResult.Publish(value + IntResult.Value)).
-                Subscribe().
-                AddTo(LifeTime);
-            
-            IntResult.
-                Do(x => GameLog.Log($"{nodeName} SUMM VALUE = {x}")).
+            IntIn.Do(value => IntResult.SetValue(IntResult.Value - value)).
                 Subscribe().
                 AddTo(LifeTime);
             
