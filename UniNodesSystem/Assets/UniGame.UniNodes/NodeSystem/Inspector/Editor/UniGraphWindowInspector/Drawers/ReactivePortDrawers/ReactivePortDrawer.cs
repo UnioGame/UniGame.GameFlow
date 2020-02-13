@@ -1,37 +1,8 @@
 ﻿namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.Drawers.ReactivePortDrawers
 {
-    // using Runtime.ReactivePorts;
-    //
-    // /// <summary>
-    // /// base drawer class for ReactivePortValue<T>
-    // /// </summary>
-    // /// <typeparam name="T">Type of target Value</typeparam>
-    // public class ReactivePortDrawer<T> : ReactivePortDrawer { }
-    //
-    // [UnityEditor.CustomPropertyDrawer(typeof(IntReactivePort))]
-    // public class IntReactivePortDrawer : ReactivePortDrawer<int> { }
-    //
-    // [UnityEditor.CustomPropertyDrawer(typeof(FloatReactivePort))]
-    // public class FloatReactivePortDrawer : ReactivePortDrawer<float> { }
-    //
-    // [UnityEditor.CustomPropertyDrawer(typeof(StringReactivePort))]
-    // public class StringReactivePortDrawer : ReactivePortDrawer<string> { }
-    //
-    // [UnityEditor.CustomPropertyDrawer(typeof(ByteReactivePort))]
-    // public class ByteReactivePortDrawer : ReactivePortDrawer<byte> { }
-    //
-    // [UnityEditor.CustomPropertyDrawer(typeof(BoolReactivePort))]
-    // public class BoolReactivePortDrawer : ReactivePortDrawer<bool> { }
-    //
-    // [UnityEditor.CustomPropertyDrawer(typeof(ContextReactivePort))]
-    // public class ContextReactivePortDrawer : ReactivePortDrawer<bool> { }
-}
-
-namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.Drawers.ReactivePortDrawers
-{
     using System;
-    using DG.DemiEditor;
     using Runtime.Attributes;
+    using Runtime.Core.Interfaces;
     using UnityEditor;
     using UnityEngine;
 
@@ -58,7 +29,6 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nod
         
             // Create property container element.
             var container = property;
-            container = container.FindPropertyRelative(ValueFieldName);
             var reactiveValue = container.FindPropertyRelative(ValueFieldName);
 
             // Create property fields.
@@ -83,13 +53,9 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nod
         {
             var property = sourceProperty;
             
-            // if (value is IReactiveSource) {
-            //     GameLog.Log($"DrawPropertyValue field {property?.name}");
-            //     property = property.FindPropertyRelative(ValueFieldName);
-            //     GameLog.Log($"DrawPropertyValue field {property?.name}");
-            //     property = property.FindPropertyRelative(ValueFieldName);
-            //     GameLog.Log($"DrawPropertyValue field {property?.name}");
-            // }
+            if (value is IReactiveSource) {
+                property = property.FindPropertyRelative(ValueFieldName);
+            }
 
             if (EditorGUILayout.PropertyField(property, label)) {
                 sourceProperty?.serializedObject.ApplyModifiedProperties(); 

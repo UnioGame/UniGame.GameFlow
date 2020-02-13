@@ -1,34 +1,50 @@
 ﻿namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Core
 {
     using System;
+    using Interfaces;
     using UniRx;
     using UnityEngine;
 
     [Serializable]
-    public class ReactivePortValue<TValue, TType> : 
-        IReactivePortValue<TType>
-        where TValue : class, IReactiveProperty<TType>, new()
+    public class ReactivePortValue<TValue> : 
+        IReactivePortValue<TValue>
     {
-        [SerializeReference] 
-        public TValue value = new TValue();
-
-        public Type ValueType => typeof(TType);
+        [SerializeField]
+        public bool sendByBind = true;
         
-        public void Publish<T>(T message)
+        [SerializeReference] 
+        public TValue value = default;
+
+        [SerializeReference] 
+        public IMessageBroker target;
+        
+        public Type ValueType => typeof(TValue);
+
+        public TValue Value => value;
+
+        public bool HasValue => target!=null;
+
+        public void Bind(IMessageBroker broker)
         {
-            if(message is TType messageValue)
-                value.Value = messageValue;
+            this.target = broker;
+            if (sendByBind) {
+                SetValue(value);
+            }
         }
-    
-        public IDisposable Subscribe(IObserver<TType> observer) => value.Subscribe(observer);
-
-        public TType Value => value.Value;
-
-        public bool HasValue => value.HasValue;
-
-        public IDisposable Bind(IMessagePublisher connection)
+        
+        public void SetValue(TValue portValue)
         {
-            return value.Subscribe(connection.Publish);
+            value = portValue;
+            target?.Publish(value);
+        }
+
+        public IDisposable Subscribe(IObserver<TValue> observer)
+        {
+            if(target == null)
+                return Disposable.Empty;
+            
+            return target.Receive<TValue>().
+                Subscribe(observer);
         }
 
     }

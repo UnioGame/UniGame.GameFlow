@@ -1,13 +1,11 @@
 ﻿using System;
 using UniGreenModules.UniCore.Runtime.DataFlow.Interfaces;
 using UniGreenModules.UniCore.Runtime.Interfaces;
-using UniGreenModules.UniCore.Runtime.Rx.Extensions;
 using UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Core.Interfaces;
 using UniGreenModules.UniNodeSystem.Runtime.Commands;
 using UniGreenModules.UniNodeSystem.Runtime.Core;
 using UniGreenModules.UniNodeSystem.Runtime.Extensions;
 using UniGreenModules.UniNodeSystem.Runtime.Interfaces;
-using UniRx;
 using UnityEngine;
 
 namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Core.Commands
@@ -47,6 +45,7 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nod
         public override ILifeTimeCommand Create(IUniNode node)
         {
             port = node.UpdatePortValue(portData);
+            targetSource.Bind(port);
             return this;
         }
 
@@ -57,22 +56,6 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nod
                    node.GetPort(portData.FieldName) != null;
         }
 
-        public void Execute(ILifeTime lifeTime)
-        {
-            var portDirection = portData.Direction;
-
-            switch (portDirection) {
-                case PortIO.Input:
-                    port.Receive<>()
-                    break;
-                case PortIO.Output:
-                    targetSource.Bind(port).
-                        AddTo(lifeTime);
-                    break;
-            }
-            var source      = portDirection == PortIO.Input ? (IConnector<IMessagePublisher>) port : targetSource;
-            var targetValue = portDirection == PortIO.Input ? targetSource : (IMessagePublisher) port;
-
-        }
+        public void Execute(ILifeTime lifeTime){}
     }
 }

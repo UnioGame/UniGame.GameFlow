@@ -5,12 +5,12 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nod
 {
     using System;
 
-    public interface IReactiveSource : 
-        IMessagePublisher, 
-        IConnector<IMessagePublisher>
+    public interface IReactiveSource
     {
         
         Type ValueType { get; }
 
+        void Bind(IMessageBroker broker);
+        
     }
 }

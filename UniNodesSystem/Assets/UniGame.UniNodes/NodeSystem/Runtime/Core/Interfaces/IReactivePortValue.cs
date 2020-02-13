@@ -1,13 +1,11 @@
-﻿using UniGreenModules.UniCore.Runtime.ObjectPool.Runtime.Interfaces;
-using UniRx;
-
-namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Core
+﻿namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Core.Interfaces
 {
-    using Interfaces;
+    using UniRx;
 
     public interface IReactivePortValue<TValue> : 
         IReadOnlyReactiveProperty<TValue>,
         IReactiveSource
     {
+        void SetValue(TValue portValue);
     }
 }
