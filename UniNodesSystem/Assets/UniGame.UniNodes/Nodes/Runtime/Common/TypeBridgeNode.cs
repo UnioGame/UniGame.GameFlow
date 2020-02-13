@@ -9,7 +9,6 @@
     using UniCore.Runtime.Interfaces.Rx;
     using UniCore.Runtime.Rx.Extensions;
     using UniNodeSystem.Nodes.Commands;
-    using UniNodeSystem.Runtime;
     using UniNodeSystem.Runtime.Interfaces;
     using UniRx;
     using UnityEngine;
@@ -30,6 +29,7 @@
         [Header("bind in/out")]
         public bool bindInOut = false;
         
+        [Header("is finish called")]
         [ReadOnlyValue]
         public bool isFinalyze;
         
@@ -92,7 +92,6 @@
             input = portCommand.InputPort;
             output = portCommand.OutputPort;
 
-            
             var valueObservable = input.Receive<TData>();
             if (distinctInput) {
                 valueObservable.
@@ -110,7 +109,7 @@
     
         }
 
-        protected virtual void Finish()
+        protected void Finish()
         {
             isFinalyze = true;
             output.Publish(valueData.Value);
@@ -119,7 +118,7 @@
         private void CleanUpNode()
         {
             isFinalyze = false;
-            this.value = default;
+            value = default;
         }
 
     }

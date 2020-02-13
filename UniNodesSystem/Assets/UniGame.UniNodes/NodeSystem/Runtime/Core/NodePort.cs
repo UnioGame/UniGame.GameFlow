@@ -206,32 +206,16 @@
             _direction = portData.Direction;
             _connectionType = portData.ConnectionType;
             _showBackingValue = portData.ShowBackingValue;
-            
             _portValue.SetValueTypeFilter(portData.ValueTypes);
         }
-        
-        public void Dispose() => Release();
 
-        public IObservable<Unit> PortValueChanged => _portValue.PortValueChanged;
-        
         public bool HasValue => _portValue.HasValue;
-
-        public TData Get<TData>() => _portValue.Get<TData>();
-
-        public bool Remove<TData>() => _portValue.Remove<TData>();
-
-        public bool Contains<T>() => _portValue.Contains<T>();
 
         public void Publish<T>(T message) => _portValue.Publish(message);
 
         public IDisposable Bind(IMessagePublisher publisher) => _portValue.Bind(publisher);
 
         public IObservable<T> Receive<T>() => GetObservable<T>();
-
-        /// <summary>
-        /// is target type value valid for this port
-        /// </summary>
-        public bool IsValidPortValueType(Type targetType) => _portValue.IsValidPortValueType(targetType);
 
         #endregion
 

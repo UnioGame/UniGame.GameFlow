@@ -93,11 +93,9 @@ MonoBehaviour:
       isDynamic: 1
       isInstancePortList: 0
       _node: {fileID: 5731486205000819630}
-      _allowedValueTypes:
-      - UniGreenModules.UniContextData.Runtime.Entities.EntityContext, unigame.contextdata.runtime,
-        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       _portValue:
         name: contextValue
+        serializedValueTypes: []
       connections:
       - fieldName: '[in]context'
         node: {fileID: 4218738910056644367}
@@ -132,7 +130,7 @@ MonoBehaviour:
   _id: 8
   width: 220
   nodeName: Demo Context Source Node
-  position: {x: 280, y: 264}
+  position: {x: 280, y: 344}
   ports:
     keys:
     - contextValue
@@ -145,11 +143,9 @@ MonoBehaviour:
       isDynamic: 1
       isInstancePortList: 0
       _node: {fileID: 7906159257936419607}
-      _allowedValueTypes:
-      - UniGreenModules.UniCore.Runtime.Interfaces.IContext, unigame.unicore.runtime,
-        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       _portValue:
         name: contextValue
+        serializedValueTypes: []
       connections:
       - fieldName: '[in]context'
         node: {fileID: 4218738910056644367}
@@ -198,9 +194,9 @@ MonoBehaviour:
       isDynamic: 1
       isInstancePortList: 0
       _node: {fileID: 4218738910056644367}
-      _allowedValueTypes: []
       _portValue:
         name: '[out]context'
+        serializedValueTypes: []
       connections: []
     - _id: 12
       _fieldName: '[in]context'
@@ -210,9 +206,9 @@ MonoBehaviour:
       isDynamic: 1
       isInstancePortList: 0
       _node: {fileID: 4218738910056644367}
-      _allowedValueTypes: []
       _portValue:
         name: '[in]context'
+        serializedValueTypes: []
       connections:
       - fieldName: contextValue
         node: {fileID: 5731486205000819630}
@@ -258,9 +254,9 @@ MonoBehaviour:
       isDynamic: 1
       isInstancePortList: 0
       _node: {fileID: 1551255790007718190}
-      _allowedValueTypes: []
       _portValue:
         name: '[out]context'
+        serializedValueTypes: []
       connections: []
     - _id: 15
       _fieldName: '[in]context'
@@ -270,9 +266,9 @@ MonoBehaviour:
       isDynamic: 1
       isInstancePortList: 0
       _node: {fileID: 1551255790007718190}
-      _allowedValueTypes: []
       _portValue:
         name: '[in]context'
+        serializedValueTypes: []
       connections:
       - fieldName: contextValue
         node: {fileID: 5731486205000819630}

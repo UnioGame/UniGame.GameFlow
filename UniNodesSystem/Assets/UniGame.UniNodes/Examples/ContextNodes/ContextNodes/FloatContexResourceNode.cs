@@ -7,7 +7,7 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Exa
     using UniRx;
 
     [CreateNodeMenu("Examples/ContextNodes/FloatContex","FloatContex")]
-    public class FloatContexResourcetNode : ContextNode
+    public class FloatContexResourceNode : ContextNode
     {
         public float currentIntSummValue;
         public float lastIntValue;
