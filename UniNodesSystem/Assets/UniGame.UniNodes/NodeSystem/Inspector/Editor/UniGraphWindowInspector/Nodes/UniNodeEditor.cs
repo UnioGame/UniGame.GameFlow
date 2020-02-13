@@ -120,16 +120,10 @@
             if (value == null) return;
             switch (value) {
                 case IReactiveSource reactiveSource:
-                    var command = node.serializableCommands.
-                        OfType<ReactiveValuePortCommand>().
-                        FirstOrDefault(x => 
-                            x.node.Id == node.Id && x.fieldName == portData.FieldName);
+
+                    var port = node.UpdatePortValue(portData);
+                    reactiveSource.Bind(port);
                     
-                    if(command!=null) return;
-                    
-                    command = new ReactiveValuePortCommand();
-                    command.Initialize(node,reactiveSource, portData);
-                    node.serializableCommands.Add(command);
                     break;
             }
         }

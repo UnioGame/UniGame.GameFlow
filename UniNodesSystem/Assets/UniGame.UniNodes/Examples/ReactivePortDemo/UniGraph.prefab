@@ -105,7 +105,9 @@ MonoBehaviour:
   delay: 2
   range: {x: 1, y: 2}
   IntOut:
-    value:
+    sendByBind: 1
+    value: 0
+    target:
       id: 1
   references:
     version: 1
@@ -128,17 +130,51 @@ MonoBehaviour:
         targetSource:
           id: 2
     00000001:
-      type: {class: IntRecycleReactiveProperty, ns: UniGreenModules.UniGame.Core.Runtime.Rx,
-        asm: unigame.unicore.runtime}
+      type: {class: NodePort, ns: UniGreenModules.UniNodeSystem.Runtime.Core, asm: unigame.nodesystem.runtime}
       data:
-        value: 0
-        hasValue: 0
+        _id: 30
+        _fieldName: IntOut
+        _direction: 1
+        _connectionType: 0
+        _showBackingValue: 2
+        isDynamic: 1
+        isInstancePortList: 0
+        _node: {fileID: 115054199971061112}
+        _allowedValueTypes:
+        - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+        _portValue:
+          name: IntOut
+        connections:
+        - fieldName: IntIn
+          node: {fileID: 1909121160466111395}
+          reroutePoints: []
     00000002:
       type: {class: IntReactivePort, ns: UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.ReactivePorts,
         asm: unigame.nodesystem.runtime}
       data:
-        value:
-          id: 1
+        sendByBind: 0
+        value: 0
+        target:
+          id: 3
+    00000003:
+      type: {class: NodePort, ns: UniGreenModules.UniNodeSystem.Runtime.Core, asm: unigame.nodesystem.runtime}
+      data:
+        _id: 30
+        _fieldName: IntOut
+        _direction: 1
+        _connectionType: 0
+        _showBackingValue: 2
+        isDynamic: 1
+        isInstancePortList: 0
+        _node: {fileID: 115054199971061112}
+        _allowedValueTypes:
+        - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+        _portValue:
+          name: IntOut
+        connections:
+        - fieldName: IntIn
+          node: {fileID: 1909121160466111395}
+          reroutePoints: []
 --- !u!114 &1909121160466111395
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -197,10 +233,14 @@ MonoBehaviour:
   - id: 0
   - id: 1
   IntIn:
-    value:
+    sendByBind: 1
+    value: 0
+    target:
       id: 2
   IntResult:
-    value:
+    sendByBind: 1
+    value: 0
+    target:
       id: 3
   references:
     version: 1
@@ -241,29 +281,97 @@ MonoBehaviour:
         targetSource:
           id: 5
     00000002:
-      type: {class: IntRecycleReactiveProperty, ns: UniGreenModules.UniGame.Core.Runtime.Rx,
-        asm: unigame.unicore.runtime}
+      type: {class: NodePort, ns: UniGreenModules.UniNodeSystem.Runtime.Core, asm: unigame.nodesystem.runtime}
       data:
-        value: 0
-        hasValue: 0
+        _id: 31
+        _fieldName: IntIn
+        _direction: 0
+        _connectionType: 0
+        _showBackingValue: 2
+        isDynamic: 1
+        isInstancePortList: 0
+        _node: {fileID: 1909121160466111395}
+        _allowedValueTypes:
+        - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+        _portValue:
+          name: IntIn
+        connections:
+        - fieldName: IntOut
+          node: {fileID: 115054199971061112}
+          reroutePoints: []
     00000003:
-      type: {class: IntRecycleReactiveProperty, ns: UniGreenModules.UniGame.Core.Runtime.Rx,
-        asm: unigame.unicore.runtime}
+      type: {class: NodePort, ns: UniGreenModules.UniNodeSystem.Runtime.Core, asm: unigame.nodesystem.runtime}
       data:
-        value: 0
-        hasValue: 0
+        _id: 32
+        _fieldName: IntResult
+        _direction: 1
+        _connectionType: 0
+        _showBackingValue: 2
+        isDynamic: 1
+        isInstancePortList: 0
+        _node: {fileID: 1909121160466111395}
+        _allowedValueTypes:
+        - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+        _portValue:
+          name: IntResult
+        connections:
+        - fieldName: log
+          node: {fileID: 18125909105642779}
+          reroutePoints: []
     00000004:
       type: {class: IntReactivePort, ns: UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.ReactivePorts,
         asm: unigame.nodesystem.runtime}
       data:
-        value:
-          id: 2
+        sendByBind: 0
+        value: 0
+        target:
+          id: 6
     00000005:
       type: {class: IntReactivePort, ns: UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.ReactivePorts,
         asm: unigame.nodesystem.runtime}
       data:
-        value:
-          id: 3
+        sendByBind: 0
+        value: 0
+        target:
+          id: 7
+    00000006:
+      type: {class: NodePort, ns: UniGreenModules.UniNodeSystem.Runtime.Core, asm: unigame.nodesystem.runtime}
+      data:
+        _id: 31
+        _fieldName: IntIn
+        _direction: 0
+        _connectionType: 0
+        _showBackingValue: 2
+        isDynamic: 1
+        isInstancePortList: 0
+        _node: {fileID: 1909121160466111395}
+        _allowedValueTypes:
+        - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+        _portValue:
+          name: IntIn
+        connections:
+        - fieldName: IntOut
+          node: {fileID: 115054199971061112}
+          reroutePoints: []
+    00000007:
+      type: {class: NodePort, ns: UniGreenModules.UniNodeSystem.Runtime.Core, asm: unigame.nodesystem.runtime}
+      data:
+        _id: 32
+        _fieldName: IntResult
+        _direction: 1
+        _connectionType: 0
+        _showBackingValue: 2
+        isDynamic: 1
+        isInstancePortList: 0
+        _node: {fileID: 1909121160466111395}
+        _allowedValueTypes:
+        - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+        _portValue:
+          name: IntResult
+        connections:
+        - fieldName: log
+          node: {fileID: 18125909105642779}
+          reroutePoints: []
 --- !u!114 &18125909105642779
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -12,7 +12,7 @@
         [SerializeField]
         public bool sendByBind = true;
         
-        [SerializeReference] 
+        [SerializeField] 
         public TValue value = default;
 
         [SerializeReference] 
@@ -27,7 +27,7 @@
         public void Bind(IMessageBroker broker)
         {
             this.target = broker;
-            if (sendByBind) {
+            if (Application.isPlaying && sendByBind) {
                 SetValue(value);
             }
         }
