@@ -17,11 +17,11 @@
 
         public virtual Texture2D GetGridTexture() 
         {
-            return NodeEditorPreferences.GetSettings().gridTexture;
+            return this.GetSettings().gridTexture;
         }
 
         public virtual Texture2D GetSecondaryGridTexture() {
-            return NodeEditorPreferences.GetSettings().crossTexture;
+            return this.GetSettings().crossTexture;
         }
 
         /// <summary> Return default settings for this graph type. This is the settings the user will load if no previous settings have been saved. </summary>
@@ -39,19 +39,15 @@
                 ObjectNames.NicifyVariableName(type.ToString().Replace('.', '/'));
         }
 
-        public virtual Color GetTypeColor(Type type) {
-            return NodeEditorPreferences.GetTypeColor(type);
-        }
-
         /// <summary> Creates a copy of the original node in the graph </summary>
-        public UniBaseNode CopyNode(UniBaseNode original) 
+        public Node CopyNode(Node original) 
         {
             
             var node = target.CopyNode(original);
             node.name = original.name;
             node.transform.parent = original.Graph.transform;
             
-            if (NodeEditorPreferences.GetSettings().autoSave)
+            if (this.GetSettings().autoSave)
             {
                 AssetDatabase.SaveAssets();
             }
@@ -60,7 +56,7 @@
         }
 
         /// <summary> Safely remove a node and all its connections. </summary>
-        public void RemoveNode(UniBaseNode node)
+        public void RemoveNode(Node node)
         {
             var graph = node.Graph;
 

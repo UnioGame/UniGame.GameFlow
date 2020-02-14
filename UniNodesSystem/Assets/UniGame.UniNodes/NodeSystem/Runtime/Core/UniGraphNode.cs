@@ -25,10 +25,10 @@
             
             //create node port values by target graph
             foreach (var input in sourceGraphPrefab.Inputs) {
-                this.UpdatePortValue(input.FieldName, input.Direction);
+                this.UpdatePortValue(input.ItemName, input.Direction);
             }
             foreach (var output in sourceGraphPrefab.Outputs) {
-                this.UpdatePortValue(output.FieldName, output.Direction);
+                this.UpdatePortValue(output.ItemName, output.Direction);
             }
         }
 

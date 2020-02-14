@@ -27,46 +27,44 @@
             SerializedProperty property,
             bool includeChildren)
         {
-            node.DrawNodePropertyField(property, GUIContent.none,includeChildren);
+            node.DrawNodePropertyField(property, GUIContent.none, includeChildren);
         }
-        
+
         /// <summary> Make a field for a serialized property. Automatically displays relevant node port. </summary>
         public static void DrawNodePropertyField(
             this INode node,
             SerializedProperty property,
-            GUIContent label, 
+            GUIContent label,
             bool includeChildren,
             params GUILayoutOption[] options)
         {
-            if (property == null || node == null) 
+            if (property == null || node == null)
                 throw new NullReferenceException();
 
             var port = node.GetPort(property.name);
-            
+
             node.DrawNodePropertyField(property, label, port, includeChildren, options);
         }
 
         /// <summary> Make a field for a serialized property. Manual node port override. </summary>
         public static void DrawNodePropertyField(
             this INode node,
-            SerializedProperty property, 
+            SerializedProperty property,
             NodePort port,
             bool includeChildren = true, params GUILayoutOption[] options)
         {
             node.DrawNodePropertyField(property, null, port, includeChildren, options);
         }
-        
+
         public static void ShowBackingValueField(
             NodeFieldData data,
-            SerializedProperty property, 
+            SerializedProperty property,
             bool isConnected,
             bool includeChildren,
-            GUIStyle style = null,params GUILayoutOption[] options)
+            GUIStyle style = null, params GUILayoutOption[] options)
         {
-            var portData = data.PortData;
-            var labelContent = portData.FieldName != null ? 
-                new GUIContent(portData.FieldName) : 
-                new GUIContent(property.displayName);
+            var portData     = data.PortData;
+            var labelContent = portData.ItemName != null ? new GUIContent(portData.ItemName) : new GUIContent(property.displayName);
 
             switch (portData.ShowBackingValue) {
                 case ShowBackingValue.Unconnected:
@@ -76,8 +74,9 @@
                     }
                     // Display an editable property field if port is not connected
                     else {
-                        ReactivePortDrawer.DrawPropertyValue(data.Value,property,labelContent);
+                        ReactivePortDrawer.DrawPropertyValue(data.Value, property, labelContent);
                     }
+
                     break;
                 case ShowBackingValue.Never:
                     // Display a label
@@ -85,64 +84,60 @@
                     break;
                 case ShowBackingValue.Always:
                     // Display an editable property field
-                    ReactivePortDrawer.DrawPropertyValue(data.Value,property,labelContent);
+                    ReactivePortDrawer.DrawPropertyValue(data.Value, property, labelContent);
                     break;
             }
-
         }
 
 
-        
         /// <summary> Make a field for a serialized property. Manual node port override. </summary>
         public static void DrawNodePropertyField(
             this INode node,
-            SerializedProperty property, 
-            GUIContent label, 
+            SerializedProperty property,
+            GUIContent label,
             NodePort port,
-            bool includeChildren = true, 
+            bool includeChildren = true,
             params GUILayoutOption[] options)
         {
             if (property == null) return;
 
-            label = label ?? new GUIContent(property.name); 
-            
+            label = label ?? new GUIContent(property.name);
+
             // If property is not a port, display a regular property field
             if (port == null) {
                 EditorGUILayout.PropertyField(property, label, includeChildren, GUILayout.MinWidth(30));
             }
             else {
-                DrawFieldPort(property,label,port,includeChildren,options);
+                DrawFieldPort(property, label, port, includeChildren, options);
             }
         }
 
         private static void DrawFieldPort(
-            SerializedProperty property, 
-            GUIContent label, 
+            SerializedProperty property,
+            GUIContent label,
             NodePort port,
-            bool includeChildren = true, 
+            bool includeChildren = true,
             params GUILayoutOption[] options)
         {
             var rect = new Rect();
 
-            var node = port.Node;
-            var data = port.Node.GetPortData(node.GetType(),property.name);
+            var node     = port.Node;
+            var data     = port.Node.GetPortData(node.GetType(), property.name);
             var portData = data.PortData;
-            
+
             if (portData.InstancePortList) {
-                InstancePortList(property.name, 
-                    port.ValueType, 
-                    property.serializedObject, 
+                InstancePortList(property.name,
+                    port.ValueType,
+                    property.serializedObject,
                     portData.Direction,
                     portData.ConnectionType);
                 return;
             }
 
-            ShowBackingValueField(data, property,  port.IsConnected,includeChildren,null,GUILayout.MinWidth(30));
-                
-            rect = GUILayoutUtility.GetLastRect();
-            rect.position = port.Direction == PortIO.Input ?
-                rect.position - new Vector2(16, 0) :
-                rect.position + new Vector2(rect.width, 0);
+            ShowBackingValueField(data, property, port.IsConnected, includeChildren, null, GUILayout.MinWidth(30));
+
+            rect          = GUILayoutUtility.GetLastRect();
+            rect.position = port.Direction == PortIO.Input ? rect.position - new Vector2(16, 0) : rect.position + new Vector2(rect.width, 0);
 
             rect.size = new Vector2(16, 16);
 
@@ -150,17 +145,17 @@
             if (NodeEditorWindow.nodeTint.TryGetValue(port.Node.GetType(), out var tint)) {
                 backgroundColor *= tint;
             }
-                
-            var col = NodeEditorWindow.Current.graphEditor.GetTypeColor(port.ValueType);
+
+            var col = NodeEditorPreferences.GetTypeColor(port.ValueType);
             DrawPortHandle(rect, backgroundColor, col);
 
             // Register the handle position
             var portPos = rect.center;
-                
+
             //TODO REMOTE
             NodeEditor.PortPositions[port] = portPos;
         }
-        
+
         private static Type GetType(SerializedProperty property)
         {
             var parentType = property.serializedObject.targetObject.GetType();
@@ -198,7 +193,7 @@
 
             Vector2 position = Vector3.zero;
             portStyle.Label = portStyle.Label != null ? portStyle.Label
-                : string.IsNullOrEmpty(portStyle.Name) ? new GUIContent(ObjectNames.NicifyVariableName(port.FieldName))
+                : string.IsNullOrEmpty(portStyle.Name) ? new GUIContent(ObjectNames.NicifyVariableName(port.ItemName))
                 : new GUIContent(portStyle.Name);
 
             // If property is an input, display a regular property field and put a port handle on the left side
@@ -233,8 +228,8 @@
 
         public static NodeGuiLayoutStyle GetDefaultPortStyle(NodePort port)
         {
-            var name  = port == null ? string.Empty : port.FieldName;
-            var label = port == null ? new GUIContent(string.Empty) : new GUIContent(port.FieldName);
+            var name  = port == null ? string.Empty : port.ItemName;
+            var label = port == null ? new GUIContent(string.Empty) : new GUIContent(port.ItemName);
 
             var style = new NodeGuiLayoutStyle() {
                 Color      = GetMainPortColor(port),
@@ -252,7 +247,7 @@
             if (port == null)
                 return Color.magenta;
 
-            return NodeEditorWindow.Current.graphEditor.GetTypeColor(port.ValueType);
+            return NodeEditorPreferences.GetTypeColor(port.ValueType);
         }
 
         public static Color GetBackgroundPortColor(NodePort port)
@@ -310,7 +305,7 @@
             Color backgroundColor = new Color32(90, 97, 105, 255);
             Color tint;
             if (NodeEditorWindow.nodeTint.TryGetValue(port.Node.GetType(), out tint)) backgroundColor *= tint;
-            var col                                                                                   = NodeEditorWindow.Current.graphEditor.GetTypeColor(port.ValueType);
+            var col                                                                                   = NodeEditorPreferences.GetTypeColor(port.ValueType);
             DrawPortHandle(rect, backgroundColor, col);
 
             // Register the handle position
@@ -356,6 +351,7 @@
             InstancePortList(fieldName, type, serializedObject, PortIO.Output, connectionType);
         }
 
+
         /// <summary> Draw an editable list of instance ports. Port names are named as "[fieldName] [index]" </summary>
         /// <param name="fieldName">Supply a list for editable values</param>
         /// <param name="type">Value type of added instance ports</param>
@@ -365,7 +361,8 @@
             PortIO io,
             ConnectionType connectionType = ConnectionType.Multiple)
         {
-            var node      = serializedObject.targetObject as UniBaseNode;
+            var node = serializedObject.targetObject as Node;
+
             var arrayData = serializedObject.FindProperty(fieldName);
 
             bool IsMatchingInstancePort(string x)
@@ -374,9 +371,7 @@
                 return split.Length == 2 && split[0] == fieldName;
             }
 
-            var instancePorts = node.Ports.
-                Where(x => IsMatchingInstancePort(x.FieldName)).
-                OrderBy(x => x.FieldName).ToList();
+            var instancePorts = node.Ports.Where(x => IsMatchingInstancePort(x.ItemName)).OrderBy(x => x.ItemName).ToList();
 
             ReorderableList                     list = null;
             Dictionary<string, ReorderableList> rlc;
@@ -405,8 +400,11 @@
         {
             var hasArrayData = arrayData != null && arrayData.isArray;
             var arraySize    = hasArrayData ? arrayData.arraySize : 0;
-            var node         = serializedObject.targetObject as UniBaseNode;
-            var list         = new ReorderableList(instancePorts, null, true, true, true, true);
+            var node         = serializedObject.targetObject as Node;
+            var portConnections =
+                NodeEditorWindow.ActiveWindows.FirstOrDefault(x => x.ActiveGraph == node.Graph).PortConnectionPoints;
+
+            var list = new ReorderableList(instancePorts, null, true, true, true, true);
 
             list.drawElementCallback =
                 (rect, index, isActive, isFocused) => {
@@ -415,7 +413,7 @@
                         var itemData = arrayData.GetArrayElementAtIndex(index);
                         EditorGUI.PropertyField(rect, itemData);
                     }
-                    else EditorGUI.LabelField(rect, port.FieldName);
+                    else EditorGUI.LabelField(rect, port.ItemName);
 
                     var pos = rect.position + (port.IsOutput ? new Vector2(rect.width + 6, 0) : new Vector2(-36, 0));
                     PortField(pos, port);
@@ -439,15 +437,14 @@
                         for (var i = reorderableListIndex; i < rl.index; ++i) {
                             var port     = node.GetPort(arrayData.name + " " + i);
                             var nextPort = node.GetPort(arrayData.name + " " + (i + 1));
-                            var id = port.Id;
-                            
+                            var id       = port.Id;
+
                             port.SwapConnections(nextPort);
 
                             // Swap cached positions to mitigate twitching
-                            var rect = NodeEditorWindow.Current.PortConnectionPoints[id];
-                            NodeEditorWindow.Current.PortConnectionPoints[id] =
-                                NodeEditorWindow.Current.PortConnectionPoints[id];
-                            NodeEditorWindow.Current.PortConnectionPoints[id] = rect;
+                            var rect = portConnections[id];
+                            portConnections[id] = portConnections[id];
+                            portConnections[id] = rect;
                         }
                     }
                     // Move down
@@ -459,10 +456,9 @@
 
                             var id = port.Id;
                             // Swap cached positions to mitigate twitching
-                            var rect = NodeEditorWindow.Current.PortConnectionPoints[id];
-                            NodeEditorWindow.Current.PortConnectionPoints[id] =
-                                NodeEditorWindow.Current.PortConnectionPoints[id];
-                            NodeEditorWindow.Current.PortConnectionPoints[id] = rect;
+                            var rect = portConnections[id];
+                            portConnections[id] = portConnections[id];
+                            portConnections[id] = rect;
                         }
                     }
 
@@ -479,15 +475,16 @@
                     // Apply changes
                     serializedObject.ApplyModifiedProperties();
                     serializedObject.Update();
-                    NodeEditorWindow.Current.Repaint();
 
-                    EditorApplication.delayCall += NodeEditorWindow.Current.Repaint;
+                    var window = NodeEditorWindow.ActiveWindows.FirstOrDefault(x => x.ActiveGraph == node.Graph);
+                    window.Repaint();
+//                    EditorApplication.delayCall += window.Repaint;
                 };
             list.onAddCallback = rl => {
                 // Add instance port postfixed with an index number
-                var newName                           = arrayData.name + " 0";
-                var i                                 = 0;
-                while (node.HasPort(newName)) 
+                var newName = arrayData.name + " 0";
+                var i       = 0;
+                while (node.HasPort(newName))
                     newName = arrayData.name + " " + (++i);
 
                 var types = new List<Type>();
@@ -513,7 +510,7 @@
                     }
 
                     // Remove the last instance port, to avoid messing up the indexing
-                    node.RemovePort(instancePorts[instancePorts.Count() - 1].FieldName);
+                    node.RemovePort(instancePorts[instancePorts.Count() - 1].ItemName);
                     serializedObject.Update();
                     EditorUtility.SetDirty(node);
                     if (hasArrayData) {
@@ -537,16 +534,16 @@
                 var instancePortCount = instancePorts.Count;
                 while (instancePortCount < arraySize) {
                     // Add instance port postfixed with an index number
-                    var newName                           = arrayData.name + " 0";
-                    var i                                 = 0;
-                    while (node.HasPort(newName)) 
+                    var newName = arrayData.name + " 0";
+                    var i       = 0;
+                    while (node.HasPort(newName))
                         newName = arrayData.name + " " + (++i);
-                    
+
                     var types = new List<Type>();
-                    node.AddPort(newName,types,io, connectionType,ShowBackingValue.Always);
+                    node.AddPort(newName, types, io, connectionType, ShowBackingValue.Always);
 
                     EditorUtility.SetDirty(node);
-                    
+
                     instancePortCount++;
                 }
 

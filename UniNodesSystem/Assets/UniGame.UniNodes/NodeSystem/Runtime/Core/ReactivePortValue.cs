@@ -3,6 +3,8 @@
     using System;
     using System.Runtime.CompilerServices;
     using Interfaces;
+    using UniCore.Runtime.ProfilerTools;
+    using UniNodeSystem.Nodes;
     using UniNodeSystem.Runtime.Core;
     using UniRx;
     using UnityEngine;
@@ -16,11 +18,17 @@
         [SerializeField]
         public bool sendByBind = true;
         
-        [SerializeField] 
+        [SerializeField]
         public TValue value = default;
 
+        [SerializeField]
+        public int nodeId;
+        
         [SerializeField] 
-        public UniBaseNode target;
+#if ODIN_INSPECTOR
+        [Sirenix.OdinInspector.InlineEditor()]
+#endif
+        public NodeGraph graph;
 
         [SerializeField]
         public string portName;
@@ -47,13 +55,14 @@
 
         public TValue Value => value;
 
-        public bool HasValue => target!=null;
+        public bool HasValue => graph!=null;
 
         #endregion
         
-        public void Bind(UniBaseNode node, string name)
+        public void Bind(NodeGraph graph,int id, string name)
         {
-            this.target = node;
+            this.graph = graph;
+            this.nodeId = id;
             this.portName = name;
             
             if (Application.isPlaying && sendByBind) {
@@ -81,7 +90,14 @@
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private IMessageBroker GetBroker()
         {
-            return broker = broker ?? target.GetPort(portName).Value;
+            if (broker != null)
+                return broker;
+            var node = graph.GetNode(nodeId);
+            if (node == null) {
+                GameLog.LogError($"NULL Node at ReactivePoort {graph} node id:{nodeId} {portName}");
+            }
+            broker = node.GetPort(portName).Value;
+            return broker;
         }
     }
 }

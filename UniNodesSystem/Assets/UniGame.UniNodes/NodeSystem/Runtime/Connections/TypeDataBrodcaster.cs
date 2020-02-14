@@ -18,6 +18,8 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nod
         private List<IMessagePublisher> _registeredItems = new List<IMessagePublisher>();
         private int count = 0;
 
+        public int ConnectionsCount => count;
+        
         #region ipoolable
         
         public virtual void Release()
@@ -49,7 +51,8 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nod
                 _registeredItems.Add(connection);
             
             var disposable = ClassPool.Spawn<DisposableAction>();
-            disposable.Initialize(() => Disconnect(connection));
+            disposable.Initialize(() => 
+                Disconnect(connection));
             
             UpdateCounter();
             return disposable;

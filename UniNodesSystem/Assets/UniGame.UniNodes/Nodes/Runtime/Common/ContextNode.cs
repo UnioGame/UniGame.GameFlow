@@ -3,6 +3,7 @@
     using System;
     using NodeSystem.Runtime.Attributes;
     using UniCore.Runtime.Interfaces;
+    using UniCore.Runtime.ProfilerTools;
     using UniRx;
 
     [Serializable]
@@ -15,6 +16,7 @@
         {
             return valueData.
                 Where(x => x!=null).
+                Do(x => GameLog.Log($"{ItemName} : CONTEXT VALUE {x}")).
                 Select(x => x.Receive<T>()).
                 Switch();
         }

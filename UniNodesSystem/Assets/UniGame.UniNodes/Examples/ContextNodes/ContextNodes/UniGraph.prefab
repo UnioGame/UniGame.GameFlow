@@ -10,11 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 3602875647241057990}
   - component: {fileID: 2285024171325816328}
-  - component: {fileID: 5731486205000819630}
-  - component: {fileID: 7906159257936419607}
   - component: {fileID: 4218738910056644367}
   - component: {fileID: 1551255790007718190}
   - component: {fileID: 1940648519}
+  - component: {fileID: 379952691}
   m_Layer: 0
   m_Name: UniGraph
   m_TagString: Untagged
@@ -50,119 +49,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _id: 1
   width: 220
-  nodeName: 
+  nodeName: UniGraph
   position: {x: 0, y: 0}
   ports:
     keys: []
     values: []
   _graph: {fileID: 2285024171325816328}
   serializableCommands: []
-  _uniqueId: 15
+  _uniqueId: 65
   nodes:
-  - {fileID: 5731486205000819630}
-  - {fileID: 7906159257936419607}
   - {fileID: 4218738910056644367}
   - {fileID: 1551255790007718190}
-  references:
-    version: 1
---- !u!114 &5731486205000819630
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 512704875213271262}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7817cc805a3da8143902915bc1728ac3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _id: 5
-  width: 220
-  nodeName: Demo Context Source Node
-  position: {x: 280, y: 104}
-  ports:
-    keys:
-    - contextValue
-    values:
-    - _id: 7
-      _fieldName: contextValue
-      _direction: 1
-      _connectionType: 0
-      _showBackingValue: 2
-      isDynamic: 1
-      isInstancePortList: 0
-      _node: {fileID: 5731486205000819630}
-      _portValue:
-        name: contextValue
-        serializedValueTypes: []
-      connections:
-      - fieldName: '[in]context'
-        node: {fileID: 4218738910056644367}
-        reroutePoints: []
-      - fieldName: '[in]context'
-        node: {fileID: 1551255790007718190}
-        reroutePoints: []
-  _graph: {fileID: 2285024171325816328}
-  serializableCommands: []
-  contextValue:
-    sendByBind: 1
-    target: {fileID: 5731486205000819630}
-    portName: contextValue
-  onFireContext:
-    value: 0
-  intValue: 1
-  floatValule: 1
-  references:
-    version: 1
---- !u!114 &7906159257936419607
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 512704875213271262}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7817cc805a3da8143902915bc1728ac3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _id: 8
-  width: 220
-  nodeName: Demo Context Source Node
-  position: {x: 280, y: 344}
-  ports:
-    keys:
-    - contextValue
-    values:
-    - _id: 9
-      _fieldName: contextValue
-      _direction: 1
-      _connectionType: 0
-      _showBackingValue: 2
-      isDynamic: 1
-      isInstancePortList: 0
-      _node: {fileID: 7906159257936419607}
-      _portValue:
-        name: contextValue
-        serializedValueTypes: []
-      connections:
-      - fieldName: '[in]context'
-        node: {fileID: 4218738910056644367}
-        reroutePoints: []
-      - fieldName: '[in]context'
-        node: {fileID: 1551255790007718190}
-        reroutePoints: []
-  _graph: {fileID: 2285024171325816328}
-  serializableCommands: []
-  contextValue:
-    sendByBind: 1
-    target: {fileID: 7906159257936419607}
-    portName: contextValue
-  onFireContext:
-    value: 0
-  intValue: 5
-  floatValule: 5
+  - {fileID: 379952691}
   references:
     version: 1
 --- !u!114 &4218738910056644367
@@ -186,7 +84,7 @@ MonoBehaviour:
     - '[out]context'
     - '[in]context'
     values:
-    - _id: 11
+    - _id: 33
       _fieldName: '[out]context'
       _direction: 1
       _connectionType: 0
@@ -197,8 +95,9 @@ MonoBehaviour:
       _portValue:
         name: '[out]context'
         serializedValueTypes: []
+        broadcastersCount: 0
       connections: []
-    - _id: 12
+    - _id: 34
       _fieldName: '[in]context'
       _direction: 0
       _connectionType: 0
@@ -209,12 +108,10 @@ MonoBehaviour:
       _portValue:
         name: '[in]context'
         serializedValueTypes: []
+        broadcastersCount: 0
       connections:
       - fieldName: contextValue
-        node: {fileID: 5731486205000819630}
-        reroutePoints: []
-      - fieldName: contextValue
-        node: {fileID: 7906159257936419607}
+        node: {fileID: 379952691}
         reroutePoints: []
   _graph: {fileID: 2285024171325816328}
   serializableCommands: []
@@ -246,7 +143,7 @@ MonoBehaviour:
     - '[out]context'
     - '[in]context'
     values:
-    - _id: 14
+    - _id: 35
       _fieldName: '[out]context'
       _direction: 1
       _connectionType: 0
@@ -257,8 +154,9 @@ MonoBehaviour:
       _portValue:
         name: '[out]context'
         serializedValueTypes: []
+        broadcastersCount: 0
       connections: []
-    - _id: 15
+    - _id: 36
       _fieldName: '[in]context'
       _direction: 0
       _connectionType: 0
@@ -269,12 +167,10 @@ MonoBehaviour:
       _portValue:
         name: '[in]context'
         serializedValueTypes: []
+        broadcastersCount: 0
       connections:
       - fieldName: contextValue
-        node: {fileID: 5731486205000819630}
-        reroutePoints: []
-      - fieldName: contextValue
-        node: {fileID: 7906159257936419607}
+        node: {fileID: 379952691}
         reroutePoints: []
   _graph: {fileID: 2285024171325816328}
   serializableCommands: []
@@ -297,4 +193,58 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff87142bf9c884741bbcd295bab90ce7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  graph: {fileID: 0}
+  graph: {fileID: 2285024171325816328}
+--- !u!114 &379952691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 512704875213271262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7817cc805a3da8143902915bc1728ac3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _id: 64
+  width: 220
+  nodeName: Demo Context Source Node
+  position: {x: 328, y: 168}
+  ports:
+    keys:
+    - contextValue
+    values:
+    - _id: 65
+      _fieldName: contextValue
+      _direction: 1
+      _connectionType: 0
+      _showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      _node: {fileID: 379952691}
+      _portValue:
+        name: contextValue
+        serializedValueTypes:
+        - UniGreenModules.UniCore.Runtime.Interfaces.IContext, unigame.unicore.runtime,
+          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        broadcastersCount: 0
+      connections:
+      - fieldName: '[in]context'
+        node: {fileID: 4218738910056644367}
+        reroutePoints: []
+      - fieldName: '[in]context'
+        node: {fileID: 1551255790007718190}
+        reroutePoints: []
+  _graph: {fileID: 2285024171325816328}
+  serializableCommands: []
+  contextValue:
+    sendByBind: 1
+    nodeId: 64
+    graph: {fileID: 2285024171325816328}
+    portName: contextValue
+  clickToFireContext:
+    value: 0
+  intValue: 1
+  floatValule: 1
+  references:
+    version: 1

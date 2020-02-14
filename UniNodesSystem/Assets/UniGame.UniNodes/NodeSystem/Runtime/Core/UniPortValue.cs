@@ -7,8 +7,11 @@
     using System.Runtime.CompilerServices;
     using Interfaces;
     using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
+    using UniCore.Runtime.Attributes;
     using UniCore.Runtime.Common;
+    using UniCore.Runtime.DataFlow;
     using UniCore.Runtime.DataFlow.Interfaces;
+    using UniCore.Runtime.Interfaces;
     using UniCore.Runtime.ProfilerTools;
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Connections;
     using UniRx;
@@ -24,12 +27,13 @@
         /// </summary>
         public string name = string.Empty;
 
-                
         /// <summary>
         /// allowed port value types
         /// </summary>
         [SerializeField] protected List<string> serializedValueTypes;
 
+        [SerializeField]
+        [ReadOnlyValue] protected int broadcastersCount;
         
         #endregion
 
@@ -39,11 +43,11 @@
 
         private TypeDataBrodcaster broadcaster;
 
-        private bool initialized = false;
-        
         private ReactiveCommand portValueChanged = new ReactiveCommand();
 
         private ILifeTime lifeTime;
+        
+        private LifeTimeDefinition lifeTimeDefeDefinition = new LifeTimeDefinition();
         
         private List<Type> valueTypeFilter;
 
@@ -54,7 +58,7 @@
         
         public IReadOnlyList<Type> ValueTypes => valueTypeFilter = valueTypeFilter ?? new List<Type>();
        
-        public ILifeTime LifeTime => lifeTime;
+        public ILifeTime LifeTime => lifeTimeDefeDefinition.LifeTime;
 
         public string ItemName => name;
 
@@ -70,25 +74,27 @@
         }
 
         #endregion
-
-        #region constructor
         
-        public UniPortValue()
+        public void Initialize(string portName)
         {
-            Initialize();
-        }
+            GameLog.Log($"PORTVALUE {ItemName} : Initialize");
 
-        #endregion
-        
-        public void Initialize(string portName, ILifeTime lifeTimeScope)
-        {
+            if (lifeTime != null && lifeTime.IsTerminated == false)
+                return;
+            
             name = portName;
+            
+            lifeTimeDefeDefinition = lifeTimeDefeDefinition ?? new LifeTimeDefinition();
+            lifeTime = lifeTimeDefeDefinition.LifeTime;
+            
+            context     = context ?? new TypeData();
+            broadcaster = broadcaster ?? new TypeDataBrodcaster();
 
-            this.lifeTime = lifeTimeScope;
-            this.lifeTime.AddCleanUpAction(Release);
-
-            Initialize();
+            lifeTime.AddCleanUpAction(context.Release);
+            lifeTime.AddCleanUpAction(RemoveAllConnections);
+            
         }
+
 
         public void SetValueTypeFilter(IReadOnlyList<Type> types)
         {
@@ -99,16 +105,9 @@
             UpdateSerializedFilter(valueTypeFilter);
         }
 
-        public void Dispose()
-        {
-            Release();
-        }
+        public void Dispose() => Release();
         
-        public void Release()
-        {
-            context.Release();
-            RemoveAllConnections();
-        }
+        public void Release() => lifeTimeDefeDefinition.Terminate();
 
         #region type data container
 
@@ -152,21 +151,12 @@
 
         public IDisposable Bind(IMessagePublisher contextData)
         {
-            return broadcaster.Bind(contextData);
+            var disposable = broadcaster.Bind(contextData);
+            broadcastersCount = broadcaster.ConnectionsCount;            
+            return disposable;
         }
         
         #endregion
-
-        private void Initialize()
-        {
-            if (initialized)
-                return;
-            
-            context    = new TypeData();
-            broadcaster = new TypeDataBrodcaster();
-            //mark as initialized
-            initialized = true;
-        }
 
         private bool DefaultFilter(Type type) => true;
 

@@ -12,5 +12,7 @@ namespace UniGreenModules.UniNodeSystem.Runtime.Interfaces
         IReadOnlyCollection<INodePort> PortValues { get; }
 
         bool AddPortValue(INodePort portValue);
+
+        void Initialize();
     }
 }

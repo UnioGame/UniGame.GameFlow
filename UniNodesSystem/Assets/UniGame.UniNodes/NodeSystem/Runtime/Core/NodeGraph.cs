@@ -2,10 +2,17 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using Interfaces;
     using UniCore.Runtime.Attributes;
+    using UniGame.Core.Runtime.DataStructure;
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Nodes;
     using UnityEngine;
+
+    [Serializable]
+    public class NodesDictionary : SerializableDictionary<ulong, Node>
+    {
+    }
 
     /// <summary> Base class for all node graphs </summary>
     [Serializable]
@@ -17,17 +24,18 @@
 
         #endregion
 
+        private Dictionary<int,Node> nodesCache;
+        
         [ReadOnlyValue]
-        [SerializeField] private ulong _uniqueId;
+        [SerializeField] private int _uniqueId;
 
         /// <summary> All nodes in the graph. <para/>
         /// See: <see cref="AddNode{T}"/> </summary>
-        [SerializeField] public List<UniBaseNode> nodes = new List<UniBaseNode>();
-
+        [SerializeField] public List<Node> nodes = new List<Node>();
 
         public IReadOnlyList<INode> Nodes => nodes;
 
-        public ulong GetId()
+        public int GetId()
         {
             return ++_uniqueId;
         }
@@ -35,20 +43,32 @@
         #region graph operations
 
         /// <summary> Add a node to the graph by type </summary>
-        public T AddNode<T>() where T : UniBaseNode
+        public T AddNode<T>() where T : Node
         {
             return AddNode(typeof(T)) as T;
         }
 
-        public T AddNode<T>(string name) where T : UniBaseNode
+        public T AddNode<T>(string name) where T : Node
         {
             return AddNode(name, typeof(T)) as T;
         }
 
-        public virtual UniBaseNode AddNode(string itemName, Type type)
+        public Node GetNode(int id)
+        {
+            nodesCache = nodesCache ?? new Dictionary<int, Node>();
+            if (nodesCache.Count != nodes.Count) {
+                nodesCache.Clear();
+                nodesCache = nodes.ToDictionary(x => x.Id);
+            }
+
+            nodesCache.TryGetValue(id, out var node);
+            return node;
+        }
+        
+        public virtual Node AddNode(string itemName, Type type)
         {
             var nodeAsset = gameObject.AddComponent(type);
-            var node      = nodeAsset as UniBaseNode;
+            var node      = nodeAsset as Node;
             if (node == null) {
                 DestroyImmediate(nodeAsset,true);
                 return null;
@@ -62,13 +82,13 @@
         }
 
         /// <summary> Add a node to the graph by type </summary>
-        public UniBaseNode AddNode(Type type)
+        public Node AddNode(Type type)
         {
             return AddNode(type.Name, type);
         }
 
         /// <summary> Creates a copy of the original node in the graph </summary>
-        public virtual UniBaseNode CopyNode(UniBaseNode original)
+        public virtual Node CopyNode(Node original)
         {
             var node = Instantiate(original);
             node.UpdateId();
@@ -80,7 +100,7 @@
 
         /// <summary> Safely remove a node and all its connections </summary>
         /// <param name="node"> The node to remove </param>
-        public void RemoveNode(UniBaseNode node)
+        public void RemoveNode(Node node)
         {
             node.ClearConnections();
             nodes.Remove(node);
@@ -107,7 +127,7 @@
             // Instantiate all nodes inside the graph
             for (var i = 0; i < nodes.Count; i++) {
                 if (nodes[i] == null) continue;
-                var node = Instantiate(nodes[i]) as UniBaseNode;
+                var node = Instantiate(nodes[i]) as Node;
                 node.Graph     = graph;
                 graph.nodes[i] = node;
             }

@@ -18,6 +18,7 @@
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Core.Interfaces;
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Interfaces;
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Nodes;
+    using UnityEditor;
     using UnityEngine;
 
     [CustomNodeEditor(typeof(UniNode))]
@@ -41,6 +42,7 @@
             var node = target as UniNode;
             return node && node.IsActive;
         }
+        
 
         public override void OnHeaderGUI()
         {
@@ -56,8 +58,12 @@
         public override void OnBodyGUI()
         {
             var node = target as UniNode;
+            
+            var idEditingMode = EditorApplication.isPlayingOrWillChangePlaymode == false && 
+                                EditorApplication.isCompiling == false && 
+                                EditorApplication.isUpdating == false;
 
-            if (Application.isPlaying == false) {
+            if (idEditingMode) {
 
                 node.Initialize();
                     
@@ -72,8 +78,10 @@
             base.OnBodyGUI();
 
             DrawPorts(node);
-            
+
             serializedObject.ApplyModifiedPropertiesWithoutUndo();
+
+
         }
 
         public virtual void UpdateData(UniNode node) { }
@@ -87,11 +95,11 @@
         public bool IsPortRemoved(IUniNode node,INodePort port)
         {
             var value = node.PortValues.
-                FirstOrDefault(x => x.FieldName == port.FieldName && 
+                FirstOrDefault(x => x.ItemName == port.ItemName && 
                                     x.Direction == port.Direction);
             
             if (value == null) {
-                GameLog.Log($"REMOVE PORT {node.ItemName} : {port.FieldName} and Clear");
+                GameLog.Log($"REMOVE PORT {node.ItemName} : {port.ItemName} and Clear");
             }
             
             return value == null;
@@ -110,19 +118,20 @@
                 var port = node.UpdatePortValue(data.PortData);
                 var value = portField.GetValue(node);
 
-                UpdateSerializedCommands(node,port,data.PortData, value, portField);
+                UpdateSerializedCommands(node, port, value);
             }
 
         }
 
-        public void UpdateSerializedCommands(UniNode node,IPortValue port,
-            IPortData portData, object value, FieldInfo info)
+        public void UpdateSerializedCommands(UniNode node,IPortValue port, object value)
         {
+
             switch (value) {
                 case IReactiveSource reactiveSource:
-                    reactiveSource.Bind(node,port.ItemName);
-                    break;
+                    reactiveSource.Bind(node.Graph,node.Id,port.ItemName);
+                    return;
             }
+
         }
 
         public void DrawPorts(UniNode node)

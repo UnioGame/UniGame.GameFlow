@@ -121,7 +121,7 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1001 &1878558316525602386
+--- !u!1001 &379952686
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -131,7 +131,7 @@ PrefabInstance:
     - target: {fileID: 512704875213271262, guid: 38ead084f51e9fa4eb0d2070ddd409cf,
         type: 3}
       propertyPath: m_Name
-      value: UniGraph
+      value: UniGraph (1)
       objectReference: {fileID: 0}
     - target: {fileID: 3602875647241057990, guid: 38ead084f51e9fa4eb0d2070ddd409cf,
         type: 3}

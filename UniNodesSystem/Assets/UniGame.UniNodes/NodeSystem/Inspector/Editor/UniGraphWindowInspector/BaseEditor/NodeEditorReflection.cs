@@ -66,7 +66,7 @@
         public static List<Type> GetNodeTypes()
         {
             //Get all classes deriving from Node via reflection
-            return GetDerivedTypes(typeof(UniBaseNode));
+            return GetDerivedTypes(typeof(Node));
         }
 
         public static Dictionary<Type, Color> GetNodeTint()

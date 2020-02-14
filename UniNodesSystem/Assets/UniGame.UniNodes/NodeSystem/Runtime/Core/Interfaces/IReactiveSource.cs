@@ -11,7 +11,7 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nod
         
         Type ValueType { get; }
 
-        void Bind(UniBaseNode node, string portName);
+        void Bind(NodeGraph graph,int nodeId, string portName);
 
     }
 }

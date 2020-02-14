@@ -1,9 +1,11 @@
 ﻿namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Examples.ContextNodes.ContextNodes
 {
+    using System;
     using NodeSystem.Runtime.Attributes;
     using NodeSystem.Runtime.Nodes;
     using NodeSystem.Runtime.ReactivePorts;
     using UniContextData.Runtime.Entities;
+    using UniCore.Runtime.ProfilerTools;
     using UniCore.Runtime.Rx.Extensions;
     using UniNodeSystem.Runtime.Core;
     using UniRx;
@@ -16,7 +18,7 @@
         
         public EntityContext context = new EntityContext();
         
-        public BoolReactiveProperty onFireContext = new BoolReactiveProperty(false);
+        public BoolReactiveProperty clickToFireContext = new BoolReactiveProperty(false);
 
         public int intValue = 1;
 
@@ -24,17 +26,24 @@
         
         protected override void OnExecute()
         {
-            onFireContext.Subscribe(x => FireContext()).AddTo(LifeTime);
+            GameLog.Log($"{ItemName} ID {Id} : OnExecute");
+            
+            clickToFireContext.
+                Where(x => x).
+                Subscribe(x => FireContext()).AddTo(LifeTime);
         }
 
-#if ODIN_INSPECTOR
-        [Sirenix.OdinInspector.Button("Set Context")]
-#endif
         public void FireContext()
         {
             contextValue.SetValue(context);
             context.Publish(intValue);
             context.Publish(floatValule);
+
+            Observable.Timer(TimeSpan.FromSeconds(0.5)).
+                Do(x => clickToFireContext.Value = false).
+                Subscribe().
+                AddTo(LifeTime);
+            
         }
     }
 }

@@ -8,13 +8,13 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
         [System.Serializable]
         public class NodePortReference
         {
-            [SerializeField] private UniBaseNode _node;
+            [SerializeField] private Node _node;
             [SerializeField] private string _name;
 
             public NodePortReference(NodePort nodePort)
             {
                 _node = nodePort.Node;
-                _name = nodePort.FieldName;
+                _name = nodePort.ItemName;
             }
 
             public NodePort GetNodePort()

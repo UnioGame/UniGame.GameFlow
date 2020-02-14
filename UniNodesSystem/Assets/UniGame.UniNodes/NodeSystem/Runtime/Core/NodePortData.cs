@@ -19,7 +19,7 @@
         public bool instancePortList = false;
         public List<Type> valueTypes;
 
-        public string FieldName => fieldName;
+        public string ItemName => fieldName;
 
         public PortIO Direction => direction;
 
@@ -37,7 +37,7 @@
 
         public NodePortData(IPortData portData)
         {
-            fieldName = portData.FieldName;
+            fieldName = portData.ItemName;
             direction = portData.Direction;
             connectionType = portData.ConnectionType;
             showBackingValue = portData.ShowBackingValue;

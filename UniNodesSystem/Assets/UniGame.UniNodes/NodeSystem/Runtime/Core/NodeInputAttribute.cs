@@ -30,7 +30,7 @@ namespace UniGreenModules.UniNodeSystem.Runtime.Core
             this.instancePortList = instancePortList;
         }
 
-        public string FieldName => fieldName;
+        public string ItemName => fieldName;
 
         public PortIO Direction => direction;
 

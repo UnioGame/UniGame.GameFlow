@@ -93,8 +93,9 @@
         /// <param name="context"></param>
         protected void OnUiTriggerAction(IInteractionTrigger trigger, IContext context)
         {
-            var portValue = GetPort(trigger.ItemName);
-
+            var port = GetPort(trigger.ItemName);
+            var portValue = port.Value;
+            
             if (trigger.IsActive) {
                 portValue.Publish(context);
             }    
@@ -170,10 +171,11 @@
             for (var i = 0; i < slots.Count; i++) {
                 //get associated port value by slot
                 var slot      = slots[i];
-                var portValue = GetPort(slot.SlotName);
-
+                var port = GetPort(slot.SlotName);
+                var portValue = port.Value;
+                
                 //connect to ui module data
-                slot.Value.Bind(portValue.Value).
+                slot.Value.Bind(portValue).
                     AddTo(lifetime);
 
                 //add new placement value

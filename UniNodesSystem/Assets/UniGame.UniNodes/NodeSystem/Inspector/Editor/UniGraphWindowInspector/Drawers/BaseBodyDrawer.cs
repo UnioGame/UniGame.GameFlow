@@ -20,7 +20,7 @@
             _excludes = new List<string>(){"m_Script", "graph", "position", "ports"};
         }
     
-        public bool Update(INodeEditorData editor, UniBaseNode node)
+        public bool Update(INodeEditorData editor, Node node)
         {
             var serializedObject = editor.SerializedObject;
 

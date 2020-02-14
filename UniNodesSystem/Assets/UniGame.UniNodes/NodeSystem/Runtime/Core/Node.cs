@@ -14,12 +14,12 @@
     using Debug = UnityEngine.Debug;
 
     [Serializable]
-    public abstract class UniBaseNode : MonoBehaviour, INode
+    public abstract class Node : MonoBehaviour, INode
     {
 
         [HideInInspector] 
         [ReadOnlyValue] 
-        [SerializeField] private ulong _id;
+        [SerializeField] private int _id;
 
         [HideNodeInspector]
         [SerializeField] public int width = 220;
@@ -42,7 +42,7 @@
 
         #region public properties
         
-        public ulong Id
+        public int Id
         {
             get
             {
@@ -152,7 +152,7 @@
         {
             if (port == null) throw new ArgumentNullException("port");
             port.ClearConnections();
-            ports.Remove(port.FieldName);
+            ports.Remove(port.ItemName);
         }
 
         #endregion

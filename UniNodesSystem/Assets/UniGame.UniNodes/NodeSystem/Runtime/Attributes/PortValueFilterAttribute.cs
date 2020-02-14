@@ -30,7 +30,7 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nod
             this.typeFilter = typeFilter.ToList();
         }
 
-        public string FieldName => portName;
+        public string ItemName => portName;
         public PortIO Direction => direction;
         public ConnectionType ConnectionType => connectionType;
         

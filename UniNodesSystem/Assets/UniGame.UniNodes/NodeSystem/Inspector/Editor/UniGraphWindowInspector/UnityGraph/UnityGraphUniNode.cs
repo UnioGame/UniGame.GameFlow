@@ -4,12 +4,12 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.UnityGraph
 {
     using Runtime.Core;
 
-    public class UnityGraphUniNode : Node
+    public class UnityGraphUniNode : UnityEditor.Graphs.Node
     {
     
         #region factory methods
 
-        public static Node Create(UniBaseNode graphNode)
+        public static UnityEditor.Graphs.Node Create(Node graphNode)
         {
             var node = CreateInstance<UnityGraphUniNode>();
             node.Initialize(graphNode);
@@ -18,9 +18,9 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.UnityGraph
         
         #endregion
 
-        private UniBaseNode _node;
+        private Node _node;
         
-        public void Initialize(UniBaseNode graphNode)
+        public void Initialize(Node graphNode)
         {
             _node = graphNode;
         }

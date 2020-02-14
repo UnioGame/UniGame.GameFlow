@@ -11,9 +11,9 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
     using UnityEngine;
 
     /// <summary> Base class to derive custom Node editors from. Use this to create your own custom inspectors and editors for your nodes. </summary>
-    [CustomNodeEditor(typeof(UniBaseNode))]
+    [CustomNodeEditor(typeof(Node))]
     public class NodeEditor : 
-        NodeEditorBase<NodeEditor, CustomNodeEditorAttribute, UniBaseNode>, 
+        NodeEditorBase<NodeEditor, CustomNodeEditorAttribute, Node>, 
         INodeEditorData
     {
 
@@ -23,7 +23,7 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
         public static Dictionary<NodePort, Vector2> PortPositions = new Dictionary<NodePort, Vector2>();
 
         /// <summary> Fires every whenever a node was modified through the editor </summary>
-        public static Action<UniBaseNode> OnUpdateNode;
+        public static Action<Node> OnUpdateNode;
         public static int Renaming;
         
         protected List<INodeEditorHandler> _bodyDrawers = new List<INodeEditorHandler>();

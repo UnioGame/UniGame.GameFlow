@@ -27,7 +27,7 @@
         /// unique graph space port id 
         /// </summary>
         [ReadOnlyValue]
-        [SerializeField] protected ulong _id;
+        [SerializeField] protected int _id;
         [SerializeField] protected string               _fieldName;
         [SerializeField] protected PortIO               _direction = PortIO.Input;
         [SerializeField] protected ConnectionType       _connectionType = ConnectionType.Multiple;
@@ -39,7 +39,7 @@
 #if ODIN_INSPECTOR
         [Sirenix.OdinInspector.InlineEditor()]
 #endif
-        protected UniBaseNode _node;
+        protected Node _node;
 
         /// <summary>
         /// port container value
@@ -53,7 +53,8 @@
 
         #endregion
 
-        private LifeTimeDefinition _lifetime;
+        private LifeTimeDefinition lifetimeDLifeTimeDefinition;
+        private ILifeTime lifeTime;
 
         /// <summary>
         /// draft validator refactoring. Move rule to SO files
@@ -67,9 +68,9 @@
         /// <summary>
         /// Copy a nodePort but assign it to another node.
         /// </summary>
-        public NodePort(NodePort nodePort, UniBaseNode node) :
+        public NodePort(NodePort nodePort, Node node) :
             this(node,
-                nodePort.FieldName,
+                nodePort.ItemName,
                 nodePort.Direction,
                 nodePort.ConnectionType,
                 nodePort.ShowBackingValue,
@@ -85,9 +86,9 @@
             
         }
 
-        public NodePort(UniBaseNode node,IPortData portData) : 
+        public NodePort(Node node,IPortData portData) : 
             this(node,
-                portData.FieldName,
+                portData.ItemName,
                 portData.Direction,
                 portData.ConnectionType,
                 portData.ShowBackingValue,
@@ -97,7 +98,7 @@
         /// Construct a dynamic port. Dynamic ports are not forgotten on reimport,
         /// and is ideal for runtime-created ports.
         /// </summary>
-        public NodePort(UniBaseNode node,
+        public NodePort(Node node,
             string fieldName,
             Type type,
             PortIO direction = PortIO.Input,
@@ -109,7 +110,7 @@
 
 
         public NodePort(
-            UniBaseNode node,
+            Node node,
             string fieldName,
             PortIO direction = PortIO.Input,
             ConnectionType connectionType = ConnectionType.Multiple,
@@ -144,13 +145,11 @@
                     source.ValueTypes.Any(to.Value.IsValidPortValueType),
             };
 
-        public ulong Id => _id = _id == 0 ? UpdateId() : _id;
+        public int Id => _id = _id == 0 ? UpdateId() : _id;
 
         public bool InstancePortList => instancePortList;
 
         public IReadOnlyList<Type> ValueTypes => _portValue.ValueTypes;
-
-        public bool Dynamic => isDynamic;
 
         public int ConnectionCount => connections.Count;
 
@@ -175,14 +174,10 @@
 
         public bool IsInput  => Direction == PortIO.Input;
         public bool IsOutput => Direction == PortIO.Output;
-
-        public string FieldName => _fieldName;
-
         public string ItemName => _fieldName;
-        
         public ShowBackingValue ShowBackingValue => _showBackingValue;
 
-        public UniBaseNode Node {
+        public Node Node {
             get => _node;
             set {
                 if (_node == value)
@@ -194,7 +189,7 @@
 
         public Type ValueType => _portValue.ValueTypes.FirstOrDefault();
 
-        public ILifeTime LifeTime => _lifetime.LifeTime;
+        public ILifeTime LifeTime => lifeTime;
 
         #endregion
 
@@ -202,40 +197,43 @@
 
         public void SetPortData(IPortData portData)
         {
-            _fieldName = portData.FieldName;
+            _fieldName = portData.ItemName;
             _direction = portData.Direction;
             _connectionType = portData.ConnectionType;
             _showBackingValue = portData.ShowBackingValue;
             _portValue.SetValueTypeFilter(portData.ValueTypes);
         }
 
-        public bool HasValue => _portValue.HasValue;
-
-        public void Publish<T>(T message) => _portValue.Publish(message);
-
-        public IDisposable Bind(IMessagePublisher publisher) => _portValue.Bind(publisher);
-
-        public IObservable<T> Receive<T>() => GetObservable<T>();
-
         #endregion
 
         public void Initialize()
         {
-            _lifetime = _lifetime ?? new LifeTimeDefinition();
-            _lifetime.Release();
-            _portValue.Initialize(_fieldName, _lifetime.LifeTime);
+
+            if(lifetimeDLifeTimeDefinition != null && lifetimeDLifeTimeDefinition.IsTerminated == false)
+                return;
             
-            BindToConnectedSources(_portValue);
+            GameLog.Log($"PORT {_node.ItemName}:{ItemName} : Initialize");
+            
+            //initialize port lifetime
+            lifetimeDLifeTimeDefinition = lifetimeDLifeTimeDefinition ?? new LifeTimeDefinition();
+            lifeTime = lifetimeDLifeTimeDefinition.LifeTime;
+            //initialize port value
+            _portValue.Initialize(_fieldName);
+            //bind port value to port lifetime
+            lifeTime.AddDispose(_portValue);
         }
 
+        /// <summary>
+        /// terminate Port lifetime, release resources
+        /// </summary>
         public void Release()
         {
-            _lifetime.Terminate();
+            lifetimeDLifeTimeDefinition.Terminate();
         }
 
         #region node methods
 
-        public ulong UpdateId() => _id = _node.Graph.GetId();
+        public int UpdateId() => _id = _node.Graph.GetId();
 
         /// <summary> Checks all connections for invalid references, and removes them. </summary>
         public void VerifyConnections()
@@ -262,7 +260,7 @@
             if (connections == null) connections = new List<PortConnection>();
 
             if (!ConnectionsValidators.All(x => x(this, port))) {
-                GameLog.LogError($"{_node.Graph.name}:{_node.name}:{FieldName} Connection Error. Validation Failed");
+                GameLog.LogError($"{_node.Graph.name}:{_node.name}:{ItemName} Connection Error. Validation Failed");
                 return;
             }
 
@@ -288,7 +286,6 @@
                 var port = GetConnection(i);
                 if (port != null) result.Add(port);
             }
-
             return result;
         }
 
@@ -469,7 +466,7 @@
         }
 
         /// <summary> Swap connected nodes from the old list with nodes from the new list </summary>
-        public void Redirect(List<UniBaseNode> oldNodes, List<UniBaseNode> newNodes)
+        public void Redirect(List<Node> oldNodes, List<Node> newNodes)
         {
             foreach (var connection in connections) {
                 var index                       = oldNodes.IndexOf(connection.node);
@@ -480,7 +477,7 @@
         #endregion
 
         #region private methods
-
+        
         /// <summary>
         /// TODO MOVE TO  GRAPH RULES SO
         /// </summary>
@@ -507,25 +504,7 @@
         {
             return _portValue.Receive<TValue>();
         }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void BindToConnectedSources(IMessagePublisher publisher)
-        {
-            //data source connections allowed only for input ports
-            if (_direction != PortIO.Input) {
-                return;
-            }
-
-            for (var i = 0; i < connections.Count; i++) {
-                var connection = connections[i];
-                var port       = connection.Port;
-                if(port.Direction == PortIO.Input || port.Id == Id)
-                    continue;
-                connection.Port.Bind(publisher).
-                    AddTo(LifeTime);
-            }
-        }
-
+        
         #endregion
     }
 }

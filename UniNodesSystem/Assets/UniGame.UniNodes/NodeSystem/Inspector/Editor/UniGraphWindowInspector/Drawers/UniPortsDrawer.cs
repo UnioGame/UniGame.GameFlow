@@ -23,7 +23,7 @@
             this.styleSelector = styleProvider;
         }
         
-        public bool Update(INodeEditorData editor, UniBaseNode baseNode)
+        public bool Update(INodeEditorData editor, Node baseNode)
         {
             _drawedPorts.Clear();
             

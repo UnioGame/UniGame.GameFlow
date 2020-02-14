@@ -20,7 +20,7 @@
 
     [HideNode]
     [Serializable]
-    public abstract class UniNode : UniBaseNode, IUniNode
+    public abstract class UniNode : Node, IUniNode
     {       
         #region inspector fields
 
@@ -32,17 +32,16 @@
         
         #region private fields
 
-        [NonSerialized] protected HashSet<INodePort> portValues = new HashSet<INodePort>();
+        protected HashSet<INodePort> portValues = new HashSet<INodePort>();
         
-        [NonSerialized] protected List<ILifeTimeCommand> commands = 
+        protected List<ILifeTimeCommand> commands = 
             new List<ILifeTimeCommand>();
 
-        [NonSerialized] private LifeTimeDefinition lifeTimeDefinition = 
-            new LifeTimeDefinition();
+        private LifeTimeDefinition lifeTimeDefinition = new LifeTimeDefinition();
 
-        [NonSerialized] private bool isInitialized;
+        private bool isActive = false;
 
-        [NonSerialized] private bool isActive = false;
+        protected ILifeTime lifeTime;
 
         #endregion
 
@@ -55,7 +54,7 @@
 
         public ILifeTime LifeTime => lifeTimeDefinition.LifeTime;
 
-        public IReadOnlyCollection<INodePort> PortValues => portValues = (portValues ?? new HashSet<INodePort>());
+        public IReadOnlyCollection<INodePort> PortValues => portValues;
 
         #endregion
 
@@ -64,23 +63,26 @@
         public void Initialize()
         {
             //check initialization status
-            if (isInitialized)
+            if (lifeTime != null && lifeTime.IsTerminated == false)
                 return;
 
-            portValues = new HashSet<INodePort>();
+            GameLog.Log($"NODE {ItemName} : Initialize");
+
+            //restart lifetime
+            lifeTimeDefinition = lifeTimeDefinition ?? new LifeTimeDefinition();
+            lifeTime = lifeTimeDefinition.LifeTime;
+            portValues = portValues ?? new HashSet<INodePort>();
             
             //initialize ports
-            foreach (var nodePort in Ports) {
-                nodePort.Initialize();
-            }
-            
-            isInitialized = true;
-            
+            InitializePorts(lifeTime);
             //custom node initialization
             OnInitialize();
             //initialize all node commands
             InitializeCommands();
-        }
+
+            lifeTime.AddCleanUpAction(() => isActive = false);
+            lifeTime.AddCleanUpAction(() => portValues.Clear());
+        }    
 
         public bool AddPortValue(INodePort portValue)
         {
@@ -99,7 +101,7 @@
         /// </summary>
         public void Exit()
         {
-            isActive = false;
+            GameLog.Log($"NODE {ItemName} : Exit");
             lifeTimeDefinition.Terminate();
         }
 
@@ -112,11 +114,9 @@
             if (isActive) {
                 return;
             }
-
+            GameLog.Log($"NODE {ItemName} : Execute");
             //mark as active
             isActive = true;
-            //restart lifetime
-            lifeTimeDefinition.Release();
             //initialize
             Initialize();
             //execute all node commands
@@ -164,10 +164,28 @@
         }
 
         /// <summary>
+        /// initialize ports before execution
+        /// </summary>
+        /// <param name="portsLifeTime"></param>
+        private void InitializePorts(ILifeTime portsLifeTime)
+        {
+            //initialize ports
+            for (var i = 0; i < Ports.Count; i++) {
+                var nodePort = Ports[i];
+                nodePort.Initialize();
+                portsLifeTime.AddCleanUpAction(nodePort.Release);
+                
+                if(Application.isPlaying)
+                    AddPortValue(nodePort);
+            }
+        }
+        
+        /// <summary>
         /// finish node life time
         /// </summary>
         private void OnDisable() => Exit();
 
+        
 #region inspector call
 
         [Conditional("UNITY_EDITOR")]

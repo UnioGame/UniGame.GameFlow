@@ -26,7 +26,7 @@
 		{
 			var changed = false;
 			var nodes = graph.nodes;
-			foreach (var node in graph.GetComponents<UniBaseNode>()) 
+			foreach (var node in graph.GetComponents<Node>()) 
 			{
 				if (nodes.Contains(node) != false || graph == node) {
 					continue;

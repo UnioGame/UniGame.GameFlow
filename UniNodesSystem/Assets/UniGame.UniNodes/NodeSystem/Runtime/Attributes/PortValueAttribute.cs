@@ -26,7 +26,7 @@
             this.showBackingValue = backingValue;
         }
         
-        public string FieldName => fieldName;
+        public string ItemName => fieldName;
 
         public PortIO Direction => direction;
 

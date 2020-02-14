@@ -26,7 +26,7 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nod
             var portData = attributes.FirstOrDefault(x => x is IPortData) as IPortData;
             if (portData == null) return new NodeFieldData();
 
-            var name          = string.IsNullOrEmpty(portData.FieldName) ? portName : portData.FieldName;
+            var name          = string.IsNullOrEmpty(portData.ItemName) ? portName : portData.ItemName;
             var direction     = portData.Direction;
             var showBackValue = portData.ShowBackingValue;
             var connection    = portData.ConnectionType;

@@ -22,7 +22,7 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
 
         private bool IsHoveringReroute => hoveredReroute.port != null;
 
-        private UniBaseNode hoveredNode;
+        private Node hoveredNode;
         [NonSerialized] private NodePort hoveredPort;
         [NonSerialized] private NodePort draggedOutput;
         [NonSerialized] private NodePort draggedOutputTarget;
@@ -110,16 +110,16 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
                         if (currentActivity == NodeActivity.DragNode)
                         {
                             // Holding ctrl inverts grid snap
-                            var gridSnap = NodeEditorPreferences.GetSettings().gridSnap;
+                            var gridSnap = this.GetSettings().gridSnap;
                             if (e.control) gridSnap = !gridSnap;
 
                             var mousePos = WindowToGridPosition(e.mousePosition);
                             // Move selected nodes with offset
                             for (var i = 0; i < Selection.objects.Length; i++)
                             {
-                                if (Selection.objects[i] is UniBaseNode)
+                                if (Selection.objects[i] is Node)
                                 {
-                                    var node = Selection.objects[i] as UniBaseNode;
+                                    var node = Selection.objects[i] as Node;
                                     var initial = node.position;
                                     node.position = mousePos + dragOffset[i];
                                     if (gridSnap)
@@ -309,14 +309,14 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
                             draggedOutput = null;
                             draggedOutputTarget = null;
                             EditorUtility.SetDirty(ActiveGraph);
-                            if (NodeEditorPreferences.GetSettings().autoSave) AssetDatabase.SaveAssets();
+                            if (this.GetSettings().autoSave) AssetDatabase.SaveAssets();
                         }
                         else if (currentActivity == NodeActivity.DragNode)
                         {
-                            var nodes = Selection.objects.Where(x => x is UniBaseNode)
-                                .Select(x => x as UniBaseNode);
+                            var nodes = Selection.objects.Where(x => x is Node)
+                                .Select(x => x as Node);
                             foreach (var node in nodes) EditorUtility.SetDirty(node);
-                            if (NodeEditorPreferences.GetSettings().autoSave) AssetDatabase.SaveAssets();
+                            if (this.GetSettings().autoSave) AssetDatabase.SaveAssets();
                         }
                         else if (!IsHoveringNode)
                         {
@@ -326,7 +326,7 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
                                 EditorGUI.FocusTextInControl(null);
                             }
 
-                            if (NodeEditorPreferences.GetSettings().autoSave) AssetDatabase.SaveAssets();
+                            if (this.GetSettings().autoSave) AssetDatabase.SaveAssets();
                         }
 
                         // If click node header, select it.
@@ -422,9 +422,9 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
             // Selected nodes
             for (var i = 0; i < Selection.objects.Length; i++)
             {
-                if (Selection.objects[i] is UniBaseNode)
+                if (Selection.objects[i] is Node)
                 {
-                    var node = Selection.objects[i] as UniBaseNode;
+                    var node = Selection.objects[i] as Node;
                     dragOffset[i] = node.position - WindowToGridPosition(current.mousePosition);
                 }
             }
@@ -451,17 +451,22 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
         
         public void CreateNode(Type type,string nodeName, Vector2 position)
         {
+            if(!PrefabUtility.IsPartOfPrefabInstance(ActiveGraph))
+            {
+                Debug.LogError($"IsPartOfPrefabInstance {ActiveGraph.name}");
+            }
+            if(!PrefabUtility.IsAnyPrefabInstanceRoot(ActiveGraph.gameObject))
+            {
+                Debug.LogError($"IsAnyPrefabInstanceRoot {ActiveGraph.name}");
+            }
+            
             var node = ActiveGraph.AddNode(type);
             node.position = position;
             node.nodeName = nodeName;
             node.transform.parent = ActiveGraph.transform;
-
-            if (NodeEditorPreferences.GetSettings().autoSave)
-            {
-                Save();
-            }
-
-            Repaint();
+            
+            Save();
+            
         }
 
         /// <summary> Remove nodes in the graph in Selection.objects</summary>
@@ -477,7 +482,7 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
             selectedReroutes.Clear();
             foreach (var item in Selection.objects)
             {
-                if (item is UniBaseNode node)
+                if (item is Node node)
                 {
                     graphEditor.RemoveNode(node);
                 }
@@ -487,15 +492,15 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
         /// <summary> Initiate a rename on the currently selected node </summary>
         public void RenameSelectedNode()
         {
-            if (Selection.objects.Length == 1 && Selection.activeObject is UniBaseNode)
+            if (Selection.objects.Length == 1 && Selection.activeObject is Node)
             {
-                var node = Selection.activeObject as UniBaseNode;
+                var node = Selection.activeObject as Node;
                 NodeEditor.GetEditor(node).InitiateRename();
             }
         }
 
         /// <summary> Draw this node on top of other nodes by placing it last in the graph.nodes list </summary>
-        public void MoveNodeToTop(UniBaseNode node)
+        public void MoveNodeToTop(Node node)
         {
             int index;
             while ((index = ActiveGraph.nodes.IndexOf(node)) != ActiveGraph.nodes.Count - 1)
@@ -509,12 +514,12 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
         public void DublicateSelectedNodes()
         {
             var newNodes = new Object[Selection.objects.Length];
-            var substitutes = new Dictionary<UniBaseNode, UniBaseNode>();
+            var substitutes = new Dictionary<Node, Node>();
             for (var i = 0; i < Selection.objects.Length; i++)
             {
-                if (Selection.objects[i] is UniBaseNode)
+                if (Selection.objects[i] is Node)
                 {
-                    var srcNode = Selection.objects[i] as UniBaseNode;
+                    var srcNode = Selection.objects[i] as Node;
                     if (srcNode.Graph != ActiveGraph) continue; // ignore nodes selected in another graph
                     var newNode = graphEditor.CopyNode(srcNode);
                     substitutes.Add(srcNode, newNode);
@@ -526,9 +531,9 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
             // Walk through the selected nodes again, recreate connections, using the new nodes
             for (var i = 0; i < Selection.objects.Length; i++)
             {
-                if (Selection.objects[i] is UniBaseNode)
+                if (Selection.objects[i] is Node)
                 {
-                    var srcNode = Selection.objects[i] as UniBaseNode;
+                    var srcNode = Selection.objects[i] as Node;
                     if (srcNode.Graph != ActiveGraph) continue; // ignore nodes selected in another graph
                     foreach (var port in srcNode.Ports)
                     {
@@ -539,12 +544,12 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
                                 ? port
                                 : port.GetConnection(c);
 
-                            UniBaseNode newNodeIn, newNodeOut;
+                            Node newNodeIn, newNodeOut;
                             if (substitutes.TryGetValue(inputPort.Node, out newNodeIn) &&
                                 substitutes.TryGetValue(outputPort.Node, out newNodeOut))
                             {
-                                inputPort = newNodeIn.GetInputPort(inputPort.FieldName);
-                                outputPort = newNodeOut.GetOutputPort(outputPort.FieldName);
+                                inputPort = newNodeIn.GetInputPort(inputPort.ItemName);
+                                outputPort = newNodeOut.GetOutputPort(outputPort.ItemName);
                             }
 
                             if (!inputPort.IsConnectedTo(outputPort as NodePort)) {
@@ -600,7 +605,7 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
             }
         }
 
-        bool IsHoveringTitle(UniBaseNode node)
+        bool IsHoveringTitle(Node node)
         {
             var mousePos = Event.current.mousePosition;
             //Get node position

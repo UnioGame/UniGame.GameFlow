@@ -12,7 +12,7 @@
 #if ODIN_INSPECTOR
         [Sirenix.OdinInspector.InlineEditor]
 #endif
-        [SerializeField] public UniBaseNode node;
+        [SerializeField] public Node node;
 
         [NonSerialized] private NodePort port;
         
@@ -27,7 +27,7 @@
         {
             this.port = port;
             node      = port.Node;
-            fieldName = port.FieldName;
+            fieldName = port.ItemName;
         }
 
         /// <summary> Returns the port that this <see cref="PortConnection"/> points to </summary>

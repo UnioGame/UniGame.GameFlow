@@ -2,14 +2,14 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nod
 {
     using System;
     using System.Collections.Generic;
+    using UniCore.Runtime.Interfaces;
     using UniNodeSystem.Runtime.Core;
     using UniNodeSystem.Runtime.Interfaces;
     using UnityEngine;
 
-    public interface INodePort
+    public interface INodePort : IUnique , INamedItem
     {
-        ulong Id { get; }
-        
+
         int ConnectionCount { get; }
 
         /// <summary> Return the first non-null connection </summary>
@@ -24,11 +24,9 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nod
         /// <summary> Is this port connected to anytihng? </summary>
         bool IsConnected { get; }
 
-        string FieldName { get; }
+        Node Node { get; set; }
 
-        UniBaseNode Node { get; set; }
-
-        ulong UpdateId();
+        int UpdateId();
 
         /// <summary> Checks all connections for invalid references, and removes them. </summary>
         void VerifyConnections();
@@ -67,6 +65,6 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nod
         void MoveConnections(NodePort targetPort);
 
         /// <summary> Swap connected nodes from the old list with nodes from the new list </summary>
-        void Redirect(List<UniBaseNode> oldNodes, List<UniBaseNode> newNodes);
+        void Redirect(List<Node> oldNodes, List<Node> newNodes);
     }
 }

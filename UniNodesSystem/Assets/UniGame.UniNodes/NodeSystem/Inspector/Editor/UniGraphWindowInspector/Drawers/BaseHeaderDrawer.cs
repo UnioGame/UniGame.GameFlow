@@ -9,7 +9,7 @@
 
     public class BaseHeaderDrawer : INodeEditorHandler
     {
-        public virtual bool Update(INodeEditorData editor, UniBaseNode node)
+        public virtual bool Update(INodeEditorData editor, Node node)
         {
             var target = node;
             var title = target.GetName();
@@ -31,7 +31,7 @@
                     NodeEditor.Renaming = 2;
                 }
 
-                target.nodeName = EditorGUILayout.TextField(target.name, NodeEditorResources.styles.nodeHeader,
+                target.nodeName = EditorGUILayout.TextField(target.ItemName, NodeEditorResources.styles.nodeHeader,
                     GUILayout.Height(30));
                 
                 if (!EditorGUIUtility.editingTextField)

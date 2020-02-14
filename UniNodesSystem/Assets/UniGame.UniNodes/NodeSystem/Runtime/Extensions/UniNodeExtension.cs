@@ -28,7 +28,7 @@
         public static Func<string, string[]> portNameCache = MemorizeTool.Create((string x) => new string[2]);
         
         public static List<TTarget> GetOutputConnections<TTarget>(this INode node)
-            where TTarget :UniBaseNode
+            where TTarget :Node
         {
             var items = ClassPool.Spawn<List<TTarget>>();
             
@@ -102,7 +102,7 @@
         }
         
         public static List<INodePort> GetConnectionToNodes<TTarget>(this INodePort port)
-            where TTarget :UniBaseNode
+            where TTarget :Node
         {
             
             var items = ClassPool.Spawn<List<INodePort>>();
@@ -143,7 +143,7 @@
         }
 
         public static TValue GetConnectedNode<TValue>(this INodePort port)
-            where TValue :UniBaseNode
+            where TValue :Node
         {
             if (port == null || !port.IsConnected)
             {
@@ -182,7 +182,7 @@
                 return null;
             
             return node.UpdatePortValue(
-                portData.FieldName, 
+                portData.ItemName, 
                 portData.Direction, 
                 portData.ConnectionType,
                 ShowBackingValue.Always, 

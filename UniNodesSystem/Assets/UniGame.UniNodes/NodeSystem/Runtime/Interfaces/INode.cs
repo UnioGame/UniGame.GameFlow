@@ -7,7 +7,7 @@ namespace UniGreenModules.UniNodeSystem.Runtime.Interfaces
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Core;
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Interfaces;
 
-    public interface INode : IImmutableNode , INamedItem
+    public interface INode : IImmutableNode
     {
   
         /// <summary> Remove an instance port from the node </summary>

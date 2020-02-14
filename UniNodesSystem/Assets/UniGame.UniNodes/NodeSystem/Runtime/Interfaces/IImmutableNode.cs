@@ -3,12 +3,11 @@ namespace UniGreenModules.UniNodeSystem.Runtime.Interfaces
     using System;
     using System.Collections.Generic;
     using Core;
+    using UniCore.Runtime.Interfaces;
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Core;
 
-    public interface IImmutableNode
+    public interface IImmutableNode : IUnique, INamedItem
     {
-        ulong Id { get; }
-
         IReadOnlyList<NodePort> Ports { get; }
 
         /// <summary> Iterate over all outputs on this node. </summary>

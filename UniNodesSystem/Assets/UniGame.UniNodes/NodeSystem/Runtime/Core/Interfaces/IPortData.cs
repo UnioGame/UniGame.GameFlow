@@ -6,7 +6,7 @@
 
     public interface IPortData
     {
-        string              FieldName        { get; }
+        string              ItemName        { get; }
         PortIO              Direction        { get; }
         ConnectionType      ConnectionType   { get; }
         ShowBackingValue    ShowBackingValue { get; }

@@ -16,14 +16,14 @@
     /// <summary> Contains GUI methods </summary>
     public partial class NodeEditorWindow
     {
-        public  NodeGraphEditor   graphEditor;
-        private List<Object>      selectionCache;
-        private List<UniBaseNode> culledNodes;
+        public  NodeGraphEditor graphEditor;
+        private List<Object>    selectionCache;
+        private List<Node>      culledNodes;
 
-        private List<UniBaseNode> _regularNodes  = new List<UniBaseNode>();
-        private List<UniBaseNode> _selectedNodes = new List<UniBaseNode>();
-        private HashSet<ulong> idHash = new HashSet<ulong>();
-        
+        private List<Node>   _regularNodes  = new List<Node>();
+        private List<Node>   _selectedNodes = new List<Node>();
+        private HashSet<int> idHash         = new HashSet<int>();
+
         private int topPadding => isDocked() ? 19 : 22;
 
         private void OnGUI()
@@ -41,6 +41,8 @@
             graphEditor          = NodeGraphEditor.GetEditor(ActiveGraph);
             graphEditor.position = position;
 
+            VerifyNodes();
+
             Controls();
 
             DrawGrid(position, Zoom, PanOffset);
@@ -53,14 +55,17 @@
 
             graphEditor.OnGUI();
 
-            VerifyNodes();
-            
             GUI.matrix = m;
         }
 
         public void VerifyNodes()
         {
+            idHash = idHash ?? new HashSet<int>();
             idHash.Clear();
+            if (ActiveGraph == null) return;
+
+            ActiveGraph.nodes.RemoveAll(x => x == null);
+
             foreach (var node in ActiveGraph.nodes) {
                 if (idHash.Add(node.Id) == false) {
                     node.UpdateId();
@@ -158,8 +163,8 @@
         {
             var contextMenu = new GenericMenu();
             // If only one node is selected
-            if (Selection.objects.Length == 1 && Selection.activeObject is UniBaseNode) {
-                var node = Selection.activeObject as UniBaseNode;
+            if (Selection.objects.Length == 1 && Selection.activeObject is Node) {
+                var node = Selection.activeObject as Node;
                 contextMenu.AddItem(new GUIContent("Move To Top"), false, () => MoveNodeToTop(node));
                 contextMenu.AddItem(new GUIContent("Rename"), false, RenameSelectedNode);
             }
@@ -168,8 +173,8 @@
             contextMenu.AddItem(new GUIContent("Remove"), false, RemoveSelectedNodes);
 
             // If only one node is selected
-            if (Selection.objects.Length == 1 && Selection.activeObject is UniBaseNode) {
-                var node = Selection.activeObject as UniBaseNode;
+            if (Selection.objects.Length == 1 && Selection.activeObject is Node) {
+                var node = Selection.activeObject as Node;
                 AddCustomContextMenuItems(contextMenu, node);
             }
 
@@ -223,7 +228,7 @@
             startPoint = GridToWindowPosition(startPoint);
             endPoint   = GridToWindowPosition(endPoint);
 
-            switch (NodeEditorPreferences.GetSettings().noodleType) {
+            switch (this.GetSettings().noodleType) {
                 case NodeEditorNoodleType.Curve:
                     var startTangent = startPoint;
                     if (startPoint.x < endPoint.x) startTangent.x = Mathf.LerpUnclamped(startPoint.x, endPoint.x, 0.7f);
@@ -288,16 +293,15 @@
                 // Draw full connections and output > reroute
                 foreach (var output in node.Outputs) {
                     //Needs cleanup. Null checks are ugly
-                    var item = _portConnectionPoints.
-                        FirstOrDefault(x => x.Key == output.Id);
-                    
+                    var item = _portConnectionPoints.FirstOrDefault(x => x.Key == output.Id);
+
                     if (item.Key == 0) continue;
 
                     if (output == null)
                         continue;
                     var types           = output.ValueTypes;
                     var fromRect        = item.Value;
-                    var connectionColor = graphEditor.GetTypeColor(types.FirstOrDefault());
+                    var connectionColor = NodeEditorPreferences.GetTypeColor(types.FirstOrDefault());
 
                     for (var k = 0; k < output.ConnectionCount; k++) {
                         var input = output.GetConnection(k);
@@ -308,7 +312,7 @@
                         if (!input.IsConnectedTo(output)) {
                             input.Connect(output);
                         }
-                        
+
                         Rect toRect;
                         if (!_portConnectionPoints.TryGetValue(input.Id, out toRect)) continue;
 
@@ -336,7 +340,7 @@
 
                             // Draw selected reroute points with an outline
                             if (selectedReroutes.Contains(rerouteRef)) {
-                                GUI.color = NodeEditorPreferences.GetSettings().highlightColor;
+                                GUI.color = this.GetSettings().highlightColor;
                                 GUI.DrawTexture(rect, NodeEditorResources.dotOuter);
                             }
 
@@ -388,6 +392,9 @@
 
                 EditorDrawerUtils.DrawButton("Refresh", Refresh,
                     GUILayout.Height(20), GUILayout.Width(200));
+
+                EditorDrawerUtils.DrawButton("Ping", PingInEditor,
+                    GUILayout.Height(20), GUILayout.Width(200));
             }, GUILayout.Height(100));
         }
 
@@ -421,7 +428,7 @@
             var selectionBox = new Rect(boxStartPos, boxSize);
 
             if (activeEvent.type == EventType.Layout)
-                culledNodes = new List<UniBaseNode>();
+                culledNodes = new List<Node>();
 
             var nodes = ActiveGraph.nodes;
 
@@ -462,7 +469,7 @@
                 Selection.objects = preSelection.ToArray();
         }
 
-        private void DrawNodes(List<UniBaseNode> nodes, NodeEditorGuiState state)
+        private void DrawNodes(List<Node> nodes, NodeEditorGuiState state)
         {
             for (var n = 0; n < nodes.Count; n++) {
                 // Skip null nodes. The user could be in the process of renaming scripts, so removing them at this point is not advisable.
@@ -482,7 +489,7 @@
             //Active node is hashed before and after node GUI to detect changes
             var        nodeHash   = 0;
             MethodInfo onValidate = null;
-            if (Selection.activeObject != null && Selection.activeObject is UniBaseNode) {
+            if (Selection.activeObject != null && Selection.activeObject is Node) {
                 onValidate = Selection.activeObject.GetType().GetMethod("OnValidate");
                 if (onValidate != null) nodeHash = Selection.activeObject.GetHashCode();
             }
@@ -498,7 +505,7 @@
             }
         }
 
-        private void DrawNode(UniBaseNode node, NodeEditorGuiState state)
+        private void DrawNode(Node node, NodeEditorGuiState state)
         {
             switch (state.EventType) {
                 case EventType.Ignore:
@@ -530,7 +537,7 @@
             DrawNodeArea(node, state);
         }
 
-        private void DrawNodeArea(UniBaseNode node, NodeEditorGuiState state)
+        private void DrawNodeArea(Node node, NodeEditorGuiState state)
         {
             var nodeEditor = NodeEditor.GetEditor(node);
             //Get node position
@@ -543,7 +550,7 @@
 
         private void DrawNodeArea(
             NodeEditor nodeEditor,
-            UniBaseNode node,
+            Node node,
             Vector2 nodePos,
             Rect rectArea,
             NodeEditorGuiState state)
@@ -552,14 +559,14 @@
 
             GUILayout.BeginArea(rectArea);
 
-            this.WrapDrawer(() => DrawNodeEditorArea(nodeEditor, node, state),true);
-            this.WrapDrawer(() => DrawNodePorts(node, nodePos, state),true);
+            this.WrapDrawer(() => DrawNodeEditorArea(nodeEditor, node, state), true);
+            this.WrapDrawer(() => DrawNodePorts(node, nodePos, state), true);
 
             GUILayout.EndArea();
         }
 
         private void DrawNodePorts(
-            UniBaseNode node,
+            Node node,
             Vector2 nodePos,
             NodeEditorGuiState state)
         {
@@ -601,7 +608,7 @@
             }
         }
 
-        private void DrawNodeEditorArea(NodeEditor nodeEditor, UniBaseNode node, NodeEditorGuiState state)
+        private void DrawNodeEditorArea(NodeEditor nodeEditor, Node node, NodeEditorGuiState state)
         {
             var eventType  = state.EventType;
             var stateEvent = state.Event;
@@ -622,7 +629,7 @@
                 style.padding          = new RectOffset();
                 GUI.color              = nodeEditor.GetTint();
                 GUILayout.BeginVertical(style);
-                GUI.color = NodeEditorPreferences.GetSettings().highlightColor;
+                GUI.color = this.GetSettings().highlightColor;
 
                 //TODO fix style
                 GUILayout.BeginVertical(new GUIStyle(highlightStyle));
@@ -657,7 +664,7 @@
                 else NodeSizes.Add(node, size);
 
                 foreach (var portPairs in NodeEditor.PortPositions) {
-                    var id = portPairs.Key.Id;
+                    var id            = portPairs.Key.Id;
                     var portHandlePos = portPairs.Value;
                     portHandlePos += node.position;
                     var rect = new Rect(portHandlePos.x - 8, portHandlePos.y - 8, 16, 16);
@@ -669,7 +676,7 @@
             if (selected) GUILayout.EndVertical();
         }
 
-        private bool ShouldBeCulled(UniBaseNode node)
+        private bool ShouldBeCulled(Node node)
         {
             var nodePos = GridToWindowPositionNoClipped(node.position);
             if (nodePos.x / _zoom > position.width) return true;  // Right

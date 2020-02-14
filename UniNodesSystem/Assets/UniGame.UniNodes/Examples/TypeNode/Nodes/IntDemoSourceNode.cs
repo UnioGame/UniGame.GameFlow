@@ -39,8 +39,8 @@ namespace UniGreenModules.UniGameSystems.Examples.ServiceNode
             
             var wait = new WaitForSeconds(updateDelay);
             while (isActiveAndEnabled) {
-                intPort.Publish(increment);
-                floatPort.Publish(Time.deltaTime);
+                intPort.Value.Publish(increment);
+                floatPort.Value.Publish(Time.deltaTime);
                 yield return wait;
             }
         }

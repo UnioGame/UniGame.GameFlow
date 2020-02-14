@@ -2,11 +2,17 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Runtime.CompilerServices;
     using Runtime.Core;
     using Runtime.Extensions;
     using Runtime.Interfaces;
+    using Sirenix.Utilities;
+    using UniCore.Runtime.ObjectPool.Runtime.Extensions;
+    using UniCore.Runtime.ProfilerTools;
     using UniCore.Runtime.Rx.Extensions;
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Attributes;
+    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Interfaces;
+    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Nodes;
     using UniRx;
     using UnityEngine;
 
@@ -50,7 +56,6 @@
 
         protected override void OnInitialize()
         {
-            
             base.OnInitialize();
             
             InitializeGraphNodes();
@@ -63,8 +68,6 @@
 
             LifeTime.AddCleanUpAction(() => ActiveGraphs.Remove(this));
 
-            allNodes.ForEach( InitializeNode );
-
             for (var i = 0; i < cancelationNodes.Count; i++) {
                 var x = cancelationNodes[i];
                 x.PortValue.PortValueChanged.
@@ -72,16 +75,41 @@
                     AddTo(LifeTime);
             }
                       
-            inputs.ForEach(x => 
-                GetPort(x.ItemName).
-                Bind(x.PortValue).
-                AddTo(LifeTime) );
-            
-            outputs.ForEach(x => 
-                GetPort(x.ItemName).
-                Bind(x.PortValue).
-                AddTo(LifeTime) );
+            inputs.ForEach(x => BindConnections(this,GetPort(x.ItemName),x.PortValue) );
+            outputs.ForEach(x => BindConnections(this,GetPort(x.ItemName),x.PortValue));
 
+            for (int i = 0; i < allNodes.Count; i++) {
+                var node = allNodes[i];
+                node.Ports.ForEach(x => BindConnections(node, x, x.Value));
+            }
+            
+            allNodes.ForEach( x => x.Execute());
+
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void BindConnections(IUniNode node,INodePort sourcePort,IMessagePublisher publisher)
+        {
+            GameLog.Log($"{node.ItemName}:{sourcePort.ItemName} : BindToConnectedSources");
+            //data source connections allowed only for input ports
+            if (sourcePort.Direction != PortIO.Input) {
+                return;
+            }
+
+            var connections = sourcePort.GetConnections();
+            
+            for (var i = 0; i < connections.Count; i++) {
+                var connection = connections[i];
+                var port       = connection;
+                if(port.Direction == PortIO.Input || port.Id == Id)
+                    continue;
+                
+                var value = connection.Value;
+                value.Bind(publisher).
+                    AddTo(LifeTime);
+            }
+
+            connections.DespawnCollection();
         }
 
         private void InitializeGraphNodes()
@@ -107,10 +135,13 @@
                     cancelationNodes.Add(cancelationNode);
                 }
 
+                uniNode.Initialize();
+                lifeTime.AddCleanUpAction(uniNode.Exit);
+                
                 allNodes.Add(uniNode);
             }
         }
-
+        
         private void UpdatePortNode(IUniNode uniNode)
         {
             //register input/output nodes
@@ -127,15 +158,6 @@
             container.Add(graphPortNode);
 
         }
-
-
-        private void InitializeNode(IUniNode node)
-        {
-            LifeTime.AddCleanUpAction(node.Exit);
-                
-            node.Execute();
-        }
-        
 
         private void OnDisable() => Dispose();
         
