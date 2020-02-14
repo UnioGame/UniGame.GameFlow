@@ -13,7 +13,7 @@
     public class NodesDictionary : SerializableDictionary<ulong, Node>
     {
     }
-
+    
     /// <summary> Base class for all node graphs </summary>
     [Serializable]
     public abstract class NodeGraph : UniNode, IDisposable

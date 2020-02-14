@@ -9,11 +9,13 @@
     using UniCore.Runtime.Rx.Extensions;
     using UniNodeSystem.Runtime.Core;
     using UniRx;
+    using UnityEngine;
 
     [CreateNodeMenu("Examples/ContextNodes/ContextSource","ContextSource")]
     public class DemoContextSourceNode : UniNode
     {
         [ReactivePort(PortIO.Output)]
+        [SerializeField]
         public ContextReactivePort contextValue = new ContextReactivePort();
         
         public EntityContext context = new EntityContext();

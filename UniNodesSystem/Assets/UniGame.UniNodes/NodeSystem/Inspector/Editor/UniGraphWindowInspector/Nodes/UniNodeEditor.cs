@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+    using System.Runtime.Serialization.Formatters;
     using BaseEditor;
     using Drawers;
     using Drawers.Interfaces;
@@ -118,17 +119,18 @@
                 var port = node.UpdatePortValue(data.PortData);
                 var value = portField.GetValue(node);
 
-                UpdateSerializedCommands(node, port, value);
+                UpdateSerializedCommands(node, port, value,portField);
             }
 
         }
 
-        public void UpdateSerializedCommands(UniNode node,IPortValue port, object value)
+        public void UpdateSerializedCommands(UniNode node,IPortValue port, object value, FieldInfo valueField)
         {
 
             switch (value) {
                 case IReactiveSource reactiveSource:
                     reactiveSource.Bind(node.Graph,node.Id,port.ItemName);
+                    //valueField.SetValue(node,reactiveSource);
                     return;
             }
 

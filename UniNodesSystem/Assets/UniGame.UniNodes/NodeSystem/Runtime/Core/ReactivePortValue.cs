@@ -25,9 +25,6 @@
         public int nodeId;
         
         [SerializeField] 
-#if ODIN_INSPECTOR
-        [Sirenix.OdinInspector.InlineEditor()]
-#endif
         public NodeGraph graph;
 
         [SerializeField]

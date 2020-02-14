@@ -69,11 +69,6 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
 
         public static NodeEditorWindow Open(NodeGraph nodeGraph, bool replaceActive = false)
         {
-            if (PrefabUtility.IsAnyPrefabInstanceRoot(nodeGraph.gameObject) == false ||
-                PrefabUtility.IsAnyPrefabInstanceRoot(nodeGraph.gameObject) == false) {
-                GameLog.LogError($"OPEN NON INISTANCE GRAPH {nodeGraph.name}");
-            }
-
             if (!nodeGraph) return null;
 
             var window = SelectWindow(nodeGraph, replaceActive);
@@ -86,8 +81,8 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
         private static NodeEditorWindow SelectWindow(NodeGraph nodeGraph, bool replaceActive)
         {
             var window = ActiveWindows.FirstOrDefault(x => x.ActiveGraph == nodeGraph);
-            if (window) return window;
 
+            if (window) return window;
             window = ActiveWindows.FirstOrDefault(x => !x.ActiveGraph);
 
             if (window) return window;
