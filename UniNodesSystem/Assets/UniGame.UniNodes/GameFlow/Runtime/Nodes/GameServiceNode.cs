@@ -7,6 +7,7 @@
     public abstract class GameServiceNode<TService> :
         GameServiceNode<TService, TService> where TService : class, IGameService, new() { }
 
+    
     /// <summary>
     /// Base game service binder between Unity world and regular classes
     /// </summary>
