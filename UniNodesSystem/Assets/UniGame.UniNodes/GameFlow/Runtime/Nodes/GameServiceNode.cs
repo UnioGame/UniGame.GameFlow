@@ -1,11 +1,7 @@
 ﻿namespace UniGreenModules.UniGameSystems.Runtime.Nodes
 {
-    using UniCore.Runtime.Attributes;
-    using UniCore.Runtime.Interfaces;
-    using UniCore.Runtime.ProfilerTools;
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Attributes;
     using UniGameSystem.Runtime.Interfaces;
-    using UnityEngine;
 
     [HideNode]
     public abstract class GameServiceNode<TService> :
@@ -21,14 +17,6 @@
         where TServiceApi : IGameService
         where TService : class, TServiceApi, new()
     {
-        #region inspector
-
-        [Header("Service Status")]
-        [ReadOnlyValue]
-        [SerializeField]
-        private bool isReady;
-        
-        #endregion
  
         protected override TService CreateService() => service ?? new TService();
         
