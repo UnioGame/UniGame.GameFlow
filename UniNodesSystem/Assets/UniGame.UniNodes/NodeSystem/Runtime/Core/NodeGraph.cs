@@ -2,99 +2,127 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using Interfaces;
+    using UniCore.Runtime.Attributes;
+    using UniGame.Core.Runtime.DataStructure;
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Nodes;
     using UnityEngine;
 
+    [Serializable]
+    public class NodesDictionary : SerializableDictionary<ulong, Node>
+    {
+    }
+
     /// <summary> Base class for all node graphs </summary>
     [Serializable]
-    public abstract class NodeGraph : UniNode, IDisposable
+    public abstract class NodeGraph : UniNode, IDisposable , IGraphData
     {
         #region static data
 
         public static HashSet<NodeGraph> ActiveGraphs { get; } = new HashSet<NodeGraph>();
 
+        private Dictionary<int, Node> nodesCache;
+
         #endregion
 
-        [HideInInspector] [SerializeField] private ulong _uniqueId;
+        [ReadOnlyValue] [SerializeField] private int uniqueId;
 
         /// <summary> All nodes in the graph. <para/>
         /// See: <see cref="AddNode{T}"/> </summary>
         [SerializeField]
-        public List<UniBaseNode> nodes = new List<UniBaseNode>();
+        public List<Node> nodes = new List<Node>();
 
+        #region public properties
 
         public IReadOnlyList<INode> Nodes => nodes;
-        
-        public ulong GetId()
-        {
-            return ++_uniqueId;
-        }
+
+        public sealed override IGraphData Graph => this;
+
+        #endregion
 
         #region graph operations
+
+        public int GetId() => ++uniqueId;
+
+        public int UpdateId(int oldId)
+        {
+            return GetId();
+        }
         
         /// <summary> Add a node to the graph by type </summary>
-        public T AddNode<T>() where T : UniBaseNode
-        {
-            return AddNode(typeof(T)) as T;
-        }
-        
-        public T AddNode<T>(string name) where T : UniBaseNode
-        {
-            return AddNode(name,typeof(T)) as T;
-        }
+        public T AddNode<T>() where T : Node => AddNode(typeof(T)) as T;
 
-        public virtual UniBaseNode AddNode(string nodeName,Type type)
-        {
-            var childNode = new GameObject();
-            childNode.name             = type.Name;
-            childNode.transform.parent = transform;
+        public T AddNode<T>(string name) where T : Node => AddNode(name, typeof(T)) as T;
 
-            var node = childNode.AddComponent(type) as UniBaseNode;
-            if (!node) {
-                DestroyImmediate(childNode);
+        public Node GetNode(int nodeId)
+        {
+            nodesCache = nodesCache ?? new Dictionary<int, Node>();
+            if (nodesCache.Count != nodes.Count) {
+                nodesCache.Clear();
+                nodesCache = nodes.ToDictionary(x => x.Id);
             }
 
+            nodesCache.TryGetValue(nodeId, out var node);
+            return node;
+        }
+
+        
+        public new void SetGraph(NodeGraph parent)
+        {
+        }
+
+        public virtual Node AddNode(string itemName, Type type)
+        {
+            var nodeAsset = gameObject.AddComponent(type);
+            var node      = nodeAsset as Node;
+            if (node == null) {
+                DestroyImmediate(nodeAsset, true);
+                return null;
+            }
+
+            node.SetGraph(this);
+            node.graph = graph;
+            node.nodeName = itemName;
             nodes.Add(node);
-            node.graph = this;
+
             return node;
         }
 
         /// <summary> Add a node to the graph by type </summary>
-        public UniBaseNode AddNode(Type type)
-        {
-            return AddNode(type.Name, type);
-        }
+        public Node AddNode(Type type) => AddNode(type.Name, type);
 
         /// <summary> Creates a copy of the original node in the graph </summary>
-        public virtual UniBaseNode CopyNode(UniBaseNode original)
+        public virtual Node CopyNode(Node original)
         {
-            UniBaseNode node = ScriptableObject.Instantiate(original);
+            var node = Instantiate(original);
             node.UpdateId();
             node.ClearConnections();
             nodes.Add(node);
-            node.graph = this;
+            node.SetGraph(this);
             return node;
         }
 
         /// <summary> Safely remove a node and all its connections </summary>
         /// <param name="node"> The node to remove </param>
-        public void RemoveNode(UniBaseNode node)
+        public void RemoveNode(Node node)
         {
             node.ClearConnections();
             nodes.Remove(node);
-            if (Application.isPlaying) Destroy(node);
+            if (Application.isPlaying) 
+                Destroy(node);
         }
 
         /// <summary> Remove all nodes and connections from the graph </summary>
         public void Clear()
         {
             if (Application.isPlaying) {
-                for (int i = 0; i < nodes.Count; i++) {
+                for (var i = 0; i < nodes.Count; i++) {
                     Destroy(nodes[i]);
                 }
             }
 
+            nodesCache.Clear();
             nodes.Clear();
         }
 
@@ -102,19 +130,19 @@
         public NodeGraph Copy()
         {
             // Instantiate a new nodegraph instance
-            NodeGraph graph = Instantiate(this);
+            var graph = Instantiate(this);
             // Instantiate all nodes inside the graph
-            for (int i = 0; i < nodes.Count; i++) {
+            for (var i = 0; i < nodes.Count; i++) {
                 if (nodes[i] == null) continue;
-                UniBaseNode node = Instantiate(nodes[i]) as UniBaseNode;
-                node.graph     = graph;
+                var node = Instantiate(nodes[i]) as Node;
+                node.SetGraph(this);
                 graph.nodes[i] = node;
             }
 
             // Redirect all connections
-            for (int i = 0; i < graph.nodes.Count; i++) {
+            for (var i = 0; i < graph.nodes.Count; i++) {
                 if (graph.nodes[i] == null) continue;
-                foreach (NodePort port in graph.nodes[i].Ports) {
+                foreach (var port in graph.nodes[i].Ports) {
                     port.Redirect(nodes, graph.nodes);
                 }
             }
@@ -122,30 +150,12 @@
             return graph;
         }
 
-        public virtual void Dispose() {}
-        
-        #endregion
-        
-        private void OnDestroy()
+        public virtual void Dispose()
         {
-            // Remove all nodes prior to graph destruction
-            Clear();
         }
 
-        #region editor
-
-        protected override void OnValidate()
-        {
-            base.OnValidate();
-            
-            //remove all empty nodes
-            if (nodes.RemoveAll(x => !x) > 0) {
-                Debug.LogError($"NULL node found at {name}");
-            }
-      
-        }   
-
         #endregion
-        
+
+        private void OnDestroy() => Clear();
     }
 }

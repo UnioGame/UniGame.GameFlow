@@ -27,7 +27,7 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor
         }
 
         public static void DrawPortPairField(
-            this IUniNode node,
+            this INode node,
             NodePort input,
             NodePort output,
             NodeGuiLayoutStyle intputStyle,

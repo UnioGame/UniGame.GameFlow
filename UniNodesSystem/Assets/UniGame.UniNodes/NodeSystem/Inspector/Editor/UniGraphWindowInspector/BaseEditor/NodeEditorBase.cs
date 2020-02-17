@@ -60,7 +60,7 @@
 
         public virtual void OnEnable()
         {
-            
+            target = serializedObject.targetObject as K;
         }
 
         public K target;

@@ -50,8 +50,7 @@
         {
             base.UpdateCommands(nodeCommands);
             
-            var portPairCommand = new ConnectedFormatedPairCommand();
-            portPairCommand.Initialize(this, portName, bindInOut);
+            var portPairCommand = new ConnectedFormatedPairCommand(this, portName, bindInOut);
             input = portPairCommand.InputPort;
             output = portPairCommand.OutputPort;
             

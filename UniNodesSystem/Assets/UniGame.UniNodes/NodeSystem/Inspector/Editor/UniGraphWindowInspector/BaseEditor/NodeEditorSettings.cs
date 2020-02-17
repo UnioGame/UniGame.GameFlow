@@ -19,7 +19,7 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
             public bool autoSave = false;
             [SerializeField] private string typeColorsData = "";
             [NonSerialized] public Dictionary<string, Color> typeColors = new Dictionary<string, Color>();
-            public NodeEditorNoodleType noodleType = NodeEditorNoodleType.Curve;
+            public NodeEditorNoodleType noodleType = NodeEditorNoodleType.Line;
 
             private Texture2D _gridTexture;
             public Texture2D gridTexture {

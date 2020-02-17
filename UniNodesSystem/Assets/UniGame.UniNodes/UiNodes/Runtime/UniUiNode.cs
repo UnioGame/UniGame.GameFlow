@@ -8,6 +8,7 @@
     using UniCore.Runtime.Interfaces;
     using UniCore.Runtime.ObjectPool.Runtime;
     using UniCore.Runtime.ObjectPool.Runtime.Extensions;
+    using UniCore.Runtime.Rx.Extensions;
     using UniNodeSystem.Runtime;
     using UniNodeSystem.Runtime.Core;
     using UniNodeSystem.Runtime.Extensions;
@@ -21,7 +22,7 @@
     using UniUiSystem.Runtime.Interfaces;
     using Debug = UnityEngine.Debug;
 
-    [CreateNodeMenu("UI/UiView")]
+    [CreateNodeMenu("UI/UiView", "UiView")]
     public class UniUiNode : UniNode
     {
         #region inspector
@@ -92,14 +93,12 @@
         /// <param name="context"></param>
         protected void OnUiTriggerAction(IInteractionTrigger trigger, IContext context)
         {
-            var portValue = GetPortValue(trigger.ItemName);
-
+            var port = GetPort(trigger.ItemName);
+            var portValue = port.Value;
+            
             if (trigger.IsActive) {
                 portValue.Publish(context);
-            }
-            else {
-                portValue.Remove<IContext>();
-            }
+            }    
         }
 
         protected void OnRegisterPorts()
@@ -172,12 +171,12 @@
             for (var i = 0; i < slots.Count; i++) {
                 //get associated port value by slot
                 var slot      = slots[i];
-                var portValue = GetPortValue(slot.SlotName);
-
+                var port = GetPort(slot.SlotName);
+                var portValue = port.Value;
+                
                 //connect to ui module data
-                var connection = slot.Value.Connect(portValue);
-                //remove connection, if node stoped
-                lifetime.AddCleanUpAction(() => connection.Disconnect(portValue));
+                slot.Value.Bind(portValue).
+                    AddTo(lifetime);
 
                 //add new placement value
                 portValue.Publish<IUiPlacement>(slot);

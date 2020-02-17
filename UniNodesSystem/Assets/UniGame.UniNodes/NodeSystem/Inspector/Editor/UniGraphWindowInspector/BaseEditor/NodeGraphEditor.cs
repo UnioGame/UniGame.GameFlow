@@ -17,11 +17,11 @@
 
         public virtual Texture2D GetGridTexture() 
         {
-            return NodeEditorPreferences.GetSettings().gridTexture;
+            return this.GetSettings().gridTexture;
         }
 
         public virtual Texture2D GetSecondaryGridTexture() {
-            return NodeEditorPreferences.GetSettings().crossTexture;
+            return this.GetSettings().crossTexture;
         }
 
         /// <summary> Return default settings for this graph type. This is the settings the user will load if no previous settings have been saved. </summary>
@@ -33,25 +33,21 @@
         /// <summary> Returns context node menu path. Null or empty strings for hidden nodes. </summary>
         public virtual string GetNodeMenuName(Type type) {
             //Check if type has the CreateNodeMenuAttribute
-            UniBaseNode.CreateNodeMenuAttribute attrib;
+            CreateNodeMenuAttribute attrib;
             return NodeEditorUtilities.GetAttrib(type, out attrib) ? 
                 attrib.menuName : 
                 ObjectNames.NicifyVariableName(type.ToString().Replace('.', '/'));
         }
 
-        public virtual Color GetTypeColor(Type type) {
-            return NodeEditorPreferences.GetTypeColor(type);
-        }
-
         /// <summary> Creates a copy of the original node in the graph </summary>
-        public UniBaseNode CopyNode(UniBaseNode original) 
+        public Node CopyNode(Node original) 
         {
             
             var node = target.CopyNode(original);
             node.name = original.name;
-            node.transform.parent = original.graph.transform;
+            node.transform.parent = original.transform;
             
-            if (NodeEditorPreferences.GetSettings().autoSave)
+            if (this.GetSettings().autoSave)
             {
                 AssetDatabase.SaveAssets();
             }
@@ -60,28 +56,27 @@
         }
 
         /// <summary> Safely remove a node and all its connections. </summary>
-        public void RemoveNode(UniBaseNode node)
+        public void RemoveNode(Node node)
         {
-            var graph = node.graph;
-
-            var sourceGraph = PrefabUtility.GetCorrespondingObjectFromSource(target);
-            var sourceNode = PrefabUtility.GetCorrespondingObjectFromSource(node);
-
-            var removedAsset = sourceNode != null ? (Object)sourceNode.gameObject : node.gameObject;
-            var targetGraph = sourceGraph ? sourceGraph : target;
-
-            var targetNode = sourceNode ? sourceNode : node;
+//            var sourceGraph = PrefabUtility.GetCorrespondingObjectFromSource(target);
+//            var sourceNode = PrefabUtility.GetCorrespondingObjectFromSource(node);
+//
+//            var removedAsset = sourceNode != null ? (Object)sourceNode : node;
+//            var targetGraph = sourceGraph ? sourceGraph : target;
+            var targetGraph = node.graph;
+            var targetNode = node;
             targetGraph.RemoveNode(targetNode);
 
-            Object.DestroyImmediate(removedAsset,true);
+            Object.DestroyImmediate(node,true);
 
             AssetDatabase.SaveAssets();
-
-            if (sourceGraph)
-            {
-                PrefabUtility.ApplyPrefabInstance(targetGraph.gameObject,InteractionMode.AutomatedAction);
-            }
+            EditorUtility.SetDirty(targetGraph);
             
+//            if (sourceGraph && targetGraph)
+//            {
+//                PrefabUtility.ApplyPrefabInstance(targetGraph.gameObject,InteractionMode.AutomatedAction);
+//            }
+//            
         }
     }
 }

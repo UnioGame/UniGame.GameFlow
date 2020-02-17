@@ -1,14 +1,25 @@
 ﻿namespace UniGreenModules.UniNodeSystem.Inspector.Editor.Nodes
 {
     using System.Collections.Generic;
+    using System.Linq;
+    using System.Reflection;
+    using System.Runtime.Serialization.Formatters;
     using BaseEditor;
     using Drawers;
     using Drawers.Interfaces;
-    using Runtime;
+    using Runtime.Core;
+    using Runtime.Extensions;
     using Runtime.Interfaces;
     using Styles;
     using UniCore.EditorTools.Editor.Utility;
+    using UniCore.Runtime.Extension;
+    using UniCore.Runtime.ProfilerTools;
+    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.BaseEditor.Extensions;
+    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Core.Commands;
+    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Core.Interfaces;
+    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Interfaces;
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Nodes;
+    using UnityEditor;
     using UnityEngine;
 
     [CustomNodeEditor(typeof(UniNode))]
@@ -30,11 +41,9 @@
         public override bool IsSelected()
         {
             var node = target as UniNode;
-            if (!node)
-                return false;
-            return node.IsActive;
+            return node && node.IsActive;
         }
-
+        
         public override void OnHeaderGUI()
         {
             if (IsSelected())
@@ -50,20 +59,93 @@
         {
             var node = target as UniNode;
 
-            node.Initialize();
+            var idEditingMode = EditorApplication.isPlayingOrWillChangePlaymode == false && 
+                                EditorApplication.isCompiling == false && 
+                                EditorApplication.isUpdating == false;
 
-            UpdateData(node);
+            if (idEditingMode) {
+                
+                node.Initialize(node.graph);
+                    
+                UpdatePortAttributes(node);
 
+                UpdateData(node);
+
+                VerifyNode(node);
+
+            }
+            
             base.OnBodyGUI();
 
             DrawPorts(node);
 
             serializedObject.ApplyModifiedPropertiesWithoutUndo();
+
+
         }
 
-        public virtual void UpdateData(UniNode node)
+        public virtual void UpdateData(UniNode node) { }
+
+        public void VerifyNode(UniNode node)
         {
+            var emptyPorts = node.ports.
+                Where(x => x.Value != null && string.IsNullOrEmpty(x.Value.ItemName)).
+                ToList();
             
+            foreach (var pairs in emptyPorts) {
+                var port = pairs.Value;
+                port.fieldName = pairs.Key;
+            }
+
+            var removedPorts = node.Ports.
+                Where(x => IsPortRemoved(node, x));
+            foreach (var removedPort in removedPorts) {
+                node.RemovePort(removedPort);
+            }
+            
+            node.Validate();
+        }
+
+        public bool IsPortRemoved(IUniNode node,INodePort port)
+        {
+            var value = node.PortValues.
+                FirstOrDefault(x => x.ItemName == port.ItemName && 
+                                    x.Direction == port.Direction);
+            
+            if (value == null) {
+                GameLog.Log($"REMOVE PORT {node.ItemName} : {port.ItemName} and Clear");
+            }
+            
+            return value == null || string.IsNullOrEmpty(value.ItemName) ;
+        }
+
+        public void UpdatePortAttributes(UniNode node)
+        {
+            var type = node.GetType();
+            var fields = type.GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
+
+            foreach (var portField in fields) {
+                var data = node.GetPortData(portField, portField.Name);
+                if(data.PortData == null)
+                    continue;
+                
+                var port = node.UpdatePortValue(data.PortData);
+                var value = portField.GetValue(node);
+
+                UpdateSerializedCommands(node, port, value);
+            }
+
+        }
+
+        public void UpdateSerializedCommands(UniNode node,IPortValue port, object value)
+        {
+
+            switch (value) {
+                case IReactiveSource reactiveSource:
+                    reactiveSource.Bind(node,port.ItemName);
+                    return;
+            }
+
         }
 
         public void DrawPorts(UniNode node)
@@ -80,7 +162,7 @@
         
         protected virtual List<INodeEditorHandler> InitializeBodyHandlers(List<INodeEditorHandler> drawers)
         {
-            drawers.Add(new UniNodeBasePortsDrawer(new PortStyleSelector()));
+            drawers.Add(new UniPortsDrawer(new PortStyleSelector()));
             return drawers;
         }
 

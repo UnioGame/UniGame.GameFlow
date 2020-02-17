@@ -2,7 +2,6 @@
 {
     using NUnit.Framework;
     using Runtime;
-    using Runtime.Connections;
     using UniContextData.Runtime.Entities;
 
     public class UniPortValueTests
@@ -56,12 +55,10 @@
         {
             var portValue1 = new UniPortValue();
             var portValue2 = new UniPortValue();
-            var port2Connection = new PortValueConnection();
-            port2Connection.Initialize(portValue2);
 
             var testPortValue = "TestPortValue";           
             
-            portValue1.Connect(port2Connection);
+            portValue1.Bind(portValue2);
             portValue1.Publish(testPortValue);
 
             var result = portValue2.Get<string>();
@@ -76,15 +73,10 @@
             var portValue1 = new UniPortValue();
             var portValue2 = new UniPortValue();
             
-            var port2Connection = new PortValueConnection();
-            port2Connection.Initialize(portValue2);
-            
-            var context1 = new EntityContext();
-            
             var testPortValue = "TestPortValue";
             var testPortValue2 = "TestPortValue2";
             
-            portValue1.Connect(port2Connection);
+            portValue1.Bind(portValue2);
             
             portValue1.Publish(testPortValue);
             portValue1.Publish(testPortValue2);
@@ -99,12 +91,10 @@
         {
             var portValue1 = new UniPortValue();
             var portValue2 = new UniPortValue();
-            var port2Connection = new PortValueConnection();
-            port2Connection.Initialize(portValue2);
             
             var testPortValue = "TestPortValue";
             
-            portValue1.Connect(port2Connection);          
+            portValue1.Bind(portValue2);          
             portValue1.Publish(testPortValue);
 
             Assert.That(portValue1.Get<string>(),Is.EqualTo(testPortValue));
@@ -139,7 +129,7 @@
             portValue1.Publish(testPortValue);
             portValue1.Publish(testPortValue2);
             
-            portValue1.CleanUp();
+            portValue1.Release();
 
             Assert.That(portValue1.Contains<string>(),Is.EqualTo(false));
             Assert.That(portValue1.Contains<int>(),Is.EqualTo(false));

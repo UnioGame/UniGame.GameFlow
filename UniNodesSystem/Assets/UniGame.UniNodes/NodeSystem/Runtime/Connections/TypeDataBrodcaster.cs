@@ -1,18 +1,25 @@
 ﻿
 namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Connections
 {
+    using System;
     using System.Collections.Generic;
     using System.Runtime.CompilerServices;
-    using UniCore.Runtime.Interfaces;
+    using UniCore.Runtime.Common;
+    using UniCore.Runtime.ObjectPool.Runtime;
     using UniCore.Runtime.ObjectPool.Runtime.Interfaces;
     using UniNodeSystem.Runtime.Interfaces;
+    using UniRx;
 
     public class TypeDataBrodcaster : 
-        IPoolable, ITypeDataBrodcaster
+        IPoolable, 
+        IConnector<IMessagePublisher>,
+        IMessagePublisher
     {
-        private List<IContextWriter> _registeredItems = new List<IContextWriter>();
+        private List<IMessagePublisher> _registeredItems = new List<IMessagePublisher>();
         private int count = 0;
 
+        public int ConnectionsCount => count;
+        
         #region ipoolable
         
         public virtual void Release()
@@ -25,25 +32,7 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nod
         
         #region IContextData interface
 
-        public void CleanUp()
-        {
-            for (var i = 0; i < count; i++)
-            {
-                var context = _registeredItems[i];
-                context.CleanUp();
-            }
-        }
-        
-        public virtual bool Remove<TData>()
-        {
-            for (var i = 0; i < count; i++)
-            {
-                var context = _registeredItems[i];
-                context.Remove<TData>();
-            }
-            return true;          
-        }
-
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Publish<TData>(TData value)
         {
             for (var i = 0; i < count; i++)
@@ -55,15 +44,21 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nod
 
         #endregion
 
-        public IConnector<IContextWriter> Connect(IContextWriter connection)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public IDisposable Bind(IMessagePublisher connection)
         {
             if (!_registeredItems.Contains(connection))
                 _registeredItems.Add(connection);
+            
+            var disposable = ClassPool.Spawn<DisposableAction>();
+            disposable.Initialize(() => 
+                Disconnect(connection));
+            
             UpdateCounter();
-            return this;
+            return disposable;
         }
 
-        public void Disconnect(IContextWriter connection)
+        public void Disconnect(IMessagePublisher connection)
         {
             _registeredItems.Remove(connection);
             UpdateCounter();

@@ -1,0 +1,511 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2408933617207225848
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8355779202966547028}
+  - component: {fileID: 6761353731672153290}
+  - component: {fileID: 6952354765366983671}
+  - component: {fileID: 6952354765366983670}
+  - component: {fileID: 6952354765366983668}
+  - component: {fileID: 6952354765366983672}
+  - component: {fileID: 6952354765366983673}
+  - component: {fileID: 6952354765366983674}
+  m_Layer: 0
+  m_Name: UniGraph
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8355779202966547028
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2408933617207225848}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6761353731672153290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2408933617207225848}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 782945db79ce44748b3f294e0edf364e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 0
+  width: 220
+  nodeName: New Game Object
+  position: {x: 0, y: 0}
+  ports:
+    keys: []
+    values: []
+  graph: {fileID: 6761353731672153290}
+  serializableCommands: []
+  uniqueId: 21
+  nodes:
+  - {fileID: 6952354765366983671}
+  - {fileID: 6952354765366983670}
+  - {fileID: 6952354765366983668}
+  - {fileID: 6952354765366983672}
+  - {fileID: 6952354765366983673}
+  - {fileID: 6952354765366983674}
+  references:
+    version: 1
+--- !u!114 &6952354765366983671
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2408933617207225848}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d568c15827dc52458e94d1f52070d1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 4
+  width: 220
+  nodeName: Simple 1 Node
+  position: {x: 103.23107, y: -9.770616}
+  ports:
+    keys:
+    - '[out]context'
+    - '[in]context'
+    values:
+    - id: 5
+      nodeId: 4
+      node: {fileID: 6952354765366983671}
+      fieldName: '[out]context'
+      direction: 1
+      connectionType: 0
+      showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      portValue:
+        name: '[out]context'
+        serializedValueTypes: []
+        broadcastersCount: 0
+      connections:
+      - fieldName: '[in]context'
+        nodeId: 19
+        reroutePoints: []
+        portId: 21
+        node: {fileID: 6952354765366983671}
+      instancePortList: 0
+    - id: 6
+      nodeId: 4
+      node: {fileID: 6952354765366983671}
+      fieldName: '[in]context'
+      direction: 0
+      connectionType: 0
+      showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      portValue:
+        name: '[in]context'
+        serializedValueTypes: []
+        broadcastersCount: 0
+      connections:
+      - fieldName: '[out]data'
+        nodeId: 7
+        reroutePoints: []
+        portId: 8
+        node: {fileID: 6952354765366983671}
+      instancePortList: 0
+  graph: {fileID: 6761353731672153290}
+  serializableCommands: []
+  distinctInput: 1
+  bindInOut: 0
+  isFinalyze: 0
+  isReady: 0
+  waitForServiceReady: 1
+  references:
+    version: 1
+--- !u!114 &6952354765366983670
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2408933617207225848}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba0021ffbc371844089f02bf34ca25f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 7
+  width: 220
+  nodeName: Context Data Node
+  position: {x: -232, y: 200}
+  ports:
+    keys:
+    - '[out]data'
+    - '[in]data'
+    values:
+    - id: 8
+      nodeId: 7
+      node: {fileID: 6952354765366983670}
+      fieldName: '[out]data'
+      direction: 1
+      connectionType: 0
+      showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      portValue:
+        name: '[out]data'
+        serializedValueTypes: []
+        broadcastersCount: 0
+      connections:
+      - fieldName: '[in]context'
+        nodeId: 4
+        reroutePoints: []
+        portId: 6
+        node: {fileID: 6952354765366983670}
+      - fieldName: '[in]context'
+        nodeId: 10
+        reroutePoints: []
+        portId: 12
+        node: {fileID: 6952354765366983670}
+      - fieldName: '[in]context'
+        nodeId: 13
+        reroutePoints: []
+        portId: 15
+        node: {fileID: 6952354765366983670}
+      - fieldName: '[in]context'
+        nodeId: 16
+        reroutePoints: []
+        portId: 18
+        node: {fileID: 6952354765366983670}
+      instancePortList: 0
+    - id: 9
+      nodeId: 7
+      node: {fileID: 6952354765366983670}
+      fieldName: '[in]data'
+      direction: 0
+      connectionType: 0
+      showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      portValue:
+        name: '[in]data'
+        serializedValueTypes: []
+        broadcastersCount: 0
+      connections: []
+      instancePortList: 0
+  graph: {fileID: 6761353731672153290}
+  serializableCommands: []
+  bindInOut: 0
+  contextAsset:
+    m_AssetGUID: 7ac5f3a92dc42094b9fbb6a31ecd86be
+    m_SubObjectName: 
+  contextDataSources:
+    m_AssetGUID: afd7adc1bde95bd4a859bcbbff8e1f1b
+    m_SubObjectName: 
+  references:
+    version: 1
+--- !u!114 &6952354765366983668
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2408933617207225848}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b5a9cbb95ab9b84db1eb7302f56fada, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 10
+  width: 220
+  nodeName: Simple 2 Node
+  position: {x: 104, y: 248}
+  ports:
+    keys:
+    - '[out]context'
+    - '[in]context'
+    values:
+    - id: 11
+      nodeId: 10
+      node: {fileID: 6952354765366983668}
+      fieldName: '[out]context'
+      direction: 1
+      connectionType: 0
+      showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      portValue:
+        name: '[out]context'
+        serializedValueTypes: []
+        broadcastersCount: 0
+      connections:
+      - fieldName: '[in]context'
+        nodeId: 19
+        reroutePoints: []
+        portId: 21
+        node: {fileID: 6952354765366983668}
+      instancePortList: 0
+    - id: 12
+      nodeId: 10
+      node: {fileID: 6952354765366983668}
+      fieldName: '[in]context'
+      direction: 0
+      connectionType: 0
+      showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      portValue:
+        name: '[in]context'
+        serializedValueTypes: []
+        broadcastersCount: 0
+      connections:
+      - fieldName: '[out]data'
+        nodeId: 7
+        reroutePoints: []
+        portId: 8
+        node: {fileID: 6952354765366983668}
+      instancePortList: 0
+  graph: {fileID: 6761353731672153290}
+  serializableCommands: []
+  distinctInput: 1
+  bindInOut: 0
+  isFinalyze: 0
+  isReady: 0
+  waitForServiceReady: 1
+  references:
+    version: 1
+--- !u!114 &6952354765366983672
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2408933617207225848}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb4ddc60137e3204794345bf89154dfe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 13
+  width: 220
+  nodeName: Simple 3 Node
+  position: {x: 104, y: 504}
+  ports:
+    keys:
+    - '[out]context'
+    - '[in]context'
+    values:
+    - id: 14
+      nodeId: 13
+      node: {fileID: 6952354765366983672}
+      fieldName: '[out]context'
+      direction: 1
+      connectionType: 0
+      showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      portValue:
+        name: '[out]context'
+        serializedValueTypes: []
+        broadcastersCount: 0
+      connections:
+      - fieldName: '[in]context'
+        nodeId: 19
+        reroutePoints: []
+        portId: 21
+        node: {fileID: 6952354765366983672}
+      instancePortList: 0
+    - id: 15
+      nodeId: 13
+      node: {fileID: 6952354765366983672}
+      fieldName: '[in]context'
+      direction: 0
+      connectionType: 0
+      showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      portValue:
+        name: '[in]context'
+        serializedValueTypes: []
+        broadcastersCount: 0
+      connections:
+      - fieldName: '[out]data'
+        nodeId: 7
+        reroutePoints: []
+        portId: 8
+        node: {fileID: 6952354765366983672}
+      instancePortList: 0
+  graph: {fileID: 6761353731672153290}
+  serializableCommands: []
+  distinctInput: 1
+  bindInOut: 0
+  isFinalyze: 0
+  isReady: 0
+  waitForServiceReady: 1
+  references:
+    version: 1
+--- !u!114 &6952354765366983673
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2408933617207225848}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b8d1661374689841bfb8436c94ad1db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 16
+  width: 220
+  nodeName: Simple 4 Node
+  position: {x: 104, y: 760}
+  ports:
+    keys:
+    - '[out]context'
+    - '[in]context'
+    values:
+    - id: 17
+      nodeId: 16
+      node: {fileID: 6952354765366983673}
+      fieldName: '[out]context'
+      direction: 1
+      connectionType: 0
+      showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      portValue:
+        name: '[out]context'
+        serializedValueTypes: []
+        broadcastersCount: 0
+      connections:
+      - fieldName: '[in]context'
+        nodeId: 19
+        reroutePoints: []
+        portId: 21
+        node: {fileID: 6952354765366983673}
+      instancePortList: 0
+    - id: 18
+      nodeId: 16
+      node: {fileID: 6952354765366983673}
+      fieldName: '[in]context'
+      direction: 0
+      connectionType: 0
+      showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      portValue:
+        name: '[in]context'
+        serializedValueTypes: []
+        broadcastersCount: 0
+      connections:
+      - fieldName: '[out]data'
+        nodeId: 7
+        reroutePoints: []
+        portId: 8
+        node: {fileID: 6952354765366983673}
+      instancePortList: 0
+  graph: {fileID: 6761353731672153290}
+  serializableCommands: []
+  distinctInput: 1
+  bindInOut: 0
+  isFinalyze: 0
+  isReady: 0
+  waitForServiceReady: 1
+  references:
+    version: 1
+--- !u!114 &6952354765366983674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2408933617207225848}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c154383987fac943b2bd2b253ca8863, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 19
+  width: 220
+  nodeName: Game Status Node
+  position: {x: 456, y: 328}
+  ports:
+    keys:
+    - '[out]context'
+    - '[in]context'
+    values:
+    - id: 20
+      nodeId: 19
+      node: {fileID: 6952354765366983674}
+      fieldName: '[out]context'
+      direction: 1
+      connectionType: 0
+      showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      portValue:
+        name: '[out]context'
+        serializedValueTypes: []
+        broadcastersCount: 0
+      connections: []
+      instancePortList: 0
+    - id: 21
+      nodeId: 19
+      node: {fileID: 6952354765366983674}
+      fieldName: '[in]context'
+      direction: 0
+      connectionType: 0
+      showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      portValue:
+        name: '[in]context'
+        serializedValueTypes: []
+        broadcastersCount: 0
+      connections:
+      - fieldName: '[out]context'
+        nodeId: 4
+        reroutePoints: []
+        portId: 5
+        node: {fileID: 6952354765366983674}
+      - fieldName: '[out]context'
+        nodeId: 10
+        reroutePoints: []
+        portId: 11
+        node: {fileID: 6952354765366983674}
+      - fieldName: '[out]context'
+        nodeId: 13
+        reroutePoints: []
+        portId: 14
+        node: {fileID: 6952354765366983674}
+      - fieldName: '[out]context'
+        nodeId: 16
+        reroutePoints: []
+        portId: 17
+        node: {fileID: 6952354765366983674}
+      instancePortList: 0
+  graph: {fileID: 6761353731672153290}
+  serializableCommands: []
+  distinctInput: 1
+  bindInOut: 0
+  isFinalyze: 0
+  isGameReady: 0
+  references:
+    version: 1

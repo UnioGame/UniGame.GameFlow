@@ -20,13 +20,13 @@
         
         private static Dictionary<string, NodeEditorSettings> settings = new Dictionary<string, NodeEditorSettings>();
 
+        
         /// <summary> Get settings of current active editor </summary>
-        public static NodeEditorSettings GetSettings()
+        public static NodeEditorSettings GetSettings(this NodeGraphEditor editor)
         {
-            var currentEditor = NodeEditorWindow.Current;
-            var graphEditor   = currentEditor.graphEditor;
+            var graphEditor   = editor;
             
-            if (graphEditor!=null && lastEditor != NodeEditorWindow.Current.graphEditor)
+            if (graphEditor!=null && lastEditor != graphEditor)
             {
                 var attribs = graphEditor.GetType()
                     .GetCustomAttributes(NodeEditorType, true);
@@ -35,14 +35,20 @@
                 {
                     var attrib =
                         attribs[0] as NodeGraphEditor.CustomNodeGraphEditorAttribute;
-                    lastEditor = NodeEditorWindow.Current.graphEditor;
-                    lastKey = attrib.editorPrefsKey;
+                    lastEditor = graphEditor;
+                    lastKey    = attrib.editorPrefsKey;
                 }
                 else return null;
             }
 
             if (!settings.ContainsKey(lastKey)) VerifyLoaded();
             return settings[lastKey];
+        }
+        
+        /// <summary> Get settings of current active editor </summary>
+        public static NodeEditorSettings GetSettings(this NodeEditorWindow window)
+        {
+            return window.graphEditor.GetSettings();
         }
 
         [PreferenceItem("Node Editor")]

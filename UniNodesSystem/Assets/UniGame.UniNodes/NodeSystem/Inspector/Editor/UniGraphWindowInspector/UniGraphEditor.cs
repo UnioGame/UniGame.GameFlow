@@ -16,21 +16,32 @@
 		{
 			base.OnEnable();
 			graph = target as UniGraph;
-			CleanUp();
+			if (Application.isPlaying == false) {
+				Validate();
+			}
+			
 		}
 		
-		private void CleanUp()
+		private void Validate()
 		{
 			var changed = false;
 			var nodes = graph.nodes;
-			foreach (Transform child in graph.transform) 
+			foreach (var node in graph.GetComponents<Node>()) 
 			{
-				var node = child.gameObject.GetComponent<UniBaseNode>();
-				if (nodes.Contains(node) != false) {
+				if (nodes.Contains(node) || graph == node) {
 					continue;
 				}
 				RemoveNode(node);
 				changed = true;
+			}
+
+			foreach (var node in nodes) {
+				if (node.graph != null) {
+					continue;
+				}
+
+				changed    = true;
+				node.graph = graph;
 			}
 
 			if (changed) {

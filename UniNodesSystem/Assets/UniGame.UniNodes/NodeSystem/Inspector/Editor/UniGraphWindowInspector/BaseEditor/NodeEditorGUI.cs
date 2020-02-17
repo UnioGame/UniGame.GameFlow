@@ -8,31 +8,23 @@
     using UniCore.EditorTools.Editor.Utility;
     using UniCore.Runtime.ProfilerTools;
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Attributes;
+    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Interfaces;
     using UnityEditor;
     using UnityEngine;
     using Object = UnityEngine.Object;
 
-    public struct NodeEditorGuiState
-    {
-        public Event        Event;
-        public Vector2      MousePosition;
-        public List<Object> PreSelection;
-        public EventType EventType;
-    }
-    
     /// <summary> Contains GUI methods </summary>
     public partial class NodeEditorWindow
     {
-        public  NodeGraphEditor   graphEditor;
-        private List<Object>      selectionCache;
-        private List<UniBaseNode> culledNodes;
+        public  NodeGraphEditor graphEditor;
+        private List<Object>    selectionCache;
+        private List<Node>      culledNodes;
 
-        private List<UniBaseNode> _regularNodes  = new List<UniBaseNode>();
-        private List<UniBaseNode> _selectedNodes = new List<UniBaseNode>();
+        private List<Node>   _regularNodes  = new List<Node>();
+        private List<Node>   _selectedNodes = new List<Node>();
+        private HashSet<int> idHash         = new HashSet<int>();
 
-        private int topPadding {
-            get { return isDocked() ? 19 : 22; }
-        }
+        private int topPadding => isDocked() ? 19 : 22;
 
         private void OnGUI()
         {
@@ -42,11 +34,14 @@
                 if (NodeGraph.ActiveGraphs.Count > 0) {
                     Initialize(NodeGraph.ActiveGraphs.FirstOrDefault());
                 }
+
                 return;
             }
 
             graphEditor          = NodeGraphEditor.GetEditor(ActiveGraph);
             graphEditor.position = position;
+
+            VerifyNodes();
 
             Controls();
 
@@ -56,11 +51,28 @@
             DrawZoomedNodes();
             DrawSelectionBox();
             DrawTooltip();
-            DrawGraphsButtons();
+            DrawGraphsControlls();
 
             graphEditor.OnGUI();
 
             GUI.matrix = m;
+        }
+
+        public void VerifyNodes()
+        {
+            idHash = idHash ?? new HashSet<int>();
+            idHash.Clear();
+            if (ActiveGraph == null) return;
+
+            var graph = ActiveGraph;
+            graph.nodes.RemoveAll(x => x == null);
+
+            foreach (var node in ActiveGraph.nodes) {
+                node.graph = graph;
+                if (idHash.Add(node.Id) == false) {
+                    node.UpdateId();
+                }
+            }
         }
 
         public static void BeginZoomed(Rect rect, float zoom, float topPadding)
@@ -140,12 +152,12 @@
         }
 
         /// <summary> Show right-click context menu for hovered port </summary>
-        void ShowPortContextMenu(NodePort hoveredPort)
+        void ShowPortContextMenu(INodePort hoveredPort)
         {
             var contextMenu = new GenericMenu();
-            contextMenu.AddItem(new GUIContent("Clear Connections"), false, () => hoveredPort.ClearConnections());
+            contextMenu.AddItem(new GUIContent("Clear Connections"), false, hoveredPort.ClearConnections);
+            contextMenu.AddItem(new GUIContent("Show Content"), false, hoveredPort.ClearConnections);
             contextMenu.DropDown(new Rect(Event.current.mousePosition, Vector2.zero));
-            //if (NodeEditorPreferences.GetSettings().autoSave) AssetDatabase.SaveAssets();
         }
 
         /// <summary> Show right-click context menu for selected nodes </summary>
@@ -153,8 +165,8 @@
         {
             var contextMenu = new GenericMenu();
             // If only one node is selected
-            if (Selection.objects.Length == 1 && Selection.activeObject is UniBaseNode) {
-                var node = Selection.activeObject as UniBaseNode;
+            if (Selection.objects.Length == 1 && Selection.activeObject is Node) {
+                var node = Selection.activeObject as Node;
                 contextMenu.AddItem(new GUIContent("Move To Top"), false, () => MoveNodeToTop(node));
                 contextMenu.AddItem(new GUIContent("Rename"), false, RenameSelectedNode);
             }
@@ -163,8 +175,8 @@
             contextMenu.AddItem(new GUIContent("Remove"), false, RemoveSelectedNodes);
 
             // If only one node is selected
-            if (Selection.objects.Length == 1 && Selection.activeObject is UniBaseNode) {
-                var node = Selection.activeObject as UniBaseNode;
+            if (Selection.objects.Length == 1 && Selection.activeObject is Node) {
+                var node = Selection.activeObject as Node;
                 AddCustomContextMenuItems(contextMenu, node);
             }
 
@@ -179,9 +191,9 @@
             for (var i = 0; i < NodeTypes.Count; i++) {
                 var type = NodeTypes[i];
 
-                if(IsValidNode(type) == false)
+                if (IsValidNode(type) == false)
                     continue;
-                
+
                 //Get node context menu path
                 var path = graphEditor.GetNodeMenuName(type);
                 if (string.IsNullOrEmpty(path)) continue;
@@ -218,7 +230,7 @@
             startPoint = GridToWindowPosition(startPoint);
             endPoint   = GridToWindowPosition(endPoint);
 
-            switch (NodeEditorPreferences.GetSettings().noodleType) {
+            switch (this.GetSettings().noodleType) {
                 case NodeEditorNoodleType.Curve:
                     var startTangent = startPoint;
                     if (startPoint.x < endPoint.x) startTangent.x = Mathf.LerpUnclamped(startPoint.x, endPoint.x, 0.7f);
@@ -283,11 +295,15 @@
                 // Draw full connections and output > reroute
                 foreach (var output in node.Outputs) {
                     //Needs cleanup. Null checks are ugly
-                    var item = _portConnectionPoints.FirstOrDefault(x => x.Key.Id == output.Id);
-                    if (item.Key == null) continue;
+                    var item = _portConnectionPoints.FirstOrDefault(x => x.Key == output.Id);
 
+                    if (item.Key == 0) continue;
+
+                    if (output == null)
+                        continue;
+                    var types           = output.ValueTypes;
                     var fromRect        = item.Value;
-                    var connectionColor = graphEditor.GetTypeColor(output.ValueType);
+                    var connectionColor = NodeEditorPreferences.GetTypeColor(types.FirstOrDefault());
 
                     for (var k = 0; k < output.ConnectionCount; k++) {
                         var input = output.GetConnection(k);
@@ -295,9 +311,12 @@
                         // Error handling
                         if (input == null)
                             continue; //If a script has been updated and the port doesn't exist, it is removed and null is returned. If this happens, return.
-                        if (!input.IsConnectedTo(output)) input.Connect(output);
+                        if (!input.IsConnectedTo(output)) {
+                            input.Connect(output);
+                        }
+
                         Rect toRect;
-                        if (!_portConnectionPoints.TryGetValue(input, out toRect)) continue;
+                        if (!_portConnectionPoints.TryGetValue(input.Id, out toRect)) continue;
 
                         var from          = fromRect.center;
                         var to            = Vector2.zero;
@@ -323,7 +342,7 @@
 
                             // Draw selected reroute points with an outline
                             if (selectedReroutes.Contains(rerouteRef)) {
-                                GUI.color = NodeEditorPreferences.GetSettings().highlightColor;
+                                GUI.color = this.GetSettings().highlightColor;
                                 GUI.DrawTexture(rect, NodeEditorResources.dotOuter);
                             }
 
@@ -341,15 +360,8 @@
                 selectedReroutes = selection;
         }
 
-        private Vector2 _nodeGraphScroll;
-        private bool    _showGraphsList;
-
-        private void DrawGraphsButtons()
+        private void DrawGraphsControlls()
         {
-            if (NodeGraphs == null) {
-                UpdateEditorNodeGraphs();
-            }
-
             DrawTopButtons();
 
             DrawActiveGraphs();
@@ -377,13 +389,14 @@
         private void DrawTopButtons()
         {
             EditorDrawerUtils.DrawHorizontalLayout(() => {
-                
                 EditorDrawerUtils.DrawButton("Apply Prefab", () => Open(Save(ActiveGraph)),
                     GUILayout.Height(20), GUILayout.Width(200));
-                
+
                 EditorDrawerUtils.DrawButton("Refresh", Refresh,
                     GUILayout.Height(20), GUILayout.Width(200));
-                
+
+                EditorDrawerUtils.DrawButton("Ping", PingInEditor,
+                    GUILayout.Height(20), GUILayout.Width(200));
             }, GUILayout.Height(100));
         }
 
@@ -417,11 +430,15 @@
             var selectionBox = new Rect(boxStartPos, boxSize);
 
             if (activeEvent.type == EventType.Layout)
-                culledNodes = new List<UniBaseNode>();
+                culledNodes = new List<Node>();
 
             var nodes = ActiveGraph.nodes;
+
             for (int i = 0; i < nodes.Count; i++) {
                 var node = nodes[i];
+
+                if (node == null) continue;
+
                 if (Selection.Contains(node)) {
                     _selectedNodes.Add(node);
                     continue;
@@ -431,16 +448,17 @@
             }
 
             var eventType = activeEvent.type == EventType.Ignore ||
-                activeEvent.rawType == EventType.Ignore ? EventType.Ignore : 
-                activeEvent.type;
-            
+                            activeEvent.rawType == EventType.Ignore
+                ? EventType.Ignore
+                : activeEvent.type;
+
             var editorGuiState = new NodeEditorGuiState() {
                 MousePosition = mousePos,
-                PreSelection = preSelection,
-                Event =  activeEvent,
-                EventType = eventType,
+                PreSelection  = preSelection,
+                Event         = activeEvent,
+                EventType     = eventType,
             };
-            
+
             EditorDrawerUtils.DrawAndRevertColor(() => {
                 DrawNodes(_regularNodes, editorGuiState);
                 DrawNodes(_selectedNodes, editorGuiState);
@@ -453,7 +471,7 @@
                 Selection.objects = preSelection.ToArray();
         }
 
-        private void DrawNodes(List<UniBaseNode> nodes, NodeEditorGuiState state)
+        private void DrawNodes(List<Node> nodes, NodeEditorGuiState state)
         {
             for (var n = 0; n < nodes.Count; n++) {
                 // Skip null nodes. The user could be in the process of renaming scripts, so removing them at this point is not advisable.
@@ -473,7 +491,7 @@
             //Active node is hashed before and after node GUI to detect changes
             var        nodeHash   = 0;
             MethodInfo onValidate = null;
-            if (Selection.activeObject != null && Selection.activeObject is UniBaseNode) {
+            if (Selection.activeObject != null && Selection.activeObject is Node) {
                 onValidate = Selection.activeObject.GetType().GetMethod("OnValidate");
                 if (onValidate != null) nodeHash = Selection.activeObject.GetHashCode();
             }
@@ -489,10 +507,10 @@
             }
         }
 
-        private void DrawNode(UniBaseNode node, NodeEditorGuiState state)
+        private void DrawNode(Node node, NodeEditorGuiState state)
         {
             switch (state.EventType) {
-                case EventType.Ignore:    
+                case EventType.Ignore:
                     return;
                 // Culling
                 case EventType.Layout: {
@@ -501,6 +519,7 @@
                         culledNodes.Add(node);
                         return;
                     }
+
                     break;
                 }
                 default: {
@@ -511,7 +530,7 @@
             }
 
             if (state.EventType == EventType.Repaint) {
-                _portConnectionPoints = _portConnectionPoints.Where(x => x.Key.node != node)
+                _portConnectionPoints = _portConnectionPoints.Where(x => x.Key != node.Id)
                     .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
             }
 
@@ -520,7 +539,7 @@
             DrawNodeArea(node, state);
         }
 
-        private void DrawNodeArea(UniBaseNode node,NodeEditorGuiState state)
+        private void DrawNodeArea(Node node, NodeEditorGuiState state)
         {
             var nodeEditor = NodeEditor.GetEditor(node);
             //Get node position
@@ -528,47 +547,41 @@
 
             var rectArea = new Rect(nodePos, new Vector2(nodeEditor.GetWidth(), 4000));
 
-            DrawNodeArea(nodeEditor,node,nodePos,rectArea,state);
+            DrawNodeArea(nodeEditor, node, nodePos, rectArea, state);
         }
-        
+
         private void DrawNodeArea(
             NodeEditor nodeEditor,
-            UniBaseNode node, 
+            Node node,
             Vector2 nodePos,
-            Rect rectArea, NodeEditorGuiState state)
+            Rect rectArea,
+            NodeEditorGuiState state)
         {
             if (state.EventType == EventType.Ignore) return;
 
-            try {
-                GUILayout.BeginArea(rectArea);
+            GUILayout.BeginArea(rectArea);
 
-                DrawNodeEditorArea(nodeEditor, node, state);
-            
-                DrawNodePorts(node,nodePos, state);
-            }
-            catch (Exception e) {
-                GameLog.LogError(e);
-                GUIUtility.ExitGUI();
-            }
+            this.WrapDrawer(() => DrawNodeEditorArea(nodeEditor, node, state), true);
+            this.WrapDrawer(() => DrawNodePorts(node, nodePos, state), true);
 
             GUILayout.EndArea();
         }
 
         private void DrawNodePorts(
-            UniBaseNode node, 
+            Node node,
             Vector2 nodePos,
             NodeEditorGuiState state)
         {
             var eventType  = state.EventType;
             var stateEvent = state.Event;
             if (eventType == EventType.Ignore ||
-                stateEvent.type == EventType.Ignore || 
+                stateEvent.type == EventType.Ignore ||
                 stateEvent.rawType == EventType.Ignore)
                 return;
-            
-            var mousePos = state.MousePosition;
+
+            var mousePos     = state.MousePosition;
             var preSelection = state.PreSelection;
-            
+
             //Check if we are hovering this node
             var nodeSize                                   = GUILayoutUtility.GetLastRect().size;
             var windowRect                                 = new Rect(nodePos, nodeSize);
@@ -583,31 +596,30 @@
             //Check input ports
             foreach (var input in node.Inputs) {
                 //Check if port rect is available
-                if (!PortConnectionPoints.ContainsKey(input)) continue;
-                var r                                 = GridToWindowRectNoClipped(PortConnectionPoints[input]);
+                if (!PortConnectionPoints.ContainsKey(input.Id)) continue;
+                var r                                 = GridToWindowRectNoClipped(PortConnectionPoints[input.Id]);
                 if (r.Contains(mousePos)) hoveredPort = input;
             }
 
             //Check all output ports
             foreach (var output in node.Outputs) {
                 //Check if port rect is available
-                if (!PortConnectionPoints.ContainsKey(output)) continue;
-                var r                                 = GridToWindowRectNoClipped(PortConnectionPoints[output]);
+                if (!PortConnectionPoints.ContainsKey(output.Id)) continue;
+                var r                                 = GridToWindowRectNoClipped(PortConnectionPoints[output.Id]);
                 if (r.Contains(mousePos)) hoveredPort = output;
             }
-
         }
-        
-        private void DrawNodeEditorArea(NodeEditor nodeEditor, UniBaseNode node, NodeEditorGuiState state)
+
+        private void DrawNodeEditorArea(NodeEditor nodeEditor, Node node, NodeEditorGuiState state)
         {
-            var eventType = state.EventType;
+            var eventType  = state.EventType;
             var stateEvent = state.Event;
 
             if (eventType == EventType.Ignore ||
-                stateEvent.type == EventType.Ignore || 
+                stateEvent.type == EventType.Ignore ||
                 stateEvent.rawType == EventType.Ignore)
                 return;
-            
+
             var guiColor = GUI.color;
 
             var selected = selectionCache.Contains(node);
@@ -619,18 +631,10 @@
                 style.padding          = new RectOffset();
                 GUI.color              = nodeEditor.GetTint();
                 GUILayout.BeginVertical(style);
-                GUI.color = NodeEditorPreferences.GetSettings().highlightColor;
-                try {
-                    GUILayout.BeginVertical(new GUIStyle(highlightStyle));
-                }
-                catch (Exception e) {
-                    
-                    GameLog.Log($"EventType {state.EventType} EventData[type: {state.Event.type} rawtype: {state.Event.type}");
-                    GameLog.LogError(e);
-                    GUILayout.EndVertical();
-                    GUILayout.EndVertical();
-                    GUIUtility.ExitGUI();
-                }
+                GUI.color = this.GetSettings().highlightColor;
+
+                //TODO fix style
+                GUILayout.BeginVertical(new GUIStyle(highlightStyle));
             }
             else {
                 var style = new GUIStyle(nodeEditor.GetBodyStyle());
@@ -661,19 +665,20 @@
                 if (NodeSizes.ContainsKey(node)) NodeSizes[node] = size;
                 else NodeSizes.Add(node, size);
 
-                foreach (var kvp in NodeEditor.PortPositions) {
-                    var portHandlePos = kvp.Value;
+                foreach (var portPairs in NodeEditor.PortPositions) {
+                    var id            = portPairs.Key.Id;
+                    var portHandlePos = portPairs.Value;
                     portHandlePos += node.position;
                     var rect = new Rect(portHandlePos.x - 8, portHandlePos.y - 8, 16, 16);
-                    if (PortConnectionPoints.ContainsKey(kvp.Key)) PortConnectionPoints[kvp.Key] = rect;
-                    else PortConnectionPoints.Add(kvp.Key, rect);
+                    if (PortConnectionPoints.ContainsKey(id)) PortConnectionPoints[id] = rect;
+                    else PortConnectionPoints.Add(id, rect);
                 }
             }
 
             if (selected) GUILayout.EndVertical();
         }
 
-        private bool ShouldBeCulled(UniBaseNode node)
+        private bool ShouldBeCulled(Node node)
         {
             var nodePos = GridToWindowPositionNoClipped(node.position);
             if (nodePos.x / _zoom > position.width) return true;  // Right
@@ -694,8 +699,9 @@
                 var content = new GUIContent();
                 content.text = type.PrettyName();
                 if (hoveredPort.IsOutput) {
-                    var obj = hoveredPort.node.GetValue(hoveredPort);
-                    content.text += " = " + (obj != null ? obj.ToString() : "null");
+                    //TODO DRAW ACTUAL VALUE
+                    //var obj = hoveredPort.node.GetValue(hoveredPort);
+                    //content.text += " = " + (obj != null ? obj.ToString() : "null");
                 }
 
                 var size = NodeEditorResources.styles.tooltip.CalcSize(content);

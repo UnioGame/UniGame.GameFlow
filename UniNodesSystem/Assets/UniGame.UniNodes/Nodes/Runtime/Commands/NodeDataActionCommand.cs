@@ -5,6 +5,7 @@
     using UniCore.Runtime.DataFlow;
     using UniCore.Runtime.DataFlow.Interfaces;
     using UniCore.Runtime.Interfaces;
+    using UniCore.Runtime.Rx.Extensions;
 
     [Serializable]
     public class NodeDataActionCommand : ILifeTimeCommand, IContextWriter
@@ -25,8 +26,8 @@
         
         public void Execute(ILifeTime lifeTime)
         {
-            port.Connect(this);
-            lifeTime.AddCleanUpAction(() => port.Disconnect(this));
+            port.Bind(this).
+                AddTo(lifeTime);
         }
 
         public bool Remove<TData>()

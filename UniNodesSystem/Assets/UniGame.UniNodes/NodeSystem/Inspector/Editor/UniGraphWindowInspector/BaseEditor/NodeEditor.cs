@@ -6,32 +6,39 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
     using Drawers.Interfaces;
     using Interfaces;
     using Runtime.Core;
+    using Runtime.Interfaces;
     using UnityEditor;
     using UnityEngine;
 
     /// <summary> Base class to derive custom Node editors from. Use this to create your own custom inspectors and editors for your nodes. </summary>
-    [CustomNodeEditor(typeof(UniBaseNode))]
-    public class NodeEditor : NodeEditorBase<NodeEditor, CustomNodeEditorAttribute, UniBaseNode>, INodeEditor
+    [CustomNodeEditor(typeof(Node))]
+    public class NodeEditor : 
+        NodeEditorBase<NodeEditor, CustomNodeEditorAttribute, Node>, 
+        INodeEditorData
     {
 
+        /// <summary>
+        /// nodes port positions
+        /// </summary>
         public static Dictionary<NodePort, Vector2> PortPositions = new Dictionary<NodePort, Vector2>();
 
         /// <summary> Fires every whenever a node was modified through the editor </summary>
-        public static Action<UniBaseNode> OnUpdateNode;
+        public static Action<Node> OnUpdateNode;
         public static int Renaming;
-
-
+        
         protected List<INodeEditorHandler> _bodyDrawers = new List<INodeEditorHandler>();
         
         protected List<INodeEditorHandler> _headerDrawers = new List<INodeEditorHandler>();
 
-        public UniBaseNode Target => target;
+        public INode Target => target;
+
+        public IReadOnlyDictionary<NodePort, Vector2> HandledPorts => PortPositions;
 
         public SerializedObject SerializedObject => serializedObject;
 
+        
         public sealed override void OnEnable()
         {
-            
             _bodyDrawers = new List<INodeEditorHandler>();
             _headerDrawers = new List<INodeEditorHandler>();
             
@@ -47,22 +54,16 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
             return Selection.Contains(target);
         }
         
-        public virtual void OnHeaderGUI()
-        {
-            
-            Draw(_headerDrawers);
-            
-        }
+        public virtual void OnHeaderGUI() => Draw(_headerDrawers);
         
-        
-
         /// <summary> Draws standard field editors for all public fields </summary>
         public virtual void OnBodyGUI()
         {
-            PortPositions = new Dictionary<NodePort, Vector2>();
+            PortPositions = PortPositions ?? new Dictionary<NodePort, Vector2>();
+            PortPositions.Clear();
             
             serializedObject.Update();
-            
+
             Draw(_bodyDrawers);
 
             serializedObject.ApplyModifiedProperties();
@@ -96,7 +97,7 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
 
         public void Rename(string newName)
         {
-            target.name = newName;
+            target.nodeName = newName;
             AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(target));
         }
         

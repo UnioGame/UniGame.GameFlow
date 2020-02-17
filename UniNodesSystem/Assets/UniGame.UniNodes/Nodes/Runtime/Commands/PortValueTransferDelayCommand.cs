@@ -6,6 +6,7 @@
     using UniCore.Runtime.Interfaces;
     using UniNodeSystem.Runtime.Interfaces;
     using UniRoutine.Runtime.Extension;
+    using UniRx;
 
     [Serializable]
     public class PortValueTransferDelayCommand : ILifeTimeCommand
@@ -24,7 +25,7 @@
             transferCommand.Execute(lifeTime);
         }
 
-        private IEnumerator DelayAction(IContext source,IContextWriter target)
+        private IEnumerator DelayAction(IContext source,IMessagePublisher target)
         {
             yield return this.WaitForSeconds(delay);
         }

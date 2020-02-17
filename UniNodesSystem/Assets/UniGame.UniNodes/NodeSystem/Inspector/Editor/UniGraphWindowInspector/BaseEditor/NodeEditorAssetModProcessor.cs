@@ -18,7 +18,7 @@
             // Check script type. Return if deleting a non-node script
             MonoScript script = obj as MonoScript;
             System.Type scriptType = script.GetClass ();
-            if (scriptType == null || (scriptType != typeof (UniBaseNode) && !scriptType.IsSubclassOf (typeof (UniBaseNode)))) return AssetDeleteResult.DidNotDelete;
+            if (scriptType == null || (scriptType != typeof (Node) && !scriptType.IsSubclassOf (typeof (Node)))) return AssetDeleteResult.DidNotDelete;
 
             // Find all ScriptableObjects using this script
             string[] guids = AssetDatabase.FindAssets ("t:" + scriptType);
@@ -26,12 +26,12 @@
                 string assetpath = AssetDatabase.GUIDToAssetPath (guids[i]);
                 Object[] objs = AssetDatabase.LoadAllAssetRepresentationsAtPath (assetpath);
                 for (int k = 0; k < objs.Length; k++) {
-                    UniBaseNode node = objs[k] as UniBaseNode;
+                    Node node = objs[k] as Node;
                     if (node.GetType () == scriptType) {
-                        if (node != null && node.graph != null) {
+                        if (node != null && node.Graph != null) {
                             // Delete the node and notify the user
-                            Debug.LogWarning (node.name + " of " + node.graph + " depended on deleted script and has been removed automatically.", node.graph);
-                            node.graph.RemoveNode (node);
+                            Debug.LogWarning (node.name + " of " + node.Graph + " depended on deleted script and has been removed automatically.", node);
+                            node.Graph.RemoveNode (node);
                         }
                     }
                 }
@@ -52,7 +52,7 @@
                 Object[] objs = AssetDatabase.LoadAllAssetRepresentationsAtPath (assetpath);
                 // Ensure that all sub node assets are present in the graph node list
                 for (int u = 0; u < objs.Length; u++) {
-                    if (!graph.nodes.Contains (objs[u] as UniBaseNode)) graph.nodes.Add(objs[u] as UniBaseNode);
+                    if (!graph.nodes.Contains (objs[u] as Node)) graph.nodes.Add(objs[u] as Node);
                 }
             }
         }

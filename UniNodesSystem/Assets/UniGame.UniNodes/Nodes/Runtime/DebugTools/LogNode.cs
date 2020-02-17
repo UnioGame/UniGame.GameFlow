@@ -1,39 +1,39 @@
-﻿using UniGreenModules.UniNodeSystem.Runtime;
-
-namespace UniGreenModules.UniNodeSystem.Nodes.DebugTools
+﻿namespace UniGreenModules.UniNodeSystem.Nodes.DebugTools
 {
     using System;
     using System.Collections.Generic;
-    using Commands;
     using Runtime.Core;
     using Runtime.Extensions;
+    using Runtime.Interfaces;
     using UniCore.Runtime.Interfaces;
     using UniCore.Runtime.ProfilerTools;
+    using UniCore.Runtime.Rx.Extensions;
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Nodes;
-    using UniNodes.Runtime.Commands;
+    using UniRx;
 
     [Serializable]
-    [CreateNodeMenu("Debug/Log")]
-    public class LogNode : UniNode
+    [CreateNodeMenu("Debug/Log","Log")]
+    public class LogNode : UniNode , IMessagePublisher
     {
         private const string logPortName = "log";
         
         public LogMode mode = LogMode.Log;
-        
+
         public string message = "LogNode";
-        
+
+        private IPortValue logPort;
+
         protected override void OnExecute()
         {
             PrintLog(GetMessage(), mode);
+            logPort.Bind(this).
+                AddTo(LifeTime);
         }
 
         protected override void UpdateCommands(List<ILifeTimeCommand> nodeCommands)
         {
             base.UpdateCommands(nodeCommands);
-            
-            var inputMessagePort = this.UpdatePortValue(logPortName, PortIO.Input);
-            nodeCommands.Add(new ContextBroadCastCommand<object>(x => 
-                PrintLog($"GRAPH {graph.name} NODE {name} \n\t {x.GetType().Name} : {x}", mode),inputMessagePort.value));
+            logPort = this.UpdatePortValue(logPortName, PortIO.Input);
         }
 
         protected virtual string GetMessage()
@@ -41,6 +41,11 @@ namespace UniGreenModules.UniNodeSystem.Nodes.DebugTools
             return message;
         }
 
+        public void Publish<T>(T value)
+        {
+            PrintLog($"{message}: GRAPH:{Graph.ItemName} : {name} \n\t {value.GetType().Name} : {value}", mode);
+        }
+        
         private void PrintLog(string messageData, LogMode logMode)
         {
             switch (logMode) {

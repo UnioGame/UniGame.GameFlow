@@ -2,22 +2,18 @@ namespace UniGreenModules.UniNodeSystem.Runtime.Interfaces
 {
     using System.Collections.Generic;
     using Core;
-    using UniCore.Runtime.Interfaces;
+    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Interfaces;
     using UniStateMachine.Runtime.Interfaces;
 
     public interface IUniNode : 
         INode,
-        IState,
-        INamedItem
+        IState
     {
+        IReadOnlyCollection<INodePort> PortValues { get; }
 
-        IReadOnlyList<IPortValue> PortValues { get; }
+        bool AddPortValue(INodePort portValue);
 
-        IPortValue GetPortValue(INodePort port);
-        
-        IPortValue GetPortValue(string port);
+        void Initialize(NodeGraph data);
 
-        bool AddPortValue(IPortValue portValue);
-        
     }
 }

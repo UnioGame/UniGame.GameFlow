@@ -9,10 +9,16 @@
 
     public class BaseHeaderDrawer : INodeEditorHandler
     {
-        public virtual bool Update(INodeEditor editor, UniBaseNode node)
+        public virtual bool Update(INodeEditorData editor, Node node)
         {
             var target = node;
             var title = target.GetName();
+            if (string.IsNullOrEmpty(title)) {
+                CreateNodeMenuAttribute attrib;
+                var type = node.GetType();
+                title = NodeEditorUtilities.GetAttrib(type, out attrib) ? attrib.nodeName : type.Name;
+                node.nodeName = title;
+            }
             var renaming = NodeEditor.Renaming;
 
             if (NodeEditor.Renaming != 0 && Selection.Contains(target))
@@ -25,19 +31,18 @@
                     NodeEditor.Renaming = 2;
                 }
 
-                target.name = EditorGUILayout.TextField(target.name, NodeEditorResources.styles.nodeHeader,
+                target.nodeName = EditorGUILayout.TextField(target.ItemName, NodeEditorResources.styles.nodeHeader,
                     GUILayout.Height(30));
                 
                 if (!EditorGUIUtility.editingTextField)
                 {
-                    editor.Rename(target.name);
+                    editor.Rename(target.ItemName);
                     NodeEditor.Renaming = 0;
                 }
             }
             else
             {
                 GUILayout.Label(title, NodeEditorResources.styles.nodeHeader, GUILayout.Height(30));
-                node.width = (int)EditorGUILayout.Slider(node.width, 220, 1000);
             }
 
             return true;

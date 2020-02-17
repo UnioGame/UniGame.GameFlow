@@ -5,7 +5,10 @@
     using BaseEditor.Interfaces;
     using Interfaces;
     using Runtime.Core;
+    using UniCore.Runtime.ProfilerTools;
+    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Attributes;
     using UnityEditor;
+    using UnityEngine;
 
     public class BaseBodyDrawer : INodeEditorHandler
     {
@@ -13,23 +16,29 @@
     
         public BaseBodyDrawer()
         {
-            _excludes = new List<string>(){"m_Script", "graph", "position", "ports"};
+            //TODO remove this old dirty hack
+            _excludes = new List<string>(){"m_Script", "graph", "position", "ports", "id"};
         }
     
-        public bool Update(INodeEditor editor, UniBaseNode node)
+        public bool Update(INodeEditorData editor, Node node)
         {
             var serializedObject = editor.SerializedObject;
 
             var iterator = serializedObject.GetIterator();
-            bool enterChildren = true;
-        
+            var enterChildren = true;
+            var type = node.GetType();
+            
             EditorGUIUtility.labelWidth = 84;
             while (iterator.NextVisible(enterChildren))
             {
                 enterChildren = false;
-                if (_excludes.Contains(iterator.name)) continue;
-            
-                NodeEditorGUILayout.PropertyField(iterator, true);
+                
+                //is node field should be draw
+                var field = type.GetField(iterator.name);
+                var hideInspector = field?.GetCustomAttributes(typeof(HideNodeInspectorAttribute), false).Length > 0;
+                if (hideInspector || _excludes.Contains(iterator.name)) continue;
+                
+                node.DrawNodePropertyField(iterator,new GUIContent(iterator.name,iterator.tooltip),true);
             }
 
             return true;

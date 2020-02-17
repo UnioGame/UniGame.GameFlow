@@ -4,13 +4,9 @@ namespace UniGreenModules.UniGameSystems.Runtime.Nodes
 {
     using System.Collections.Generic;
     using Commands;
-    using UniContextData.Runtime.Interfaces;
     using UniCore.Runtime.Interfaces;
-    using UniCore.Runtime.ObjectPool.Runtime;
-    using UniCore.Runtime.ProfilerTools;
-    using UniCore.Runtime.ReorderableInspector;
-    using UniGame.AddressableTools.Runtime.Attributes;
     using UniGame.SerializableContext.Runtime.Addressables;
+    using UniNodeSystem.Runtime.Core;
     using UniRx.Async;
     using UnityEngine;
 
@@ -18,6 +14,9 @@ namespace UniGreenModules.UniGameSystems.Runtime.Nodes
     public class ContextDataSourcesNode : InOutPortNode
     {
         [Header("Node Output Data Source")]
+        #if ODIN_INSPECTOR
+        [Sirenix.OdinInspector.DrawWithUnity] 
+        #endif
         public List<AsyncContextDataSourceAssetReference> sources;
 
         protected override void UpdateCommands(List<ILifeTimeCommand> nodeCommands)

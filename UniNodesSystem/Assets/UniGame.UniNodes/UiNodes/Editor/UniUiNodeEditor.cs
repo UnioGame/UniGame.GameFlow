@@ -30,7 +30,7 @@
                 UpdateUiData(uiNode,uiNode.resource.editorAsset.GetComponent<UiModule>());
             }
             
-            EditorUtility.SetDirty(uiNode.graph.gameObject);
+            EditorUtility.SetDirty(uiNode);
             serializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
 

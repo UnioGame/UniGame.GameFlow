@@ -1,74 +1,43 @@
-namespace UniGreenModules.UniNodeSystem.Runtime.Core
+namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Interfaces
 {
     using System;
     using System.Collections.Generic;
+    using UniCore.Runtime.Interfaces;
+    using UniNodeSystem.Runtime.Core;
+    using UniNodeSystem.Runtime.Interfaces;
     using UnityEngine;
 
-    public interface INodePort
+    public interface INodePort : IGraphItem
     {
-        ulong Id { get; }
+
         int ConnectionCount { get; }
 
         /// <summary> Return the first non-null connection </summary>
-        NodePort Connection { get; }
+        INodePort Connection { get; }
 
-        PortIO direction { get; }
-        ConnectionType connectionType { get; }
+        IPortValue Value { get; }
+
+        PortIO Direction { get; }
+        
+        ConnectionType ConnectionType { get; }
 
         /// <summary> Is this port connected to anytihng? </summary>
         bool IsConnected { get; }
 
-        bool IsInput { get; }
-        bool IsOutput { get; }
-        string fieldName { get; }
-        UniBaseNode node { get; set; }
-        bool IsDynamic { get; }
-        bool IsStatic { get; }
-        Type ValueType { get; set; }
+        Node Node { get; }
 
-        void UpdateId();
+        int UpdateId();
 
         /// <summary> Checks all connections for invalid references, and removes them. </summary>
         void VerifyConnections();
-
-        /// <summary> Return the output value of this node through its parent nodes GetValue override method. </summary>
-        /// <returns> <see cref="UniBaseNode.GetValue(NodePort)"/> </returns>
-        object GetOutputValue();
-
-        /// <summary> Return the output value of the first connected port. Returns null if none found or invalid.</summary>
-        /// <returns> <see cref="NodePort.GetOutputValue"/> </returns>
-        object GetInputValue();
-
-        /// <summary> Return the output values of all connected ports. </summary>
-        /// <returns> <see cref="NodePort.GetOutputValue"/> </returns>
-        object[] GetInputValues();
-
-        /// <summary> Return the output value of the first connected port. Returns null if none found or invalid. </summary>
-        /// <returns> <see cref="NodePort.GetOutputValue"/> </returns>
-        T GetInputValue<T>();
-
-        /// <summary> Return the output values of all connected ports. </summary>
-        /// <returns> <see cref="NodePort.GetOutputValue"/> </returns>
-        T[] GetInputValues<T>();
-
-        /// <summary> Return true if port is connected and has a valid input. </summary>
-        /// <returns> <see cref="NodePort.GetOutputValue"/> </returns>
-        bool TryGetInputValue<T>(out T value);
-
-        /// <summary> Return the sum of all inputs. </summary>
-        /// <returns> <see cref="NodePort.GetOutputValue"/> </returns>
-        float GetInputSum(float fallback);
-
-        /// <summary> Return the sum of all inputs. </summary>
-        /// <returns> <see cref="NodePort.GetOutputValue"/> </returns>
-        int GetInputSum(int fallback);
 
         /// <summary> Connect this <see cref="NodePort"/> to another </summary>
         /// <param name="port">The <see cref="NodePort"/> to connect to</param>
         void Connect(NodePort port);
 
-        List<NodePort> GetConnections();
-        NodePort GetConnection(int i);
+        List<INodePort> GetConnections();
+        
+        INodePort GetConnection(int i);
 
         /// <summary> Get index of the connection connecting this and specified ports </summary>
         int GetConnectionIndex(NodePort port);
@@ -96,6 +65,6 @@ namespace UniGreenModules.UniNodeSystem.Runtime.Core
         void MoveConnections(NodePort targetPort);
 
         /// <summary> Swap connected nodes from the old list with nodes from the new list </summary>
-        void Redirect(List<UniBaseNode> oldNodes, List<UniBaseNode> newNodes);
+        void Redirect(List<Node> oldNodes, List<Node> newNodes);
     }
 }
