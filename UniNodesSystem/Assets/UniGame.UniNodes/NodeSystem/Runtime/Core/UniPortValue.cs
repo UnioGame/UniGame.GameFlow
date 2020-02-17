@@ -6,7 +6,6 @@
     using System.Linq;
     using System.Runtime.CompilerServices;
     using Interfaces;
-    using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
     using UniCore.Runtime.Attributes;
     using UniCore.Runtime.Common;
     using UniCore.Runtime.DataFlow;
@@ -121,7 +120,7 @@
             if (valueTypeFilter != null && 
                 valueTypeFilter.Count != 0  && 
                 !valueTypeFilter.Contains(typeof(TData))) {
-                GameLog.Log($"PUBLISH: You try to Publish wrong type value {nameof(T)} into {ItemName}");
+                GameLog.Log($"PUBLISH: You try to Publish wrong type value {nameof(TData)} into {ItemName}");
                 return;
             }
             
