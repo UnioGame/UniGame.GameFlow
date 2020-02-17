@@ -24,7 +24,7 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Exa
             
             base.OnExecute();
 
-            IntIn.Do(value => IntResult.SetValue(IntResult.Value - value)).
+            IntIn.Do(value => IntResult.Publish(IntResult.Value - value)).
                 Subscribe().
                 AddTo(LifeTime);
             

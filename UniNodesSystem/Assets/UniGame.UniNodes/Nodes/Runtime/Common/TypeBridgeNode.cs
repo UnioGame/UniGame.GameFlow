@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using NodeSystem.Runtime.Attributes;
+    using NodeSystem.Runtime.Core.Commands;
     using NodeSystem.Runtime.Nodes;
     using UniCore.Runtime.Attributes;
     using UniCore.Runtime.Interfaces;
@@ -15,42 +16,32 @@
 
     [HideNode]
     [Serializable]
-    public class TypeBridgeNode<TData> : UniNode, 
-        IUniInOutNode,
+    public class TypeBridgeNode<TData> : UniNode,
         IReadonlyRecycleReactiveProperty<TData>
     {
-        private const string portName = "context";
+        protected const string portName = "context";
         
         #region inspector
-        public bool distinctInput = true;
-        public bool bindInOut = false;
-        [ReadOnlyValue]
-        public bool isFinalyze;
         
+        public bool distinctInput = true;
+
         [ReadOnlyValue]
-        [SerializeField]
-        protected TData value;
+        [SerializeField] protected TData defaultValue;
 
         #endregion
+        
+        protected IDataSourceCommand<TData> valueSource;
+
+        protected IReadOnlyReactiveProperty<TData> valueData;
 
         #region private fields
-        
-        protected ReactiveProperty<TData> valueData;
-        
-        protected IPortValue input;
-        
-        protected IPortValue output;
-        
+
         #endregion
         
         #region public properties
 
-        public IObservable<TData> Source => valueData;
+        public IReadOnlyReactiveProperty<TData> Source => valueData;
 
-        public IPortValue Input => input;
-
-        public IPortValue Output => output;
-        
         #endregion
 
         #region IReactiveProperty API
@@ -59,60 +50,23 @@
 
         public bool HasValue => valueData.HasValue;
         
-        
         public IDisposable Subscribe(IObserver<TData> observer) => valueData.Subscribe(observer);
-
         
         #endregion
-        
-        protected override void OnInitialize()
-        {
-            base.OnInitialize();
-            
-            valueData = new ReactiveProperty<TData>();
-            
-            //reset local value
-            LifeTime.AddCleanUpAction(CleanUpNode);
-        }
 
         protected override void UpdateCommands(List<ILifeTimeCommand> nodeCommands)
         {
             base.UpdateCommands(nodeCommands);
-            
-            //create port pairs
-            var portCommand = new ConnectedFormatedPairCommand(this,portName,bindInOut);
-            nodeCommands.Add(portCommand);
 
-            input = portCommand.InputPort;
-            output = portCommand.OutputPort;
+            valueSource = new PortTypeDataBridgeCommand<TData>(this,portName,defaultValue,distinctInput);
+            valueData   = valueSource.Value;
 
-            var valueObservable = input.Receive<TData>();
-            if (distinctInput) {
-                valueObservable.
-                    Subscribe(x => valueData.Value = x).
-                    AddTo(LifeTime);
-            }
-            else {
-                valueObservable.
-                    Subscribe(valueData.SetValueAndForceNotify).
-                    AddTo(LifeTime);
-            }
-
-            valueData.Subscribe(x => value = x).
-                AddTo(LifeTime);
-    
+            nodeCommands.Add(valueSource);
         }
 
         protected void Finish()
         {
-            isFinalyze = true;
-            output.Publish(valueData.Value);
-        }
-
-        private void CleanUpNode()
-        {
-            isFinalyze = false;
-            value = default;
+            valueSource.Complete();
         }
 
     }

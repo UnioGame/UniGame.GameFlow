@@ -6,7 +6,10 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nod
     using UniCore.Runtime.Interfaces;
 
     [Serializable]
-    public class IntReactivePort : ReactivePortValue<int>{}
+    public class IntReactivePort : ReactivePortValue<int>
+    {
+        
+    }
     
     [Serializable]
     public class StringReactivePort : ReactivePortValue<string> {}

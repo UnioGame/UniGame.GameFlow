@@ -79,11 +79,6 @@
         public int UpdateId()
         {
             id = Graph.UpdateId(id);
-            foreach (var portPair in ports)
-            {
-                var port = portPair.Value;
-                port.UpdateId();
-            }
             return id;
         }
 

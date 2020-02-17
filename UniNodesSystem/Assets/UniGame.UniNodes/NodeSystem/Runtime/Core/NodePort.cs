@@ -313,7 +313,9 @@
 
         public void Validate()
         {
-            if (id == 0) UpdateId();
+            if (id == 0) {
+                UpdateId();
+            }
             VerifyConnections();
         }
 
@@ -346,20 +348,21 @@
         public void Disconnect(NodePort port)
         {
             // Remove this ports connection to the other
+            if (port == null) {
+                return;
+            }
+
             for (var i = connections.Count - 1; i >= 0; i--) {
                 var connection = connections[i];
                 if (connection.portId == port.id) {
                     connections.RemoveAt(i);
                 }
             }
-
-            if (port != null) {
-                // Remove the other ports connection to this port
-                for (var i = 0; i < port.connections.Count; i++) {
-                    var connection = port.connections[i];
-                    if (connection.portId == id) {
-                        port.connections.RemoveAt(i);
-                    }
+            // Remove the other ports connection to this port
+            for (var i = 0; i < port.connections.Count; i++) {
+                var connection = port.connections[i];
+                if (connection.portId == id) {
+                    port.connections.RemoveAt(i);
                 }
             }
         }
@@ -384,6 +387,7 @@
 
         public void ClearConnections()
         {
+            connections.RemoveAll(x => x.Port == null);
             while (connections.Count > 0) {
                 Disconnect(connections[0].Port);
             }

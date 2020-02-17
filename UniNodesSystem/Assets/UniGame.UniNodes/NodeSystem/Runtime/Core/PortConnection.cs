@@ -53,6 +53,8 @@
         {
             //if (port != null) return port;
             var targetNode = node.Graph.GetNode(nodeId);
+            if (targetNode == null)
+                return null;
             port = targetNode.GetPort(fieldName);
             return port;
         }

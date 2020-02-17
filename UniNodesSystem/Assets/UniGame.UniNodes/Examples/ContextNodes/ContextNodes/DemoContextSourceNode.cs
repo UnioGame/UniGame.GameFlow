@@ -5,7 +5,6 @@
     using NodeSystem.Runtime.Nodes;
     using NodeSystem.Runtime.ReactivePorts;
     using UniContextData.Runtime.Entities;
-    using UniCore.Runtime.ProfilerTools;
     using UniCore.Runtime.Rx.Extensions;
     using UniNodeSystem.Runtime.Core;
     using UniRx;
@@ -41,7 +40,7 @@
 
         public void FireContext()
         {
-            contextValue.SetValue(context);
+            contextValue.Publish(context);
             context.Publish(intValue);
             context.Publish(floatValule);
 

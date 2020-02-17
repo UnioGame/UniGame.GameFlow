@@ -44,7 +44,6 @@
             return node && node.IsActive;
         }
         
-
         public override void OnHeaderGUI()
         {
             if (IsSelected())
@@ -59,15 +58,14 @@
         public override void OnBodyGUI()
         {
             var node = target as UniNode;
-            var graph = node.GetComponent<NodeGraph>();
-            
+
             var idEditingMode = EditorApplication.isPlayingOrWillChangePlaymode == false && 
                                 EditorApplication.isCompiling == false && 
                                 EditorApplication.isUpdating == false;
 
             if (idEditingMode) {
-
-                node.Initialize(graph);
+                
+                node.Initialize(node.graph);
                     
                 UpdatePortAttributes(node);
 
@@ -93,11 +91,18 @@
             var emptyPorts = node.ports.
                 Where(x => x.Value != null && string.IsNullOrEmpty(x.Value.ItemName)).
                 ToList();
+            
             foreach (var pairs in emptyPorts) {
                 var port = pairs.Value;
                 port.fieldName = pairs.Key;
             }
-            node.Ports.RemoveItems(x => IsPortRemoved(node,x), node.RemovePort);
+
+            var removedPorts = node.Ports.
+                Where(x => IsPortRemoved(node, x));
+            foreach (var removedPort in removedPorts) {
+                node.RemovePort(removedPort);
+            }
+            
             node.Validate();
         }
 

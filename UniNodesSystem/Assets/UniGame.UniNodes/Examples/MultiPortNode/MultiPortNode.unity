@@ -308,6 +308,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: UniGraph
       objectReference: {fileID: 0}
+    - target: {fileID: 7332805275249036991, guid: f557b00ba17df6740832a3e419a89f0c,
+        type: 3}
+      propertyPath: uniqueId
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 8752078913047958056, guid: f557b00ba17df6740832a3e419a89f0c,
         type: 3}
       propertyPath: m_LocalPosition.x

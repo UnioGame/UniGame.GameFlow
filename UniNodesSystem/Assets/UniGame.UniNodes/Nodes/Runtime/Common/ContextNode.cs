@@ -1,6 +1,7 @@
 ﻿namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nodes.Runtime.Nodes
 {
     using System;
+    using Common;
     using NodeSystem.Runtime.Attributes;
     using UniCore.Runtime.Interfaces;
     using UniCore.Runtime.ProfilerTools;
@@ -14,8 +15,8 @@
     {
         public IObservable<T> Receive<T>()
         {
-            return valueData.
-                Where(x => x!=null).
+            return Source.
+                Where(x => x != null).
                 Select(x => x.Receive<T>()).
                 Switch();
         }

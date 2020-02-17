@@ -6,6 +6,6 @@
         IReadOnlyReactiveProperty<TValue>,
         IReactiveSource
     {
-        void SetValue(TValue portValue);
+        void Publish(TValue portValue);
     }
 }

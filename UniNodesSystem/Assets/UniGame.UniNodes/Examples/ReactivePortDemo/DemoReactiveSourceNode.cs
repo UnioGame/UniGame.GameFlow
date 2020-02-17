@@ -29,14 +29,20 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Exa
         
         #endregion
         
+        
         [Space]
         [ReactivePort(PortIO.Output)]
         public IntReactivePort IntOut = new IntReactivePort();
 
+        protected override void OnInitialize()
+        {
+            IntOut.Initialize(this);
+        }
+
         protected override void OnExecute()
         {
             Observable.Interval(TimeSpan.FromSeconds(delay)).
-                Do(x => IntOut.SetValue(value)).
+                Do(x => IntOut.Publish(++value)).
                 Subscribe().
                 AddTo(LifeTime);
         }

@@ -55,7 +55,7 @@
 
         public T AddNode<T>(string name) where T : Node => AddNode(name, typeof(T)) as T;
 
-        public Node GetNode(int id)
+        public Node GetNode(int nodeId)
         {
             nodesCache = nodesCache ?? new Dictionary<int, Node>();
             if (nodesCache.Count != nodes.Count) {
@@ -63,7 +63,7 @@
                 nodesCache = nodes.ToDictionary(x => x.Id);
             }
 
-            nodesCache.TryGetValue(id, out var node);
+            nodesCache.TryGetValue(nodeId, out var node);
             return node;
         }
 
@@ -122,6 +122,7 @@
                 }
             }
 
+            nodesCache.Clear();
             nodes.Clear();
         }
 

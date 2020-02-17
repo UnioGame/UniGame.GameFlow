@@ -3,6 +3,7 @@
     using System;
     using System.Runtime.CompilerServices;
     using Interfaces;
+    using UniCore.Runtime.Attributes;
     using UniCore.Runtime.ProfilerTools;
     using UniNodeSystem.Runtime.Interfaces;
     using UniRx;
@@ -14,17 +15,15 @@
     {
         #region inspector
         
-        [SerializeField]
-        public bool sendByBind = true;
+        [SerializeField] public bool sendByBind = true;
         
-        [SerializeField]
-        public TValue value = default;
+        [SerializeField] public TValue value = default;
 
-        [SerializeField]
-        public int nodeId;
+        [ReadOnlyValue]
+        [SerializeField] public int nodeId;
         
-        [SerializeField]
-        public string portName;
+        [ReadOnlyValue]
+        [SerializeField] public string portName;
         
         #endregion
         
@@ -53,14 +52,13 @@
 
         #endregion
         
-        public void Bind(INode node, string name)
+        public void Bind(INode target, string name)
         {
-            Initialize(node);
-
             this.portName = name;
+            Initialize(target);
 
             if (Application.isPlaying && sendByBind) {
-                SetValue(value);
+                Publish(value);
             }
         }
 
@@ -72,9 +70,12 @@
         }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void SetValue(TValue portValue)
+        public void Publish(TValue portValue)
         {
             value = portValue;
+            if (broker == null) {
+                GameLog.LogError("Reactive Value must be initialized before use");
+            }
             broker.Publish(value);
         }
 
@@ -93,8 +94,11 @@
         {
             if (node == null) {
                 GameLog.LogError($"NULL Node at ReactivePoort {this.node} node id:{nodeId} {portName}");
+                return null;
             }
-            var result = node.GetPort(portName).Value;
+
+            var port = node.GetPort(portName);
+            var result = port.Value;
             return result;
         }
     }

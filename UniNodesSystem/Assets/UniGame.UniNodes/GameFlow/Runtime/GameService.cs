@@ -1,11 +1,13 @@
 ﻿namespace UniGreenModules.UniGameSystem.Runtime
 {
+    using System;
     using Interfaces;
     using UniCore.Runtime.DataFlow;
     using UniCore.Runtime.DataFlow.Interfaces;
     using UniCore.Runtime.Interfaces;
     using UniRx;
 
+    [Serializable]
     public abstract class GameService : IGameService
     {
         protected LifeTimeDefinition lifeTimeDefinition = new LifeTimeDefinition();
