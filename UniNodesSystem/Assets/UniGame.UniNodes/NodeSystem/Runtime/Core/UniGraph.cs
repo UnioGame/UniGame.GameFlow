@@ -1,6 +1,5 @@
 ﻿namespace UniGreenModules.UniNodeSystem.Nodes
 {
-    using System;
     using System.Collections.Generic;
     using System.Runtime.CompilerServices;
     using Runtime.Core;
@@ -8,11 +7,9 @@
     using Runtime.Interfaces;
     using Sirenix.Utilities;
     using UniCore.Runtime.ObjectPool.Runtime.Extensions;
-    using UniCore.Runtime.ProfilerTools;
     using UniCore.Runtime.Rx.Extensions;
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Attributes;
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Interfaces;
-    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Nodes;
     using UniRx;
     using UnityEngine;
 
@@ -25,22 +22,22 @@
         /// <summary>
         /// graph cancelation
         /// </summary>
-        [NonSerialized] private List<IGraphCancelationNode> cancelationNodes = new List<IGraphCancelationNode>();
+        private List<IGraphCancelationNode> cancelationNodes = new List<IGraphCancelationNode>();
         
         /// <summary>
         /// graph inputs
         /// </summary>
-        [NonSerialized] private List<IGraphPortNode> inputs = new List<IGraphPortNode>();
+        private List<IGraphPortNode> inputs = new List<IGraphPortNode>();
         
         /// <summary>
         /// graph outputs
         /// </summary>
-        [NonSerialized] private List<IGraphPortNode> outputs = new List<IGraphPortNode>();
+        private List<IGraphPortNode> outputs = new List<IGraphPortNode>();
 
         /// <summary>
         /// all child nodes
         /// </summary>
-        [NonSerialized] private List<IUniNode> allNodes = new List<IUniNode>();
+        private List<IUniNode> allNodes = new List<IUniNode>();
 
         #endregion
 
@@ -56,10 +53,7 @@
 
         protected override void OnInitialize()
         {
-            base.OnInitialize();
-            
             InitializeGraphNodes();
-            
         }
 
         protected override void OnExecute()
@@ -90,7 +84,6 @@
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void BindConnections(IUniNode node,INodePort sourcePort,IMessagePublisher publisher)
         {
-            GameLog.Log($"{node.ItemName}:{sourcePort.ItemName} : BindToConnectedSources");
             //data source connections allowed only for input ports
             if (sourcePort.Direction != PortIO.Input) {
                 return;
@@ -135,7 +128,8 @@
                     cancelationNodes.Add(cancelationNode);
                 }
 
-                uniNode.Initialize();
+                uniNode.Initialize(this);
+                
                 lifeTime.AddCleanUpAction(uniNode.Exit);
                 
                 allNodes.Add(uniNode);
@@ -162,6 +156,7 @@
         private void OnDisable() => Dispose();
         
         #endregion
-
+        
+        
     }
 }

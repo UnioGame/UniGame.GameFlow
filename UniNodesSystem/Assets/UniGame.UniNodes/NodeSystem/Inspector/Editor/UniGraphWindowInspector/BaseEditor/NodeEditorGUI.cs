@@ -64,9 +64,11 @@
             idHash.Clear();
             if (ActiveGraph == null) return;
 
-            ActiveGraph.nodes.RemoveAll(x => x == null);
+            var graph = ActiveGraph;
+            graph.nodes.RemoveAll(x => x == null);
 
             foreach (var node in ActiveGraph.nodes) {
+                node.graph = graph;
                 if (idHash.Add(node.Id) == false) {
                     node.UpdateId();
                 }

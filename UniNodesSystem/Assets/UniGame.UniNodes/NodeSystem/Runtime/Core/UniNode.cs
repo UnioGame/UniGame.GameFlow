@@ -8,15 +8,11 @@
     using Interfaces;
     using UniCore.Runtime.DataFlow;
     using UniCore.Runtime.DataFlow.Interfaces;
-    using UniCore.Runtime.Extension;
     using UniCore.Runtime.Interfaces;
     using UniCore.Runtime.ProfilerTools;
-    using UniNodeSystem.Runtime.Commands;
     using UniNodeSystem.Runtime.Core;
-    using UniNodeSystem.Runtime.Extensions;
     using UniNodeSystem.Runtime.Interfaces;
     using UnityEngine;
-    using Object = UnityEngine.Object;
 
     [HideNode]
     [Serializable]
@@ -41,6 +37,8 @@
 
         private bool isActive = false;
 
+        private bool isInitialized = false;
+
         protected ILifeTime lifeTime;
 
         #endregion
@@ -60,21 +58,25 @@
 
         #region public methods
 
-        public void Initialize()
+        public void Initialize(NodeGraph graphData)
         {
-            //check initialization status
-            if (lifeTime != null && lifeTime.IsTerminated == false)
+            if (Application.isEditor && Application.isPlaying == false) {
+                lifeTimeDefinition.Terminate();
+            }
+            
+            if (Application.isPlaying && isInitialized)
                 return;
 
-            GameLog.Log($"NODE {ItemName} : Initialize");
-
+            isInitialized = true;
+            
+            graph = graphData;
             //restart lifetime
             lifeTimeDefinition = lifeTimeDefinition ?? new LifeTimeDefinition();
             lifeTime = lifeTimeDefinition.LifeTime;
             portValues = portValues ?? new HashSet<INodePort>();
-            
+
             //initialize ports
-            InitializePorts(lifeTime);
+            InitializePorts();
             //custom node initialization
             OnInitialize();
             //initialize all node commands
@@ -99,11 +101,7 @@
         /// <summary>
         /// stop execution
         /// </summary>
-        public void Exit()
-        {
-            GameLog.Log($"NODE {ItemName} : Exit");
-            lifeTimeDefinition.Terminate();
-        }
+        public void Exit() => lifeTimeDefinition.Terminate();
 
         /// <summary>
         /// start node execution
@@ -114,11 +112,11 @@
             if (isActive) {
                 return;
             }
-            GameLog.Log($"NODE {ItemName} : Execute");
+            //initialize
+            Initialize(graph);
+            
             //mark as active
             isActive = true;
-            //initialize
-            Initialize();
             //execute all node commands
             commands.ForEach(x => x.Execute(LifeTime));
             //user defined logic
@@ -167,13 +165,13 @@
         /// initialize ports before execution
         /// </summary>
         /// <param name="portsLifeTime"></param>
-        private void InitializePorts(ILifeTime portsLifeTime)
+        private void InitializePorts()
         {
             //initialize ports
             for (var i = 0; i < Ports.Count; i++) {
                 var nodePort = Ports[i];
-                nodePort.Initialize();
-                portsLifeTime.AddCleanUpAction(nodePort.Release);
+                nodePort.Initialize(this);
+                lifeTime.AddCleanUpAction(nodePort.Release);
                 
                 if(Application.isPlaying)
                     AddPortValue(nodePort);
@@ -185,30 +183,27 @@
         /// </summary>
         private void OnDisable() => Exit();
 
-        
 #region inspector call
 
         [Conditional("UNITY_EDITOR")]
         public void Validate()
-        { 
-            foreach (var port in Ports) {
+        {
+            for (int i = 0; i < Ports.Count; i++) {
+                var port = Ports[i];
+                port.nodeId = id;
+                port.node = this;
                 port.Validate();
             }
+            
             CleanUpSerializableCommands();
         }
 
         [Conditional("UNITY_EDITOR")]
         private void LogMessage(string message)
         {
-            GameLog.Log($"{Graph.name}:{name}: {message}");
+            GameLog.Log($"{Graph.ItemName}:{ItemName}: {message}");
         }
 
-        [Conditional("UNITY_EDITOR")]
-        protected virtual void OnValidate()
-        {
-            Validate();
-        }
-        
         [Conditional("UNITY_EDITOR")]
         public void CleanUpSerializableCommands()
         {

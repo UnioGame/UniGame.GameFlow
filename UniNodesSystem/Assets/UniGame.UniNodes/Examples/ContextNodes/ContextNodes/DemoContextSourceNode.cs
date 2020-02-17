@@ -25,14 +25,18 @@
         public int intValue = 1;
 
         public float floatValule = 1f;
+
+        protected override void OnInitialize()
+        {
+            contextValue.Initialize(this);
+        }
         
         protected override void OnExecute()
         {
-            GameLog.Log($"{ItemName} ID {Id} : OnExecute");
-            
             clickToFireContext.
                 Where(x => x).
-                Subscribe(x => FireContext()).AddTo(LifeTime);
+                Subscribe(x => FireContext()).
+                AddTo(LifeTime);
         }
 
         public void FireContext()

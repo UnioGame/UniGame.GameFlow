@@ -20,8 +20,6 @@
 		{
 			
 			var graph = new GameObject().AddComponent<UniGraph>();
-			
-			graph.Graph = graph;
 			graph.nodeName = graph.name;
 			
 			//add main root node

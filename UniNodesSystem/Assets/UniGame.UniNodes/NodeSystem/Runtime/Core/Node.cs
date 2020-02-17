@@ -2,24 +2,19 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Linq;
     using Interfaces;
     using UniCore.Runtime.Attributes;
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Attributes;
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Core;
-    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Interfaces;
     using UnityEngine;
-    using UnityEngine.Serialization;
-    using Debug = UnityEngine.Debug;
 
     [Serializable]
     public abstract class Node : MonoBehaviour, INode
     {
 
-        [HideInInspector] 
+        [HideNodeInspector] 
         [ReadOnlyValue] 
-        [SerializeField] private int _id;
+        [SerializeField] public int id;
 
         [HideNodeInspector]
         [SerializeField] public int width = 220;
@@ -31,53 +26,22 @@
         [SerializeField] public Vector2 position;
 
         /// <summary> It is recommended not to modify these at hand. Instead, see <see cref="NodeInputAttribute"/> and <see cref="NodeOutputAttribute"/> </summary>
-        [SerializeField] private NodePortDictionary ports = new NodePortDictionary();
+        [SerializeField] public NodePortDictionary ports = new NodePortDictionary();
       
         /// <summary> Parent <see cref="NodeGraph"/> </summary>
-        [SerializeField] 
         [Tooltip("Parent Graph")] 
-        [HideInInspector] 
-        [FormerlySerializedAs("graph")]
-        private NodeGraph _graph;
+        [HideNodeInspector] 
+        [SerializeField] public NodeGraph graph;
 
         #region public properties
-        
-        public int Id
-        {
-            get
-            {
-                if (_id == 0)
-                {
-                    UpdateId();
-                }
 
-                return _id;
-            }
-        }
+        public int Id => id == 0 ? UpdateId() : id;
 
         public string ItemName => nodeName;
-        
-        
+
+
         /// <summary> Iterate over all ports on this node. </summary>
         public IReadOnlyList<NodePort> Ports => ports.Ports;
-
-        
-        #endregion
-        
-        public void UpdateId()
-        {
-            _id = Graph.GetId();
-            foreach (var portPair in ports)
-            {
-                var port = portPair.Value;
-                port.UpdateId();
-            }
-        }
-
-        public virtual string GetName()
-        {
-            return nodeName;
-        }
 
         /// <summary> Iterate over all outputs on this node. </summary>
         public IEnumerable<NodePort> Outputs
@@ -102,23 +66,39 @@
                 }
             }
         }
+
+        public virtual IGraphData Graph => graph;
+
+        #endregion
         
-        public NodeGraph Graph
+        public void OnIdUpdate(int oldId, int newId, IGraphItem updatedItem)
         {
-            get => _graph;
-            set
+            return;
+        }
+        
+        public int UpdateId()
+        {
+            id = Graph.UpdateId(id);
+            foreach (var portPair in ports)
             {
-                if (_graph == value)
-                    return;
-                _graph = value;
-                _id = _graph.GetId();
+                var port = portPair.Value;
+                port.UpdateId();
             }
+            return id;
         }
 
-        #region Instance Ports
+        public virtual string GetName() => nodeName;
 
+        public void SetGraph(NodeGraph parent)
+        {
+            if (graph == parent)
+                return;
+            graph = parent;
+            UpdateId();       
+        }
+        
         /// <summary> Add a serialized port to this node. </summary>
-        public INodePort AddPort(
+        public NodePort AddPort(
             string fieldName,
             IReadOnlyList<Type> types, PortIO direction,
             ConnectionType connectionType = ConnectionType.Multiple,
@@ -137,6 +117,8 @@
             }    
 
             var port = new NodePort(this,fieldName, direction, connectionType,showBackingValue,types);
+            port.Initialize(this);
+            
             ports.Add(fieldName, port);
             return port;
         }
@@ -155,16 +137,12 @@
             ports.Remove(port.ItemName);
         }
 
-        #endregion
-
-        #region Ports
-
         /// <summary> Returns output port which matches fieldName </summary>
         public NodePort GetOutputPort(string fieldName)
         {
             var port = GetPort(fieldName);
             if (port == null || port.Direction != PortIO.Output) return null;
-            else return port;
+            return port;
         }
 
         /// <summary> Returns input port which matches fieldName </summary>
@@ -172,7 +150,7 @@
         {
             var port = GetPort(fieldName);
             if (port == null || port.Direction != PortIO.Input) return null;
-            else return port;
+            return port;
         }
 
         /// <summary> Returns port which matches fieldName </summary>
@@ -189,26 +167,11 @@
             return ports.ContainsKey(fieldName);
         }
 
-        #endregion
-        
-        /// <summary> Called after a connection between two <see cref="NodePort"/>s is created </summary>
-        /// <param name="from">Output</param> <param name="to">Input</param>
-        public virtual void OnCreateConnection(NodePort from, NodePort to)
-        {
-        }
-
-        /// <summary> Called after a connection is removed from this port </summary>
-        /// <param name="port">Output or Input</param>
-        public virtual void OnRemoveConnection(NodePort port)
-        {
-        }
-
         /// <summary> Disconnect everything from this node </summary>
         public void ClearConnections()
         {
             foreach (var port in Ports) port.ClearConnections();
         }
 
-        public override int GetHashCode() => (int)_id;
     }
 }

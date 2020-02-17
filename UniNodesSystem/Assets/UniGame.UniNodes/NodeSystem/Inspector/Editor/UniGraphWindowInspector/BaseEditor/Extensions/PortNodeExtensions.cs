@@ -38,7 +38,6 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nod
                 types.AddRange(portData.ValueTypes);
             }
 
-
             var value          = info.GetValue(node);
             var reactiveSource = value as IReactiveSource;
             if (reactiveSource!=null) {

@@ -534,7 +534,7 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
                 if (Selection.objects[i] is Node)
                 {
                     var srcNode = Selection.objects[i] as Node;
-                    if (srcNode.Graph != ActiveGraph) continue; // ignore nodes selected in another graph
+                    if (srcNode.graph != ActiveGraph) continue; // ignore nodes selected in another graph
                     foreach (var port in srcNode.Ports)
                     {
                         for (var c = 0; c < port.ConnectionCount; c++)

@@ -18,29 +18,24 @@ namespace UniGreenModules.UniGameSystems.Examples.ServiceNode
         [PortValue(PortIO.Output)]
         public int intOut;
 
-        [PortValue(PortIO.Output)]
-        public int intOut1;
-
-        
-        public int interval = 1;
         public float delay = 1;
         
         protected override void OnExecute()
         {
-            IntSourceProcess(interval, delay).
+            IntSourceProcess().
                 Execute().
                 AddTo(LifeTime);
         }
 
-        private IEnumerator IntSourceProcess(int increment, float updateDelay)
+        private IEnumerator IntSourceProcess()
         {
             var intPort = GetPort(nameof(intOut));
             var floatPort = GetPort(nameof(floatOut));
             
-            var wait = new WaitForSeconds(updateDelay);
+            var wait = new WaitForSeconds(delay);
             while (isActiveAndEnabled) {
-                intPort.Value.Publish(increment);
-                floatPort.Value.Publish(Time.deltaTime);
+                intPort.Value.Publish(intOut);
+                floatPort.Value.Publish(floatOut);
                 yield return wait;
             }
         }

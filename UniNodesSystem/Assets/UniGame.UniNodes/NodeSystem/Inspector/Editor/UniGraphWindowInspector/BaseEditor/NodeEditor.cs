@@ -39,7 +39,6 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
         
         public sealed override void OnEnable()
         {
-            
             _bodyDrawers = new List<INodeEditorHandler>();
             _headerDrawers = new List<INodeEditorHandler>();
             

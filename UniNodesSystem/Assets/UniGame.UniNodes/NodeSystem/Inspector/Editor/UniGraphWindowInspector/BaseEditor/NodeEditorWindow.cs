@@ -80,7 +80,15 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
 
         private static NodeEditorWindow SelectWindow(NodeGraph nodeGraph, bool replaceActive)
         {
-            var window = ActiveWindows.FirstOrDefault(x => x.ActiveGraph == nodeGraph);
+            NodeEditorWindow window = null;
+            
+            if (replaceActive) {
+                window = ActiveWindows.FirstOrDefault(x => x != null);
+            }
+
+            if (window) return window;
+            
+            window = ActiveWindows.FirstOrDefault(x => x.ActiveGraph == nodeGraph);
 
             if (window) return window;
             window = ActiveWindows.FirstOrDefault(x => !x.ActiveGraph);
@@ -140,7 +148,7 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
         {
             if (ActiveGraph == null) return;
             ActiveGraph.Release();
-            ActiveGraph.Initialize();
+            ActiveGraph.Initialize(ActiveGraph);
         }
 
         public void OnInspectorUpdate()
@@ -323,6 +331,7 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
                 return nodeGraph;
 
             nodeGraph.SaveScenes();
+            
             var prefabResource = nodeGraph.GetPrefabDefinition();
             if (prefabResource.IsInstance)
                 return nodeGraph;

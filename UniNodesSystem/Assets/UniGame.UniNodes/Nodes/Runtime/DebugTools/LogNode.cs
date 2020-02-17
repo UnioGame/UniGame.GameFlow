@@ -1,10 +1,7 @@
-﻿using UniGreenModules.UniNodeSystem.Runtime;
-
-namespace UniGreenModules.UniNodeSystem.Nodes.DebugTools
+﻿namespace UniGreenModules.UniNodeSystem.Nodes.DebugTools
 {
     using System;
     using System.Collections.Generic;
-    using Commands;
     using Runtime.Core;
     using Runtime.Extensions;
     using Runtime.Interfaces;
@@ -12,22 +9,20 @@ namespace UniGreenModules.UniNodeSystem.Nodes.DebugTools
     using UniCore.Runtime.ProfilerTools;
     using UniCore.Runtime.Rx.Extensions;
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Nodes;
-    using UniNodes.Runtime.Commands;
     using UniRx;
-    using UnityEngine;
 
     [Serializable]
     [CreateNodeMenu("Debug/Log","Log")]
     public class LogNode : UniNode , IMessagePublisher
     {
         private const string logPortName = "log";
-
-        private IPortValue logPort;
         
         public LogMode mode = LogMode.Log;
 
         public string message = "LogNode";
-        
+
+        private IPortValue logPort;
+
         protected override void OnExecute()
         {
             PrintLog(GetMessage(), mode);
@@ -48,7 +43,7 @@ namespace UniGreenModules.UniNodeSystem.Nodes.DebugTools
 
         public void Publish<T>(T value)
         {
-            PrintLog($"{message}: GRAPH:{Graph.name} : {name} \n\t {value.GetType().Name} : {value}", mode);
+            PrintLog($"{message}: GRAPH:{Graph.ItemName} : {name} \n\t {value.GetType().Name} : {value}", mode);
         }
         
         private void PrintLog(string messageData, LogMode logMode)

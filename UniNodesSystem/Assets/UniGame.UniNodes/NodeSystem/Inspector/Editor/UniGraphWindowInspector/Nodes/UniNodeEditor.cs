@@ -59,6 +59,7 @@
         public override void OnBodyGUI()
         {
             var node = target as UniNode;
+            var graph = node.GetComponent<NodeGraph>();
             
             var idEditingMode = EditorApplication.isPlayingOrWillChangePlaymode == false && 
                                 EditorApplication.isCompiling == false && 
@@ -66,7 +67,7 @@
 
             if (idEditingMode) {
 
-                node.Initialize();
+                node.Initialize(graph);
                     
                 UpdatePortAttributes(node);
 
@@ -89,6 +90,13 @@
 
         public void VerifyNode(UniNode node)
         {
+            var emptyPorts = node.ports.
+                Where(x => x.Value != null && string.IsNullOrEmpty(x.Value.ItemName)).
+                ToList();
+            foreach (var pairs in emptyPorts) {
+                var port = pairs.Value;
+                port.fieldName = pairs.Key;
+            }
             node.Ports.RemoveItems(x => IsPortRemoved(node,x), node.RemovePort);
             node.Validate();
         }
@@ -103,7 +111,7 @@
                 GameLog.Log($"REMOVE PORT {node.ItemName} : {port.ItemName} and Clear");
             }
             
-            return value == null;
+            return value == null || string.IsNullOrEmpty(value.ItemName) ;
         }
 
         public void UpdatePortAttributes(UniNode node)
@@ -119,18 +127,17 @@
                 var port = node.UpdatePortValue(data.PortData);
                 var value = portField.GetValue(node);
 
-                UpdateSerializedCommands(node, port, value,portField);
+                UpdateSerializedCommands(node, port, value);
             }
 
         }
 
-        public void UpdateSerializedCommands(UniNode node,IPortValue port, object value, FieldInfo valueField)
+        public void UpdateSerializedCommands(UniNode node,IPortValue port, object value)
         {
 
             switch (value) {
                 case IReactiveSource reactiveSource:
-                    reactiveSource.Bind(node.Graph,node.Id,port.ItemName);
-                    //valueField.SetValue(node,reactiveSource);
+                    reactiveSource.Bind(node,port.ItemName);
                     return;
             }
 

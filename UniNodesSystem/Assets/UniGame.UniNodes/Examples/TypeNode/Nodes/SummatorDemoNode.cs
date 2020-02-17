@@ -11,27 +11,35 @@
     public class SummatorDemoNode : UniNode
     {
         [PortValue(PortIO.Input)]
-        public int summInt = 0;
+        public int intValue = 0;
 
-        [PortValue(PortIO.Output)]
-        public int summResult = 0;
-        
         [PortValue(PortIO.Input)]
-        public float summFloat = 0f;
+        public float floatValue = 0;
+
+        
+        [PortValue(PortIO.Output)]
+        public int summIntResult = 0;
+        
+        [PortValue(PortIO.Output)]
+        public float summFloatResult = 0f;
         
         protected override void OnExecute()
         {
-            var intSumm = GetPort(nameof(summInt));
-            var floatSumm = GetPort(nameof(summFloat));
+            var intSumm = GetPort(nameof(intValue));
+            var floatSumm = GetPort(nameof(floatValue));
+            
+            var intOutput   = GetPort(nameof(summIntResult)).Value;
+            var floatOutput = GetPort(nameof(summFloatResult)).Value;
             
             intSumm.Value.Receive<int>().
-                Do(x => this.summResult += x).
-                Do(x => this.summInt = summResult).
+                Do(x => this.summIntResult += x).
+                Do(x => intOutput.Publish(summIntResult)).
                 Subscribe().
                 AddTo(LifeTime);
             
-            intSumm.Value.Receive<float>().
-                Do(x => this.summFloat += x).
+            floatSumm.Value.Receive<float>().
+                Do(x => this.summFloatResult += x).
+                Do(x => floatOutput.Publish(summFloatResult)).
                 Subscribe().
                 AddTo(LifeTime);
         }

@@ -4,8 +4,7 @@
     using System.Runtime.CompilerServices;
     using Interfaces;
     using UniCore.Runtime.ProfilerTools;
-    using UniNodeSystem.Nodes;
-    using UniNodeSystem.Runtime.Core;
+    using UniNodeSystem.Runtime.Interfaces;
     using UniRx;
     using UnityEngine;
 
@@ -24,12 +23,13 @@
         [SerializeField]
         public int nodeId;
         
-        [SerializeField] 
-        public NodeGraph graph;
-
         [SerializeField]
         public string portName;
         
+        #endregion
+        
+        protected INode node;  
+                
         #region constructor
         
         public ReactivePortValue(){}
@@ -38,9 +38,6 @@
         {
             this.value = value;
         }
-        
-        #endregion
-        
         
         #endregion
 
@@ -52,26 +49,33 @@
 
         public TValue Value => value;
 
-        public bool HasValue => graph!=null;
+        public bool HasValue => node!=null;
 
         #endregion
         
-        public void Bind(NodeGraph graph,int id, string name)
+        public void Bind(INode node, string name)
         {
-            this.graph = graph;
-            this.nodeId = id;
+            Initialize(node);
+
             this.portName = name;
-            
+
             if (Application.isPlaying && sendByBind) {
                 SetValue(value);
             }
+        }
+
+        public void Initialize(INode target)
+        {
+            this.node = target;
+            this.nodeId = target.Id;
+            broker = GetBroker();
         }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void SetValue(TValue portValue)
         {
             value = portValue;
-            GetBroker()?.Publish(value);
+            broker.Publish(value);
         }
 
         public IDisposable Subscribe(IObserver<TValue> observer)
@@ -87,14 +91,11 @@
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private IMessageBroker GetBroker()
         {
-            if (broker != null)
-                return broker;
-            var node = graph.GetNode(nodeId);
             if (node == null) {
-                GameLog.LogError($"NULL Node at ReactivePoort {graph} node id:{nodeId} {portName}");
+                GameLog.LogError($"NULL Node at ReactivePoort {this.node} node id:{nodeId} {portName}");
             }
-            broker = node.GetPort(portName).Value;
-            return broker;
+            var result = node.GetPort(portName).Value;
+            return result;
         }
     }
 }

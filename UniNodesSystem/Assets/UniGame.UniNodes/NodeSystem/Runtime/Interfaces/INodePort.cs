@@ -7,7 +7,7 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nod
     using UniNodeSystem.Runtime.Interfaces;
     using UnityEngine;
 
-    public interface INodePort : IUnique , INamedItem
+    public interface INodePort : IGraphItem
     {
 
         int ConnectionCount { get; }
@@ -24,7 +24,7 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nod
         /// <summary> Is this port connected to anytihng? </summary>
         bool IsConnected { get; }
 
-        Node Node { get; set; }
+        Node Node { get; }
 
         int UpdateId();
 

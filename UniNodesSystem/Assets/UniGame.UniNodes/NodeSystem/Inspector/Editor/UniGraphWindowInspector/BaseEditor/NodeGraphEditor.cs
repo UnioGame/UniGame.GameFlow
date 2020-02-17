@@ -45,7 +45,7 @@
             
             var node = target.CopyNode(original);
             node.name = original.name;
-            node.transform.parent = original.Graph.transform;
+            node.transform.parent = original.transform;
             
             if (this.GetSettings().autoSave)
             {
@@ -58,26 +58,25 @@
         /// <summary> Safely remove a node and all its connections. </summary>
         public void RemoveNode(Node node)
         {
-            var graph = node.Graph;
-
-            var sourceGraph = PrefabUtility.GetCorrespondingObjectFromSource(target);
-            var sourceNode = PrefabUtility.GetCorrespondingObjectFromSource(node);
-
-            var removedAsset = sourceNode != null ? (Object)sourceNode : node;
-            var targetGraph = sourceGraph ? sourceGraph : target;
-
-            var targetNode = sourceNode ? sourceNode : node;
+//            var sourceGraph = PrefabUtility.GetCorrespondingObjectFromSource(target);
+//            var sourceNode = PrefabUtility.GetCorrespondingObjectFromSource(node);
+//
+//            var removedAsset = sourceNode != null ? (Object)sourceNode : node;
+//            var targetGraph = sourceGraph ? sourceGraph : target;
+            var targetGraph = node.graph;
+            var targetNode = node;
             targetGraph.RemoveNode(targetNode);
 
-            Object.DestroyImmediate(removedAsset,true);
+            Object.DestroyImmediate(node,true);
 
             AssetDatabase.SaveAssets();
-
-            if (sourceGraph && targetGraph)
-            {
-                PrefabUtility.ApplyPrefabInstance(targetGraph.gameObject,InteractionMode.AutomatedAction);
-            }
+            EditorUtility.SetDirty(targetGraph);
             
+//            if (sourceGraph && targetGraph)
+//            {
+//                PrefabUtility.ApplyPrefabInstance(targetGraph.gameObject,InteractionMode.AutomatedAction);
+//            }
+//            
         }
     }
 }

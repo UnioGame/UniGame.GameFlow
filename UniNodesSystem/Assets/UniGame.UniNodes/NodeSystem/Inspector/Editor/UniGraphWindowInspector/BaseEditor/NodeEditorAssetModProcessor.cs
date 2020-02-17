@@ -30,7 +30,7 @@
                     if (node.GetType () == scriptType) {
                         if (node != null && node.Graph != null) {
                             // Delete the node and notify the user
-                            Debug.LogWarning (node.name + " of " + node.Graph + " depended on deleted script and has been removed automatically.", node.Graph);
+                            Debug.LogWarning (node.name + " of " + node.Graph + " depended on deleted script and has been removed automatically.", node);
                             node.Graph.RemoveNode (node);
                         }
                     }

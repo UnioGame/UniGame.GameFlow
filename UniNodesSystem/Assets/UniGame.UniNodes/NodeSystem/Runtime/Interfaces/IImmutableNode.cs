@@ -6,8 +6,11 @@ namespace UniGreenModules.UniNodeSystem.Runtime.Interfaces
     using UniCore.Runtime.Interfaces;
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Core;
 
-    public interface IImmutableNode : IUnique, INamedItem
+    public interface IImmutableNode : IGraphItem
     {
+
+        IGraphData Graph { get; }
+
         IReadOnlyList<NodePort> Ports { get; }
 
         /// <summary> Iterate over all outputs on this node. </summary>

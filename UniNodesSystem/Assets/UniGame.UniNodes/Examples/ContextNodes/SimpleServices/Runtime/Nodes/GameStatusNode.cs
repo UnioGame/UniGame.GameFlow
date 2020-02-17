@@ -22,7 +22,8 @@
 
         protected override void OnExecute()
         {
-            Source.Do(OnContextUpdate).
+            Source.Where(x => x!=null).
+                Do(OnContextUpdate).
                 Subscribe().
                 AddTo(LifeTime);
         }

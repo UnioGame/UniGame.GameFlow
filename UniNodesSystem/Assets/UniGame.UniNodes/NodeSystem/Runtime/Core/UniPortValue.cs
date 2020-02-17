@@ -11,7 +11,6 @@
     using UniCore.Runtime.Common;
     using UniCore.Runtime.DataFlow;
     using UniCore.Runtime.DataFlow.Interfaces;
-    using UniCore.Runtime.Interfaces;
     using UniCore.Runtime.ProfilerTools;
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Connections;
     using UniRx;
@@ -77,15 +76,11 @@
         
         public void Initialize(string portName)
         {
-            GameLog.Log($"PORTVALUE {ItemName} : Initialize");
-
-            if (lifeTime != null && lifeTime.IsTerminated == false)
-                return;
-            
             name = portName;
             
             lifeTimeDefeDefinition = lifeTimeDefeDefinition ?? new LifeTimeDefinition();
             lifeTime = lifeTimeDefeDefinition.LifeTime;
+            lifeTimeDefeDefinition.Release();
             
             context     = context ?? new TypeData();
             broadcaster = broadcaster ?? new TypeDataBrodcaster();

@@ -22,14 +22,8 @@
         private const string portName = "context";
         
         #region inspector
-
-        [Header("take unique input")]
         public bool distinctInput = true;
-
-        [Header("bind in/out")]
         public bool bindInOut = false;
-        
-        [Header("is finish called")]
         [ReadOnlyValue]
         public bool isFinalyze;
         

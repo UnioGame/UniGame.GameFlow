@@ -2,39 +2,59 @@
 {
     using System;
     using System.Collections.Generic;
+    using Interfaces;
+    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Interfaces;
     using UnityEngine;
 
     [Serializable]
     public class PortConnection
     {
-        [SerializeField] public string      fieldName;
+        #region inspector
 
-#if ODIN_INSPECTOR
-        [Sirenix.OdinInspector.InlineEditor]
-#endif
-        [SerializeField] public Node node;
+        [SerializeField] public string fieldName;
 
-        [NonSerialized] private NodePort port;
-        
-        public                 NodePort Port => port ?? (port = GetPort());
-
+        [SerializeField] public int nodeId;
 
         /// <summary> Extra connection path points for organization </summary>
-        [SerializeField]
-        public List<Vector2> reroutePoints = new List<Vector2>();
+        [SerializeField] public List<Vector2> reroutePoints = new List<Vector2>();
 
-        public PortConnection(NodePort port)
+        [SerializeField] public int portId;
+        
+        [SerializeField] private Node node;
+        
+        #endregion
+
+        [NonSerialized] private NodePort port;
+
+        public NodePort Port => GetPort();
+
+        public PortConnection(NodePort connectionPort, int id)
         {
-            this.port = port;
-            node      = port.Node;
-            fieldName = port.ItemName;
+            port      = connectionPort;
+            portId = port.id;
+            
+            Initialize(port.node,id,port.fieldName);
+        }
+
+        public void Initialize(Node data,int id, string portName)
+        {
+            nodeId = id;
+            fieldName = portName;
+            Initialize(data);
+        }
+        
+        public void Initialize(Node data)
+        {
+            node   = data;
         }
 
         /// <summary> Returns the port that this <see cref="PortConnection"/> points to </summary>
         public NodePort GetPort()
         {
-            if (node == null || string.IsNullOrEmpty(fieldName)) return null;
-            return node.GetPort(fieldName);
+            //if (port != null) return port;
+            var targetNode = node.Graph.GetNode(nodeId);
+            port = targetNode.GetPort(fieldName);
+            return port;
         }
     }
 }

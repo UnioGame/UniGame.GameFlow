@@ -13,45 +13,47 @@
     public class NodesDictionary : SerializableDictionary<ulong, Node>
     {
     }
-    
+
     /// <summary> Base class for all node graphs </summary>
     [Serializable]
-    public abstract class NodeGraph : UniNode, IDisposable
+    public abstract class NodeGraph : UniNode, IDisposable , IGraphData
     {
         #region static data
 
         public static HashSet<NodeGraph> ActiveGraphs { get; } = new HashSet<NodeGraph>();
 
+        private Dictionary<int, Node> nodesCache;
+
         #endregion
 
-        private Dictionary<int,Node> nodesCache;
-        
-        [ReadOnlyValue]
-        [SerializeField] private int _uniqueId;
+        [ReadOnlyValue] [SerializeField] private int uniqueId;
 
         /// <summary> All nodes in the graph. <para/>
         /// See: <see cref="AddNode{T}"/> </summary>
-        [SerializeField] public List<Node> nodes = new List<Node>();
+        [SerializeField]
+        public List<Node> nodes = new List<Node>();
+
+        #region public properties
 
         public IReadOnlyList<INode> Nodes => nodes;
 
-        public int GetId()
-        {
-            return ++_uniqueId;
-        }
+        public sealed override IGraphData Graph => this;
+
+        #endregion
 
         #region graph operations
 
-        /// <summary> Add a node to the graph by type </summary>
-        public T AddNode<T>() where T : Node
-        {
-            return AddNode(typeof(T)) as T;
-        }
+        public int GetId() => ++uniqueId;
 
-        public T AddNode<T>(string name) where T : Node
+        public int UpdateId(int oldId)
         {
-            return AddNode(name, typeof(T)) as T;
+            return GetId();
         }
+        
+        /// <summary> Add a node to the graph by type </summary>
+        public T AddNode<T>() where T : Node => AddNode(typeof(T)) as T;
+
+        public T AddNode<T>(string name) where T : Node => AddNode(name, typeof(T)) as T;
 
         public Node GetNode(int id)
         {
@@ -64,28 +66,31 @@
             nodesCache.TryGetValue(id, out var node);
             return node;
         }
+
         
+        public new void SetGraph(NodeGraph parent)
+        {
+        }
+
         public virtual Node AddNode(string itemName, Type type)
         {
             var nodeAsset = gameObject.AddComponent(type);
             var node      = nodeAsset as Node;
             if (node == null) {
-                DestroyImmediate(nodeAsset,true);
+                DestroyImmediate(nodeAsset, true);
                 return null;
             }
 
-            node.Graph = this;
+            node.SetGraph(this);
+            node.graph = graph;
             node.nodeName = itemName;
             nodes.Add(node);
-            
+
             return node;
         }
 
         /// <summary> Add a node to the graph by type </summary>
-        public Node AddNode(Type type)
-        {
-            return AddNode(type.Name, type);
-        }
+        public Node AddNode(Type type) => AddNode(type.Name, type);
 
         /// <summary> Creates a copy of the original node in the graph </summary>
         public virtual Node CopyNode(Node original)
@@ -94,7 +99,7 @@
             node.UpdateId();
             node.ClearConnections();
             nodes.Add(node);
-            node.Graph = this;
+            node.SetGraph(this);
             return node;
         }
 
@@ -104,7 +109,8 @@
         {
             node.ClearConnections();
             nodes.Remove(node);
-            if (Application.isPlaying) Destroy(node);
+            if (Application.isPlaying) 
+                Destroy(node);
         }
 
         /// <summary> Remove all nodes and connections from the graph </summary>
@@ -128,7 +134,7 @@
             for (var i = 0; i < nodes.Count; i++) {
                 if (nodes[i] == null) continue;
                 var node = Instantiate(nodes[i]) as Node;
-                node.Graph     = graph;
+                node.SetGraph(this);
                 graph.nodes[i] = node;
             }
 
@@ -149,11 +155,6 @@
 
         #endregion
 
-        private void OnDestroy()
-        {
-            // Remove all nodes prior to graph destruction
-            Clear();
-        }
-
+        private void OnDestroy() => Clear();
     }
 }

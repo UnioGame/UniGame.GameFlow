@@ -181,12 +181,15 @@
             if (portData == null)
                 return null;
             
-            return node.UpdatePortValue(
+            var port = node.UpdatePortValue(
                 portData.ItemName, 
                 portData.Direction, 
                 portData.ConnectionType,
                 ShowBackingValue.Always, 
                 portData.ValueTypes);
+            
+            
+            return port;
         }
 
         public static IPortValue UpdatePortValue(
@@ -197,13 +200,23 @@
             ShowBackingValue showBackingValue = ShowBackingValue.Always,
             IReadOnlyList<Type> types = null)
         {
-            INodePort port = node.GetPort(portName);
-            
+            var port = node.GetPort(portName);
+
             if (port == null) {
                 types = types ?? new List<Type>();
                 port = node.AddPort(portName, types, direction, connectionType, showBackingValue);
             }
 
+            var portData = new NodePortData() {
+                direction        = direction,
+                fieldName        = portName,
+                connectionType   = connectionType,
+                showBackingValue = showBackingValue,
+                valueTypes       = types == null ? new List<Type>() : new List<Type>(types),
+            };
+            
+            port.SetPortData(portData);
+            
             node.AddPortValue(port);
 
             return port.Value;

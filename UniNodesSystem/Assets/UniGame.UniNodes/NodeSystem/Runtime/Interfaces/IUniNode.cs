@@ -13,6 +13,7 @@ namespace UniGreenModules.UniNodeSystem.Runtime.Interfaces
 
         bool AddPortValue(INodePort portValue);
 
-        void Initialize();
+        void Initialize(NodeGraph data);
+
     }
 }

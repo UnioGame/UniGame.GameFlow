@@ -19,7 +19,7 @@ namespace UniGreenModules.UniNodeSystem.Runtime.Interfaces
         /// <summary> Disconnect everything from this node </summary>
         void ClearConnections();
         
-        INodePort AddPort(
+        NodePort AddPort(
             string fieldName,
             IReadOnlyList<Type> types, PortIO direction,
             ConnectionType connectionType = ConnectionType.Multiple,

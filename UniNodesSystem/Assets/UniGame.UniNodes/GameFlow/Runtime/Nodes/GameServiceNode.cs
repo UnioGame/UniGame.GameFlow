@@ -39,9 +39,10 @@
 
         protected override void OnExecute()
         {
-            GameLog.LogMessage($"{Graph.name}:{name}: Service {typeof(TService).Name}");
+            GameLog.LogMessage($"{Graph.ItemName}:{name}: Service {typeof(TService).Name}");
 
-            Source.Do(x => service.Bind(x,LifeTime)).
+            Receive<IContext>().
+                Do(x => service.Bind(x,LifeTime)).
                 CombineLatest(service.IsReady, (ctx, ready) => (ctx,ready)).
                 Where(x => x.ready || !waitForServiceReady).
                 Do(x => x.ctx.Publish<TServiceApi>(service)).

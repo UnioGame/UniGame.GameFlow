@@ -28,11 +28,20 @@
 			var nodes = graph.nodes;
 			foreach (var node in graph.GetComponents<Node>()) 
 			{
-				if (nodes.Contains(node) != false || graph == node) {
+				if (nodes.Contains(node) || graph == node) {
 					continue;
 				}
 				RemoveNode(node);
 				changed = true;
+			}
+
+			foreach (var node in nodes) {
+				if (node.graph != null) {
+					continue;
+				}
+
+				changed    = true;
+				node.graph = graph;
 			}
 
 			if (changed) {

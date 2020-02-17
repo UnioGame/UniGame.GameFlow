@@ -17,7 +17,7 @@
         public BaseBodyDrawer()
         {
             //TODO remove this old dirty hack
-            _excludes = new List<string>(){"m_Script", "graph", "position", "ports"};
+            _excludes = new List<string>(){"m_Script", "graph", "position", "ports", "id"};
         }
     
         public bool Update(INodeEditorData editor, Node node)
