@@ -98,7 +98,7 @@
             }
 
             var port = node.GetPort(portName);
-            var result = port.Value;
+            var result = port?.Value;
             return result;
         }
     }

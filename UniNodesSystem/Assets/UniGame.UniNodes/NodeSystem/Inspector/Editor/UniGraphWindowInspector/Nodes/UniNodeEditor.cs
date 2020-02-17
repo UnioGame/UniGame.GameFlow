@@ -71,8 +71,8 @@
 
                 UpdateData(node);
 
-                VerifyNode(node);
-
+                node.Validate();
+                
             }
             
             base.OnBodyGUI();
@@ -80,44 +80,10 @@
             DrawPorts(node);
 
             serializedObject.ApplyModifiedPropertiesWithoutUndo();
-
-
+            
         }
 
         public virtual void UpdateData(UniNode node) { }
-
-        public void VerifyNode(UniNode node)
-        {
-            var emptyPorts = node.ports.
-                Where(x => x.Value != null && string.IsNullOrEmpty(x.Value.ItemName)).
-                ToList();
-            
-            foreach (var pairs in emptyPorts) {
-                var port = pairs.Value;
-                port.fieldName = pairs.Key;
-            }
-
-            var removedPorts = node.Ports.
-                Where(x => IsPortRemoved(node, x));
-            foreach (var removedPort in removedPorts) {
-                node.RemovePort(removedPort);
-            }
-            
-            node.Validate();
-        }
-
-        public bool IsPortRemoved(IUniNode node,INodePort port)
-        {
-            var value = node.PortValues.
-                FirstOrDefault(x => x.ItemName == port.ItemName && 
-                                    x.Direction == port.Direction);
-            
-            if (value == null) {
-                GameLog.Log($"REMOVE PORT {node.ItemName} : {port.ItemName} and Clear");
-            }
-            
-            return value == null || string.IsNullOrEmpty(value.ItemName) ;
-        }
 
         public void UpdatePortAttributes(UniNode node)
         {

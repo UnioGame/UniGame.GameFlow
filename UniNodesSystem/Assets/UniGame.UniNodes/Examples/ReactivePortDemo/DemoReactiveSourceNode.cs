@@ -4,14 +4,9 @@ using UniGreenModules.UniNodeSystem.Runtime.Core;
 namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Examples.ReactivePortDemo
 {
     using System;
-    using System.Collections;
     using NodeSystem.Runtime.Attributes;
-    using NodeSystem.Runtime.Core.Interfaces;
     using NodeSystem.Runtime.ReactivePorts;
-    using UniCore.Runtime.ProfilerTools;
     using UniCore.Runtime.Rx.Extensions;
-    using UniRoutine.Runtime;
-    using UniRoutine.Runtime.Extension;
     using UniRx;
     using UnityEngine;
 
@@ -29,14 +24,22 @@ namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Exa
         
         #endregion
         
-        
-        [Space]
+        /// <summary>
+        /// bind local to port
+        /// </summary>
         [ReactivePort(PortIO.Output)]
         public IntReactivePort IntOut = new IntReactivePort();
 
+        /// <summary>
+        /// custom output port name
+        /// </summary>
+        [ReactivePort(fieldName = "customOutput",direction = PortIO.Output)]
+        public IntReactivePort outValue = new IntReactivePort();
+        
         protected override void OnInitialize()
         {
             IntOut.Initialize(this);
+            outValue.Initialize(this);
         }
 
         protected override void OnExecute()

@@ -3,12 +3,14 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Linq;
     using Attributes;
     using Core.Commands;
     using Interfaces;
     using UniCore.Runtime.DataFlow;
     using UniCore.Runtime.DataFlow.Interfaces;
     using UniCore.Runtime.Interfaces;
+    using UniCore.Runtime.ObjectPool.Runtime;
     using UniCore.Runtime.ProfilerTools;
     using UniNodeSystem.Runtime.Core;
     using UniNodeSystem.Runtime.Interfaces;
@@ -188,6 +190,24 @@
         [Conditional("UNITY_EDITOR")]
         public void Validate()
         {
+            var removedPorts = ClassPool.Spawn<List<NodePort>>();
+            foreach (var portPair in ports) {
+                var port = portPair.Value;
+                if (port == null || string.IsNullOrEmpty(port.fieldName) || port.nodeId == 0) {
+                    removedPorts.Add(port);
+                    continue;
+                }
+                var value = PortValues.FirstOrDefault(x => x.ItemName == port.ItemName && 
+                                        x.Direction == port.Direction);
+                if (value == null || string.IsNullOrEmpty(value.ItemName)) {
+                    removedPorts.Add(port);
+                }
+            }
+
+            foreach (var removedPort in removedPorts) {
+                RemovePort(removedPort);
+            }
+
             for (int i = 0; i < Ports.Count; i++) {
                 var port = Ports[i];
                 port.nodeId = id;

@@ -47,16 +47,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 782945db79ce44748b3f294e0edf364e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _id: 1
+  id: 0
   width: 220
   nodeName: 
   position: {x: 0, y: 0}
   ports:
     keys: []
     values: []
-  _graph: {fileID: 7009446666381924808}
+  graph: {fileID: 0}
   serializableCommands: []
-  _uniqueId: 54
+  uniqueId: 8
   nodes:
   - {fileID: 115054199971061112}
   - {fileID: 1909121160466111395}
@@ -75,39 +75,66 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 620ad14d07f226747a9b5c5c8f7686a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _id: 5
+  id: 1
   width: 220
   nodeName: Demo Reactive Source Node
-  position: {x: 424, y: 24}
+  position: {x: 408, y: 24}
   ports:
     keys:
     - IntOut
+    - customOutput
     values:
-    - _id: 54
-      _fieldName: IntOut
-      _direction: 1
-      _connectionType: 0
-      _showBackingValue: 2
+    - id: 4
+      nodeId: 1
+      node: {fileID: 115054199971061112}
+      fieldName: IntOut
+      direction: 1
+      connectionType: 0
+      showBackingValue: 2
       isDynamic: 1
       isInstancePortList: 0
-      _node: {fileID: 115054199971061112}
-      _allowedValueTypes:
-      - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-      _portValue:
+      portValue:
         name: IntOut
+        serializedValueTypes:
+        - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+        broadcastersCount: 0
       connections:
       - fieldName: IntIn
-        node: {fileID: 1909121160466111395}
+        nodeId: 2
         reroutePoints: []
-  _graph: {fileID: 7009446666381924808}
+        portId: 6
+        node: {fileID: 115054199971061112}
+      instancePortList: 0
+    - id: 8
+      nodeId: 1
+      node: {fileID: 115054199971061112}
+      fieldName: customOutput
+      direction: 1
+      connectionType: 0
+      showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      portValue:
+        name: customOutput
+        serializedValueTypes:
+        - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+        broadcastersCount: 0
+      connections: []
+      instancePortList: 0
+  graph: {fileID: 7009446666381924808}
   serializableCommands: []
   delay: 0.1
   value: 1
   IntOut:
     sendByBind: 1
     value: 0
-    target: {fileID: 115054199971061112}
+    nodeId: 1
     portName: IntOut
+  outValue:
+    sendByBind: 1
+    value: 0
+    nodeId: 1
+    portName: customOutput
   references:
     version: 1
 --- !u!114 &1909121160466111395
@@ -122,7 +149,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e220d9478c8c56748a8e2f1b11bb82f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _id: 8
+  id: 2
   width: 220
   nodeName: Demo Value Summ Reactive Node
   position: {x: 696, y: 24}
@@ -131,49 +158,59 @@ MonoBehaviour:
     - IntResult
     - IntIn
     values:
-    - _id: 53
-      _fieldName: IntResult
-      _direction: 1
-      _connectionType: 0
-      _showBackingValue: 2
+    - id: 5
+      nodeId: 2
+      node: {fileID: 1909121160466111395}
+      fieldName: IntResult
+      direction: 1
+      connectionType: 0
+      showBackingValue: 2
       isDynamic: 1
       isInstancePortList: 0
-      _node: {fileID: 1909121160466111395}
-      _allowedValueTypes:
-      - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-      _portValue:
+      portValue:
         name: IntResult
+        serializedValueTypes:
+        - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+        broadcastersCount: 0
       connections:
       - fieldName: log
-        node: {fileID: 18125909105642779}
+        nodeId: 3
         reroutePoints: []
-    - _id: 52
-      _fieldName: IntIn
-      _direction: 0
-      _connectionType: 0
-      _showBackingValue: 2
+        portId: 7
+        node: {fileID: 1909121160466111395}
+      instancePortList: 0
+    - id: 6
+      nodeId: 2
+      node: {fileID: 1909121160466111395}
+      fieldName: IntIn
+      direction: 0
+      connectionType: 0
+      showBackingValue: 2
       isDynamic: 1
       isInstancePortList: 0
-      _node: {fileID: 1909121160466111395}
-      _allowedValueTypes:
-      - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-      _portValue:
+      portValue:
         name: IntIn
+        serializedValueTypes:
+        - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+        broadcastersCount: 0
       connections:
       - fieldName: IntOut
-        node: {fileID: 115054199971061112}
+        nodeId: 1
         reroutePoints: []
-  _graph: {fileID: 7009446666381924808}
+        portId: 4
+        node: {fileID: 1909121160466111395}
+      instancePortList: 0
+  graph: {fileID: 7009446666381924808}
   serializableCommands: []
   IntIn:
     sendByBind: 1
     value: 0
-    target: {fileID: 1909121160466111395}
+    nodeId: 2
     portName: IntIn
   IntResult:
     sendByBind: 1
     value: 0
-    target: {fileID: 1909121160466111395}
+    nodeId: 2
     portName: IntResult
   references:
     version: 1
@@ -189,30 +226,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23f9640bdcee91f44b837897ec957069, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _id: 13
+  id: 3
   width: 220
   nodeName: Log Node
-  position: {x: 952, y: 24}
+  position: {x: 1000, y: 24}
   ports:
     keys:
     - log
     values:
-    - _id: 14
-      _fieldName: log
-      _direction: 0
-      _connectionType: 0
-      _showBackingValue: 2
+    - id: 7
+      nodeId: 3
+      node: {fileID: 18125909105642779}
+      fieldName: log
+      direction: 0
+      connectionType: 0
+      showBackingValue: 2
       isDynamic: 1
       isInstancePortList: 0
-      _node: {fileID: 18125909105642779}
-      _allowedValueTypes: []
-      _portValue:
+      portValue:
         name: log
+        serializedValueTypes: []
+        broadcastersCount: 0
       connections:
       - fieldName: IntResult
-        node: {fileID: 1909121160466111395}
+        nodeId: 2
         reroutePoints: []
-  _graph: {fileID: 7009446666381924808}
+        portId: 5
+        node: {fileID: 18125909105642779}
+      instancePortList: 0
+  graph: {fileID: 7009446666381924808}
   serializableCommands: []
   mode: 1
   message: SUMM
