@@ -140,15 +140,21 @@
         }
 
         public virtual void Dispose() {}
+        
+        public override void Validate()
+        {
+            graph = this;
+            nodes.Clear();
+            nodes.AddRange(GetComponents<Node>());
+            nodes.RemoveAll(x => !x);
+            nodes.Remove(this);
+        }
 
         #endregion
 
         private void Awake()
         {
-            graph = this;
-            nodes.Clear();
-            GetComponents<Node>(nodes);
-            nodes.Remove(this);
+            Validate();
         }
 
     }

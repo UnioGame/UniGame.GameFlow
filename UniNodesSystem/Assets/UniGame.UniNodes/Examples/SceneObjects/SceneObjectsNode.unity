@@ -121,18 +121,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!114 &216782877 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7608387215950119889, guid: 8612b258e81ac4245a1772aa8c36933d,
-    type: 3}
-  m_PrefabInstance: {fileID: 1235398633}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 782945db79ce44748b3f294e0edf364e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1056168254
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -147,7 +135,7 @@ PrefabInstance:
     - target: {fileID: 529047507879149129, guid: 8612b258e81ac4245a1772aa8c36933d,
         type: 3}
       propertyPath: m_Name
-      value: CubeUniGraph
+      value: CubeUniGraph1
       objectReference: {fileID: 0}
     - target: {fileID: 7136188771150986460, guid: 8612b258e81ac4245a1772aa8c36933d,
         type: 3}
@@ -389,7 +377,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1001 &1235398633
 PrefabInstance:
@@ -399,21 +387,13 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1056168256, guid: 8612b258e81ac4245a1772aa8c36933d, type: 3}
-      propertyPath: graph
-      value: 
-      objectReference: {fileID: 216782877}
-    - target: {fileID: 1056168256, guid: 8612b258e81ac4245a1772aa8c36933d, type: 3}
       propertyPath: target
       value: 
       objectReference: {fileID: 1069132472}
-    - target: {fileID: 1056168256, guid: 8612b258e81ac4245a1772aa8c36933d, type: 3}
-      propertyPath: limit
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 529047507879149129, guid: 8612b258e81ac4245a1772aa8c36933d,
         type: 3}
       propertyPath: m_Name
-      value: ShpereUniGraph
+      value: ShpereUniGraph1
       objectReference: {fileID: 0}
     - target: {fileID: 7136188771150986460, guid: 8612b258e81ac4245a1772aa8c36933d,
         type: 3}
@@ -453,7 +433,7 @@ PrefabInstance:
     - target: {fileID: 7136188771150986460, guid: 8612b258e81ac4245a1772aa8c36933d,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7136188771150986460, guid: 8612b258e81ac4245a1772aa8c36933d,
         type: 3}

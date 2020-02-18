@@ -30,19 +30,20 @@
         {
             var e = Event.current;
             var m = GUI.matrix;
-            if (ActiveGraph == null) {
-                if (NodeGraph.ActiveGraphs.Count > 0) {
-                    Initialize(NodeGraph.ActiveGraphs.FirstOrDefault());
-                }
-
+            if (ActiveGraph == null || 
+                e.type == EventType.Ignore || 
+                e.rawType == EventType.Ignore) {
                 return;
             }
-
+            
+            //Initialize(ActiveGraph);
             graphEditor          = NodeGraphEditor.GetEditor(ActiveGraph);
             graphEditor.position = position;
 
-            VerifyNodes();
-
+            if (Application.isPlaying == false) {
+                ActiveGraph.Validate();
+            }
+            
             Controls();
 
             DrawGrid(position, Zoom, PanOffset);
@@ -58,22 +59,6 @@
             GUI.matrix = m;
         }
 
-        public void VerifyNodes()
-        {
-            idHash = idHash ?? new HashSet<int>();
-            idHash.Clear();
-            if (ActiveGraph == null) return;
-
-            var graph = ActiveGraph;
-            graph.nodes.RemoveAll(x => x == null);
-
-            foreach (var node in ActiveGraph.nodes) {
-                node.graph = graph;
-                if (idHash.Add(node.Id) == false) {
-                    node.UpdateId();
-                }
-            }
-        }
 
         public static void BeginZoomed(Rect rect, float zoom, float topPadding)
         {
@@ -202,7 +187,7 @@
             }
 
             contextMenu.AddSeparator("");
-            contextMenu.AddItem(new GUIContent("Preferences"), false, () => OpenPreferences());
+            //contextMenu.AddItem(new GUIContent("Preferences"), false, () => OpenPreferences());
             AddCustomContextMenuItems(contextMenu, ActiveGraph);
             contextMenu.DropDown(new Rect(Event.current.mousePosition, Vector2.zero));
         }

@@ -18,7 +18,7 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
         public const string ActiveGraphPath     = "ActiveGraphPath";
         public const string UniNodesWindowTitle = "UniNodes";
 
-        public static NodeGraph LastEditorGraph;
+        public NodeGraph LastEditorGraph;
 
         private Dictionary<int, NodePort> _portsIds             = new Dictionary<int, NodePort>();
         private Dictionary<int, Rect>     _portConnectionPoints = new Dictionary<int, Rect>();
@@ -86,15 +86,9 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
                 window = ActiveWindows.FirstOrDefault(x => x != null);
             }
 
-            if (window) return window;
-            
-            window = ActiveWindows.FirstOrDefault(x => x.ActiveGraph == nodeGraph);
-
-            if (window) return window;
-            window = ActiveWindows.FirstOrDefault(x => !x.ActiveGraph);
-
-            if (window) return window;
-            window = CreateInstance<NodeEditorWindow>();
+            window = window ?? ActiveWindows.FirstOrDefault(x => x.Title == nodeGraph.name);
+            window = window ?? ActiveWindows.FirstOrDefault(x => !x.ActiveGraph);
+            window = window ?? CreateInstance<NodeEditorWindow>();
 
             return window;
         }
