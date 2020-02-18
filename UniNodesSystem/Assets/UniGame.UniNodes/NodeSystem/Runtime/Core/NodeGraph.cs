@@ -9,14 +9,9 @@
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Nodes;
     using UnityEngine;
 
-    [Serializable]
-    public class NodesDictionary : SerializableDictionary<ulong, Node>
-    {
-    }
-
     /// <summary> Base class for all node graphs </summary>
     [Serializable]
-    public abstract class NodeGraph : UniNode, IDisposable , IGraphData
+    public abstract class NodeGraph : UniNode, IDisposable
     {
         #region static data
 
@@ -37,7 +32,7 @@
 
         public IReadOnlyList<INode> Nodes => nodes;
 
-        public sealed override IGraphData Graph => this;
+        public sealed override NodeGraph Graph => this;
 
         #endregion
 

@@ -67,7 +67,7 @@
             }
         }
 
-        public virtual IGraphData Graph => graph;
+        public virtual NodeGraph Graph => graph;
 
         #endregion
         

@@ -9,7 +9,7 @@ namespace UniGreenModules.UniNodeSystem.Runtime.Interfaces
     public interface IImmutableNode : IGraphItem
     {
 
-        IGraphData Graph { get; }
+        NodeGraph Graph { get; }
 
         IReadOnlyList<NodePort> Ports { get; }
 

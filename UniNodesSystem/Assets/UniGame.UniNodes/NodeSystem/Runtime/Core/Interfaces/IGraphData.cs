@@ -1,19 +1,41 @@
 ﻿namespace UniGreenModules.UniNodeSystem.Runtime.Core
 {
-    using System.Collections.Generic;
-    using UniCore.Runtime.DataFlow.Interfaces;
     using UniCore.Runtime.Interfaces;
-    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Interfaces;
+    using UniRx;
 
     public interface IGraphData : INamedItem, IUnique
     {
-        int GetId();
+
+        #region read operations
         
         Node GetNode(int id);
 
+        NodePort GetPort(int portId);
+        
+        PortConnection GetConnection(int portId);
+
+        IReadOnlyReactiveCollection<NodePort> GetPorts(int nodeId);
+
+        IReadOnlyReactiveCollection<PortConnection> GetConnections(int portId);
+        
+        #endregion
+        
+        int GetUniqueId();
+        
         int UpdateId(int oldId);
 
-        //IGraphItem Add(IGraphItem graphItem);
-        void RemoveNode(Node node);
+        IGraphData Add(IGraphItem graphItem);
+
+        #region remove operations
+        
+        IGraphData Remove(int id);
+        
+        IGraphData RemoveNode(Node node);
+
+        IGraphData RemovePort(NodePort port);
+
+        IGraphData RemoveConnection(PortConnection connection);
+        
+        #endregion
     }
 }
