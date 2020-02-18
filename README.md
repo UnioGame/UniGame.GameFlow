@@ -32,4 +32,4 @@ Open window Package Manager in Unity and install UniGame Nodes System Package
 
 ### Screens
 
-![](https://prnt.sc/r3za49)
+![](https://i.gyazo.com/981ff54d04adb0046df58ad85b9e785c.png)
