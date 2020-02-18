@@ -65,13 +65,13 @@
 
             if (idEditingMode) {
                 
-                node.Initialize(node.graph);
+                //node.Initialize(node.graph);
                     
                 UpdatePortAttributes(node);
 
                 UpdateData(node);
 
-                node.Validate();
+                //node.Validate();
                 
             }
             

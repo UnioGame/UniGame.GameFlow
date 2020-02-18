@@ -30,7 +30,7 @@
       
         /// <summary> Parent <see cref="NodeGraph"/> </summary>
         [Tooltip("Parent Graph")] 
-        //[HideNodeInspector] 
+        [HideNodeInspector] 
         [SerializeField] public NodeGraph graph;
 
         #region public properties
@@ -174,5 +174,6 @@
             foreach (var port in Ports) port.ClearConnections();
         }
 
+        public virtual void Validate(){}
     }
 }

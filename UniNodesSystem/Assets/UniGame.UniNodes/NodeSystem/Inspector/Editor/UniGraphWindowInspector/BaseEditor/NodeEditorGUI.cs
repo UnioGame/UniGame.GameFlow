@@ -41,9 +41,10 @@
             graphEditor.position = position;
 
             if (Application.isPlaying == false) {
+                ActiveGraph.Initialize(ActiveGraph);
                 ActiveGraph.Validate();
             }
-            
+
             Controls();
 
             DrawGrid(position, Zoom, PanOffset);

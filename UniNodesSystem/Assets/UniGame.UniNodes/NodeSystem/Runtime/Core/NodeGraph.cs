@@ -148,6 +148,8 @@
             nodes.AddRange(GetComponents<Node>());
             nodes.RemoveAll(x => !x);
             nodes.Remove(this);
+            
+            nodes.ForEach(x => x.Validate());
         }
 
         #endregion
