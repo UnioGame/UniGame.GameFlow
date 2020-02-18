@@ -58,25 +58,15 @@
         /// <summary> Safely remove a node and all its connections. </summary>
         public void RemoveNode(Node node)
         {
-//            var sourceGraph = PrefabUtility.GetCorrespondingObjectFromSource(target);
-//            var sourceNode = PrefabUtility.GetCorrespondingObjectFromSource(node);
-//
-//            var removedAsset = sourceNode != null ? (Object)sourceNode : node;
-//            var targetGraph = sourceGraph ? sourceGraph : target;
             var targetGraph = node.graph;
-            var targetNode = node;
-            targetGraph.RemoveNode(targetNode);
 
-            Object.DestroyImmediate(node,true);
+            targetGraph.RemoveNode(node);
+
+            if(node) Object.DestroyImmediate(node,true);
 
             AssetDatabase.SaveAssets();
             EditorUtility.SetDirty(targetGraph);
-            
-//            if (sourceGraph && targetGraph)
-//            {
-//                PrefabUtility.ApplyPrefabInstance(targetGraph.gameObject,InteractionMode.AutomatedAction);
-//            }
-//            
+
         }
     }
 }

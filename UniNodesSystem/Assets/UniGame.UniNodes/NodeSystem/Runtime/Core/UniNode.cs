@@ -189,7 +189,7 @@
 #region inspector call
 
         [Conditional("UNITY_EDITOR")]
-        public void Validate()
+        public virtual void Validate()
         {
             var removedPorts = ClassPool.Spawn<List<NodePort>>();
             foreach (var portPair in ports) {

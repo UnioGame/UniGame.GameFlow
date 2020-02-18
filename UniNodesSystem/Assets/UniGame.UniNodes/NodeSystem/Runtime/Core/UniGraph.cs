@@ -48,7 +48,15 @@
         public IReadOnlyList<IGraphPortNode> InputsPorts => inputs;
         
         public override void Dispose() => Exit();
-        
+
+        public override void Validate()
+        {
+            nodes.Clear();
+            nodes.AddRange(GetComponents<Node>());
+            nodes.RemoveAll(x => !x);
+            nodes.Remove(this);
+        }
+
         #region private methods
 
         protected override void OnInitialize()

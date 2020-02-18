@@ -28,7 +28,7 @@
         [SerializeField]
         public List<Node> nodes = new List<Node>();
 
-#endregiona
+#endregion
        
         [NonSerialized] private Dictionary<int, Node> nodesCache;
 
@@ -94,10 +94,10 @@
         public virtual Node CopyNode(Node original)
         {
             var node = Instantiate(original);
+            node.graph = this;
             node.UpdateId();
             node.ClearConnections();
             nodes.Add(node);
-            node.SetGraph(this);
             return node;
         }
 
@@ -107,8 +107,12 @@
         {
             node.ClearConnections();
             nodes.Remove(node);
-            if (Application.isPlaying) 
+            if (Application.isPlaying) {
                 Destroy(node);
+            }
+            else if (Application.isEditor) {
+                DestroyImmediate(node,true);
+            }
         }
 
         /// <summary> Create a new deep copy of this graph </summary>

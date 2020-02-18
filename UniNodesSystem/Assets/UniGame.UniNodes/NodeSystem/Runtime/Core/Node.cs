@@ -148,13 +148,19 @@
             return port;
         }
 
-        /// <summary> Returns port which matches fieldName </summary>
-        public NodePort GetPort(string fieldName)
+        public IPortValue GetPortValue(string portName)
         {
-            if (string.IsNullOrEmpty(fieldName))
+            var port = GetPort(portName);
+            return port?.portValue;
+        }
+        
+        /// <summary> Returns port which matches fieldName </summary>
+        public NodePort GetPort(string portName)
+        {
+            if (string.IsNullOrEmpty(portName))
                 return null;
 
-            return ports.TryGetValue(fieldName, out var port) ? port : null;
+            return ports.TryGetValue(portName, out var port) ? port : null;
         }
 
         public bool HasPort(string fieldName)
