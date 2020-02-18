@@ -389,7 +389,7 @@
         private void DrawTopButtons()
         {
             EditorDrawerUtils.DrawHorizontalLayout(() => {
-                EditorDrawerUtils.DrawButton("Apply Prefab", () => Open(Save(ActiveGraph)),
+                EditorDrawerUtils.DrawButton("Save", () => Open(Save(ActiveGraph)),
                     GUILayout.Height(20), GUILayout.Width(200));
 
                 EditorDrawerUtils.DrawButton("Refresh", Refresh,

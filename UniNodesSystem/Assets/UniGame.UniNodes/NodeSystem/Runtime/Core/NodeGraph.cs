@@ -28,7 +28,7 @@
         [SerializeField]
         public List<Node> nodes = new List<Node>();
 
-#endregion
+#endregiona
        
         [NonSerialized] private Dictionary<int, Node> nodesCache;
 
