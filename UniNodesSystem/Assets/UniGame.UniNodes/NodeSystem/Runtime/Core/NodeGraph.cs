@@ -5,7 +5,6 @@
     using System.Linq;
     using Interfaces;
     using UniCore.Runtime.Attributes;
-    using UniGame.Core.Runtime.DataStructure;
     using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Nodes;
     using UnityEngine;
 
@@ -17,7 +16,7 @@
 
         public static HashSet<NodeGraph> ActiveGraphs { get; } = new HashSet<NodeGraph>();
 
-        private Dictionary<int, Node> nodesCache;
+        private Dictionary<int, Node> nodesCache = new Dictionary<int, Node>();
 
         #endregion
 
@@ -52,7 +51,6 @@
 
         public Node GetNode(int nodeId)
         {
-            nodesCache = nodesCache ?? new Dictionary<int, Node>();
             if (nodesCache.Count != nodes.Count) {
                 nodesCache.Clear();
                 nodesCache = nodes.ToDictionary(x => x.Id);
