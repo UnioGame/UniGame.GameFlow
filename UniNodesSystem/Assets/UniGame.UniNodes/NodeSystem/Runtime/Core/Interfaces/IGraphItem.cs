@@ -1,6 +1,6 @@
-﻿namespace UniGreenModules.UniNodeSystem.Runtime.Core
+﻿namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Interfaces
 {
-    using UniCore.Runtime.Interfaces;
+    using UniGreenModules.UniCore.Runtime.Interfaces;
 
     public interface IGraphItem : IUnique, INamedItem
     {

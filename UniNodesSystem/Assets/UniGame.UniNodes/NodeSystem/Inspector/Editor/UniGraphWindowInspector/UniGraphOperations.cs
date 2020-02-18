@@ -1,14 +1,8 @@
-﻿namespace UniGreenModules.UniNodeSystem.Inspector.Editor
+﻿namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector
 {
 	using System.IO;
-	using System.Linq;
-	using Boo.Lang;
-	using Runtime;
 	using Runtime.Core;
-	using UniCore.EditorTools.Editor.AssetOperations;
-	using UniCore.EditorTools.Editor.Utility;
-	using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Nodes;
-	using UniNodeSystem.Nodes;
+	using UniGreenModules.UniCore.EditorTools.Editor.AssetOperations;
 	using UnityEditor;
 	using UnityEngine;
 

@@ -1,11 +1,8 @@
-namespace UniGreenModules.UniNodeSystem.Runtime.Interfaces
+namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
 {
     using System;
     using System.Collections.Generic;
     using Core;
-    using UniCore.Runtime.Interfaces;
-    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Core;
-    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Interfaces;
 
     public interface INode : IImmutableNode
     {

@@ -1,11 +1,10 @@
 ﻿
-namespace UniGreenModules.UniUiNodes.Runtime.UiData
+namespace UniGame.UniNodes.UiNodes.Runtime.UiData
 {
     using System;
     using Interfaces;
-    using UniCore.Runtime.Interfaces;
-    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Connections;
-    using UniNodeSystem.Runtime.Interfaces;
+    using NodeSystem.Runtime.Connections;
+    using NodeSystem.Runtime.Interfaces;
     using UniRx;
     using UnityEngine;
     using UnityEngine.EventSystems;

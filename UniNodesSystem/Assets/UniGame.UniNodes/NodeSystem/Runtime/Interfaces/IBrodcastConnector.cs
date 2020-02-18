@@ -1,6 +1,6 @@
-namespace UniGreenModules.UniNodeSystem.Runtime.Interfaces
+namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
 {
-    using UniCore.Runtime.Interfaces;
+    using UniGreenModules.UniCore.Runtime.Interfaces;
 
     public interface IBrodcastConnector<TConnection> : 
         IContextWriter, 

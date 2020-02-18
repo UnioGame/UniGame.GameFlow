@@ -1,7 +1,7 @@
-﻿namespace UniGreenModules.UniGameSystems.Runtime.Nodes
+﻿namespace UniGame.UniNodes.GameFlow.Runtime.Nodes
 {
-    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Attributes;
-    using UniGameSystem.Runtime.Interfaces;
+    using Interfaces;
+    using NodeSystem.Runtime.Attributes;
 
     [HideNode]
     public abstract class GameServiceNode<TService> :

@@ -1,10 +1,10 @@
-﻿namespace UniGreenModules.UniGameSystems.Runtime.Nodes
+﻿namespace UniGame.UniNodes.GameFlow.Runtime.Nodes
 {
-    using UniCore.Runtime.Attributes;
-    using UniCore.Runtime.Rx.Extensions;
-    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nodes.Runtime.Nodes;
-    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Attributes;
-    using UniGameSystem.Runtime.Interfaces;
+    using Interfaces;
+    using NodeSystem.Runtime.Attributes;
+    using UniGreenModules.UniCore.Runtime.Attributes;
+    using UniGreenModules.UniCore.Runtime.Rx.Extensions;
+    using UniNodes.Nodes.Runtime.Common;
     using UniRx;
     using UnityEngine;
 

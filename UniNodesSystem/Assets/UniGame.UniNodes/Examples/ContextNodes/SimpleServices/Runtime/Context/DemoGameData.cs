@@ -1,9 +1,8 @@
-﻿namespace UniGreenModules.UniGameSystems.Examples.SimpleSystem.Context
+﻿namespace UniGame.UniNodes.Examples.ContextNodes.SimpleServices.Runtime.Context
 {
     using System;
-    using Runtime.Context;
-    using UniContextData.Runtime.Interfaces;
-    using UniCore.Runtime.Interfaces;
+    using UniGreenModules.UniContextData.Runtime.Interfaces;
+    using UniGreenModules.UniCore.Runtime.Interfaces;
     using UniRx.Async;
     using UnityEngine;
 

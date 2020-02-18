@@ -1,11 +1,9 @@
-﻿using UnityEngine;
-
-namespace UniGreenModules.UniNodeSystem.Inspector.Editor
+﻿namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector
 {
     using BaseEditor;
-    using Runtime;
     using Runtime.Core;
     using Runtime.Interfaces;
+    using UnityEngine;
 
     public static class UniNodeEditorExtensions
     {

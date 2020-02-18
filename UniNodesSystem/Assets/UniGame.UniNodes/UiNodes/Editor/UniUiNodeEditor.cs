@@ -1,13 +1,10 @@
-﻿namespace UniGreenModules.UniUiNodes.Editor
+﻿namespace UniGame.UniNodes.UiNodes.Editor
 {
+    using NodeSystem.Inspector.Editor.UniGraphWindowInspector.BaseEditor;
+    using NodeSystem.Inspector.Editor.UniGraphWindowInspector.Nodes;
+    using NodeSystem.Runtime.Core;
     using Runtime;
-    using Runtime.Interfaces;
     using Runtime.UiData;
-    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Nodes;
-    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.UiNodes.Runtime;
-    using UniNodeSystem.Inspector.Editor.BaseEditor;
-    using UniNodeSystem.Inspector.Editor.Nodes;
-    using UniNodeSystem.Runtime;
     using UnityEditor;
     using UnityEngine;
 

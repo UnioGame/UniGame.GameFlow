@@ -1,4 +1,4 @@
-﻿namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor {
+﻿namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.BaseEditor {
     using System;
     using Runtime.Core;
     using UnityEditor;
@@ -40,12 +40,14 @@
         }
 
         /// <summary> Creates a copy of the original node in the graph </summary>
-        public Node CopyNode(Node original) 
+        public Node CopyNode(Node original)
         {
-            
-            var node = target.CopyNode(original);
+            var type = original.GetType();
+            var node = target.AddNode(original.ItemName, type);
+            //var node = target.CopyNode(original);
             node.name = original.name;
-            node.transform.parent = original.transform;
+            node.graph = target;
+            //node.transform.parent = original.transform;
             
             if (this.GetSettings().autoSave)
             {

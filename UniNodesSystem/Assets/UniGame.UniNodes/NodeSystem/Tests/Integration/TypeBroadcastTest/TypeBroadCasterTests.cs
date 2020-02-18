@@ -1,9 +1,7 @@
-﻿using UnityEngine;
-
-namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Tests.Integration.TypeBroadcastTest
+﻿namespace UniGame.UniNodes.NodeSystem.Tests.Integration.TypeBroadcastTest
 {
     using Runtime.Connections;
-    using UnityEngine.Profiling;
+    using UnityEngine;
 
     public class TypeBroadCasterTests : MonoBehaviour
     {

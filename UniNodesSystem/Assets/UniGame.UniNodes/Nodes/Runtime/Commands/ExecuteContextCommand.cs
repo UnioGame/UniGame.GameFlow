@@ -1,8 +1,7 @@
-﻿namespace UniGreenModules.UniFlowNodes.Commands
+﻿namespace UniGame.UniNodes.Nodes.Runtime.Commands
 {
-    using UniCore.Runtime.DataFlow;
-    using UniCore.Runtime.DataFlow.Interfaces;
-    using UniCore.Runtime.Interfaces;
+    using UniGreenModules.UniCore.Runtime.DataFlow.Interfaces;
+    using UniGreenModules.UniCore.Runtime.Interfaces;
 
     public class ExecuteContextCommand : ILifeTimeCommand
     {

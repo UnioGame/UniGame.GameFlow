@@ -1,4 +1,4 @@
-﻿namespace UniGreenModules.UniUiNodes.Runtime
+﻿namespace UniGame.UniNodes.UiNodes.Runtime
  {
      using Triggers;
      using UnityEngine.EventSystems;

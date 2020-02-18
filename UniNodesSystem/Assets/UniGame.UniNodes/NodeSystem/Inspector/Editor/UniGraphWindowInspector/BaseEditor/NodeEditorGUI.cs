@@ -1,14 +1,13 @@
-﻿namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
+﻿namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.BaseEditor
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+    using Runtime.Attributes;
     using Runtime.Core;
-    using UniCore.EditorTools.Editor.Utility;
-    using UniCore.Runtime.ProfilerTools;
-    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Attributes;
-    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Interfaces;
+    using Runtime.Interfaces;
+    using UniGreenModules.UniCore.EditorTools.Editor.Utility;
     using UnityEditor;
     using UnityEngine;
     using Object = UnityEngine.Object;
@@ -39,10 +38,10 @@
             //Initialize(ActiveGraph);
             graphEditor          = NodeGraphEditor.GetEditor(ActiveGraph);
             graphEditor.position = position;
-
-            if (Application.isPlaying == false) {
-                ActiveGraph.Initialize(ActiveGraph);
+            
+            if(EditorApplication.isPlayingOrWillChangePlaymode == false){
                 ActiveGraph.Validate();
+                ActiveGraph.Initialize(ActiveGraph);
             }
 
             Controls();

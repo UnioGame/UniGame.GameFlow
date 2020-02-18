@@ -1,4 +1,4 @@
-﻿namespace UniGreenModules.UniUiNodes.Runtime.Extensions
+﻿namespace UniGame.UniNodes.UiNodes.Runtime.Extensions
 {
     using UiData;
 

@@ -1,8 +1,8 @@
-﻿namespace UniGreenModules.UniUiNodes.Runtime.UiData
+﻿namespace UniGame.UniNodes.UiNodes.Runtime.UiData
 {
     using System;
     using Interfaces;
-    using UniCore.Runtime.Common;
+    using UniGreenModules.UniCore.Runtime.Common;
 
     [Serializable]
     public class UiModuleSlotsContainer : UniObjectsContainer<UiModuleSlot,IUiModuleSlot> {}

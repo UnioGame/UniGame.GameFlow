@@ -1,9 +1,9 @@
-﻿namespace UniGreenModules.UniNodeSystem.Inspector.Editor.UnityGraph
+﻿namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.UnityGraph
 {
-    using Runtime;
-    using UniNodeSystem.Nodes;
+    using Runtime.Core;
     using UnityEditor.Graphs;
     using UnityEngine;
+    using Node = UnityEditor.Graphs.Node;
 
     public class UniGraphGuiEditor : GraphGUI
     {

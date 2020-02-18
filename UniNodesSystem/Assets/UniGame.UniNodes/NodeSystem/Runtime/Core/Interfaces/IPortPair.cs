@@ -1,4 +1,4 @@
-﻿namespace UniGreenModules.UniNodeSystem.Nodes.Commands
+﻿namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Interfaces
 {
     using Runtime.Interfaces;
 

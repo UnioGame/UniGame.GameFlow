@@ -1,9 +1,7 @@
-﻿namespace UniGreenModules.UniNodeSystem.Inspector.Editor.Styles
+﻿namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.Styles
 {
     using BaseEditor;
-    using Runtime;
     using Runtime.Core;
-    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Nodes;
     using UnityEngine;
 
     public class PortStyleSelector : IPortStyleProvider

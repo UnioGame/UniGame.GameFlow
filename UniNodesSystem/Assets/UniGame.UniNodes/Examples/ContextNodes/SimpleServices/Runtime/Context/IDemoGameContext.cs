@@ -1,4 +1,4 @@
-﻿namespace UniGreenModules.UniGameSystems.Examples.SimpleSystem.Runtime.Context
+﻿namespace UniGame.UniNodes.Examples.ContextNodes.SimpleServices.Runtime.Context
 {
     public interface IDemoGameContext
     {

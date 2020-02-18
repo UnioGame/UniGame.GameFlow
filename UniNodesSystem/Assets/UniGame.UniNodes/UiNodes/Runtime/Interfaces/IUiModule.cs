@@ -1,7 +1,7 @@
-    namespace UniGreenModules.UniUiNodes.Runtime.Interfaces
+    namespace UniGame.UniNodes.UiNodes.Runtime.Interfaces
 {
-    using UniCore.Runtime.Interfaces;
-    using UniUiSystem.Runtime.Interfaces;
+    using UniGreenModules.UniCore.Runtime.Interfaces;
+    using UniGreenModules.UniUiSystem.Runtime.Interfaces;
 
     public interface IUiModule : IUiView<IValueReceiver>
     {

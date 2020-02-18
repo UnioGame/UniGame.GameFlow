@@ -1,11 +1,10 @@
-﻿namespace UniGreenModules.UniNodeSystem.Nodes.Commands
+﻿namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Commands
 {
     using System;
     using Runtime.Interfaces;
-    using UniCore.Runtime.DataFlow;
-    using UniCore.Runtime.DataFlow.Interfaces;
-    using UniCore.Runtime.Interfaces;
-    using UniCore.Runtime.Rx.Extensions;
+    using UniGreenModules.UniCore.Runtime.DataFlow.Interfaces;
+    using UniGreenModules.UniCore.Runtime.Interfaces;
+    using UniGreenModules.UniCore.Runtime.Rx.Extensions;
     using UniRx;
 
     [Serializable]

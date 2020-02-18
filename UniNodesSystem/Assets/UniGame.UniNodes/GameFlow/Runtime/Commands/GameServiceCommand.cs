@@ -1,10 +1,10 @@
-﻿using System;
-using UniGreenModules.UniCore.Runtime.DataFlow.Interfaces;
-using UniGreenModules.UniCore.Runtime.Interfaces;
-using UniGreenModules.UniGameSystem.Runtime.Interfaces;
-
-namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.GameFlow.Runtime.Commands
+﻿namespace UniGame.UniNodes.GameFlow.Runtime.Commands
 {
+    using System;
+    using Interfaces;
+    using UniGreenModules.UniCore.Runtime.DataFlow.Interfaces;
+    using UniGreenModules.UniCore.Runtime.Interfaces;
+
     public class GameServiceCommand : ILifeTimeCommand
     {
         public GameServiceCommand(Func<IGameService> service)

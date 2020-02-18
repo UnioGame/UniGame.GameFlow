@@ -1,6 +1,6 @@
-namespace UniGreenModules.UniNodeSystem.Runtime.Interfaces
+namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
 {
-    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Nodes;
+    using Core;
 
     public interface IGraphNodesUpdater
     {

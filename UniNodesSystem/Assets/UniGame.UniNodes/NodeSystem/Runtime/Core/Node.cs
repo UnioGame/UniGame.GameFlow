@@ -1,12 +1,15 @@
-﻿namespace UniGreenModules.UniNodeSystem.Runtime.Core
+﻿namespace UniGame.UniNodes.NodeSystem.Runtime.Core
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
+    using Attributes;
     using Interfaces;
-    using UniCore.Runtime.Attributes;
-    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Attributes;
-    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Core;
+    using Runtime.Interfaces;
+    using UniGreenModules.UniCore.Runtime.Attributes;
+    using UniGreenModules.UniCore.Runtime.ProfilerTools;
     using UnityEngine;
+    using Debug = UnityEngine.Debug;
 
     [Serializable]
     public abstract class Node : MonoBehaviour, INode
@@ -175,5 +178,12 @@
         }
 
         public virtual void Validate(){}
+        
+        
+        [Conditional("UNITY_EDITOR")]
+        private void LogMessage(string message)
+        {
+            GameLog.Log($"{Graph.ItemName}:{ItemName}: {message}");
+        }
     }
 }

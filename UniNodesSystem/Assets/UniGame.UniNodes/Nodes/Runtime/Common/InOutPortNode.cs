@@ -1,11 +1,12 @@
-﻿namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nodes.Runtime.Nodes
+﻿namespace UniGame.UniNodes.Nodes.Runtime.Common
 {
     using System.Collections.Generic;
     using NodeSystem.Runtime.Attributes;
-    using NodeSystem.Runtime.Nodes;
-    using UniCore.Runtime.Interfaces;
-    using UniNodeSystem.Nodes.Commands;
-    using UniNodeSystem.Runtime.Interfaces;
+    using NodeSystem.Runtime.Core;
+    using NodeSystem.Runtime.Core.Commands;
+    using NodeSystem.Runtime.Core.Interfaces;
+    using NodeSystem.Runtime.Interfaces;
+    using UniGreenModules.UniCore.Runtime.Interfaces;
     using UnityEngine;
 
     [HideNode]

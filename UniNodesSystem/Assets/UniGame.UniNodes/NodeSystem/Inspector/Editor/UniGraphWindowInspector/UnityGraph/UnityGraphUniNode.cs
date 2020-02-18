@@ -1,6 +1,4 @@
-﻿using Node = UnityEditor.Graphs.Node;
-
-namespace UniGreenModules.UniNodeSystem.Inspector.Editor.UnityGraph
+﻿namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.UnityGraph
 {
     using Runtime.Core;
 

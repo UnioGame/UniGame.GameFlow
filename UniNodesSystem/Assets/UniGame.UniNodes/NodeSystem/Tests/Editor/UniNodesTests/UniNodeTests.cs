@@ -1,4 +1,4 @@
-﻿namespace UniGreenModules.UniNodeSystem.Tests.Editor.UniNodesTests
+﻿namespace UniGame.UniNodes.NodeSystem.Tests.Editor.UniNodesTests
 {
     using System.Collections;
     using NUnit.Framework;

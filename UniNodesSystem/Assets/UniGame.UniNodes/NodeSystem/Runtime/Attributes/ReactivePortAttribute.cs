@@ -1,12 +1,9 @@
-﻿using System.Collections.Generic;
-
-namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Attributes
+﻿namespace UniGame.UniNodes.NodeSystem.Runtime.Attributes
 {
     using System;
+    using System.Collections.Generic;
     using Core;
     using Core.Interfaces;
-    using UniNodeSystem.Runtime.Core;
-    using UnityEditor;
     using UnityEngine;
 
     public class ReactivePortAttribute : PropertyAttribute , IReactivePortData

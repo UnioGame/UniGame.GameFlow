@@ -1,8 +1,8 @@
-namespace UniGreenModules.UniUiNodes.Runtime.Interfaces
+namespace UniGame.UniNodes.UiNodes.Runtime.Interfaces
 {
-    using UniNodeSystem.Runtime.Interfaces;
+    using NodeSystem.Runtime.Interfaces;
+    using UniGreenModules.UniUiSystem.Runtime.Interfaces;
     using UniRx;
-    using UniUiSystem.Runtime.Interfaces;
 
     public interface IUiModuleSlot : IUiPlacement
     {

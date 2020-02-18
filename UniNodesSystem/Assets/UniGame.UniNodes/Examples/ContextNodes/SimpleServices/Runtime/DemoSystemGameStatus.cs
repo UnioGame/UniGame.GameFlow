@@ -1,4 +1,4 @@
-﻿namespace UniGreenModules.UniGameSystems.Examples.SimpleSystem.Runtime
+﻿namespace UniGame.UniNodes.Examples.ContextNodes.SimpleServices.Runtime
 {
     public class DemoSystemGameStatus
     {

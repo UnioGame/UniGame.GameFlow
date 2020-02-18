@@ -1,9 +1,8 @@
-﻿using UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Core;
-
-namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.ReactivePorts
+﻿namespace UniGame.UniNodes.NodeSystem.Runtime.ReactivePorts
 {
     using System;
-    using UniCore.Runtime.Interfaces;
+    using Core;
+    using UniGreenModules.UniCore.Runtime.Interfaces;
 
     [Serializable]
     public class IntReactivePort : ReactivePortValue<int>

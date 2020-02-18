@@ -1,13 +1,10 @@
-namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
+namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.BaseEditor
 {
     using System.Collections.Generic;
     using System.Linq;
     using Runtime.Core;
-    using UniCore.EditorTools.Editor.AssetOperations;
-    using UniCore.EditorTools.Editor.PrefabTools;
-    using UniCore.EditorTools.Editor.Utility;
-    using UniCore.Runtime.ProfilerTools;
-    using UniNodeSystem.Nodes;
+    using UniGreenModules.UniCore.EditorTools.Editor.PrefabTools;
+    using UniGreenModules.UniCore.EditorTools.Editor.Utility;
     using UnityEditor;
     using UnityEditor.Callbacks;
     using UnityEngine;

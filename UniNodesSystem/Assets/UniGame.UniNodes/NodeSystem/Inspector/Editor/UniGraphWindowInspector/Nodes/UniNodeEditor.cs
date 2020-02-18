@@ -1,24 +1,17 @@
-﻿namespace UniGreenModules.UniNodeSystem.Inspector.Editor.Nodes
+﻿namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.Nodes
 {
     using System.Collections.Generic;
-    using System.Linq;
     using System.Reflection;
-    using System.Runtime.Serialization.Formatters;
     using BaseEditor;
+    using BaseEditor.Extensions;
     using Drawers;
     using Drawers.Interfaces;
     using Runtime.Core;
+    using Runtime.Core.Interfaces;
     using Runtime.Extensions;
     using Runtime.Interfaces;
     using Styles;
-    using UniCore.EditorTools.Editor.Utility;
-    using UniCore.Runtime.Extension;
-    using UniCore.Runtime.ProfilerTools;
-    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.BaseEditor.Extensions;
-    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Core.Commands;
-    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Core.Interfaces;
-    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Interfaces;
-    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Nodes;
+    using UniGreenModules.UniCore.EditorTools.Editor.Utility;
     using UnityEditor;
     using UnityEngine;
 
@@ -58,20 +51,21 @@
         public override void OnBodyGUI()
         {
             var node = target as UniNode;
-
+            if (node == null) return;
+            
             var idEditingMode = EditorApplication.isPlayingOrWillChangePlaymode == false && 
                                 EditorApplication.isCompiling == false && 
                                 EditorApplication.isUpdating == false;
 
             if (idEditingMode) {
                 
-                //node.Initialize(node.graph);
+                node.Initialize(node.graph);
                     
                 UpdatePortAttributes(node);
 
                 UpdateData(node);
 
-                //node.Validate();
+                node.Validate();
                 
             }
             

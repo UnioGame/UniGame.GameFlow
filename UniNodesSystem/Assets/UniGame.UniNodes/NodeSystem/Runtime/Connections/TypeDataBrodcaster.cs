@@ -1,13 +1,13 @@
 ﻿
-namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Connections
+namespace UniGame.UniNodes.NodeSystem.Runtime.Connections
 {
     using System;
     using System.Collections.Generic;
     using System.Runtime.CompilerServices;
-    using UniCore.Runtime.Common;
-    using UniCore.Runtime.ObjectPool.Runtime;
-    using UniCore.Runtime.ObjectPool.Runtime.Interfaces;
-    using UniNodeSystem.Runtime.Interfaces;
+    using Interfaces;
+    using UniGreenModules.UniCore.Runtime.Common;
+    using UniGreenModules.UniCore.Runtime.ObjectPool.Runtime;
+    using UniGreenModules.UniCore.Runtime.ObjectPool.Runtime.Interfaces;
     using UniRx;
 
     public class TypeDataBrodcaster : 

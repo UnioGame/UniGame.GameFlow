@@ -1,8 +1,8 @@
-﻿namespace UniGreenModules.UniUiNodes.Runtime.Triggers
+﻿namespace UniGame.UniNodes.UiNodes.Runtime.Triggers
 {
     using System;
     using Interfaces;
-    using UniCore.Runtime.Attributes;
+    using UniGreenModules.UniCore.Runtime.Attributes;
     using UniRx;
     using UnityEngine;
 

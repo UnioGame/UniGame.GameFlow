@@ -1,12 +1,10 @@
-﻿using UniGreenModules.UniCore.Runtime.DataFlow;
-using UniGreenModules.UniCore.Runtime.Interfaces;
-
-namespace UniGreenModules.UniNodeSystem.Nodes.Commands
+﻿namespace UniGame.UniNodes.Nodes.Runtime.Commands
 {
     using System;
-    using Runtime.Extensions;
-    using Runtime.Interfaces;
-    using UniCore.Runtime.DataFlow.Interfaces;
+    using NodeSystem.Runtime.Extensions;
+    using NodeSystem.Runtime.Interfaces;
+    using UniGreenModules.UniCore.Runtime.DataFlow.Interfaces;
+    using UniGreenModules.UniCore.Runtime.Interfaces;
 
     [Serializable]
     public class ConnectedPortPairCommands : ILifeTimeCommand

@@ -1,8 +1,7 @@
-﻿namespace UniGreenModules.UniGameSystems.Examples.SimpleSystem
+﻿namespace UniGame.UniNodes.NodeSystem.Runtime.Components
 {
-    using System;
-    using UniNodeSystem.Nodes;
-    using UniNodeSystem.Runtime.Interfaces;
+    using Core;
+    using Interfaces;
     using UnityEngine;
 
     public class GraphLauncher : MonoBehaviour

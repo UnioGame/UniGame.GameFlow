@@ -1,8 +1,7 @@
-﻿namespace UniGreenModules.UniNodeSystem.Runtime.Core
+﻿namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Interfaces
 {
     using System;
     using System.Collections.Generic;
-    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Core;
 
     public interface IPortData
     {

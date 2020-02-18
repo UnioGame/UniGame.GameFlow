@@ -1,10 +1,10 @@
-﻿namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Core
+﻿namespace UniGame.UniNodes.NodeSystem.Runtime.Core
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using UniCore.Runtime.ObjectPool.Runtime.Interfaces;
-    using UniNodeSystem.Runtime.Core;
+    using Interfaces;
+    using UniGreenModules.UniCore.Runtime.ObjectPool.Runtime.Interfaces;
     using UnityEngine;
 
     [Serializable]

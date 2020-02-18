@@ -1,8 +1,7 @@
-﻿using UniGreenModules.UniNodeSystem.Runtime.Interfaces;
-
-namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Core.Commands
+﻿namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Commands
 {
     using System;
+    using Runtime.Interfaces;
     using UniRx;
 
     public class PortObjectDataBridgeCommand<TData>  : 

@@ -1,10 +1,8 @@
-﻿namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nodes.Runtime.Nodes
+﻿namespace UniGame.UniNodes.Nodes.Runtime.Common
 {
     using System;
-    using Common;
     using NodeSystem.Runtime.Attributes;
-    using UniCore.Runtime.Interfaces;
-    using UniCore.Runtime.ProfilerTools;
+    using UniGreenModules.UniCore.Runtime.Interfaces;
     using UniRx;
 
     [Serializable]

@@ -1,10 +1,8 @@
-namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Interfaces
+namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
 {
-    using System;
     using System.Collections.Generic;
-    using UniCore.Runtime.Interfaces;
-    using UniNodeSystem.Runtime.Core;
-    using UniNodeSystem.Runtime.Interfaces;
+    using Core;
+    using Core.Interfaces;
     using UnityEngine;
 
     public interface INodePort : IGraphItem

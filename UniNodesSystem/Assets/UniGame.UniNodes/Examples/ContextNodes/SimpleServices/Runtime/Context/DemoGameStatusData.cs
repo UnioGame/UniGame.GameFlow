@@ -1,10 +1,8 @@
-﻿using UniGreenModules.UniGame.SerializableContext.Runtime.Abstract;
-
-namespace UniGreenModules.UniGameSystems.Examples.SimpleSystem.Context
+﻿namespace UniGame.UniNodes.Examples.ContextNodes.SimpleServices.Runtime.Context
 {
-    using Runtime.Context;
+    using UniGreenModules.UniGame.SerializableContext.Runtime.Abstract;
     using UnityEngine;
-    
+
     [CreateAssetMenu(menuName = "UniGame/GameSystem/Examples/DemoGameContext")]
     public class DemoGameStatusData : TypeValueSource<DemoGameData,IDemoGameContext>{}
     

@@ -1,12 +1,11 @@
-﻿namespace UniGreenModules.UniNodeSystem.Inspector.Editor.Drawers
+﻿namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.Drawers
 {
     using System.Collections.Generic;
     using BaseEditor;
     using BaseEditor.Interfaces;
     using Interfaces;
+    using Runtime.Attributes;
     using Runtime.Core;
-    using UniCore.Runtime.ProfilerTools;
-    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Attributes;
     using UnityEditor;
     using UnityEngine;
 

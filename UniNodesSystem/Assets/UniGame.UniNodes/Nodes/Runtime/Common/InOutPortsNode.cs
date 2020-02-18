@@ -1,10 +1,10 @@
-﻿namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nodes.Runtime.Nodes
+﻿namespace UniGame.UniNodes.Nodes.Runtime.Common
 {
     using System.Collections.Generic;
-    using NodeSystem.Runtime.Nodes;
-    using UniCore.Runtime.Interfaces;
-    using UniNodeSystem.Nodes.Commands;
-    using UniNodeSystem.Runtime.Core;
+    using NodeSystem.Runtime.Core;
+    using NodeSystem.Runtime.Core.Commands;
+    using NodeSystem.Runtime.Core.Interfaces;
+    using UniGreenModules.UniCore.Runtime.Interfaces;
 
     [CreateNodeMenu("Common/InOutPorts")]
     public class InOutPortsNode : UniNode

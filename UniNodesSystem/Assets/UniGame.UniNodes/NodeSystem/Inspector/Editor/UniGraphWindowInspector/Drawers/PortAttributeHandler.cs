@@ -1,9 +1,8 @@
-﻿namespace UniGreenModules.UniNodeSystem.Inspector.Editor.UniGraphWindowInspector.Drawers
+﻿namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.Drawers
 {
     using BaseEditor.Interfaces;
-    using Editor.Drawers.Interfaces;
+    using Interfaces;
     using Runtime.Core;
-    using UnityEngine;
 
     public class PortAttributeHandler : INodeEditorHandler
     {

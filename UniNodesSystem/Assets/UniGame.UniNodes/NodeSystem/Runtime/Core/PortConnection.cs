@@ -1,9 +1,7 @@
-﻿namespace UniGreenModules.UniNodeSystem.Runtime.Core
+﻿namespace UniGame.UniNodes.NodeSystem.Runtime.Core
 {
     using System;
     using System.Collections.Generic;
-    using Interfaces;
-    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Interfaces;
     using UnityEngine;
 
     [Serializable]

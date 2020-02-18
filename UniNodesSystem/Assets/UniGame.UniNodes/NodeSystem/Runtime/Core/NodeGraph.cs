@@ -1,11 +1,10 @@
-﻿namespace UniGreenModules.UniNodeSystem.Runtime.Core
+﻿namespace UniGame.UniNodes.NodeSystem.Runtime.Core
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Interfaces;
-    using UniCore.Runtime.Attributes;
-    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Nodes;
+    using Runtime.Interfaces;
+    using UniGreenModules.UniCore.Runtime.Attributes;
     using UnityEngine;
 
     /// <summary> Base class for all node graphs </summary>
@@ -18,7 +17,7 @@
 
         #endregion
         
-#region inspector data
+        #region inspector data
         
         [ReadOnlyValue] 
         [SerializeField] private int uniqueId;
@@ -28,7 +27,7 @@
         [SerializeField]
         public List<Node> nodes = new List<Node>();
 
-#endregion
+        #endregion
        
         [NonSerialized] private Dictionary<int, Node> nodesCache;
 
@@ -148,8 +147,6 @@
             nodes.AddRange(GetComponents<Node>());
             nodes.RemoveAll(x => !x);
             nodes.Remove(this);
-            
-            nodes.ForEach(x => x.Validate());
         }
 
         #endregion

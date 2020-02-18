@@ -1,7 +1,7 @@
-﻿namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Core.Commands
+﻿namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Interfaces
 {
-    using UniCore.Runtime.Interfaces;
-    using UniNodeSystem.Runtime.Interfaces;
+    using Runtime.Interfaces;
+    using UniGreenModules.UniCore.Runtime.Interfaces;
 
     public interface ILifeTimeCommandSource : IValidator
     {

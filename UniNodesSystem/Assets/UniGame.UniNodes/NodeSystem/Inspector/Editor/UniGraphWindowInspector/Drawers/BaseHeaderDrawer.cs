@@ -1,4 +1,4 @@
-﻿namespace UniGreenModules.UniNodeSystem.Inspector.Editor.Drawers
+﻿namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.Drawers
 {
     using BaseEditor;
     using BaseEditor.Interfaces;

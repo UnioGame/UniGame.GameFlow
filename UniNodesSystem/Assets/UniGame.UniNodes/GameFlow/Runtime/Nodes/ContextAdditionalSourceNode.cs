@@ -1,8 +1,7 @@
-﻿using UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nodes.Runtime.Nodes;
-
-namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.GameFlow.Runtime.Nodes
+﻿namespace UniGame.UniNodes.GameFlow.Runtime.Nodes
 {
-    using UniNodeSystem.Runtime.Core;
+    using NodeSystem.Runtime.Core;
+    using UniNodes.Nodes.Runtime.Common;
 
     [CreateNodeMenu("")]
     public class ContextAddSourceNode : ContextNode

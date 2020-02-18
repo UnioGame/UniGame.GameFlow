@@ -1,12 +1,9 @@
-﻿using UnityEditor;
-using UnityEngine;
-
-namespace UniGreenModules.UniNodeSystem.Inspector.Editor
+﻿namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector
 {
     using BaseEditor;
-    using Runtime;
-    using UniNodeSystem.Nodes;
-    using UnityGraph;
+    using Runtime.Core;
+    using UnityEditor;
+    using UnityEngine;
     using Editor = UnityEditor.Editor;
 
     [CanEditMultipleObjects]

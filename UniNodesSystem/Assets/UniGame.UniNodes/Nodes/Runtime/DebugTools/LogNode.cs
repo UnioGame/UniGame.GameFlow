@@ -1,14 +1,13 @@
-﻿namespace UniGreenModules.UniNodeSystem.Nodes.DebugTools
+﻿namespace UniGame.UniNodes.Nodes.Runtime.DebugTools
 {
     using System;
     using System.Collections.Generic;
-    using Runtime.Core;
-    using Runtime.Extensions;
-    using Runtime.Interfaces;
-    using UniCore.Runtime.Interfaces;
-    using UniCore.Runtime.ProfilerTools;
-    using UniCore.Runtime.Rx.Extensions;
-    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Nodes;
+    using NodeSystem.Runtime.Core;
+    using NodeSystem.Runtime.Extensions;
+    using NodeSystem.Runtime.Interfaces;
+    using UniGreenModules.UniCore.Runtime.Interfaces;
+    using UniGreenModules.UniCore.Runtime.ProfilerTools;
+    using UniGreenModules.UniCore.Runtime.Rx.Extensions;
     using UniRx;
 
     [Serializable]

@@ -1,8 +1,8 @@
-﻿namespace UniGreenModules.UniNodeSystem.Tests.Editor.UniNodesTests
+﻿namespace UniGame.UniNodes.NodeSystem.Tests.Editor.UniNodesTests
 {
     using NUnit.Framework;
-    using Runtime;
-    using UniContextData.Runtime.Entities;
+    using Runtime.Core;
+    using UniGreenModules.UniContextData.Runtime.Entities;
 
     public class UniPortValueTests
     {

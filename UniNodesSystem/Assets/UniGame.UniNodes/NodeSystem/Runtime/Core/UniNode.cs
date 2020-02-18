@@ -1,19 +1,18 @@
-﻿namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Nodes
+﻿namespace UniGame.UniNodes.NodeSystem.Runtime.Core
 {
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
     using Attributes;
-    using Core.Commands;
     using Interfaces;
-    using UniCore.Runtime.DataFlow;
-    using UniCore.Runtime.DataFlow.Interfaces;
-    using UniCore.Runtime.Interfaces;
-    using UniCore.Runtime.ObjectPool.Runtime;
-    using UniCore.Runtime.ProfilerTools;
-    using UniNodeSystem.Runtime.Core;
-    using UniNodeSystem.Runtime.Interfaces;
+    using Runtime.Interfaces;
+    using UniGreenModules.UniCore.Runtime.DataFlow;
+    using UniGreenModules.UniCore.Runtime.DataFlow.Interfaces;
+    using UniGreenModules.UniCore.Runtime.Interfaces;
+    using UniGreenModules.UniCore.Runtime.ObjectPool.Runtime;
+    using UniGreenModules.UniCore.Runtime.ObjectPool.Runtime.Extensions;
+    using UniGreenModules.UniCore.Runtime.ProfilerTools;
     using UnityEngine;
 
     [HideNode]
@@ -204,9 +203,8 @@
                 }
             }
 
-            foreach (var removedPort in removedPorts) {
-                RemovePort(removedPort);
-            }
+            removedPorts.ForEach(RemovePort);
+            removedPorts.DespawnCollection();
 
             for (int i = 0; i < Ports.Count; i++) {
                 var port = Ports[i];
@@ -216,12 +214,6 @@
             }
             
             CleanUpSerializableCommands();
-        }
-
-        [Conditional("UNITY_EDITOR")]
-        private void LogMessage(string message)
-        {
-            GameLog.Log($"{Graph.ItemName}:{ItemName}: {message}");
         }
 
         [Conditional("UNITY_EDITOR")]

@@ -1,12 +1,10 @@
-﻿namespace UniGreenModules.UniNodeSystem.Inspector.Editor.Nodes
+﻿namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.Nodes
 {
     using System.Collections.Generic;
     using BaseEditor;
     using Drawers;
     using Drawers.Interfaces;
     using Runtime.Core;
-    using UniNodeSystem.Nodes;
-    using UnityEngine;
 
     [CustomNodeEditor(typeof(UniGraphNode))]
     public class GraphNodeEditor : UniNodeEditor

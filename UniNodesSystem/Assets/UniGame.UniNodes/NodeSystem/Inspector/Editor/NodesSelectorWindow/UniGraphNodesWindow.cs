@@ -1,9 +1,9 @@
-using UnityEditor;
-using UnityEngine;
-using UnityEngine.UIElements;
-
-namespace UniGreenModules.UniNodeSystem.Inspector.Editor.NodesSelectorWindow
+namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.NodesSelectorWindow
 {
+    using UnityEditor;
+    using UnityEngine;
+    using UnityEngine.UIElements;
+
     public class UniGraphNodesWindow : EditorWindow
     {
         private const string windowClassName = "unigame-nodes-window";

@@ -1,8 +1,7 @@
-﻿namespace UniGreenModules.UniNodeSystem.Runtime.Core
+﻿namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Interfaces
 {
     using System.Collections.Generic;
-    using UniCore.Runtime.Interfaces;
-    using UniRx;
+    using UniGreenModules.UniCore.Runtime.Interfaces;
 
     public interface IGraphData : INamedItem, IUnique
     {

@@ -1,4 +1,4 @@
-﻿namespace UniGreenModules.UniNodeSystem.Runtime.Interfaces
+﻿namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
 {
     public interface IUniInOutNode
     {

@@ -1,25 +1,28 @@
-﻿using UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Attributes;
-using UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Nodes;
-using UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.ReactivePorts;
-using UniGreenModules.UniNodeSystem.Runtime.Core;
-using UnityEngine;
+﻿using UnityEngine;
 
-[CreateNodeMenu("Examples/SimpleCustomNodes/SimpleNode",nodeName = "Simple Node")]
-public class SimpleDemoNode : UniNode
+namespace UniGame.UniNodes.Examples.SimpleCustomNode
 {
+    using NodeSystem.Runtime.Attributes;
+    using NodeSystem.Runtime.Core;
+    using NodeSystem.Runtime.ReactivePorts;
 
-    [SerializeField]
-    private int intDataOne;
+    [CreateNodeMenu("Examples/SimpleCustomNodes/SimpleNode",nodeName = "Simple Node")]
+    public class SimpleDemoNode : UniNode
+    {
+
+        [SerializeField]
+        private int intDataOne;
     
-    public int intDataTwo;
+        public int intDataTwo;
 
-    [PortValue(PortIO.Input)]
-    public int inInt;
+        [PortValue(PortIO.Input)]
+        public int inInt;
 
-    [PortValue(PortIO.Output)] 
-    public float outInt;
+        [PortValue(PortIO.Output)] 
+        public float outInt;
 
-    [ReactivePort()]
-    public IntReactivePort inReactiveInt;
+        [ReactivePort()]
+        public IntReactivePort inReactiveInt;
 
+    }
 }

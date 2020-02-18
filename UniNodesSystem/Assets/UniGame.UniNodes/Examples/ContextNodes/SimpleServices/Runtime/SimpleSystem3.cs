@@ -1,11 +1,11 @@
-﻿namespace UniGreenModules.UniGameSystems.Examples.SimpleSystem
+﻿namespace UniGame.UniNodes.Examples.ContextNodes.SimpleServices.Runtime
 {
     using System.Collections;
-    using UniCore.Runtime.DataFlow.Interfaces;
-    using UniCore.Runtime.Interfaces;
-    using UniGameSystem.Runtime;
-    using UniRoutine.Runtime;
-    using UniRoutine.Runtime.Extension;
+    using GameFlow.Runtime;
+    using UniGreenModules.UniCore.Runtime.DataFlow.Interfaces;
+    using UniGreenModules.UniCore.Runtime.Interfaces;
+    using UniGreenModules.UniRoutine.Runtime;
+    using UniGreenModules.UniRoutine.Runtime.Extension;
 
     public class SimpleSystem3 : GameService
     {

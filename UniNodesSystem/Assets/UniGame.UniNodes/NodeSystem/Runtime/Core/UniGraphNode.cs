@@ -1,11 +1,9 @@
-﻿namespace UniGreenModules.UniNodeSystem.Nodes
+﻿namespace UniGame.UniNodes.NodeSystem.Runtime.Core
 {
-    using Runtime.Core;
-    using Runtime.Extensions;
-    using UniCore.Runtime.DataFlow.Interfaces;
-    using UniCore.Runtime.Rx.Extensions;
-    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Interfaces;
-    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Nodes;
+    using Extensions;
+    using Runtime.Interfaces;
+    using UniGreenModules.UniCore.Runtime.DataFlow.Interfaces;
+    using UniGreenModules.UniCore.Runtime.Rx.Extensions;
 
     public abstract class UniGraphNode : UniNode
     {

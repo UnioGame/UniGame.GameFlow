@@ -1,14 +1,12 @@
-﻿using UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Nodes;
-
-namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Examples.SceneObjects
+﻿namespace UniGame.UniNodes.Examples.SceneObjects
 {
     using System;
     using System.Collections;
     using NodeSystem.Runtime.Attributes;
-    using UniCore.Runtime.Attributes;
-    using UniCore.Runtime.Rx.Extensions;
-    using UniNodeSystem.Runtime.Core;
-    using UniRoutine.Runtime;
+    using NodeSystem.Runtime.Core;
+    using UniGreenModules.UniCore.Runtime.Attributes;
+    using UniGreenModules.UniCore.Runtime.Rx.Extensions;
+    using UniGreenModules.UniRoutine.Runtime;
     using UniRx;
     using UnityEngine;
 

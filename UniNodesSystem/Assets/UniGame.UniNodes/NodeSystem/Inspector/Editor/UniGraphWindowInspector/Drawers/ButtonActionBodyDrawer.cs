@@ -1,10 +1,10 @@
-﻿namespace UniGreenModules.UniNodeSystem.Inspector.Editor.Drawers
+﻿namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.Drawers
 {
     using System;
     using BaseEditor.Interfaces;
     using Interfaces;
     using Runtime.Core;
-    using UniCore.EditorTools.Editor.Utility;
+    using UniGreenModules.UniCore.EditorTools.Editor.Utility;
 
     public class ButtonActionBodyDrawer : INodeEditorHandler
     {

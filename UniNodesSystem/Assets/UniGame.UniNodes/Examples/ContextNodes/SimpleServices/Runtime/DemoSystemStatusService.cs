@@ -1,15 +1,14 @@
-﻿using UnityEngine;
-
-namespace UniGreenModules.UniGameSystems.Examples.SimpleSystem.Runtime
+﻿namespace UniGame.UniNodes.Examples.ContextNodes.SimpleServices.Runtime
 {
     using Context;
-    using UniCore.Runtime.Attributes;
-    using UniCore.Runtime.DataFlow.Interfaces;
-    using UniCore.Runtime.Interfaces;
-    using UniCore.Runtime.ProfilerTools;
-    using UniCore.Runtime.Rx.Extensions;
-    using UniGameSystem.Runtime;
+    using GameFlow.Runtime;
+    using UniGreenModules.UniCore.Runtime.Attributes;
+    using UniGreenModules.UniCore.Runtime.DataFlow.Interfaces;
+    using UniGreenModules.UniCore.Runtime.Interfaces;
+    using UniGreenModules.UniCore.Runtime.ProfilerTools;
+    using UniGreenModules.UniCore.Runtime.Rx.Extensions;
     using UniRx;
+    using UnityEngine;
 
     public class DemoSystemStatusService : GameService
     {

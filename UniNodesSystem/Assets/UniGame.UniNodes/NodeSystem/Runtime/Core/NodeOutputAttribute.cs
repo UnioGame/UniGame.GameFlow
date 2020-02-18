@@ -1,8 +1,8 @@
-namespace UniGreenModules.UniNodeSystem.Runtime.Core
+namespace UniGame.UniNodes.NodeSystem.Runtime.Core
 {
     using System;
     using System.Collections.Generic;
-    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Core;
+    using Interfaces;
 
     /// <summary> Mark a serializable field as an output port. You can access this through <see cref="GetOutputPort(string)"/> </summary>
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]

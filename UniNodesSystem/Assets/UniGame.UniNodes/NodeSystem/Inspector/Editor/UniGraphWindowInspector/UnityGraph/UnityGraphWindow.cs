@@ -1,7 +1,6 @@
-﻿namespace UniGreenModules.UniNodeSystem.Inspector.Editor.UnityGraph
+﻿namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.UnityGraph
 {
-    using Runtime;
-    using UniNodeSystem.Nodes;
+    using Runtime.Core;
     using UnityEditor;
     using UnityEditor.Graphs;
     using UnityEngine;

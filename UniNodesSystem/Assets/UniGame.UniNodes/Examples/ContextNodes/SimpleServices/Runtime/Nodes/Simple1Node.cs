@@ -1,8 +1,7 @@
-﻿namespace Examples.SimpleSystem
+﻿namespace UniGame.UniNodes.Examples.ContextNodes.SimpleServices.Runtime.Nodes
 {
-    using UniGreenModules.UniGameSystems.Examples.SimpleSystem;
-    using UniGreenModules.UniGameSystems.Runtime.Nodes;
-    using UniGreenModules.UniNodeSystem.Runtime.Core;
+    using GameFlow.Runtime.Nodes;
+    using NodeSystem.Runtime.Core;
 
     [CreateNodeMenu("Examples/DemoSystem/Simple1")]
     public class Simple1Node : GameServiceNode<SimpleSystem1> {}

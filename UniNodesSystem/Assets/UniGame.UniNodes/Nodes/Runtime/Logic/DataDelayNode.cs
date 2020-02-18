@@ -1,11 +1,10 @@
-﻿namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nodes.Runtime.Logic
+﻿namespace UniGame.UniNodes.Nodes.Runtime.Logic
 {
     using System.Collections.Generic;
-    using NodeSystem.Runtime.Nodes;
-    using UniCore.Runtime.Interfaces;
-    using UniGreenModules.UniNodes.Runtime.Commands;
-    using UniNodeSystem.Nodes.Commands;
-    using UniNodeSystem.Runtime.Core;
+    using Commands;
+    using NodeSystem.Runtime.Core;
+    using NodeSystem.Runtime.Core.Commands;
+    using UniGreenModules.UniCore.Runtime.Interfaces;
 
     [CreateNodeMenu("Common/DataDelay")]
     public class DataDelayNode : UniNode

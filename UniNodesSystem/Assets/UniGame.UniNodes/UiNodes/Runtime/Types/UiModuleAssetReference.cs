@@ -1,4 +1,4 @@
-﻿namespace UniGreenModules.UniUiNodes.Runtime.Types
+﻿namespace UniGame.UniNodes.UiNodes.Runtime.Types
 {
     using System;
     using UiData;

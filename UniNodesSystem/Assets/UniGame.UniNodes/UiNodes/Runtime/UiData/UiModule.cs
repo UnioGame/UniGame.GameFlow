@@ -1,13 +1,13 @@
-﻿namespace UniGreenModules.UniUiNodes.Runtime.UiData
+﻿namespace UniGame.UniNodes.UiNodes.Runtime.UiData
 {
     using Interfaces;
     using Triggers;
-    using UniCore.Runtime.Interfaces;
-    using UniCore.Runtime.Rx.Extensions;
+    using UniGreenModules.UniCore.Runtime.Interfaces;
+    using UniGreenModules.UniCore.Runtime.Rx.Extensions;
+    using UniGreenModules.UniUiSystem.Runtime;
+    using UniGreenModules.UniUiSystem.Runtime.Interfaces;
     using UniRx;
     using UnityEngine;
-    using UniUiSystem.Runtime;
-    using UniUiSystem.Runtime.Interfaces;
 
     public class UiModule : UiView<IValueReceiver>, IUiModule
     {

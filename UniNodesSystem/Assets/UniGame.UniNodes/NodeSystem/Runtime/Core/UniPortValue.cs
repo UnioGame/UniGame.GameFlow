@@ -1,17 +1,17 @@
-﻿namespace UniGreenModules.UniNodeSystem.Runtime
+﻿namespace UniGame.UniNodes.NodeSystem.Runtime.Core
 {
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
     using System.Runtime.CompilerServices;
-    using Interfaces;
-    using UniCore.Runtime.Attributes;
-    using UniCore.Runtime.Common;
-    using UniCore.Runtime.DataFlow;
-    using UniCore.Runtime.DataFlow.Interfaces;
-    using UniCore.Runtime.ProfilerTools;
-    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Connections;
+    using Connections;
+    using Runtime.Interfaces;
+    using UniGreenModules.UniCore.Runtime.Attributes;
+    using UniGreenModules.UniCore.Runtime.Common;
+    using UniGreenModules.UniCore.Runtime.DataFlow;
+    using UniGreenModules.UniCore.Runtime.DataFlow.Interfaces;
+    using UniGreenModules.UniCore.Runtime.ProfilerTools;
     using UniRx;
     using UnityEngine;
 

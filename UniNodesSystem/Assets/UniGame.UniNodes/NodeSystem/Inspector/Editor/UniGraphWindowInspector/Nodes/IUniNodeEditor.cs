@@ -1,4 +1,4 @@
-namespace UniGreenModules.UniNodeSystem.Inspector.Editor.Nodes
+namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.Nodes
 {
     using BaseEditor.Interfaces;
 

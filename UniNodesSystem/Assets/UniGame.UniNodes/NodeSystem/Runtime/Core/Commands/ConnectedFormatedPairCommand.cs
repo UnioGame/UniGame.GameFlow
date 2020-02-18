@@ -1,12 +1,11 @@
-﻿namespace UniGreenModules.UniNodeSystem.Nodes.Commands
+﻿namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Commands
 {
     using System;
-    using Runtime.Core;
-    using Runtime.Extensions;
+    using Extensions;
+    using Interfaces;
     using Runtime.Interfaces;
-    using UniCore.Runtime.DataFlow;
-    using UniCore.Runtime.DataFlow.Interfaces;
-    using UniCore.Runtime.Interfaces;
+    using UniGreenModules.UniCore.Runtime.DataFlow.Interfaces;
+    using UniGreenModules.UniCore.Runtime.Interfaces;
 
     [Serializable]
     public class ConnectedFormatedPairCommand : ILifeTimeCommand, IPortPair

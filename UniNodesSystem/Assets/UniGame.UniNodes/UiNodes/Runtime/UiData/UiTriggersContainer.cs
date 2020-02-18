@@ -1,11 +1,10 @@
-﻿namespace UniGreenModules.UniUiNodes.Runtime.UiData
+﻿namespace UniGame.UniNodes.UiNodes.Runtime.UiData
 {
     using System;
     using Interfaces;
     using Triggers;
-    using UniCore.Runtime.Common;
-    using UniCore.Runtime.Extension;
-    using UniCore.Runtime.Rx.Extensions;
+    using UniGreenModules.UniCore.Runtime.Common;
+    using UniGreenModules.UniCore.Runtime.Rx.Extensions;
     using UniRx;
 
     [Serializable]

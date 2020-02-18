@@ -1,8 +1,8 @@
-﻿using System;
-using UnityEngine;
-
-namespace UniGreenModules.UniNodeSystem.Runtime.NodeData
+﻿namespace UniGame.UniNodes.NodeSystem.Runtime.NodeData
 {
+    using System;
+    using UnityEngine;
+
     [Serializable]
     public struct ObjectInstanceData
     {

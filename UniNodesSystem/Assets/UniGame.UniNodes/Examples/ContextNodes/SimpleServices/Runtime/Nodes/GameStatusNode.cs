@@ -1,13 +1,13 @@
-﻿namespace UniGreenModules.UniGameSystems.Examples.SimpleSystem.Nodes
+﻿namespace UniGame.UniNodes.Examples.ContextNodes.SimpleServices.Runtime.Nodes
 {
     using System;
-    using Runtime.Context;
-    using UniCore.Runtime.Attributes;
-    using UniCore.Runtime.Interfaces;
-    using UniCore.Runtime.ProfilerTools;
-    using UniCore.Runtime.Rx.Extensions;
-    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Nodes.Runtime.Nodes;
-    using UniNodeSystem.Runtime.Core;
+    using Context;
+    using NodeSystem.Runtime.Core;
+    using UniGreenModules.UniCore.Runtime.Attributes;
+    using UniGreenModules.UniCore.Runtime.Interfaces;
+    using UniGreenModules.UniCore.Runtime.ProfilerTools;
+    using UniGreenModules.UniCore.Runtime.Rx.Extensions;
+    using UniNodes.Nodes.Runtime.Common;
     using UniRx;
     using UnityEngine;
 

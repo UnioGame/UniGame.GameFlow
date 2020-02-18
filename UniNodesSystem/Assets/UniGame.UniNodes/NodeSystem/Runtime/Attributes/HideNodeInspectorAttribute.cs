@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Attributes
+﻿namespace UniGame.UniNodes.NodeSystem.Runtime.Attributes
 {
+    using System;
+
     public class HideNodeInspectorAttribute : Attribute, INodeField
     {
 

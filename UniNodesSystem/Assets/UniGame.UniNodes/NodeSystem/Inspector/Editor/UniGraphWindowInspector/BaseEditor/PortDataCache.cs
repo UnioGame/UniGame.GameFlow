@@ -1,7 +1,8 @@
-﻿namespace UniGreenModules.UniNodeSystem.Runtime.Core
+﻿namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.BaseEditor
 {
     using System.Collections.Generic;
-    using UniGame.Core.Runtime.DataStructure;
+    using Runtime.Core;
+    using UniGreenModules.UniGame.Core.Runtime.DataStructure;
     using UnityEngine;
 
     [System.Serializable]

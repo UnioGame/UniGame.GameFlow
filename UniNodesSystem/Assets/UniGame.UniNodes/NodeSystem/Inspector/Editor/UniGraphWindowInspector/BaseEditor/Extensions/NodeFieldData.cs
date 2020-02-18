@@ -1,8 +1,8 @@
-﻿namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.BaseEditor.Extensions
+﻿namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.BaseEditor.Extensions
 {
     using System;
     using System.Reflection;
-    using UniNodeSystem.Runtime.Core;
+    using Runtime.Core.Interfaces;
     using UnityEngine;
 
     [Serializable]

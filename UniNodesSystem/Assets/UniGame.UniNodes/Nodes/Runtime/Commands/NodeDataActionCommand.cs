@@ -1,11 +1,10 @@
-﻿namespace UniGreenModules.UniNodeSystem.Nodes.Commands
+﻿namespace UniGame.UniNodes.Nodes.Runtime.Commands
 {
     using System;
-    using Runtime.Interfaces;
-    using UniCore.Runtime.DataFlow;
-    using UniCore.Runtime.DataFlow.Interfaces;
-    using UniCore.Runtime.Interfaces;
-    using UniCore.Runtime.Rx.Extensions;
+    using NodeSystem.Runtime.Interfaces;
+    using UniGreenModules.UniCore.Runtime.DataFlow.Interfaces;
+    using UniGreenModules.UniCore.Runtime.Interfaces;
+    using UniGreenModules.UniCore.Runtime.Rx.Extensions;
 
     [Serializable]
     public class NodeDataActionCommand : ILifeTimeCommand, IContextWriter

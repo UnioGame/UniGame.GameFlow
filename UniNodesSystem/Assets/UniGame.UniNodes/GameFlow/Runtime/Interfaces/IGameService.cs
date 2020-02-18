@@ -1,8 +1,8 @@
-﻿namespace UniGreenModules.UniGameSystem.Runtime.Interfaces
+﻿namespace UniGame.UniNodes.GameFlow.Runtime.Interfaces
 {
     using System;
-    using UniCore.Runtime.DataFlow.Interfaces;
-    using UniCore.Runtime.Interfaces;
+    using UniGreenModules.UniCore.Runtime.DataFlow.Interfaces;
+    using UniGreenModules.UniCore.Runtime.Interfaces;
     using UniRx;
 
     public interface IGameService : IDisposable, ILifeTimeContext

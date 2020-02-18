@@ -1,7 +1,6 @@
-﻿namespace UniGreenModules.UniGameSystem.Runtime.Interfaces
+﻿namespace UniGame.UniNodes.GameFlow.Runtime.Interfaces
 {
-    using UniCore.Runtime.DataFlow;
-    using UniCore.Runtime.DataFlow.Interfaces;
+    using UniGreenModules.UniCore.Runtime.DataFlow.Interfaces;
 
     public interface IBinder
     {

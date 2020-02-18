@@ -1,8 +1,7 @@
-﻿using UniGreenModules.UniNodeSystem.Runtime.Interfaces;
-
-namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Core.Interfaces
+﻿namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Interfaces
 {
     using System;
+    using Runtime.Interfaces;
 
     public interface IReactiveSource
     {

@@ -1,9 +1,9 @@
-﻿namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Attributes
+﻿namespace UniGame.UniNodes.NodeSystem.Runtime.Attributes
 {
     using System;
     using System.Collections.Generic;
     using Core;
-    using UniNodeSystem.Runtime.Core;
+    using Core.Interfaces;
 
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = true)]
     public class PortValueAttribute : Attribute , IPortData

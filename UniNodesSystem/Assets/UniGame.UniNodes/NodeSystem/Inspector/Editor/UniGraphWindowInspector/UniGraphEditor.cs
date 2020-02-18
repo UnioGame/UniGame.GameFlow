@@ -1,9 +1,7 @@
-﻿namespace UniGreenModules.UniNodeSystem.Inspector.Editor
+﻿namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector
 {
 	using BaseEditor;
-	using Runtime;
 	using Runtime.Core;
-	using UniNodeSystem.Nodes;
 	using UnityEngine;
 
 	[CustomNodeGraphEditor(typeof(UniGraph))]

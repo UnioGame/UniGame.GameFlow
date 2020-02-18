@@ -1,4 +1,4 @@
-﻿namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor {
+﻿namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.BaseEditor {
     using Runtime.Core;
     using UnityEditor;
     using UnityEngine;

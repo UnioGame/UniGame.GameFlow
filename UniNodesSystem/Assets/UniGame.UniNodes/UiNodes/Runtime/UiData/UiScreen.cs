@@ -1,4 +1,4 @@
-﻿namespace UniGreenModules.UniUiNodes.Runtime.UiData
+﻿namespace UniGame.UniNodes.UiNodes.Runtime.UiData
 {
     using UnityEngine;
 

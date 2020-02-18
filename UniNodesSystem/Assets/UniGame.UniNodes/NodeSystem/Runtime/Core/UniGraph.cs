@@ -1,15 +1,13 @@
-﻿namespace UniGreenModules.UniNodeSystem.Nodes
+﻿namespace UniGame.UniNodes.NodeSystem.Runtime.Core
 {
     using System.Collections.Generic;
     using System.Runtime.CompilerServices;
-    using Runtime.Core;
-    using Runtime.Extensions;
+    using Attributes;
+    using Extensions;
     using Runtime.Interfaces;
     using Sirenix.Utilities;
-    using UniCore.Runtime.ObjectPool.Runtime.Extensions;
-    using UniCore.Runtime.Rx.Extensions;
-    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Attributes;
-    using UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.NodeSystem.Runtime.Interfaces;
+    using UniGreenModules.UniCore.Runtime.ObjectPool.Runtime.Extensions;
+    using UniGreenModules.UniCore.Runtime.Rx.Extensions;
     using UniRx;
     using UnityEngine;
 

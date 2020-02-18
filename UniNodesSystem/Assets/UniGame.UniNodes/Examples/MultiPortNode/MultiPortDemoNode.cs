@@ -1,12 +1,9 @@
-﻿using UniGreenModules.UniNodeSystem.Runtime.Core;
-using UnityEngine;
-
-namespace UniGreenModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.Examples.MultiPortNode
+﻿namespace UniGame.UniNodes.Examples.MultiPortNode
 {
     using System.Collections.Generic;
-    using NodeSystem.Runtime.Nodes;
-    using UniCore.Runtime.Interfaces;
-    using UniNodeSystem.Runtime.Extensions;
+    using NodeSystem.Runtime.Core;
+    using NodeSystem.Runtime.Extensions;
+    using UniGreenModules.UniCore.Runtime.Interfaces;
 
     [CreateNodeMenu("Examples/MultiPortDemo/MultiPortNode")]
     public class MultiPortDemoNode : UniNode
