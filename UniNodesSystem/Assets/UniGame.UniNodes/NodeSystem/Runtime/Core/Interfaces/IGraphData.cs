@@ -1,22 +1,20 @@
 ﻿namespace UniGreenModules.UniNodeSystem.Runtime.Core
 {
+    using System.Collections.Generic;
     using UniCore.Runtime.Interfaces;
     using UniRx;
 
     public interface IGraphData : INamedItem, IUnique
     {
-
         #region read operations
         
         Node GetNode(int id);
 
         NodePort GetPort(int portId);
-        
-        PortConnection GetConnection(int portId);
 
-        IReadOnlyReactiveCollection<NodePort> GetPorts(int nodeId);
+        IReadOnlyList<NodePort> GetPorts(int nodeId);
 
-        IReadOnlyReactiveCollection<PortConnection> GetConnections(int portId);
+        IReadOnlyList<PortConnection> GetConnections(int portId);
         
         #endregion
         
@@ -26,6 +24,10 @@
 
         IGraphData Add(IGraphItem graphItem);
 
+        IGraphData AddConnection(int portFromId, int portToId);
+        
+        
+        
         #region remove operations
         
         IGraphData Remove(int id);

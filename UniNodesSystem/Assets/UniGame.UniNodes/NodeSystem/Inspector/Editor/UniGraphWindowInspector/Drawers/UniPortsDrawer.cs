@@ -25,9 +25,8 @@
         
         public bool Update(INodeEditorData editor, Node baseNode)
         {
-            _drawedPorts.Clear();
-            
-            DrawPorts(editor, _drawedPorts);
+
+            DrawPorts(editor);
 
             return true;
 
@@ -64,8 +63,10 @@
             return true;
         }
 
-        private void DrawPorts(INodeEditorData editor,IDictionary<string, NodePort> cache)
+        private void DrawPorts(INodeEditorData editor)
         {
+            _drawedPorts.Clear();
+
             var node = editor.Target;
             
             for (var i = 0; i < node.Ports.Count; i++)
@@ -75,28 +76,28 @@
                 if(editor.HandledPorts.ContainsKey(portValue))
                     continue;
                 
-                var outputPortName = portValue.ItemName;
-                
-                if (cache.ContainsKey(outputPortName))
+                if (_drawedPorts.ContainsKey(portValue.ItemName) )
                     continue;
                 
-                var portName = bracketsExpr.Replace(outputPortName, string.Empty, 1);
+                var portName = bracketsExpr.Replace(portValue.ItemName, string.Empty, 1);
+                var direction = portValue.direction;
+                var outputPortName = portName.GetFormatedPortName(PortIO.Output);
                 var inputPortName = portName.GetFormatedPortName(PortIO.Input);
 
                 //Try Draw port pairs
                 var result = DrawPortPair(node, inputPortName, outputPortName);
                 
-                var portOutput = node.GetPort(outputPortName);
-                cache[portName] = portOutput;
-                
                 if (result)
                 {
                     var portInput = node.GetPort(inputPortName);
-                    cache[inputPortName] = portInput;
+                    var portOutput = node.GetPort(outputPortName);
+                    _drawedPorts[inputPortName] = portInput;
+                    _drawedPorts[outputPortName] = portOutput;
                 }
                 else
                 {
-                    DrawPort(portOutput);
+                    DrawPort(portValue);
+                    _drawedPorts[portValue.ItemName] = portValue;
                 }
             }
         }
