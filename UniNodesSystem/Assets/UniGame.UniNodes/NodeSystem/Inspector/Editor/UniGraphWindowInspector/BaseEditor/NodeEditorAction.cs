@@ -582,9 +582,9 @@ namespace UniGreenModules.UniNodeSystem.Inspector.Editor.BaseEditor
                     from = to;
                 }
 
-                to = draggedOutputTarget != null
-                    ? PortConnectionPoints[draggedOutputTarget.Id].center
-                    : WindowToGridPosition(Event.current.mousePosition);
+                to = PortConnectionPoints.TryGetValue(draggedOutputTarget.Id, out var targetRect) ?
+                    targetRect.center : WindowToGridPosition(Event.current.mousePosition);
+  
                 DrawConnection(from, to, col);
 
                 var bgcol = Color.black;
