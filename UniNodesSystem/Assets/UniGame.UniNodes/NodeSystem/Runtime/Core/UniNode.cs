@@ -39,6 +39,7 @@
 
         private bool isActive = false;
 
+        [NonSerialized] 
         private bool isInitialized = false;
 
         protected ILifeTime lifeTime;
