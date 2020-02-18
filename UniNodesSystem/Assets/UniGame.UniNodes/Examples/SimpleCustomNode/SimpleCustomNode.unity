@@ -409,11 +409,49 @@ MonoBehaviour:
   id: 6
   width: 220
   nodeName: Simple Demo Node
-  position: {x: 120, y: -72}
+  position: {x: -8, y: -136}
   ports:
-    keys: []
-    values: []
+    keys:
+    - outInt
+    - inInt
+    values:
+    - id: 5926
+      nodeId: 6
+      node: {fileID: 8882037422150070984}
+      fieldName: outInt
+      direction: 1
+      connectionType: 0
+      showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      portValue:
+        name: outInt
+        serializedValueTypes:
+        - System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+        broadcastersCount: 0
+      connections: []
+      instancePortList: 0
+    - id: 5925
+      nodeId: 6
+      node: {fileID: 8882037422150070984}
+      fieldName: inInt
+      direction: 0
+      connectionType: 0
+      showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      portValue:
+        name: inInt
+        serializedValueTypes:
+        - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+        broadcastersCount: 0
+      connections: []
+      instancePortList: 0
   graph: {fileID: 8882037422150070983}
   serializableCommands: []
+  intDataOne: 0
+  intDataTwo: 0
+  inInt: 0
+  outInt: 0
   references:
     version: 1
