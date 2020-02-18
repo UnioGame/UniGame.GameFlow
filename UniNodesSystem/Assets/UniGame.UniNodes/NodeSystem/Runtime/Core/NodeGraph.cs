@@ -16,16 +16,21 @@
 
         public static HashSet<NodeGraph> ActiveGraphs { get; } = new HashSet<NodeGraph>();
 
-        private Dictionary<int, Node> nodesCache = new Dictionary<int, Node>();
-
         #endregion
-
-        [ReadOnlyValue] [SerializeField] private int uniqueId;
+        
+#region inspector data
+        
+        [ReadOnlyValue] 
+        [SerializeField] private int uniqueId;
 
         /// <summary> All nodes in the graph. <para/>
         /// See: <see cref="AddNode{T}"/> </summary>
         [SerializeField]
         public List<Node> nodes = new List<Node>();
+
+#endregion
+       
+        [NonSerialized] private Dictionary<int, Node> nodesCache;
 
         #region public properties
 
@@ -51,6 +56,7 @@
 
         public Node GetNode(int nodeId)
         {
+            nodesCache = nodesCache ?? new Dictionary<int, Node>();
             if (nodesCache.Count != nodes.Count) {
                 nodesCache.Clear();
                 nodesCache = nodes.ToDictionary(x => x.Id);
@@ -60,7 +66,6 @@
             return node;
         }
 
-        
         public new void SetGraph(NodeGraph parent)
         {
         }
@@ -106,19 +111,6 @@
                 Destroy(node);
         }
 
-        /// <summary> Remove all nodes and connections from the graph </summary>
-        public void Clear()
-        {
-            if (Application.isPlaying) {
-                for (var i = 0; i < nodes.Count; i++) {
-                    Destroy(nodes[i]);
-                }
-            }
-
-            nodesCache.Clear();
-            nodes.Clear();
-        }
-
         /// <summary> Create a new deep copy of this graph </summary>
         public NodeGraph Copy()
         {
@@ -143,12 +135,17 @@
             return graph;
         }
 
-        public virtual void Dispose()
-        {
-        }
+        public virtual void Dispose() {}
 
         #endregion
 
-        private void OnDestroy() => Clear();
+        private void Awake()
+        {
+            graph = this;
+            nodes.Clear();
+            GetComponents<Node>(nodes);
+            nodes.Remove(this);
+        }
+
     }
 }

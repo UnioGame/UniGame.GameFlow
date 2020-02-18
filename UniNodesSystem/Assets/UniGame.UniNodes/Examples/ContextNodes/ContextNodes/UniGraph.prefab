@@ -112,7 +112,7 @@ MonoBehaviour:
         portId: 11
         node: {fileID: 6247017870777286964}
       instancePortList: 0
-  graph: {fileID: 1558389282463737838}
+  graph: {fileID: 0}
   serializableCommands: []
   contextValue:
     sendByBind: 1
@@ -171,7 +171,7 @@ MonoBehaviour:
         portId: 8
         node: {fileID: 6247017870777286963}
       instancePortList: 0
-  graph: {fileID: 1558389282463737838}
+  graph: {fileID: 0}
   serializableCommands: []
   contextValue:
     sendByBind: 1
@@ -237,18 +237,11 @@ MonoBehaviour:
         nodeId: 2
         reroutePoints: []
         portId: 3
-        node: {fileID: 6247017870777286962}
-      - fieldName: contextValue
-        nodeId: 4
-        reroutePoints: []
-        portId: 5
-        node: {fileID: 6247017870777286962}
+        node: {fileID: 6247017870777286964}
       instancePortList: 0
-  graph: {fileID: 1558389282463737838}
+  graph: {fileID: 0}
   serializableCommands: []
   distinctInput: 1
-  bindInOut: 0
-  isFinalyze: 0
   currentIntSummValue: 0
   lastIntValue: 0
   references:
@@ -304,21 +297,14 @@ MonoBehaviour:
         broadcastersCount: 0
       connections:
       - fieldName: contextValue
-        nodeId: 4
-        reroutePoints: []
-        portId: 5
-        node: {fileID: 6247017870777286965}
-      - fieldName: contextValue
         nodeId: 2
         reroutePoints: []
         portId: 3
-        node: {fileID: 6247017870777286965}
+        node: {fileID: 6247017870777286964}
       instancePortList: 0
-  graph: {fileID: 1558389282463737838}
+  graph: {fileID: 0}
   serializableCommands: []
   distinctInput: 1
-  bindInOut: 0
-  isFinalyze: 0
   currentIntSummValue: 0
   lastIntValue: 0
   references:
