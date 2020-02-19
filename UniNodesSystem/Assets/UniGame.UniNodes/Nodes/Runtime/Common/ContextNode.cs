@@ -39,10 +39,11 @@
             }
             Source.Value.Publish(data);
         }
-        
-        protected override void OnInitialize()
+
+        protected override void OnExecute()
         {
-            base.OnInitialize();
+            base.OnExecute();
+            
             Source.Where(x => x!=null).
                 Do(OnContextActivate).
                 Subscribe().

@@ -27,7 +27,7 @@
         
         #endregion
         
-        protected INode node;  
+        [NonSerialized] protected INode node;  
                 
         #region constructor
         
