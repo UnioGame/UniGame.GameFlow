@@ -8,7 +8,7 @@
     using UniRx;
 
     [Serializable]
-    public class PortTypeDataBridgeCommand<TData> : IDataSourceCommand<TData>
+    public class PortTypeDataBridgeCommand<TData> : IDataSourceCommand<TData>, IPortPair
     {
         protected readonly TData defaultValue;
         protected readonly bool distinctInput;
@@ -36,6 +36,10 @@
 
         public IReadOnlyReactiveProperty<TData> Value => valueData;
 
+        public IPortValue InputPort => portPair.InputPort;
+
+        public IPortValue OutputPort => portPair.OutputPort;
+        
         public void Execute(ILifeTime lifeTime)
         {
             //reset local value
@@ -85,5 +89,6 @@
         {
             isFinalyze.Value = true;
         }
+
     }
 }

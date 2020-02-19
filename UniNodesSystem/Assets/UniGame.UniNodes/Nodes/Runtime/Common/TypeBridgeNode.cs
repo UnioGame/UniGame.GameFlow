@@ -5,6 +5,7 @@
     using NodeSystem.Runtime.Attributes;
     using NodeSystem.Runtime.Core;
     using NodeSystem.Runtime.Core.Commands;
+    using NodeSystem.Runtime.Interfaces;
     using UniGreenModules.UniCore.Runtime.Attributes;
     using UniGreenModules.UniCore.Runtime.Interfaces;
     using UniGreenModules.UniCore.Runtime.Interfaces.Rx;
@@ -26,6 +27,10 @@
         [SerializeField] protected TData defaultValue;
 
         #endregion
+
+        protected IPortValue input;
+
+        protected IPortValue output;
         
         protected IDataSourceCommand<TData> valueSource;
 
@@ -55,7 +60,11 @@
         {
             base.UpdateCommands(nodeCommands);
 
-            valueSource = new PortTypeDataBridgeCommand<TData>(this,portName,defaultValue,distinctInput);
+            var command = new PortTypeDataBridgeCommand<TData>(this,portName,defaultValue,distinctInput);
+            input = command.InputPort;
+            output = command.OutputPort;
+            
+            valueSource = command;
             valueData   = valueSource.Value;
 
             nodeCommands.Add(valueSource);
