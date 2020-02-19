@@ -4,16 +4,16 @@
   "displayName": "UniGame GameSystem",
   "description": "Unity Game Model based controllers",
   "unity": "2019.2",
-  "version": "0.1.73",
+  "version": "0.1.76",
   "keywords": [],
   "dependencies": {
     "com.unigame.neuecc.unirx": "7.1.1",
     "com.unigame.neuecc.unirx.async": "1.2.0",
     "com.unigame.unicore": "1.4.0",
-    "com.unigame.nodessystem": "1.2.14",
+    "com.unigame.nodessystem": "1.2.17",
     "com.unigame.uniroutine": "1.4.19",
-    "com.unigame.serializablecontext": "1.1.0",
+    "com.unigame.serializablecontext": "1.1.2",
     "com.unity.addressables": "1.6.0",
-    "com.unigame.addressablestools": "1.0.20"
+    "com.unigame.addressablestools": "1.0.22"
   }
 }
