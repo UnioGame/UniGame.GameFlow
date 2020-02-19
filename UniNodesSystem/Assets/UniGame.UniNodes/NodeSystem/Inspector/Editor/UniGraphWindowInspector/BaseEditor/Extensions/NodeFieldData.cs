@@ -2,6 +2,7 @@
 {
     using System;
     using System.Reflection;
+    using Runtime.Core;
     using Runtime.Core.Interfaces;
     using UnityEngine;
 
@@ -9,7 +10,7 @@
     public struct NodeFieldData
     {
         [SerializeReference]
-        public IPortData PortData;
+        public NodePortData PortData;
         
         public object    Value;
         

@@ -8,9 +8,11 @@
     using Runtime.Core;
     using Runtime.Interfaces;
     using UniGreenModules.UniCore.EditorTools.Editor.Utility;
+    using UniGreenModules.UniCore.Runtime.ObjectPool.Runtime.Extensions;
     using UnityEditor;
     using UnityEditorInternal;
     using UnityEngine;
+    using UnityEngine.Profiling;
 
     /// <summary> UniNodeSystem-specific version of <see cref="EditorGUILayout"/> </summary>
     public static class NodeEditorGUILayout
@@ -133,8 +135,12 @@
                 return;
             }
 
+            Profiler.BeginSample("ShowBackingValueField");
+            
             ShowBackingValueField(data, property, port.IsConnected, includeChildren, null, GUILayout.MinWidth(30));
 
+            Profiler.EndSample();
+            
             rect          = GUILayoutUtility.GetLastRect();
             rect.position = port.Direction == PortIO.Input ? rect.position - new Vector2(16, 0) : rect.position + new Vector2(rect.width, 0);
 
@@ -144,15 +150,19 @@
             if (NodeEditorWindow.nodeTint.TryGetValue(port.Node.GetType(), out var tint)) {
                 backgroundColor *= tint;
             }
-
+            
+            Profiler.BeginSample("DrawPortHandle");
             var col = NodeEditorPreferences.GetTypeColor(port.ValueType);
             DrawPortHandle(rect, backgroundColor, col);
-
+            Profiler.EndSample();
+            
             // Register the handle position
             var portPos = rect.center;
 
             //TODO REMOTE
             NodeEditor.PortPositions[port] = portPos;
+            
+            portData.Despawn();
         }
 
         private static Type GetType(SerializedProperty property)

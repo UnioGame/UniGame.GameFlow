@@ -7,12 +7,13 @@
     using Runtime.Core;
     using Runtime.Core.Interfaces;
     using Runtime.Interfaces;
+    using UniGreenModules.UniCore.Runtime.ReflectionUtils;
 
     public static class PortNodeExtensions 
     {
         public static NodeFieldData GetPortData(this INode node, Type type, string fieldName)
         {
-            var field = type.GetField(fieldName);
+            var field = type.GetFieldInfo(fieldName);
             return node.GetPortData(field, fieldName);
         }
 

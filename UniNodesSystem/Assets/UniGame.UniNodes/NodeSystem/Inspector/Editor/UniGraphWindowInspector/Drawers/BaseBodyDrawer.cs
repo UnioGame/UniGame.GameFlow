@@ -6,8 +6,10 @@
     using Interfaces;
     using Runtime.Attributes;
     using Runtime.Core;
+    using UniGreenModules.UniCore.Runtime.ReflectionUtils;
     using UnityEditor;
     using UnityEngine;
+    using UnityEngine.Profiling;
 
     public class BaseBodyDrawer : INodeEditorHandler
     {
@@ -31,13 +33,14 @@
             while (iterator.NextVisible(enterChildren))
             {
                 enterChildren = false;
-                
                 //is node field should be draw
-                var field = type.GetField(iterator.name);
+                var field = type.GetFieldInfo(iterator.name);
                 var hideInspector = field?.GetCustomAttributes(typeof(HideNodeInspectorAttribute), false).Length > 0;
+   
                 if (hideInspector || _excludes.Contains(iterator.name)) continue;
                 
                 node.DrawNodePropertyField(iterator,new GUIContent(iterator.name,iterator.tooltip),true);
+
             }
 
             return true;
