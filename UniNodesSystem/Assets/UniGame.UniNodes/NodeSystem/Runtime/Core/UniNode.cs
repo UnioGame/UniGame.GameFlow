@@ -79,10 +79,10 @@
 
             //initialize ports
             InitializePorts();
-            //custom node initialization
-            OnInitialize();
             //initialize all node commands
             InitializeCommands();
+            //custom node initialization
+            OnInitialize();
 
             lifeTime.AddCleanUpAction(() => isActive = false);
             lifeTime.AddCleanUpAction(() => portValues.Clear());
