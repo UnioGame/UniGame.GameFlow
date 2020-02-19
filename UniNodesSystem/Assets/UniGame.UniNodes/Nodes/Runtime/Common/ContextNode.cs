@@ -9,7 +9,7 @@
     [HideNode]
     public class ContextNode : 
         TypeBridgeNode<IContext>, 
-        IMessageReceiver
+        IMessageBroker
     {
         public IObservable<T> Receive<T>()
         {
@@ -18,5 +18,12 @@
                 Select(x => x.Receive<T>()).
                 Switch();
         }
+
+
+        public void Publish<T>(T message)
+        {
+            Source.Value?.Publish(message);
+        }
+        
     }
 }
