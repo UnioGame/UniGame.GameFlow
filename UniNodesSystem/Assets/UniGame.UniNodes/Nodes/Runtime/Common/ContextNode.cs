@@ -13,6 +13,11 @@
         TypeBridgeNode<IContext>, 
         IMessageBroker
     {
+        /// <summary>
+        /// subscribe to selected data from active context value
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public IObservable<T> Receive<T>()
         {
             return Source.
@@ -20,7 +25,21 @@
                 Select(x => x.Receive<T>()).
                 Switch();
         }
-
+        
+        /// <summary>
+        /// data publishing to current context
+        /// </summary>
+        /// <param name="data"></param>
+        /// <typeparam name="T"></typeparam>
+        public void Publish<T>(T data)
+        {
+            if (Source.Value == null) {
+                GameLog.LogWarning($"You are try to Publish DATA {data} to {graph.name}:{ItemName} while context is NULL");
+                return;
+            }
+            Source.Value.Publish(data);
+        }
+        
         protected override void OnInitialize()
         {
             base.OnInitialize();
@@ -32,14 +51,7 @@
 
         protected virtual void OnContextActivate(IContext context) { }
 
-        public void Publish<T>(T data)
-        {
-            if (Source.Value == null) {
-                GameLog.LogWarning($"You are try to Publish DATA {data} to {graph.name}:{ItemName} while context is NULL");
-                return;
-            }
-            Source.Value.Publish(data);
-        }
+
         
     }
 }
