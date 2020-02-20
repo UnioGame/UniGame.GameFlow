@@ -287,37 +287,5 @@ PrefabInstance:
       propertyPath: m_Name
       value: UniGraph1 2
       objectReference: {fileID: 0}
-    - target: {fileID: 6247017870777286962, guid: 38ead084f51e9fa4eb0d2070ddd409cf,
-        type: 3}
-      propertyPath: graph
-      value: 
-      objectReference: {fileID: 6247017870777286960}
-    - target: {fileID: 6247017870777286963, guid: 38ead084f51e9fa4eb0d2070ddd409cf,
-        type: 3}
-      propertyPath: graph
-      value: 
-      objectReference: {fileID: 6247017870777286960}
-    - target: {fileID: 6247017870777286964, guid: 38ead084f51e9fa4eb0d2070ddd409cf,
-        type: 3}
-      propertyPath: graph
-      value: 
-      objectReference: {fileID: 6247017870777286960}
-    - target: {fileID: 6247017870777286965, guid: 38ead084f51e9fa4eb0d2070ddd409cf,
-        type: 3}
-      propertyPath: graph
-      value: 
-      objectReference: {fileID: 6247017870777286960}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 38ead084f51e9fa4eb0d2070ddd409cf, type: 3}
---- !u!114 &6247017870777286960 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1558389282463737838, guid: 38ead084f51e9fa4eb0d2070ddd409cf,
-    type: 3}
-  m_PrefabInstance: {fileID: 6247017870777286959}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 782945db79ce44748b3f294e0edf364e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
