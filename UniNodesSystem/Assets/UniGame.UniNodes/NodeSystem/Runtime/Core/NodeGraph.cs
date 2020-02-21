@@ -5,6 +5,7 @@
     using System.Linq;
     using Runtime.Interfaces;
     using UniGreenModules.UniCore.Runtime.Attributes;
+    using UniRx;
     using UnityEngine;
 
     /// <summary> Base class for all node graphs </summary>
@@ -13,7 +14,7 @@
     {
         #region static data
 
-        public static HashSet<NodeGraph> ActiveGraphs { get; } = new HashSet<NodeGraph>();
+        public static ReactiveCollection<NodeGraph> ActiveGraphs { get; } = new ReactiveCollection<NodeGraph>();
 
         #endregion
         

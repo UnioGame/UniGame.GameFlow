@@ -1,13 +1,17 @@
 namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.BaseEditor
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using Runtime.Core;
     using UniGreenModules.UniCore.EditorTools.Editor.PrefabTools;
     using UniGreenModules.UniCore.EditorTools.Editor.Utility;
+    using UniGreenModules.UniCore.Runtime.Rx.Extensions;
+    using UniRx;
     using UnityEditor;
     using UnityEditor.Callbacks;
     using UnityEngine;
+    using Object = UnityEngine.Object;
 
     [InitializeOnLoad]
     public partial class NodeEditorWindow : EditorWindow
@@ -23,6 +27,7 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
 
         private float   _zoom = 1;
         private Vector2 _panOffset;
+        private IDisposable graphUpdateDisposable;
 
         [SerializeField] private NodePortReference[] _references = new NodePortReference[0];
         [SerializeField] private Rect[]              _rects      = new Rect[0];
@@ -234,6 +239,7 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
 
         private void OnDisable()
         {
+            graphUpdateDisposable.Cancel();
             ActiveWindows.Remove(this);
             EditorApplication.playModeStateChanged -= OnPlayModeChanged;
 
@@ -291,6 +297,11 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
                 }
             }
 
+            graphUpdateDisposable = NodeGraph.ActiveGraphs.ObserveCountChanged().Subscribe(x => {
+                var target = NodeGraph.ActiveGraphs.FirstOrDefault(y => Title == y.name);
+                Open(target);
+            });
+            
             graphEditor?.OnEnable();
         }
 
@@ -301,14 +312,18 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
                     if (LastEditorGraph) {
                         Open(LastEditorGraph);
                     }
-
-                    LastEditorGraph = null;
+                    ActiveGraph = null;
+                    var activeGraph = NodeGraph.ActiveGraphs.FirstOrDefault(x => x.name == Title);
+                    Open(activeGraph);
+                    break;
+                case PlayModeStateChange.EnteredPlayMode:
+                    ActiveGraph = null;
+                    var target = NodeGraph.ActiveGraphs.FirstOrDefault(x => x.name == Title);
+                    Open(target);
                     break;
                 case PlayModeStateChange.ExitingPlayMode:
                     LastEditorGraph = ActiveGraph;
                     ActiveGraph     = null;
-                    var activeGraph = NodeGraph.ActiveGraphs.FirstOrDefault();
-                    Open(activeGraph);
                     break;
             }
         }
