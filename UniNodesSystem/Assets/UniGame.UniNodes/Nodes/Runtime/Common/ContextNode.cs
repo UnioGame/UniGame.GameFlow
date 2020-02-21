@@ -47,7 +47,7 @@
             Source.Where(x => x!=null).
                 Do(OnContextActivate).
                 Subscribe().
-                AddTo(lifeTime);
+                AddTo(LifeTime);
         }
 
         protected virtual void OnContextActivate(IContext context) { }

@@ -46,12 +46,14 @@
                 Do(x => disposable = Move(x).ExecuteRoutine()).
                 DoOnCompleted(() => disposable.Cancel()).
                 Subscribe().
-                AddTo(lifeTime);
-            
-            if (target) {
-                disposable = Move(target).ExecuteRoutine();
-                output.Publish(target);
+                AddTo(LifeTime);
+
+            if (!target) {
+                return;
             }
+
+            disposable = Move(target).ExecuteRoutine();
+            output.Publish(target);
 
         }
 

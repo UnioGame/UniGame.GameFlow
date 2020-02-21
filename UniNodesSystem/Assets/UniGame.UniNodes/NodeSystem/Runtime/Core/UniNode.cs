@@ -29,11 +29,6 @@
         
         #region private fields
 
-        protected HashSet<INodePort> portValues = new HashSet<INodePort>();
-        
-        protected List<ILifeTimeCommand> commands = 
-            new List<ILifeTimeCommand>();
-
         private LifeTimeDefinition lifeTimeDefinition = new LifeTimeDefinition();
 
         private bool isActive = false;
@@ -41,7 +36,11 @@
         [NonSerialized] 
         private bool isInitialized = false;
 
-        protected ILifeTime lifeTime;
+        private ILifeTime lifeTime;
+
+        private HashSet<INodePort> portValues = new HashSet<INodePort>();
+        
+        private List<ILifeTimeCommand> commands = new List<ILifeTimeCommand>();
 
         #endregion
 

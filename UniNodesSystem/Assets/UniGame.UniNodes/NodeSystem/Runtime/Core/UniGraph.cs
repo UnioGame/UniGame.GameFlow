@@ -128,7 +128,7 @@
 
                 uniNode.Initialize(this);
                 
-                lifeTime.AddCleanUpAction(uniNode.Exit);
+                LifeTime.AddCleanUpAction(uniNode.Exit);
                 
                 allNodes.Add(uniNode);
             }
