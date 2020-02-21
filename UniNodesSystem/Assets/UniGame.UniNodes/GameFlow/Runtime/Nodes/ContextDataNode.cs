@@ -10,6 +10,11 @@
     using UniRx.Async;
     using UnityEngine;
 
+    /// <summary>
+    /// 1. Register ALL contextDataSources Source into target  contextAsset
+    /// 2. Publish ALL contextDataSources INTO Output port
+    /// 3. Publish target Context INTO Output port
+    /// </summary>
     [CreateNodeMenu("GameSystem/Context Source")]
     public class ContextDataNode : InOutPortNode
     {
@@ -27,11 +32,16 @@
 
             var outputContextTask = UniTask.FromResult<IContext>(PortPair.OutputPort);
             
-            var registerContext = new RegisterDataSourceToContextAssetCommand(contextAsset,contextDataSources);
+            //register all Context Sources Data into target context asset
+            var registerDataSourceIntoContext = new RegisterDataSourceToContextAssetCommand(contextAsset,contextDataSources);
+            //Register All Sources data into Output port
             var sourceOutputPortCommand = new RegisterDataSourceCommand(outputContextTask,contextDataSources);
+            //Register context to output port
+            var contextToOutputPortCommand = new RegisterDataSourceCommand(outputContextTask,contextAsset);
             
-            nodeCommands.Add(registerContext);
+            nodeCommands.Add(registerDataSourceIntoContext);
             nodeCommands.Add(sourceOutputPortCommand);
+            nodeCommands.Add(contextToOutputPortCommand);
         }
         
         
