@@ -88,6 +88,7 @@
         public void Complete()
         {
             isFinalyze.Value = true;
+            isFinalyze.Value = false;
         }
 
     }
