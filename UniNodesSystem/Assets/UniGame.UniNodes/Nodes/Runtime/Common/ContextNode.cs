@@ -1,6 +1,7 @@
 ﻿namespace UniGame.UniNodes.Nodes.Runtime.Common
 {
     using System;
+    using System.Collections.Generic;
     using NodeSystem.Runtime.Attributes;
     using UniGreenModules.UniCore.Runtime.Interfaces;
     using UniGreenModules.UniCore.Runtime.ProfilerTools;
@@ -40,10 +41,11 @@
             Source.Value.Publish(data);
         }
 
-        protected override void OnExecute()
+
+        protected override void UpdateCommands(List<ILifeTimeCommand> nodeCommands)
         {
-            base.OnExecute();
-            
+            base.UpdateCommands(nodeCommands);
+                        
             Source.Where(x => x!=null).
                 Do(OnContextActivate).
                 Subscribe().
@@ -51,8 +53,6 @@
         }
 
         protected virtual void OnContextActivate(IContext context) { }
-
-
         
     }
 }
