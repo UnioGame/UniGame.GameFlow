@@ -38,7 +38,7 @@
         /// <summary>
         /// port container value
         /// </summary>
-        [SerializeField] public UniPortValue portValue = new UniPortValue();
+        [SerializeField] public PortValue portValue = new PortValue();
         /// <summary>
         /// registered port connections
         /// </summary>

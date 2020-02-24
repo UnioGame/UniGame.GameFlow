@@ -33,11 +33,11 @@
 
         #endregion
 
-        private List<UniPortValue> uiTriggersOutputs = new List<UniPortValue>();
-        private List<UniPortValue> uiModulesOutputs  = new List<UniPortValue>();
+        private List<PortValue> uiTriggersOutputs = new List<PortValue>();
+        private List<PortValue> uiModulesOutputs  = new List<PortValue>();
 
-        private List<UniPortValue> slotPorts;
-        private List<UniPortValue> triggersPorts;
+        private List<PortValue> slotPorts;
+        private List<PortValue> triggersPorts;
 
 
         private AsyncOperationHandle<GameObject> UiViewHandle => resource.LoadAssetAsync();

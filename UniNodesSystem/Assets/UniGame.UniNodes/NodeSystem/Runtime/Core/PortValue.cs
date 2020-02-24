@@ -16,7 +16,7 @@
     using UnityEngine;
 
     [Serializable]
-    public class UniPortValue : IPortValue , ISerializationCallbackReceiver
+    public class PortValue : IPortValue , ISerializationCallbackReceiver
     {
         #region serialized data
 
@@ -37,7 +37,7 @@
 
         #region private property
 
-        private TypeData context;
+        private TypeData data;
 
         private TypeDataBrodcaster broadcaster;
 
@@ -60,7 +60,7 @@
 
         public string ItemName => name;
 
-        public bool HasValue => context.HasValue;
+        public bool HasValue => data.HasValue;
 
         public IObservable<Unit> PortValueChanged => portValueChanged;
 
@@ -81,10 +81,10 @@
             lifeTime = lifeTimeDefeDefinition.LifeTime;
             lifeTimeDefeDefinition.Release();
             
-            context     = context ?? new TypeData();
+            data     = data ?? new TypeData();
             broadcaster = broadcaster ?? new TypeDataBrodcaster();
 
-            lifeTime.AddCleanUpAction(context.Release);
+            lifeTime.AddCleanUpAction(data.Release);
             lifeTime.AddCleanUpAction(RemoveAllConnections);
             
         }
@@ -107,7 +107,7 @@
 
         public bool Remove<TData>()
         {
-            var result = context.Remove<TData>();
+            var result = data.Remove<TData>();
             if (result) {
                 portValueChanged.Execute(Unit.Default);
             }
@@ -124,7 +124,7 @@
                 return;
             }
             
-            context.Publish(value);
+            data.Publish(value);
             broadcaster.Publish(value);
             portValueChanged.Execute(Unit.Default);
             
@@ -132,12 +132,12 @@
 
         public void RemoveAllConnections() => broadcaster.Release();
 
-        public TData Get<TData>() => context.Get<TData>();
+        public TData Get<TData>() => data.Get<TData>();
 
-        public bool Contains<TData>() => context.Contains<TData>();
+        public bool Contains<TData>() => data.Contains<TData>();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public IObservable<TValue> Receive<TValue>() => context.Receive<TValue>();
+        public IObservable<TValue> Receive<TValue>() => data.Receive<TValue>();
 
         #endregion
 

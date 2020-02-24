@@ -11,7 +11,7 @@
         public void UpdateValueTest()
         {
             
-            var portValue = new UniPortValue();
+            var portValue = new PortValue();
             var context1 = new EntityContext();
             var value1 = "value1";
             var value2 = "value2";
@@ -34,7 +34,7 @@
         [Test]
         public void PortValueRemoveTest()
         {
-            var portValue1 = new UniPortValue();
+            var portValue1 = new PortValue();
 
             var testPortValue = "TestPortValue";
             var testPortValue2 = 222;
@@ -53,8 +53,8 @@
         [Test]
         public void PortConnectionDependenciesTest()
         {
-            var portValue1 = new UniPortValue();
-            var portValue2 = new UniPortValue();
+            var portValue1 = new PortValue();
+            var portValue2 = new PortValue();
 
             var testPortValue = "TestPortValue";           
             
@@ -70,8 +70,8 @@
         [Test]
         public void PortConnectionDependenciesChangesTest()
         {
-            var portValue1 = new UniPortValue();
-            var portValue2 = new UniPortValue();
+            var portValue1 = new PortValue();
+            var portValue2 = new PortValue();
             
             var testPortValue = "TestPortValue";
             var testPortValue2 = "TestPortValue2";
@@ -89,8 +89,8 @@
         [Test]
         public void PortDependenciesRemoveTest()
         {
-            var portValue1 = new UniPortValue();
-            var portValue2 = new UniPortValue();
+            var portValue1 = new PortValue();
+            var portValue2 = new PortValue();
             
             var testPortValue = "TestPortValue";
             
@@ -105,7 +105,7 @@
         [Test]
         public void PortValueRemoveContextTest()
         {
-            var portValue1 = new UniPortValue();
+            var portValue1 = new PortValue();
 
             var testPortValue = "TestPortValue";
             
@@ -121,7 +121,7 @@
         [Test]
         public void PortValueRemoveAllTest()
         {
-            var portValue1 = new UniPortValue();
+            var portValue1 = new PortValue();
 
             var testPortValue = "TestPortValue";
             var testPortValue2 = 333;
