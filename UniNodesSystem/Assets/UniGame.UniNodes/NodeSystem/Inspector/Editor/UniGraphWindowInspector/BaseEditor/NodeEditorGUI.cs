@@ -112,14 +112,16 @@
 
         public void DrawSelectionBox()
         {
-            if (currentActivity == NodeActivity.DragGrid) {
-                var curPos = WindowToGridPosition(Event.current.mousePosition);
-                var size   = curPos - dragBoxStart;
-                var r      = new Rect(dragBoxStart, size);
-                r.position =  GridToWindowPosition(r.position);
-                r.size     /= Zoom;
-                Handles.DrawSolidRectangleWithOutline(r, new Color(0, 0, 0, 0.1f), new Color(1, 1, 1, 0.6f));
+            if (currentActivity != NodeActivity.DragGrid) {
+                return;
             }
+
+            var curPos = WindowToGridPosition(Event.current.mousePosition);
+            var size   = curPos - dragBoxStart;
+            var r      = new Rect(dragBoxStart, size);
+            r.position =  GridToWindowPosition(r.position) / Zoom;
+            r.size     /= Zoom;
+            Handles.DrawSolidRectangleWithOutline(r, new Color(0, 0, 0, 0.1f), new Color(1, 1, 1, 0.6f));
         }
 
         public static bool DropdownButton(string name, float width)
@@ -688,7 +690,9 @@
             if (hoveredPort != null) {
                 var type    = hoveredPort.ValueType;
                 var content = new GUIContent();
-                content.text = type.PrettyName();
+                var portTypeTooltip = type.PrettyName();
+                content.text = portTypeTooltip; 
+                
                 if (hoveredPort.IsOutput) {
                     //TODO DRAW ACTUAL VALUE
                     //var obj = hoveredPort.node.GetValue(hoveredPort);

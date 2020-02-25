@@ -76,7 +76,7 @@
                 var value = objectValue.GetValue();
                 
                 var foldout = new Foldout() {
-                    text = $"{type.Name} : {value?.GetType().Name}",
+                    text = $"[Context Type :{type.Name}] : [Value Type :{value?.GetType().Name}]",
                 };
                                          
                 container.Add(foldout);

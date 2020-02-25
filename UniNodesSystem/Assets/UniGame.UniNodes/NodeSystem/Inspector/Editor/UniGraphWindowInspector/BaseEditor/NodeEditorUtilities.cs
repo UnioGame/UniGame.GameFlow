@@ -74,7 +74,7 @@
         /// <summary> Return a prettiefied type name. </summary>
         public static string PrettyName(this Type type)
         {
-            if (type == null) return "null";
+            if (type == null) return "no filter";
             if (type == typeof(System.Object)) return "object";
             if (type == typeof(float)) return "float";
             if (type == typeof(int)) return "int";
