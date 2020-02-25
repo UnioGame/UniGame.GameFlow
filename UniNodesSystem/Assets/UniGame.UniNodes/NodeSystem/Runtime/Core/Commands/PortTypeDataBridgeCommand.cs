@@ -62,9 +62,8 @@
             }
             
             isFinalyze.
-                CombineLatest(valueData, (status,data) => (status,data)).
-                Where(x => x.status).
-                Do(x => output.Publish(x.data)).
+                Where(x => x).
+                Do(x => output.Publish(valueData.Value)).
                 Subscribe().
                 AddTo(lifeTime);
         }
