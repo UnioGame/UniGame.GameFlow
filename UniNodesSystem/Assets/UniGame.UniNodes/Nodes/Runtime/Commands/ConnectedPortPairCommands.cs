@@ -1,17 +1,22 @@
 ﻿namespace UniGame.UniNodes.Nodes.Runtime.Commands
 {
     using System;
+    using NodeSystem.Runtime.Core.Interfaces;
     using NodeSystem.Runtime.Extensions;
     using NodeSystem.Runtime.Interfaces;
     using UniGreenModules.UniCore.Runtime.DataFlow.Interfaces;
     using UniGreenModules.UniCore.Runtime.Interfaces;
 
     [Serializable]
-    public class ConnectedPortPairCommands : ILifeTimeCommand
+    public class ConnectedPortPairCommands : ILifeTimeCommand , IPortPair
     {
         protected IPortValue inputPort;
         protected IPortValue outputPort;
-
+        
+        public IPortValue InputPort  => inputPort;
+        
+        public IPortValue OutputPort => outputPort;
+        
         public void Initialize(IUniNode node,
             string input, 
             string output, bool connect = true)

@@ -181,7 +181,7 @@
         
         
         [Conditional("UNITY_EDITOR")]
-        private void LogMessage(string message)
+        protected void LogMessage(string message)
         {
             GameLog.Log($"{Graph.ItemName}:{ItemName}: {message}");
         }

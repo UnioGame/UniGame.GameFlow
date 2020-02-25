@@ -94,13 +94,24 @@
                     case Sprite asset:
                         element = new Image() {
                             image = asset.texture,
-                            name = asset.name
+                            name = asset.name,
+                            scaleMode = ScaleMode.ScaleToFit,
+                            style = {
+                                width  = 128,
+                                height = 128,
+                            }
                         };
+                        
                         break;
                     case Texture asset:
                         element = new Image() {
                             image = asset,
-                            name = asset.name
+                            name = asset.name,
+                            scaleMode = ScaleMode.ScaleToFit,
+                            style = {
+                                width = 128,
+                                height = 128,
+                            }
                         };
                         break;
                     case Object asset:

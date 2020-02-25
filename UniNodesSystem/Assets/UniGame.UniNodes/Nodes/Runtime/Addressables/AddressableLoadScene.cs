@@ -13,8 +13,8 @@
     using UnityEngine.AddressableAssets;
     using UnityEngine.SceneManagement;
 
-    [CreateNodeMenu("Addressable/AddressableLoadScene")]
-    public class AddresssableLoadScene : UniNode
+    [CreateNodeMenu("Addressables/AddressableLoadScene")]
+    public class AddressableLoadScene : UniNode
     {
         private const string portName = "data";
         
