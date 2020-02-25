@@ -1,6 +1,7 @@
 ﻿namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.ContentContextWindow
 {
     using UniGreenModules.UniCore.Runtime.Common;
+    using UniGreenModules.UniCore.Runtime.Interfaces;
     using UniGreenModules.UniCore.Runtime.Interfaces.Rx;
     using UnityEditor;
     using UnityEngine;
@@ -12,14 +13,14 @@
         private const string uiViewPath = "";
         private const string uiIconViewPath = "";
         
-        private TypeData data;
+        private ITypeData value;
         
         private string portName;
         
         private ScrollView scrollView;
         private Button refreshButton;
         
-        public static void Open(TypeData data)
+        public static void Open(ITypeData data)
         {
             var window = GetWindow<ContextContentWindow>(); 
             window.Initialize(data);
@@ -28,15 +29,15 @@
             window.Show();
         }
 
-        public void Initialize(TypeData contextData)
+        public void Initialize(ITypeData contextData)
         {
-            this.data = contextData;
+            this.value = contextData;
             Refresh();
         }
 
         public void Refresh()
         {
-            CreateContent(scrollView,data);
+            CreateContent(scrollView,value);
         }
         
         public void OnEnable()
@@ -58,7 +59,7 @@
            
         }
 
-        public void CreateContent(VisualElement container , TypeData data)
+        public void CreateContent(VisualElement container , ITypeData data)
         {
             container.Clear();
             
@@ -88,6 +89,13 @@
                 VisualElement element = null;
                 
                 switch (value) {
+                    
+                    case ITypeData dataContainer:
+                        element = new ScrollView() {
+                            showVertical = true,
+                        };
+                        CreateContent(element,dataContainer);
+                        break;
                     case GameObject asset:
                         element = new IMGUIContainer(() => asset.DrawOdinPropertyInspector());
                         break;
@@ -101,7 +109,6 @@
                                 height = 128,
                             }
                         };
-                        
                         break;
                     case Texture asset:
                         element = new Image() {
@@ -123,11 +130,13 @@
                         };
                         break;
                 }
+
+                element.style.backgroundColor = new StyleColor(Color.white);
+                element.style.marginTop = 4;
+                element.style.marginBottom = 4;
                 
-                if (element != null) {
-                    foldout.Add(element);
-                }
-  
+                foldout.Add(element);
+
             }
         }
         

@@ -11,6 +11,7 @@
     using UniGreenModules.UniCore.Runtime.Common;
     using UniGreenModules.UniCore.Runtime.DataFlow;
     using UniGreenModules.UniCore.Runtime.DataFlow.Interfaces;
+    using UniGreenModules.UniCore.Runtime.Interfaces;
     using UniGreenModules.UniCore.Runtime.ProfilerTools;
     using UniRx;
     using UnityEngine;
@@ -181,6 +182,15 @@
                 filter.Select(x => x.AssemblyQualifiedName).ToList();
         }
 
+        #endregion
+
+
+        #region Unity Editor Api
+#if UNITY_EDITOR
+        
+        public IReadOnlyDictionary<Type, IValueContainerStatus> EditorValues => data.EditorValues;
+        
+#endif
         #endregion
     }
 }

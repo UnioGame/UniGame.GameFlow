@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+    using ContentContextWindow;
     using Runtime.Attributes;
     using Runtime.Core;
     using Runtime.Interfaces;
@@ -141,8 +142,13 @@
         {
             var contextMenu = new GenericMenu();
             contextMenu.AddItem(new GUIContent("Clear Connections"), false, hoveredPort.ClearConnections);
-            contextMenu.AddItem(new GUIContent("Show Content"), false, hoveredPort.ClearConnections);
+            contextMenu.AddItem(new GUIContent("Show Content"), false, () => ShowPortContextValues(hoveredPort.Value));
             contextMenu.DropDown(new Rect(Event.current.mousePosition, Vector2.zero));
+        }
+
+        public void ShowPortContextValues(IPortValue port)
+        {
+            ContextContentWindow.Open(port); 
         }
 
         /// <summary> Show right-click context menu for selected nodes </summary>
