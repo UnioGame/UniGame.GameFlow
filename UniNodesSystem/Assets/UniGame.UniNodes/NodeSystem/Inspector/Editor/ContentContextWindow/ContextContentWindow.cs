@@ -1,146 +1,108 @@
 ﻿namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.ContentContextWindow
 {
-    using UniGreenModules.UniCore.Runtime.Common;
+    using System;
+    using System.Linq;
     using UniGreenModules.UniCore.Runtime.Interfaces;
     using UniGreenModules.UniCore.Runtime.Interfaces.Rx;
-    using UniGreenModules.UniGame.Core.EditorTools.Editor.DrawersTools;
     using UnityEditor;
     using UnityEngine;
     using UnityEngine.UIElements;
 
     public class ContextContentWindow : EditorWindow
     {
-        private const string stylePath = "";
-        private const string uiViewPath = "";
+        private const string stylePath      = "";
+        private const string uiViewPath     = "";
         private const string uiIconViewPath = "";
-        
-        private ITypeData value;
-        
-        private string portName;
-        
+        private const string refreshLabel   = "refresh";
+
+        private ITypeData            containerValue;
+        private string               portName;
+        private UiElementValueDrawer drawers;
+
+
         private ScrollView scrollView;
-        private Button refreshButton;
-        
+        private Button     refreshButton;
+
         public static void Open(ITypeData data)
         {
-            var window = GetWindow<ContextContentWindow>(); 
+            var window = GetWindow<ContextContentWindow>();
             window.Initialize(data);
-            window.minSize = new Vector2(400, 200);
+            window.minSize      = new Vector2(400, 200);
             window.titleContent = new GUIContent("Context Data");
             window.Show();
         }
 
         public void Initialize(ITypeData contextData)
         {
-            this.value = contextData;
+            this.containerValue = contextData;
             Refresh();
         }
 
         public void Refresh()
         {
-            CreateContent(scrollView,value);
+            CreateContent(scrollView, containerValue);
         }
-        
+
         public void OnEnable()
         {
-           rootVisualElement.style.flexDirection = FlexDirection.Column;
-           
-           refreshButton = new Button(Refresh) {
-               text = "refresh"
-           };
-           rootVisualElement.Add(refreshButton);
-           
-           scrollView = new ScrollView() {
-               style = {
-                   marginTop = 20
-               },
-               showVertical = true,
-           };
-           rootVisualElement.Add(scrollView);
-           
+            drawers                               = new UiElementValueDrawer();
+            rootVisualElement.style.flexDirection = FlexDirection.Column;
+
+            refreshButton = new Button(Refresh) {
+                text = refreshLabel
+            };
+            rootVisualElement.Add(refreshButton);
+
+            scrollView = new ScrollView() {
+                style = {
+                    marginTop = 20,
+                    backgroundColor = new StyleColor(new Color(0.5f,0.5f,0.5f)),
+                },
+                showVertical = true,
+                
+            };
+            rootVisualElement.Add(scrollView);
         }
 
-        public void CreateContent(VisualElement container , ITypeData data)
+
+        public void CreateContent(VisualElement container, ITypeData data)
         {
             container.Clear();
-            
+
             if (data == null) return;
-            
+
             foreach (var pair in data.EditorValues) {
                 var valueContainer = pair.Value;
-                var objectValue = valueContainer as IObjectValue;
-                var type = pair.Key;
-                
-                if(valueContainer.HasValue == false || objectValue == null)
+                var objectValue    = valueContainer as IObjectValue;
+                var type           = pair.Key;
+
+                if (valueContainer.HasValue == false || objectValue == null)
                     continue;
-                
-                var value = objectValue.GetValue();
-                
+
+                var value     = objectValue.GetValue();
+                var valueType = value?.GetType();
+
+                var valueTypeLabel = valueType?.Name;
+                var genericTypes = valueType?.GenericTypeArguments.Select(x => x.Name).ToArray();
+                var genericLabel = genericTypes == null || genericTypes.Length == 0 ? string.Empty : string.Join(",", genericTypes);
                 var foldout = new Foldout() {
-                    text = $"[Context Type :{type.Name}] : [Value Type :{value?.GetType().Name}]",
+                    text = $"[Registered Type :{type.Name}] : [Value Type :{valueTypeLabel} {genericLabel}]",
                 };
-                                         
+
+                foldout.style.backgroundColor = new StyleColor(new Color(0.8f, 0.8f, 0.8f));
+                foldout.style.marginBottom   = 4;
+                foldout.style.borderTopColor = new StyleColor(Color.black);
+                foldout.style.borderTopWidth = 1;
+                
                 container.Add(foldout);
 
-                if(value == null) 
+                var element = drawers.Create(value);
+                //is empty value or value already shown
+                if (element == null)
                     continue;
 
-                var valueType = value.GetType();
-                
-                VisualElement element = null;
-                
-                switch (value) {
-                    
-                    case ITypeData dataContainer:
-                        element = new ScrollView() {
-                            showVertical = true,
-                        };
-                        CreateContent(element,dataContainer);
-                        break;
-                    case GameObject asset:
-                        element = new IMGUIContainer(() => asset.DrawOdinPropertyInspector());
-                        break;
-                    case Sprite asset:
-                        element = new Image() {
-                            image = asset.texture,
-                            name = asset.name,
-                            scaleMode = ScaleMode.ScaleToFit,
-                            style = {
-                                width  = 128,
-                                height = 128,
-                            }
-                        };
-                        break;
-                    case Texture asset:
-                        element = new Image() {
-                            image = asset,
-                            name = asset.name,
-                            scaleMode = ScaleMode.ScaleToFit,
-                            style = {
-                                width = 128,
-                                height = 128,
-                            }
-                        };
-                        break;
-                    case Object asset:
-                        element = new IMGUIContainer(() => asset.DrawOdinPropertyInspector());
-                        break;
-                    default:
-                        element = new TextElement() {
-                            text = value.ToString()
-                        };
-                        break;
-                }
-
-                element.style.backgroundColor = new StyleColor(Color.white);
-                element.style.marginTop = 4;
-                element.style.marginBottom = 4;
-                
                 foldout.Add(element);
-
             }
         }
-        
-
     }
 }
