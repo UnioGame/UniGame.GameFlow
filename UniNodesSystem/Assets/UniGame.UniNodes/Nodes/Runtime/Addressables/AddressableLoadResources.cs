@@ -5,6 +5,7 @@ namespace UniGame.UniNodes.Nodes.Runtime.Addressables
     using System.Collections.Generic;
     using Commands;
     using UniGreenModules.UniCore.Runtime.Interfaces;
+    using UniGreenModules.UniGame.AddressableTools.Runtime.Extensions;
     using UnityEngine.AddressableAssets;
 
     [CreateNodeMenu("Addressables/AddressableLoadResources","AddressableLoadResources")]
@@ -24,8 +25,13 @@ namespace UniGame.UniNodes.Nodes.Runtime.Addressables
             base.UpdateCommands(nodeCommands);
             var portCommand = new ConnectedPortPairCommands();
             portCommand.Initialize(this,"in","complete",false);
-            
-            
+        }
+
+        protected override void OnExecute()
+        {
+            foreach (var reference in assetReferences) {
+                LifeTime.AddCleanUpAction(() => reference.UnloadReference());
+            }
         }
     }
 }

@@ -25,7 +25,7 @@
         public async UniTask<IReadOnlyList<TResult>> Execute(ILifeTime lifeTime)
         {
             sources.Clear();
-            return await resources.LoadAssetsTaskAsync<TSource, TResult, AssetReference>(sources);
+            return await resources.LoadAssetsTaskAsync<TSource, TResult, AssetReference>(sources,lifeTime);
         }
     }
 }

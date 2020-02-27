@@ -28,5 +28,12 @@
             var sourceOutputPortCommand = new RegisterDataSourcesCommand<AsyncContextDataSourceAssetReference>(outputContextTask,sources);
             nodeCommands.Add(sourceOutputPortCommand);
         }
+
+        protected sealed override void OnExecute()
+        {
+            foreach (var reference in sources) {
+                LifeTime.AddDispose(reference);
+            }
+        }
     }
 }

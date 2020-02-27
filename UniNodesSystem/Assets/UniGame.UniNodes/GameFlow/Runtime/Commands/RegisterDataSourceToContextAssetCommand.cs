@@ -21,8 +21,8 @@
 
         public async void Execute(ILifeTime lifeTime)
         {
-            var context = await contextResource.LoadAssetTaskAsync();
-            var asset = await resource.LoadAssetTaskAsync();
+            var context = await contextResource.LoadAssetTaskAsync(lifeTime);
+            var asset = await resource.LoadAssetTaskAsync(lifeTime);
             
             if (!asset || !context) {
                 GameLog.LogError($"NULL asset loaded from {resource} context {contextResource}");

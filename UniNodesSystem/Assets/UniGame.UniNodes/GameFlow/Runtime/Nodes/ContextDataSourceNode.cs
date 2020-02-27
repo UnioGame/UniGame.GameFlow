@@ -5,6 +5,7 @@
     using NodeSystem.Runtime.Core;
     using UniGreenModules.UniCore.Runtime.Interfaces;
     using UniGreenModules.UniGame.AddressableTools.Runtime.Attributes;
+    using UniGreenModules.UniGame.Context.Runtime.Interfaces;
     using UniGreenModules.UniGame.SerializableContext.Runtime.Addressables;
     using UniNodes.Nodes.Runtime.Common;
     using UniRx.Async;
@@ -24,9 +25,15 @@
             //create sync result for task
             var outputContextTask = UniTask.FromResult<IContext>(PortPair.OutputPort);
             //create node commands
-            var sourceOutputPortCommand = new RegisterDataSourceCommand(outputContextTask,contextDataSource);
+            var sourceOutputPortCommand = new 
+                RegisterDataSourceCommand(outputContextTask,contextDataSource);
             
             nodeCommands.Add(sourceOutputPortCommand);
+        }
+
+        protected sealed override void OnExecute()
+        {
+            LifeTime.AddDispose(contextDataSource);
         }
     }
 }

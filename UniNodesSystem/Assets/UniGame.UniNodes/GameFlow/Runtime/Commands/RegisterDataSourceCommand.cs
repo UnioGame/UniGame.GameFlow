@@ -12,7 +12,7 @@
     using Object = System.Object;
 
     [Serializable]
-    public class RegisterDataSourceCommand : ILifeTimeCommand
+    public class RegisterDataSourceCommand : ILifeTimeCommand 
     {
         private readonly UniTask<IContext> contextTask;
         private readonly AssetReference resource;
@@ -28,7 +28,7 @@
 
         public async void Execute(ILifeTime lifeTime)
         {
-            asset = await resource.LoadAssetTaskAsync<ScriptableObject>();
+            asset = await resource.LoadAssetTaskAsync<ScriptableObject>(lifeTime);
             dataSource = asset as IAsyncContextDataSource;
             if (asset == null) {
                 GameLog.LogError($"NULL asset loaded from {resource}");
@@ -36,7 +36,7 @@
             }
             
             await dataSource.RegisterAsync(await contextTask);
-            
+
         }
     }
 }

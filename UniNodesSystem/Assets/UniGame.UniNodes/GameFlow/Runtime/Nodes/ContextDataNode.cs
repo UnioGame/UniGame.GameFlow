@@ -5,7 +5,10 @@
     using NodeSystem.Runtime.Core;
     using UniGreenModules.UniCore.Runtime.Interfaces;
     using UniGreenModules.UniGame.AddressableTools.Runtime.Attributes;
+    using UniGreenModules.UniGame.AddressableTools.Runtime.Extensions;
+    using UniGreenModules.UniGame.Context.Runtime.Interfaces;
     using UniGreenModules.UniGame.SerializableContext.Runtime.Addressables;
+    using UniGreenModules.UniGame.SerializableContext.Runtime.AssetTypes;
     using UniNodes.Nodes.Runtime.Common;
     using UniRx.Async;
     using UnityEngine;
@@ -43,7 +46,12 @@
             nodeCommands.Add(sourceOutputPortCommand);
             nodeCommands.Add(contextToOutputPortCommand);
         }
-        
-        
+
+        protected sealed override void OnExecute()
+        {
+            //unload all source addressables
+            LifeTime.AddCleanUpAction(() => contextAsset.UnloadReference());
+            LifeTime.AddDispose(contextDataSources);
+        }
     }
 }
