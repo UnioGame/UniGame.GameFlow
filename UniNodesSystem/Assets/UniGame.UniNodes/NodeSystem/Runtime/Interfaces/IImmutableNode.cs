@@ -3,11 +3,13 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
     using System.Collections.Generic;
     using Core;
     using Core.Interfaces;
+    using IGraphData = Core.IGraphData;
+    using Vector2 = UnityEngine.Vector2;
 
     public interface IImmutableNode : IGraphItem
     {
 
-        NodeGraph Graph { get; }
+        IGraphData GraphData { get; }
 
         IReadOnlyList<NodePort> Ports { get; }
 
@@ -28,7 +30,14 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
 
         bool HasPort(string fieldName);
 
-        string GetName();
+        #region Editor Api
+        
+        
+        Vector2 Position { get; }
 
+        int Width { get; }
+
+        #endregion
+        
     }
 }

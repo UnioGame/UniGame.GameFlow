@@ -6,6 +6,7 @@
     using Interfaces;
     using Runtime.Attributes;
     using Runtime.Core;
+    using Runtime.Interfaces;
     using UniGreenModules.UniCore.Runtime.ReflectionUtils;
     using UnityEditor;
     using UnityEngine;
@@ -21,7 +22,7 @@
             _excludes = new List<string>(){"m_Script", "position", "ports", "id"};
         }
     
-        public bool Update(INodeEditorData editor, Node node)
+        public bool Update(INodeEditorData editor, INode node)
         {
             var serializedObject = editor.SerializedObject;
 

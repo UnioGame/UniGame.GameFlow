@@ -21,7 +21,7 @@
             this.styleSelector = styleProvider;
         }
         
-        public bool Update(INodeEditorData editor, Node baseNode)
+        public bool Update(INodeEditorData editor, INode baseNode)
         {
 
             DrawPorts(editor);

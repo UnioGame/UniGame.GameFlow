@@ -4,6 +4,7 @@
     using BaseEditor.Interfaces;
     using Interfaces;
     using Runtime.Core;
+    using Runtime.Interfaces;
     using UniGreenModules.UniCore.EditorTools.Editor.Utility;
 
     public class ButtonActionBodyDrawer : INodeEditorHandler
@@ -17,7 +18,7 @@
             _action = action;
         }
     
-        public bool Update(INodeEditorData editor, Node node)
+        public bool Update(INodeEditorData editor, INode node)
         {
            
             EditorDrawerUtils.DrawButton(_label,_action);

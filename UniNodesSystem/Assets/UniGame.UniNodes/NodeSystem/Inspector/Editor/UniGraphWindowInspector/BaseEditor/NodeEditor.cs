@@ -7,13 +7,15 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
     using Interfaces;
     using Runtime.Core;
     using Runtime.Interfaces;
+    using UniGreenModules.UniCore.EditorTools.Editor.Utility;
     using UnityEditor;
     using UnityEngine;
+    using Object = UnityEngine.Object;
 
     /// <summary> Base class to derive custom Node editors from. Use this to create your own custom inspectors and editors for your nodes. </summary>
     [CustomNodeEditor(typeof(Node))]
     public class NodeEditor : 
-        NodeEditorBase<NodeEditor, CustomNodeEditorAttribute, Node>, 
+        NodeEditorBase<NodeEditor, CustomNodeEditorAttribute, INode>, 
         INodeEditorData
     {
 
@@ -23,7 +25,8 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
         public static Dictionary<NodePort, Vector2> PortPositions = new Dictionary<NodePort, Vector2>();
 
         /// <summary> Fires every whenever a node was modified through the editor </summary>
-        public static Action<Node> OnUpdateNode;
+        public static Action<INode> OnUpdateNode;
+        
         public static int Renaming;
         
         protected List<INodeEditorHandler> _bodyDrawers = new List<INodeEditorHandler>();
@@ -51,7 +54,7 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
 
         public virtual bool IsSelected()
         {
-            return Selection.Contains(target);
+            return (target as Object).IsSelected();
         }
         
         public virtual void OnHeaderGUI() => Draw(_headerDrawers);
@@ -74,7 +77,7 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
             var type = target.GetType();
 
             return NodeEditorWindow.nodeWidth.TryGetValue(type, out var width) ? 
-                width : target.width;
+                width : target.Width;
             
         }
 
@@ -97,8 +100,7 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
 
         public void Rename(string newName)
         {
-            target.nodeName = newName;
-            AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(target));
+            target.SetName(newName);
         }
         
         #region private methods

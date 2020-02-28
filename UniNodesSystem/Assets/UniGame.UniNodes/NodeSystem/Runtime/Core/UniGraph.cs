@@ -44,7 +44,7 @@
         public IReadOnlyList<IGraphPortNode> OutputsPorts => outputs;
         
         public IReadOnlyList<IGraphPortNode> InputsPorts => inputs;
-        
+
         public override void Dispose() => Exit();
 
         #region private methods

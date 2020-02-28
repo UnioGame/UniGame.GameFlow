@@ -4,6 +4,7 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
     using System.Collections.Generic;
     using System.Linq;
     using Runtime.Core;
+    using Runtime.Interfaces;
     using UniGreenModules.UniCore.EditorTools.Editor.PrefabTools;
     using UniGreenModules.UniCore.EditorTools.Editor.Utility;
     using UniGreenModules.UniCore.Runtime.Rx.Extensions;
@@ -23,7 +24,7 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
 
         private Dictionary<int, NodePort> _portsIds             = new Dictionary<int, NodePort>();
         private Dictionary<int, Rect>     _portConnectionPoints = new Dictionary<int, Rect>();
-        private Dictionary<Node, Vector2> _nodeSizes            = new Dictionary<Node, Vector2>();
+        private Dictionary<INode, Vector2> _nodeSizes            = new Dictionary<INode, Vector2>();
 
         private float   _zoom = 1;
         private Vector2 _panOffset;
@@ -40,7 +41,7 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
         /// <summary> Stores node positions for all nodePorts. </summary>
         public Dictionary<int, Rect> PortConnectionPoints => _portConnectionPoints;
 
-        public Dictionary<Node, Vector2> NodeSizes => _nodeSizes;
+        public Dictionary<INode, Vector2> NodeSizes => _nodeSizes;
 
         public string Title { get; protected set; }
 
@@ -196,22 +197,9 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
             return new Vector2(xOffset, yOffset);
         }
 
-        public void AddToEditorSelection(Object node, bool add)
-        {
-            if (add) {
-                var selection = new List<Object>(Selection.objects);
-                selection.Add(node);
-                Selection.objects = selection.ToArray();
-            }
-            else Selection.objects = new Object[] {node};
-        }
-
-        public void DeselectFromEditor(Object node)
-        {
-            var selection = new List<Object>(Selection.objects);
-            selection.Remove(node);
-            Selection.objects = selection.ToArray();
-        }
+        public void AddToEditorSelection(Object node, bool add) => node.AddToEditorSelection(add);
+        
+        public void DeselectFromEditor(Object node) => node.DeselectFromEditor();
 
         private static NodeGraph GetGraphItem(string assetPath)
         {

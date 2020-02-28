@@ -3,10 +3,11 @@
     using BaseEditor.Interfaces;
     using Interfaces;
     using Runtime.Core;
+    using Runtime.Interfaces;
 
     public class PortAttributeHandler : INodeEditorHandler
     {
-        public bool Update(INodeEditorData editor, Node node)
+        public bool Update(INodeEditorData editor, INode node)
         {
             
             return true;

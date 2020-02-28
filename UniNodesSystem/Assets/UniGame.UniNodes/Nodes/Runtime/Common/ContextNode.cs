@@ -35,7 +35,7 @@
         public void Publish<T>(T data)
         {
             if (Source.Value == null) {
-                GameLog.LogWarning($"You are try to Publish DATA {data} to {graph.name}:{ItemName} while context is NULL");
+                GameLog.LogWarning($"You are try to Publish DATA {data} to {graph.ItemName}:{ItemName} while context is NULL");
                 return;
             }
             Source.Value.Publish(data);

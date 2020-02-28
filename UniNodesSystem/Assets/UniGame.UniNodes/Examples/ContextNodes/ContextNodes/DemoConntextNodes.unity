@@ -188,8 +188,25 @@ PrefabInstance:
       propertyPath: m_Name
       value: UniGraph1 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 6410009113510772399, guid: 38ead084f51e9fa4eb0d2070ddd409cf,
+        type: 3}
+      propertyPath: graph
+      value: 
+      objectReference: {fileID: 415742934}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 38ead084f51e9fa4eb0d2070ddd409cf, type: 3}
+--- !u!114 &415742934 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1558389282463737838, guid: 38ead084f51e9fa4eb0d2070ddd409cf,
+    type: 3}
+  m_PrefabInstance: {fileID: 415742933}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 782945db79ce44748b3f294e0edf364e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1360533083
 GameObject:
   m_ObjectHideFlags: 0

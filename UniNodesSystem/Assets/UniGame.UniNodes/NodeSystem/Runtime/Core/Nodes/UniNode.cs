@@ -59,7 +59,7 @@
 
         #region public methods
 
-        public void Initialize(NodeGraph graphData)
+        public sealed override void Initialize(IGraphData graphData)
         {
             if (Application.isEditor && Application.isPlaying == false) {
                 lifeTimeDefinition.Terminate();
@@ -113,9 +113,9 @@
             if (isActive) {
                 return;
             }
+            
             //initialize
             Initialize(graph);
-            
             //mark as active
             isActive = true;
             //execute all node commands
@@ -147,6 +147,10 @@
         /// </summary>
         protected virtual void UpdateCommands(List<ILifeTimeCommand> nodeCommands){}
         
+        /// <summary>
+        /// Initialize all node commands
+        /// create port and bind them
+        /// </summary>
         private void InitializeCommands()
         {
             commands.Clear();
@@ -165,7 +169,6 @@
         /// <summary>
         /// initialize ports before execution
         /// </summary>
-        /// <param name="portsLifeTime"></param>
         private void InitializePorts()
         {
             //initialize ports
@@ -184,7 +187,7 @@
         /// </summary>
         private void OnDisable() => Exit();
 
-#region inspector call
+        #region inspector call
 
         public override void Validate()
         {
@@ -223,7 +226,7 @@
 
         }
         
-#endregion
+        #endregion
 
     }
 }

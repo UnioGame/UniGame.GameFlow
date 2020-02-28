@@ -411,7 +411,7 @@
             var arraySize    = hasArrayData ? arrayData.arraySize : 0;
             var node         = serializedObject.targetObject as Node;
             var portConnections =
-                NodeEditorWindow.ActiveWindows.FirstOrDefault(x => x.ActiveGraph == node.Graph).PortConnectionPoints;
+                NodeEditorWindow.ActiveWindows.FirstOrDefault(x => x.ActiveGraph == node.GraphData).PortConnectionPoints;
 
             var list = new ReorderableList(instancePorts, null, true, true, true, true);
 
@@ -485,7 +485,7 @@
                     serializedObject.ApplyModifiedProperties();
                     serializedObject.Update();
 
-                    var window = NodeEditorWindow.ActiveWindows.FirstOrDefault(x => x.ActiveGraph == node.Graph);
+                    var window = NodeEditorWindow.ActiveWindows.FirstOrDefault(x => x.ActiveGraph == node.GraphData);
                     window.Repaint();
 //                    EditorApplication.delayCall += window.Repaint;
                 };

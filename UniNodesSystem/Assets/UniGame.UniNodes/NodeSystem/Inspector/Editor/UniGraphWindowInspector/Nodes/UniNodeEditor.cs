@@ -59,7 +59,7 @@
 
             if (idEditingMode) {
                 
-                node.Initialize(node.graph);
+                node.Initialize(node.GraphData);
                     
                 UpdatePortAttributes(node);
 

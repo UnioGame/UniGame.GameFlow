@@ -3,14 +3,16 @@
     using System;
     using System.Collections.Generic;
     using Interfaces;
+    using Runtime.Core.Nodes;
     using UnityEditor;
+    using UnityEngine;
     using Object = UnityEngine.Object;
 
     /// <summary> Handles caching of custom editor classes and their target types. Accessible with GetEditor(Type type) </summary>
     public class NodeEditorBase<T, A, K> 
         where A : Attribute, INodeEditorAttribute
         where T : NodeEditorBase<T, A, K>
-        where K : Object
+        where K : class
     {
         #region static data
 
@@ -42,19 +44,37 @@
             {
                 var type = target.GetType();
                 var editorType = GetEditorType(type);
+                
                 editor = Activator.CreateInstance(editorType) as T;
+
+                var assetTarget = CreateTargetAsset(target);
                 editor.target = target;
-                editor.serializedObject = new SerializedObject(target);
+                editor.serializedObject = new SerializedObject(assetTarget);
                 editors.Add(target, editor);
                 editor.OnEnable();
             }
-
-            if (editor.target == null) editor.target = target;
-            if (editor.serializedObject == null) editor.serializedObject = new SerializedObject(target);
+            
+            if (editor.target == null) 
+                editor.target = target;
+            if (editor.serializedObject == null) 
+                editor.serializedObject = new SerializedObject(CreateTargetAsset(target));
 
             return editor;
         }
 
+        public static Object CreateTargetAsset(K targetItem)
+        {
+            var assetTarget = targetItem as Object;
+            if (assetTarget == null) {
+                var assetItem = ScriptableObject.
+                    CreateInstance(typeof(SerializableNodeContainer<K>)) as SerializableNodeContainer<K>;
+                assetItem.target = targetItem;
+                assetTarget      = assetItem;
+            }
+
+            return assetTarget;
+        }
+        
         #endregion
 
 

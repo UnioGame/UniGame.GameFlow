@@ -12,7 +12,5 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
 
         bool AddPortValue(INodePort portValue);
 
-        void Initialize(NodeGraph data);
-
     }
 }

@@ -28,7 +28,6 @@
         /// </summary>
         [ReadOnlyValue]
         [SerializeField] public int nodeId;
-        [SerializeField] public Node node;
         [SerializeField] public string           fieldName;
         [SerializeField] public PortIO           direction          = PortIO.Input;
         [SerializeField] public ConnectionType   connectionType     = ConnectionType.Multiple;
@@ -56,14 +55,17 @@
         /// draft validator refactoring. Move rule to SO files
         /// </summary>
         [NonSerialized] private IReadOnlyList<Func<NodePort, NodePort, bool>> connectionsValidators;
-
+        /// <summary>
+        /// port parent info
+        /// </summary>    
+        [NonSerialized] public INode node;
  
         #region constructor
 
         /// <summary>
         /// Copy a nodePort but assign it to another node.
         /// </summary>
-        public NodePort(NodePort nodePort, Node node) :
+        public NodePort(NodePort nodePort, INode node) :
             this(node,
                 nodePort.ItemName,
                 nodePort.Direction,
@@ -76,7 +78,7 @@
 
         }
 
-        public NodePort(Node node, IPortData portData) :
+        public NodePort(INode node, IPortData portData) :
             this(node,
                 portData.ItemName,
                 portData.Direction,
@@ -90,7 +92,7 @@
         /// Construct a dynamic port. Dynamic ports are not forgotten on reimport,
         /// and is ideal for runtime-created ports.
         /// </summary>
-        public NodePort(Node node,
+        public NodePort(INode node,
             string fieldName,
             Type type,
             PortIO direction = PortIO.Input,
@@ -102,7 +104,7 @@
 
 
         public NodePort(
-            Node node,
+            INode node,
             string fieldName,
             PortIO direction = PortIO.Input,
             ConnectionType connectionType = ConnectionType.Multiple,
@@ -188,7 +190,7 @@
 
         #endregion
 
-        public void Initialize(Node data)
+        public void Initialize(INode data)
         {
             this.node = data;
             this.nodeId = data.Id;
@@ -235,12 +237,12 @@
 
         #region node methods
 
-        public Node Node => node;
+        public INode Node => node;
 
         public int UpdateId()
         {
             var oldId = id;
-            id = node.Graph.UpdateId(id);
+            id = node.GraphData.UpdateId(id);
             OnIdUpdate(oldId,id,this);
             return id;
         }
@@ -269,7 +271,7 @@
             if (connections == null) connections = new List<PortConnection>();
 
             if (!ConnectionsValidators.All(x => x(this, port))) {
-                GameLog.LogError($"{node.Graph.ItemName}:{Node.ItemName}:{ItemName} Connection Error. Validation Failed");
+                GameLog.LogError($"{node.GraphData.ItemName}:{Node.ItemName}:{ItemName} Connection Error. Validation Failed");
                 return;
             }
 
@@ -282,7 +284,7 @@
             }
 
             var portNode = port.node;
-            connections.Add(new PortConnection(port,portNode.id));
+            connections.Add(new PortConnection(port,portNode.Id));
 
             if (port.connections == null)
                 port.connections = new List<PortConnection>();
@@ -455,13 +457,13 @@
         }
 
         /// <summary> Swap connected nodes from the old list with nodes from the new list </summary>
-        public void Redirect(List<Node> oldNodes, List<Node> newNodes)
+        public void Redirect(List<INode> oldNodes, List<INode> newNodes)
         {
             foreach (var connection in connections) {
                 var index = oldNodes.IndexOf(connection.Port.Node);
                 if (index >= 0) {
                     var newNode = newNodes[index];
-                    connection.Initialize(newNode,newNode.id,connection.fieldName); 
+                    connection.Initialize(newNode,newNode.Id,connection.fieldName); 
                 }
             }
         }

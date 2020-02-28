@@ -4,26 +4,28 @@
     using BaseEditor.Interfaces;
     using Interfaces;
     using Runtime.Core;
+    using Runtime.Interfaces;
+    using UniGreenModules.UniCore.EditorTools.Editor.Utility;
     using UnityEditor;
     using UnityEngine;
 
     public class BaseHeaderDrawer : INodeEditorHandler
     {
-        public virtual bool Update(INodeEditorData editor, Node node)
+        public virtual bool Update(INodeEditorData editor, INode node)
         {
             var target = node;
-            var title = target.GetName();
+            var title = target.ItemName;
             if (string.IsNullOrEmpty(title)) {
                 CreateNodeMenuAttribute attrib;
                 var type = node.GetType();
                 title = NodeEditorUtilities.GetAttrib(type, out attrib) ? attrib.nodeName : type.Name;
-                node.nodeName = title;
+                node.SetName(title);
             }
             var renaming = NodeEditor.Renaming;
 
-            if (NodeEditor.Renaming != 0 && Selection.Contains(target))
+            if (NodeEditor.Renaming != 0 && target.IsSelected())
             {
-                int controlId = GUIUtility.GetControlID(FocusType.Keyboard) + 1;
+                var controlId = GUIUtility.GetControlID(FocusType.Keyboard) + 1;
                 if (renaming == 1)
                 {
                     GUIUtility.keyboardControl = controlId;
@@ -31,14 +33,16 @@
                     NodeEditor.Renaming = 2;
                 }
 
-                target.nodeName = EditorGUILayout.TextField(target.ItemName, NodeEditorResources.styles.nodeHeader,
+                var nodeName = EditorGUILayout.TextField(target.ItemName, NodeEditorResources.styles.nodeHeader,
                     GUILayout.Height(30));
-                
-                if (!EditorGUIUtility.editingTextField)
-                {
-                    editor.Rename(target.ItemName);
-                    NodeEditor.Renaming = 0;
+                target.SetName(nodeName);
+
+                if (EditorGUIUtility.editingTextField) {
+                    return true;
                 }
+
+                editor.Rename(target.ItemName);
+                NodeEditor.Renaming = 0;
             }
             else
             {

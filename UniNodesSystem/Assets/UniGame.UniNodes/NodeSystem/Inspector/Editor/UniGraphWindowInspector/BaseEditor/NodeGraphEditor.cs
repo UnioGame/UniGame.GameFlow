@@ -1,6 +1,7 @@
 ﻿namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.BaseEditor {
     using System;
     using Runtime.Core;
+    using Runtime.Interfaces;
     using UnityEditor;
     using UnityEngine;
     using Object = UnityEngine.Object;
@@ -40,35 +41,21 @@
         }
 
         /// <summary> Creates a copy of the original node in the graph </summary>
-        public Node CopyNode(Node original)
+        public INode CopyNode(INode original)
         {
             var type = original.GetType();
             var node = target.AddNode(original.ItemName, type);
             //var node = target.CopyNode(original);
-            node.name = original.name;
-            node.graph = target;
-            //node.transform.parent = original.transform;
-            
-            if (this.GetSettings().autoSave)
-            {
-                AssetDatabase.SaveAssets();
-            }
-            
+            node.SetName(original.ItemName);
+            node.Initialize(original.GraphData);
             return node;
         }
 
         /// <summary> Safely remove a node and all its connections. </summary>
-        public void RemoveNode(Node node)
+        public void RemoveNode(INode node)
         {
-            var targetGraph = node.graph;
-
+            var targetGraph = node.GraphData;
             targetGraph.RemoveNode(node);
-
-            if(node) Object.DestroyImmediate(node,true);
-
-            AssetDatabase.SaveAssets();
-            EditorUtility.SetDirty(targetGraph);
-
         }
     }
 }

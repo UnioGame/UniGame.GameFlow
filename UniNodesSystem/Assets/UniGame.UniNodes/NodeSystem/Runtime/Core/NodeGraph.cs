@@ -4,18 +4,22 @@
     using System.Collections.Generic;
     using System.Linq;
     using Runtime.Interfaces;
+    using Sirenix.Utilities;
     using UniGreenModules.UniCore.Runtime.Attributes;
     using UniRx;
     using UnityEngine;
+    using Object = UnityEngine.Object;
 
     /// <summary> Base class for all node graphs </summary>
     [Serializable]
-    public abstract class NodeGraph : UniNode, IDisposable
+    public abstract class NodeGraph : UniNode, INodeGraph
     {
         #region static data
 
         public static ReactiveCollection<NodeGraph> ActiveGraphs { get; } = new ReactiveCollection<NodeGraph>();
 
+        public static Type objectType = typeof(Object);
+        
         #endregion
         
         #region inspector data
@@ -23,120 +27,146 @@
         [ReadOnlyValue] 
         [SerializeField] private int uniqueId;
 
-        /// <summary> All nodes in the graph. <para/>
-        /// See: <see cref="AddNode{T}"/> </summary>
         [SerializeField]
-        public List<Node> nodes = new List<Node>();
+        protected List<Node> nodes = new List<Node>();
+        
+        [SerializeReference]
+        protected List<INode> serializableNodes = new List<INode>();
 
         #endregion
-       
-        [NonSerialized] private Dictionary<int, Node> nodesCache;
+        
+        [NonSerialized] 
+        private Dictionary<int, INode> nodesCache;
+        
+        private List<INode> allNodes;
 
         #region public properties
 
-        public IReadOnlyList<INode> Nodes => nodes;
+        public List<INode> Nodes => GetNodes();
 
-        public sealed override NodeGraph Graph => this;
+        public sealed override IGraphData GraphData => this;
 
         #endregion
 
         #region graph operations
 
+        /// <summary>
+        /// get unique Id in graph scope
+        /// </summary>
+        /// <returns></returns>
         public int GetId() => ++uniqueId;
 
-        public int UpdateId(int oldId)
+        public int UpdateId(int oldId) => GetId();
+
+        public List<INode> GetNodes()
         {
-            return GetId();
+            if (allNodes != null) {
+                return allNodes;
+            }
+
+            allNodes = new List<INode>();
+            allNodes.AddRange(serializableNodes);
+            allNodes.AddRange(nodes);
+
+            return allNodes;
         }
         
-        /// <summary> Add a node to the graph by type </summary>
-        public T AddNode<T>() where T : Node => AddNode(typeof(T)) as T;
+        /// <summary>
+        /// Add a node to the graph by type
+        /// </summary>
+        public T AddNode<T>() where T : class, INode => AddNode(typeof(T)) as T;
 
-        public T AddNode<T>(string name) where T : Node => AddNode(name, typeof(T)) as T;
+        /// <summary>
+        /// Add a node to the graph by type
+        /// </summary>
+        public T AddNode<T>(string name) where T : class, INode => AddNode(name, typeof(T)) as T;
 
-        public Node GetNode(int nodeId)
+        /// <summary>
+        /// return node by it ID
+        /// </summary>
+        public INode GetNode(int nodeId)
         {
-            nodesCache = nodesCache ?? new Dictionary<int, Node>();
+            nodesCache = nodesCache ?? new Dictionary<int, INode>();
             if (nodesCache.Count != nodes.Count) {
                 nodesCache.Clear();
-                nodesCache = nodes.ToDictionary(x => x.Id);
+                nodesCache = Nodes.ToDictionary(x => x.Id);
             }
 
             nodesCache.TryGetValue(nodeId, out var node);
             return node;
         }
 
-        public new void SetGraph(NodeGraph parent)
+        /// <summary>
+        /// add node by type
+        /// </summary>
+        public virtual INode AddNode(string itemName, Type type)
         {
-        }
+            var node = objectType.IsAssignableFrom(type) ? 
+                AddAssetNode(type) : 
+                AddSerializableNode(type);
 
-        public virtual Node AddNode(string itemName, Type type)
-        {
-            var nodeAsset = gameObject.AddComponent(type);
-            var node      = nodeAsset as Node;
-            if (node == null) {
-                DestroyImmediate(nodeAsset, true);
-                return null;
-            }
-
-            node.SetGraph(this);
-            node.graph = graph;
-            node.nodeName = itemName;
-            nodes.Add(node);
-
+            if (node == null) return null;
+            
+            node.SetUpData(this);
+            node.SetName(itemName);
+            
+            Nodes.Add(node);
+            
             return node;
         }
 
-        /// <summary> Add a node to the graph by type </summary>
-        public Node AddNode(Type type) => AddNode(type.Name, type);
+        /// <summary>
+        /// Add a node to the graph by type
+        /// </summary>
+        public INode AddNode(Type type) => AddNode(type.Name, type);
 
-        /// <summary> Creates a copy of the original node in the graph </summary>
+        /// <summary>
+        /// add node into the graph with position and name
+        /// </summary>
+        public INode AddNode(Type type,string itemName, Vector2 nodePosition)
+        {
+            var node = AddNode(itemName, type);
+            node?.SetPosition(nodePosition);
+            return node;
+        } 
+
+        /// <summary>
+        /// Creates a copy of the original node in the graph
+        /// </summary>
         public virtual Node CopyNode(Node original)
         {
             var node = Instantiate(original);
-            node.graph = this;
+            node.SetUpData(this);
             node.UpdateId();
             node.ClearConnections();
             nodes.Add(node);
             return node;
         }
 
-        /// <summary> Safely remove a node and all its connections </summary>
-        /// <param name="node"> The node to remove </param>
-        public void RemoveNode(Node node)
+        /// <summary>
+        /// Safely remove a node and all its connections
+        /// </summary>
+        public IGraphData RemoveNode(INode node)
         {
             node.ClearConnections();
-            nodes.Remove(node);
+            Nodes.Remove(node);
+            
+            var nodeAsset = node as Node;
+            if (nodeAsset == null) {
+                serializableNodes.Remove(node);
+                return this;
+            }
+            
+            nodes.Remove(nodeAsset);
+
             if (Application.isPlaying) {
-                Destroy(node);
+                Destroy(nodeAsset);
             }
             else if (Application.isEditor) {
-                DestroyImmediate(node,true);
-            }
-        }
-
-        /// <summary> Create a new deep copy of this graph </summary>
-        public NodeGraph Copy()
-        {
-            // Instantiate a new nodegraph instance
-            var graph = Instantiate(this);
-            // Instantiate all nodes inside the graph
-            for (var i = 0; i < nodes.Count; i++) {
-                if (nodes[i] == null) continue;
-                var node = Instantiate(nodes[i]) as Node;
-                node.SetGraph(this);
-                graph.nodes[i] = node;
+                DestroyImmediate(nodeAsset,true);
             }
 
-            // Redirect all connections
-            for (var i = 0; i < graph.nodes.Count; i++) {
-                if (graph.nodes[i] == null) continue;
-                foreach (var port in graph.nodes[i].Ports) {
-                    port.Redirect(nodes, graph.nodes);
-                }
-            }
-
-            return graph;
+            return this;
         }
 
         public virtual void Dispose() {}
@@ -145,6 +175,9 @@
         {
             graph = this;
             nodes.Clear();
+            
+            serializableNodes.RemoveAll(x => x == null);
+            
             nodes.AddRange(GetComponents<Node>());
             nodes.RemoveAll(x => !x);
             nodes.Remove(this);
@@ -152,6 +185,32 @@
 
         #endregion
 
+        public virtual INode AddAssetNode(Type type)
+        {
+            var component = gameObject.AddComponent(type);
+            var node      = component as INode;
+            
+            switch (node) {
+                case null:
+                    DestroyImmediate(component, true);
+                    return null;
+                case Node nodeAsset:
+                    nodes.Add(nodeAsset);
+                    break;
+            }
+
+            return node;
+        }
+        
+        public virtual INode AddSerializableNode(Type type)
+        {
+            var node = Activator.CreateInstance(type) as INode;
+            if (node != null) {
+                serializableNodes.Add(node);
+            }
+            return node;
+        }
+        
         private void Awake()
         {
             Validate();

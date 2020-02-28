@@ -17,12 +17,10 @@
     public partial class NodeEditorWindow
     {
         public  NodeGraphEditor graphEditor;
-        private List<Object>    selectionCache;
-        private List<Node>      culledNodes;
-
-        private List<Node>   _regularNodes  = new List<Node>();
-        private List<Node>   _selectedNodes = new List<Node>();
-        private HashSet<int> idHash         = new HashSet<int>();
+        private List<object>    selectionCache;
+        private List<INode>      culledNodes;
+        private List<INode>   _regularNodes  = new List<INode>();
+        private List<INode>   _selectedNodes = new List<INode>();
 
         private int topPadding => isDocked() ? 19 : 22;
 
@@ -281,7 +279,7 @@
             hoveredReroute = new RerouteReference();
 
             var col = GUI.color;
-            foreach (var node in ActiveGraph.nodes) {
+            foreach (var node in ActiveGraph.Nodes) {
                 //If a null node is found, return. This can happen if the nodes associated script is deleted. It is currently not possible in Unity to delete a null asset.
                 if (node == null) continue;
 
@@ -403,8 +401,8 @@
             }
 
             var preSelection = preBoxSelection != null
-                ? new List<Object>(preBoxSelection)
-                : new List<Object>();
+                ? new List<int>(preBoxSelection)
+                : new List<int>();
 
             // Selection box stuff
             var boxStartPos = GridToWindowPositionNoClipped(dragBoxStart);
@@ -423,16 +421,15 @@
             var selectionBox = new Rect(boxStartPos, boxSize);
 
             if (activeEvent.type == EventType.Layout)
-                culledNodes = new List<Node>();
+                culledNodes = new List<INode>();
 
-            var nodes = ActiveGraph.nodes;
+            var nodes = ActiveGraph.Nodes;
 
-            for (int i = 0; i < nodes.Count; i++) {
+            for (var i = 0; i < nodes.Count; i++) {
                 var node = nodes[i];
-
                 if (node == null) continue;
 
-                if (Selection.Contains(node)) {
+                if (node.IsSelected()) {
                     _selectedNodes.Add(node);
                     continue;
                 }
@@ -461,10 +458,13 @@
             _selectedNodes.Clear();
 
             if (activeEvent.type != EventType.Layout && currentActivity == NodeActivity.DragGrid)
-                Selection.objects = preSelection.ToArray();
+                Selection.objects = nodes.
+                    Select(x => preSelection.Contains(x.Id)).
+                    OfType<Object>().
+                    ToArray();
         }
 
-        private void DrawNodes(List<Node> nodes, NodeEditorGuiState state)
+        private void DrawNodes(List<INode> nodes, NodeEditorGuiState state)
         {
             for (var n = 0; n < nodes.Count; n++) {
                 // Skip null nodes. The user could be in the process of renaming scripts, so removing them at this point is not advisable.
@@ -478,7 +478,7 @@
         {
             var e = Event.current;
             if (e.type == EventType.Layout) {
-                selectionCache = new List<Object>(Selection.objects);
+                selectionCache = new List<object>(Selection.objects);
             }
 
             //Active node is hashed before and after node GUI to detect changes
@@ -500,15 +500,16 @@
             }
         }
 
-        private void DrawNode(Node node, NodeEditorGuiState state)
+        private void DrawNode(INode node, NodeEditorGuiState state)
         {
             switch (state.EventType) {
                 case EventType.Ignore:
                     return;
                 // Culling
                 case EventType.Layout: {
+                    var assetNode = node as Object;
                     // Cull unselected nodes outside view
-                    if (!Selection.Contains(node) && ShouldBeCulled(node)) {
+                    if (!assetNode.IsSelected() && ShouldBeCulled(node)) {
                         culledNodes.Add(node);
                         return;
                     }
@@ -532,11 +533,11 @@
             DrawNodeArea(node, state);
         }
 
-        private void DrawNodeArea(Node node, NodeEditorGuiState state)
+        private void DrawNodeArea(INode node, NodeEditorGuiState state)
         {
             var nodeEditor = NodeEditor.GetEditor(node);
             //Get node position
-            var nodePos = GridToWindowPositionNoClipped(node.position);
+            var nodePos = GridToWindowPositionNoClipped(node.Position);
 
             var rectArea = new Rect(nodePos, new Vector2(nodeEditor.GetWidth(), 4000));
 
@@ -545,7 +546,7 @@
 
         private void DrawNodeArea(
             NodeEditor nodeEditor,
-            Node node,
+            INode node,
             Vector2 nodePos,
             Rect rectArea,
             NodeEditorGuiState state)
@@ -561,7 +562,7 @@
         }
 
         private void DrawNodePorts(
-            Node node,
+            INode node,
             Vector2 nodePos,
             NodeEditorGuiState state)
         {
@@ -578,11 +579,13 @@
             //Check if we are hovering this node
             var nodeSize                                   = GUILayoutUtility.GetLastRect().size;
             var windowRect                                 = new Rect(nodePos, nodeSize);
-            if (windowRect.Contains(mousePos)) hoveredNode = node;
+            if (windowRect.Contains(mousePos)) 
+                hoveredNode = node;
 
             //If dragging a selection box, add nodes inside to selection
             if (currentActivity == NodeActivity.DragGrid) {
-                if (windowRect.Overlaps(selectionBox)) preSelection.Add(node);
+                if (windowRect.Overlaps(selectionBox)) 
+                    preSelection.Add(node.Id);
             }
 
             //Check if we are hovering any of this nodes ports
@@ -603,7 +606,7 @@
             }
         }
 
-        private void DrawNodeEditorArea(NodeEditor nodeEditor, Node node, NodeEditorGuiState state)
+        private void DrawNodeEditorArea(NodeEditor nodeEditor, INode node, NodeEditorGuiState state)
         {
             var eventType  = state.EventType;
             var stateEvent = state.Event;
@@ -646,7 +649,7 @@
             //If user changed a value, notify other scripts through onUpdateNode
             if (EditorGUI.EndChangeCheck()) {
                 if (NodeEditor.OnUpdateNode != null) NodeEditor.OnUpdateNode(node);
-                EditorUtility.SetDirty(node);
+                node.SetDirty();
                 nodeEditor.serializedObject.ApplyModifiedProperties();
             }
 
@@ -661,7 +664,7 @@
                 foreach (var portPairs in NodeEditor.PortPositions) {
                     var id            = portPairs.Key.Id;
                     var portHandlePos = portPairs.Value;
-                    portHandlePos += node.position;
+                    portHandlePos += node.Position;
                     var rect = new Rect(portHandlePos.x - 8, portHandlePos.y - 8, 16, 16);
                     if (PortConnectionPoints.ContainsKey(id)) PortConnectionPoints[id] = rect;
                     else PortConnectionPoints.Add(id, rect);
@@ -671,9 +674,9 @@
             if (selected) GUILayout.EndVertical();
         }
 
-        private bool ShouldBeCulled(Node node)
+        private bool ShouldBeCulled(INode node)
         {
-            var nodePos = GridToWindowPositionNoClipped(node.position);
+            var nodePos = GridToWindowPositionNoClipped(node.Position);
             if (nodePos.x / _zoom > position.width) return true;  // Right
             if (nodePos.y / _zoom > position.height) return true; // Bottom
             if (NodeSizes.ContainsKey(node)) {

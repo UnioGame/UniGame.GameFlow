@@ -1,19 +1,23 @@
-﻿namespace UniGame.UniNodes.NodeSystem.Runtime.Core
+﻿using UnityEngine;
+
+namespace UniGame.UniNodes.NodeSystem.Runtime.Core
 {
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
     using Attributes;
+    using Inspector.Editor.UniGraphWindowInspector.Nodes;
     using Interfaces;
     using Runtime.Interfaces;
     using UniGreenModules.UniCore.Runtime.Attributes;
     using UniGreenModules.UniCore.Runtime.ProfilerTools;
-    using UnityEngine;
-    using Debug = UnityEngine.Debug;
 
     [Serializable]
-    public abstract class Node : MonoBehaviour, INode
+    public class SerializableNode : INode
     {
+        public static INode DummyNode = new DummyNode();
+        
+        #region inspctor
 
         [HideNodeInspector] 
         [ReadOnlyValue] 
@@ -31,48 +35,64 @@
         /// <summary> It is recommended not to modify these at hand. Instead, see <see cref="NodeInputAttribute"/> and <see cref="NodeOutputAttribute"/> </summary>
         [SerializeField] public NodePortDictionary ports = new NodePortDictionary();
       
-        /// <summary> Parent <see cref="NodeGraph"/> </summary>
-        [Tooltip("Parent Graph")] 
-        [HideNodeInspector] 
-        [SerializeField] public NodeGraph graph;
-
+        #endregion
+        
+        protected IGraphData graph;
+       
+        
         #region public properties
 
+        /// <summary>
+        /// unique node id
+        /// </summary>
         public int Id => id == 0 ? UpdateId() : id;
 
+        /// <summary>
+        /// Node name
+        /// </summary>
         public string ItemName => nodeName;
 
-
-        /// <summary> Iterate over all ports on this node. </summary>
+        /// <summary>
+        /// Iterate over all ports on this node.
+        /// </summary>
         public IReadOnlyList<NodePort> Ports => ports.Ports;
 
-        /// <summary> Iterate over all outputs on this node. </summary>
-        public IEnumerable<NodePort> Outputs
-        {
-            get
-            {
-                foreach (var port in Ports)
-                {
-                    if (port.IsOutput) yield return port;
-                }
-            }
-        }
+        /// <summary>
+        /// node width
+        /// </summary>
+        public int Width => width;
 
-        /// <summary> Iterate over all inputs on this node. </summary>
-        public IEnumerable<NodePort> Inputs
-        {
-            get
-            {
-                foreach (var port in Ports)
-                {
-                    if (port.IsInput) yield return port;
-                }
-            }
-        }
+        /// <summary>
+        /// Iterate over all outputs on this node.
+        /// </summary>
+        public IEnumerable<NodePort> Outputs => GetPorts(PortIO.Output);
 
-        public virtual NodeGraph Graph => graph;
+        /// <summary>
+        /// Iterate over all inputs on this node.
+        /// </summary>
+        public IEnumerable<NodePort> Inputs => GetPorts(PortIO.Input);
+        /// <summary>
+        /// position of node 
+        /// </summary>
+        public Vector2 Position => position;
+
+        /// <summary>
+        /// base context graph data
+        /// </summary>
+        public virtual IGraphData GraphData => graph;
 
         #endregion
+        
+        #region abstract methods
+
+        public virtual void Initialize(IGraphData data)
+        {
+            graph = data;
+        }
+
+        #endregion
+        
+        #region public methods
         
         public void OnIdUpdate(int oldId, int newId, IGraphItem updatedItem)
         {
@@ -81,13 +101,13 @@
         
         public int UpdateId()
         {
-            id = Graph.UpdateId(id);
+            id = GraphData.UpdateId(id);
             return id;
         }
 
         public virtual string GetName() => nodeName;
 
-        public void SetGraph(NodeGraph parent)
+        public void SetUpData(IGraphData parent)
         {
             if (graph == parent)
                 return;
@@ -102,32 +122,35 @@
             ConnectionType connectionType = ConnectionType.Multiple,
             ShowBackingValue showBackingValue = ShowBackingValue.Always)
         {
-            if (fieldName == null)
+            if (HasPort(fieldName))
             {
-                fieldName = "instanceInput_0";
-                var i = 0;
-                while (HasPort(fieldName)) fieldName = "instanceInput_" + (++i);
-            }
-            else if (HasPort(fieldName))
-            {
-                Debug.LogWarning("Port '" + fieldName + "' already exists in " + name, this);
+                GameLog.LogWarning("Port '" + fieldName + "' already exists in " + ItemName);
                 return ports[fieldName];
             }    
 
-            var port = new NodePort(this,fieldName, direction, connectionType,showBackingValue,types);
+            var port = new NodePort(this, fieldName, direction, connectionType,showBackingValue,types);
             port.Initialize(this);
             
             ports.Add(fieldName, port);
             return port;
         }
 
-        /// <summary> Remove an instance port from the node </summary>
+        public void SetPosition(Vector2 newPosition)
+        {
+            position = newPosition;
+        }
+
+        /// <summary>
+        /// Remove an instance port from the node
+        /// </summary>
         public void RemovePort(string fieldName)
         {
             RemovePort(GetPort(fieldName));
         }
 
-        /// <summary> Remove an instance port from the node </summary>
+        /// <summary>
+        /// Remove an instance port from the node
+        /// </summary>
         public virtual void RemovePort(NodePort port)
         {
             if (port == null) throw new ArgumentNullException("port");
@@ -135,7 +158,9 @@
             ports.Remove(port.ItemName);
         }
 
-        /// <summary> Returns output port which matches fieldName </summary>
+        /// <summary>
+        /// Returns output port which matches fieldName
+        /// </summary>
         public NodePort GetOutputPort(string fieldName)
         {
             var port = GetPort(fieldName);
@@ -143,7 +168,9 @@
             return port;
         }
 
-        /// <summary> Returns input port which matches fieldName </summary>
+        /// <summary>
+        /// Returns input port which matches fieldName
+        /// </summary>
         public NodePort GetInputPort(string fieldName)
         {
             var port = GetPort(fieldName);
@@ -157,7 +184,9 @@
             return port?.portValue;
         }
         
-        /// <summary> Returns port which matches fieldName </summary>
+        /// <summary>
+        /// Returns port which matches fieldName
+        /// </summary>
         public NodePort GetPort(string portName)
         {
             if (string.IsNullOrEmpty(portName))
@@ -166,6 +195,11 @@
             return ports.TryGetValue(portName, out var port) ? port : null;
         }
 
+        public void SetWidth(int nodeWidth)
+        {
+            width = nodeWidth;
+        }
+        
         public bool HasPort(string fieldName)
         {
             return ports.ContainsKey(fieldName);
@@ -178,12 +212,27 @@
         }
 
         public virtual void Validate(){}
-        
+
+        public void SetName(string itemName)
+        {
+            nodeName = itemName;
+        }
+
+        #endregion
+
+        private IEnumerable<NodePort> GetPorts(PortIO direction)
+        {
+            for (var i = 0; i < ports.Count; i++) {
+                var port = Ports[i];
+                if (port.direction == direction)
+                    yield return port;
+            }
+        }
         
         [Conditional("UNITY_EDITOR")]
         protected void LogMessage(string message)
         {
-            GameLog.Log($"{Graph.ItemName}:{ItemName}: {message}");
+            GameLog.Log($"{GraphData.ItemName}:{ItemName}: {message}");
         }
     }
 }

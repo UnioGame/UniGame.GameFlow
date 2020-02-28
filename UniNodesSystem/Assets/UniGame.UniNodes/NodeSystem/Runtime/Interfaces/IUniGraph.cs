@@ -2,9 +2,10 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
 {
     using System;
     using System.Collections.Generic;
+    using Core;
     using UnityEngine;
 
-    public interface IUniGraph : IUniNode, IDisposable
+    public interface IUniGraph : INodeGraph, IUniNode
     {
 
         GameObject AssetInstance { get; }
@@ -12,8 +13,6 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
         IReadOnlyList<IGraphPortNode> OutputsPorts { get; }
 
         IReadOnlyList<IGraphPortNode> InputsPorts { get; }
-
-        IReadOnlyList<INode> Nodes { get; }
         
     }
     
