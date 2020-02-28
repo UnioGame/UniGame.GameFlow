@@ -48,7 +48,10 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
 
         public SNode() { }
 
-        public SNode(int id,string name,NodePortDictionary ports)
+        public SNode(
+            int id,
+            string name,
+            NodePortDictionary ports)
         {
             this.id = id;
             this.nodeName = name;
