@@ -109,21 +109,21 @@
                 EditorGUILayout.PropertyField(property, label, includeChildren, GUILayout.MinWidth(30));
             }
             else {
-                DrawFieldPort(property, label, port, includeChildren, options);
+                DrawFieldPort(property, label,node, port, includeChildren, options);
             }
         }
 
         private static void DrawFieldPort(
             SerializedProperty property,
             GUIContent label,
+            INode node,
             NodePort port,
             bool includeChildren = true,
             params GUILayoutOption[] options)
         {
             var rect = new Rect();
 
-            var node     = port.Node;
-            var data     = port.Node.GetPortData(node.GetType(), property.name);
+            var data     = node.GetPortData(node.GetType(), property.name);
             var portData = data.PortData;
 
             if (portData.InstancePortList) {
@@ -135,15 +135,10 @@
                 return;
             }
 
-            Profiler.BeginSample("ShowBackingValueField");
-            
             ShowBackingValueField(data, property, port.IsConnected, includeChildren, null, GUILayout.MinWidth(30));
 
-            Profiler.EndSample();
-            
             rect          = GUILayoutUtility.GetLastRect();
             rect.position = port.Direction == PortIO.Input ? rect.position - new Vector2(16, 0) : rect.position + new Vector2(rect.width, 0);
-
             rect.size = new Vector2(16, 16);
 
             Color backgroundColor = new Color32(90, 97, 105, 255);

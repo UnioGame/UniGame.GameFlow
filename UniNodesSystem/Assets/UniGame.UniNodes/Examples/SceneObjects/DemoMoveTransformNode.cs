@@ -26,10 +26,10 @@
         
         #endregion
 
-        [PortValue(PortIO.Input)]
+        [Port(PortIO.Input)]
         public Transform targetSource;
 
-        [PortValue(PortIO.Output)]
+        [Port(PortIO.Output)]
         public Transform targetOutput;
         
         private IDisposable disposable;

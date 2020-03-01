@@ -44,7 +44,7 @@
         public INode CopyNode(INode original)
         {
             var type = original.GetType();
-            var node = target.AddNode(original.ItemName, type);
+            var node = Node.AddNode(original.ItemName, type);
             //var node = target.CopyNode(original);
             node.SetName(original.ItemName);
             node.Initialize(original.GraphData);

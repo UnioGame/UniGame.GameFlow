@@ -27,9 +27,12 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
         #endregion
 
         #region private fields
+        
+        private readonly Action                         onInitialize;
+        private readonly Action<List<ILifeTimeCommand>> onCommandsInitialize;
+        private readonly Action                         onExecute;
 
-        [NonSerialized] 
-        private bool isInitialized = false;
+        [NonSerialized] private bool isInitialized = false;
 
         private LifeTimeDefinition lifeTimeDefinition = new LifeTimeDefinition();
 
@@ -43,23 +46,26 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
 
         #endregion
 
-                
+
         #region constructor
 
-        public SNode() { }
+        public SNode(){}
 
         public SNode(
             int id,
             string name,
-            NodePortDictionary ports)
+            NodePortDictionary ports,
+            Action onInitialize = null,
+            Action<List<ILifeTimeCommand>> onCommandsInitialize = null,
+            Action onExecute = null) : base(id, name, ports)
         {
-            this.id = id;
-            this.nodeName = name;
-            this.ports = ports;
+            this.onInitialize         = onInitialize;
+            this.onCommandsInitialize = onCommandsInitialize;
+            this.onExecute            = onExecute;
         }
-        
+
         #endregion
-        
+
         #region public properties
 
         /// <summary>
@@ -77,6 +83,8 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
 
         public sealed override void Initialize(IGraphData graphData)
         {
+            InitializeData(graphData);
+            
             if (Application.isEditor && Application.isPlaying == false) {
                 lifeTimeDefinition.Terminate();
             }
@@ -86,16 +94,12 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
 
             isInitialized = true;
 
-            graph = graphData;
-            //restart lifetime
-            lifeTimeDefinition = lifeTimeDefinition ?? new LifeTimeDefinition();
-            lifeTime           = lifeTimeDefinition.LifeTime;
-            portValues         = portValues ?? new HashSet<INodePort>();
-
             //initialize ports
             InitializePorts();
             //initialize all node commands
             InitializeCommands();
+            //proxy outer initialization
+            onInitialize?.Invoke();
             //custom node initialization
             OnInitialize();
 
@@ -136,6 +140,8 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
             isActive = true;
             //execute all node commands
             commands.ForEach(x => x.Execute(LifeTime));
+            //proxy outer execution
+            onExecute?.Invoke();
             //user defined logic
             OnExecute();
         }
@@ -145,63 +151,7 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
         /// </summary>
         public void Release() => Exit();
 
-        #endregion
-
-        /// <summary>
-        /// Call once on node initialization
-        /// </summary>
-        protected virtual void OnInitialize()
-        {
-        }
-
-        /// <summary>
-        /// base logic realization
-        /// </summary>
-        protected virtual void OnExecute()
-        {
-        }
-
-        /// <summary>
-        /// update active list commands
-        /// add all supported node commands here
-        /// </summary>
-        protected virtual void UpdateCommands(List<ILifeTimeCommand> nodeCommands) { }
-
-        /// <summary>
-        /// Initialize all node commands
-        /// create port and bind them
-        /// </summary>
-        private void InitializeCommands()
-        {
-            commands.Clear();
-
-            //register all backed commands to main list
-            for (var i = 0; i < serializableCommands.Count; i++) {
-                var command = serializableCommands[i];
-                if (command != null)
-                    commands.Add(command.Create(this));
-            }
-
-            //register node commands
-            UpdateCommands(commands);
-        }
-
-        /// <summary>
-        /// initialize ports before execution
-        /// </summary>
-        private void InitializePorts()
-        {
-            //initialize ports
-            for (var i = 0; i < Ports.Count; i++) {
-                var nodePort = Ports[i];
-                nodePort.Initialize(this);
-                lifeTime.AddCleanUpAction(nodePort.Release);
-
-                if (Application.isPlaying)
-                    AddPortValue(nodePort);
-            }
-        }
-
+        
         #region inspector call
 
         public override void Validate()
@@ -242,5 +192,77 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
         }
 
         #endregion
+        
+        #endregion
+
+        private void InitializeData(IGraphData graphData)
+        {
+            graph = graphData;
+            //restart lifetime
+            lifeTimeDefinition = lifeTimeDefinition ?? new LifeTimeDefinition();
+            lifeTime           = lifeTimeDefinition.LifeTime;
+            portValues         = portValues ?? new HashSet<INodePort>();
+            commands           = commands ?? new List<ILifeTimeCommand>();
+        }
+        
+        /// <summary>
+        /// Call once on node initialization
+        /// </summary>
+        protected virtual void OnInitialize()
+        {
+        }
+
+        /// <summary>
+        /// base logic realization
+        /// </summary>
+        protected virtual void OnExecute()
+        {
+        }
+
+        /// <summary>
+        /// update active list commands
+        /// add all supported node commands here
+        /// </summary>
+        protected virtual void UpdateCommands(List<ILifeTimeCommand> nodeCommands)
+        {
+        }
+
+        /// <summary>
+        /// Initialize all node commands
+        /// create port and bind them
+        /// </summary>
+        private void InitializeCommands()
+        {
+            commands.Clear();
+
+            //register all backed commands to main list
+            for (var i = 0; i < serializableCommands.Count; i++) {
+                var command = serializableCommands[i];
+                if (command != null)
+                    commands.Add(command.Create(this));
+            }
+
+            //outer node commands
+            onCommandsInitialize?.Invoke(commands);
+            //register node commands
+            UpdateCommands(commands);
+        }
+
+        /// <summary>
+        /// initialize ports before execution
+        /// </summary>
+        private void InitializePorts()
+        {
+            //initialize ports
+            for (var i = 0; i < Ports.Count; i++) {
+                var nodePort = Ports[i];
+                nodePort.Initialize(this);
+                lifeTime.AddCleanUpAction(nodePort.Release);
+
+                if (Application.isPlaying)
+                    AddPortValue(nodePort);
+            }
+        }
+
     }
 }

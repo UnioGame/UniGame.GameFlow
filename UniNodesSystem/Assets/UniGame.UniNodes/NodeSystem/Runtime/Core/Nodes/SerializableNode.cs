@@ -6,11 +6,11 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
     using System.Collections.Generic;
     using System.Diagnostics;
     using Attributes;
-    using Inspector.Editor.UniGraphWindowInspector.Nodes;
     using Interfaces;
     using Runtime.Interfaces;
     using UniGreenModules.UniCore.Runtime.Attributes;
     using UniGreenModules.UniCore.Runtime.ProfilerTools;
+    using UUniGame.UniNodes.NodeSystem.Runtime.Core.Nodes;
 
     [Serializable]
     public class SerializableNode : INode
@@ -32,13 +32,32 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
         /// <summary> Position on the <see cref="NodeGraph"/> </summary>
         [SerializeField] public Vector2 position;
 
-        /// <summary> It is recommended not to modify these at hand. Instead, see <see cref="NodeInputAttribute"/> and <see cref="NodeOutputAttribute"/> </summary>
+        /// <summary>
+        /// It is recommended not to modify these at hand. Instead,
+        /// see <see cref="NodeInputAttribute"/> and <see cref="NodeOutputAttribute"/>
+        /// </summary>
         [SerializeField] public NodePortDictionary ports = new NodePortDictionary();
       
         #endregion
         
         protected IGraphData graph;
        
+        #region constructor
+
+        public SerializableNode(){}
+        
+        public SerializableNode(
+            int id,
+            string name,
+            NodePortDictionary ports)
+        {
+            this.id       = id;
+            this.nodeName = name;
+            this.ports    = ports;
+        }
+        
+        #endregion
+        
         
         #region public properties
 
@@ -60,7 +79,18 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
         /// <summary>
         /// node width
         /// </summary>
-        public int Width => width;
+        public int Width {
+            get => width;
+            set => width = value;
+        }
+        
+        /// <summary>
+        /// position of node 
+        /// </summary>
+        public Vector2 Position {
+            get => position;
+            set => position = value;
+        }
 
         /// <summary>
         /// Iterate over all outputs on this node.
@@ -71,11 +101,7 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
         /// Iterate over all inputs on this node.
         /// </summary>
         public IEnumerable<NodePort> Inputs => GetPorts(PortIO.Input);
-        /// <summary>
-        /// position of node 
-        /// </summary>
-        public Vector2 Position => position;
-
+        
         /// <summary>
         /// base context graph data
         /// </summary>
@@ -195,11 +221,6 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
             return ports.TryGetValue(portName, out var port) ? port : null;
         }
 
-        public void SetWidth(int nodeWidth)
-        {
-            width = nodeWidth;
-        }
-        
         public bool HasPort(string fieldName)
         {
             return ports.ContainsKey(fieldName);

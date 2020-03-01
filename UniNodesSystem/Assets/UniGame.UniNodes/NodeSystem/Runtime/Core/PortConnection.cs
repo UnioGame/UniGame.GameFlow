@@ -14,16 +14,18 @@
 
         [SerializeField] public int nodeId;
 
-        /// <summary> Extra connection path points for organization </summary>
+        /// <summary>
+        /// Extra connection path points for organization
+        /// </summary>
         [SerializeField] public List<Vector2> reroutePoints = new List<Vector2>();
 
         [SerializeField] public int portId;
     
         #endregion
-    
-        private INode node;
+     
+        [NonSerialized] private INode node;
         
-        private NodePort port;
+        [NonSerialized] private NodePort port;
 
         public NodePort Port => GetPort();
 
@@ -47,7 +49,9 @@
             node   = data;
         }
 
-        /// <summary> Returns the port that this <see cref="PortConnection"/> points to </summary>
+        /// <summary>
+        /// Returns the port that this <see cref="PortConnection"/> points to
+        /// </summary>
         public NodePort GetPort()
         {
             //if (port != null) return port;

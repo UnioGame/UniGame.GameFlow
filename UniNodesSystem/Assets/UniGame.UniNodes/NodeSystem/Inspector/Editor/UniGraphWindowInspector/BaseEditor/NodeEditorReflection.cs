@@ -6,6 +6,7 @@
     using System.Linq;
     using System.Reflection;
     using Runtime.Core;
+    using Runtime.Interfaces;
     using UnityEditor;
     using UnityEngine;
 
@@ -66,7 +67,7 @@
         public static List<Type> GetNodeTypes()
         {
             //Get all classes deriving from Node via reflection
-            return GetDerivedTypes(typeof(Node));
+            return GetDerivedTypes(typeof(INode));
         }
 
         public static Dictionary<Type, Color> GetNodeTint()

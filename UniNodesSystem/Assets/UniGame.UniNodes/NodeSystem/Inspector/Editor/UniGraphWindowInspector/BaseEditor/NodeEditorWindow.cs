@@ -20,7 +20,7 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
         public const string ActiveGraphPath     = "ActiveGraphPath";
         public const string UniNodesWindowTitle = "UniNodes";
 
-        public NodeGraph LastEditorGraph;
+        public static HashSet<NodeEditorWindow> ActiveWindows { get; protected set; } = new HashSet<NodeEditorWindow>();
 
         private Dictionary<int, NodePort> _portsIds             = new Dictionary<int, NodePort>();
         private Dictionary<int, Rect>     _portConnectionPoints = new Dictionary<int, Rect>();
@@ -33,11 +33,18 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
         [SerializeField] private NodePortReference[] _references = new NodePortReference[0];
         [SerializeField] private Rect[]              _rects      = new Rect[0];
 
-        public static HashSet<NodeEditorWindow> ActiveWindows { get; protected set; } = new HashSet<NodeEditorWindow>();
-
-
+        public NodeGraph LastEditorGraph;
         public NodeGraph ActiveGraph;
 
+        private SerializedObject activeObject;
+        public SerializedObject ActiveObject {
+            get {
+                if(ActiveGraph!=null && (activeObject == null || activeObject.targetObject != ActiveGraph))
+                    activeObject = new SerializedObject(ActiveGraph);
+                return activeObject;
+            }
+        }
+        
         /// <summary> Stores node positions for all nodePorts. </summary>
         public Dictionary<int, Rect> PortConnectionPoints => _portConnectionPoints;
 
@@ -197,10 +204,6 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
             return new Vector2(xOffset, yOffset);
         }
 
-        public void AddToEditorSelection(Object node, bool add) => node.AddToEditorSelection(add);
-        
-        public void DeselectFromEditor(Object node) => node.DeselectFromEditor();
-
         private static NodeGraph GetGraphItem(string assetPath)
         {
             //var loadedGraphObject = AssetDatabase.LoadAssetAtPath<GameObject>(assetPath);
@@ -326,6 +329,8 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
 
             nodeGraph.SaveScenes();
             
+            AssetDatabase.SaveAssets();
+
             var prefabResource = nodeGraph.GetPrefabDefinition();
             if (prefabResource.IsInstance)
                 return nodeGraph;

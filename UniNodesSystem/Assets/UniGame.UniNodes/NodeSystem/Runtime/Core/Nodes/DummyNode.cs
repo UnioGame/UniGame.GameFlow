@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using UniGame.UniNodes.NodeSystem.Runtime.Core;
-using UniGame.UniNodes.NodeSystem.Runtime.Core.Interfaces;
-using UniGame.UniNodes.NodeSystem.Runtime.Interfaces;
-using UnityEngine;
-
-namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.Nodes
+﻿namespace UUniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
 {
+    using System;
+    using System.Collections.Generic;
+    using UniGame.UniNodes.NodeSystem.Runtime.Core;
+    using UniGame.UniNodes.NodeSystem.Runtime.Core.Interfaces;
+    using UniGame.UniNodes.NodeSystem.Runtime.Interfaces;
+    using UnityEngine;
+
     [Serializable]
     public class DummyNode : INode
     {
@@ -28,7 +28,9 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.N
         public bool HasPort(string fieldName) => false;
 
         public Vector2 Position { get; set; } = Vector2.zero;
-        public int Width => 220;
+        
+        public int Width { get; set; } = 220;
+        
 
         public void OnIdUpdate(int oldId, int newId, IGraphItem updatedItem) { }
         
@@ -42,6 +44,8 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.N
 
         public void ClearConnections() { }
         public void Initialize(IGraphData data) {}
+
+        public void Validate(){}
 
         public void SetPosition(Vector2 position) { }
         

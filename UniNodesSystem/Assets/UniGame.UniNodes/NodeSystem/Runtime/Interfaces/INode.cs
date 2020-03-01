@@ -3,7 +3,6 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
     using System;
     using System.Collections.Generic;
     using Core;
-    using UniGreenModules.UniCore.Runtime.Interfaces;
     using UnityEngine;
 
     public interface INode : IImmutableNode
@@ -30,18 +29,21 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
             ConnectionType connectionType = ConnectionType.Multiple,
             ShowBackingValue showBackingValue = ShowBackingValue.Always);
         
+        
+        void Validate();
+
         #region editor api
         
         /// <summary>
         /// set up graph node position
         /// </summary>
-        void SetPosition(Vector2 position);
+        new Vector2 Position { get; set; }
 
         /// <summary>
         /// setup node view width
         /// </summary>
-        void SetWidth(int nodeWidth);
-
+        new int Width { get; set; }
+        
         #endregion
 
     }

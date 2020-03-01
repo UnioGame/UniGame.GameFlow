@@ -2,9 +2,9 @@
 
 namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
 {
-    public class SerializableNodeContainer<TTarget> : 
+    public class SerializableNodeContainer: 
         ScriptableObject
     {
-        public TTarget target;
+        public object target;
     }
 }

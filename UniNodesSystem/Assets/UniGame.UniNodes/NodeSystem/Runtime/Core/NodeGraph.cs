@@ -28,10 +28,11 @@
         [SerializeField] private int uniqueId;
 
         [SerializeField]
-        protected List<Node> nodes = new List<Node>();
-        
+        public List<Node> nodes = new List<Node>();
+  
+        //[NonSerialized]
         [SerializeReference]
-        protected List<INode> serializableNodes = new List<INode>();
+        public List<INode> serializableNodes = new List<INode>();
 
         #endregion
         
@@ -43,6 +44,10 @@
         #region public properties
 
         public List<INode> Nodes => GetNodes();
+
+        public IReadOnlyList<INode> SerializableNodes => serializableNodes;
+        
+        public IReadOnlyList<INode> ObjectNodes => nodes;
 
         public sealed override IGraphData GraphData => this;
 
@@ -126,7 +131,8 @@
         public INode AddNode(Type type,string itemName, Vector2 nodePosition)
         {
             var node = AddNode(itemName, type);
-            node?.SetPosition(nodePosition);
+            if(node!=null) 
+                node.Position = (nodePosition);
             return node;
         } 
 
@@ -185,7 +191,7 @@
 
         #endregion
 
-        public virtual INode AddAssetNode(Type type)
+        private INode AddAssetNode(Type type)
         {
             var component = gameObject.AddComponent(type);
             var node      = component as INode;
@@ -202,7 +208,7 @@
             return node;
         }
         
-        public virtual INode AddSerializableNode(Type type)
+        private INode AddSerializableNode(Type type)
         {
             var node = Activator.CreateInstance(type) as INode;
             if (node != null) {

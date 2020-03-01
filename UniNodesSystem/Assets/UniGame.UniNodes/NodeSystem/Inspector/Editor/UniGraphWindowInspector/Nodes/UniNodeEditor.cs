@@ -18,28 +18,11 @@
     [CustomNodeEditor(typeof(UniNode))]
     public class UniNodeEditor : NodeEditor, IUniNodeEditor
     {
-
-        #region static data
-        
-        private static GUIStyle SelectedHeaderStyle = new GUIStyle()
-        {
-            alignment = TextAnchor.MiddleCenter,
-            fontStyle = FontStyle.Bold,
-        };
-
-        #endregion
-
         protected List<INodeEditorHandler> bodyDrawers = new List<INodeEditorHandler>();
-        
-        public override bool IsSelected()
-        {
-            var node = target as UniNode;
-            return node && node.IsActive;
-        }
-        
+
         public override void OnHeaderGUI()
         {
-            if (IsSelected())
+            if (IsSelected)
             {
                 EditorDrawerUtils.DrawWithContentColor(Color.red, base.OnHeaderGUI);
                 return;
@@ -50,7 +33,7 @@
 
         public override void OnBodyGUI()
         {
-            var node = target as UniNode;
+            var node = Node as IUniNode;
             if (node == null) return;
             
             var idEditingMode = EditorApplication.isPlayingOrWillChangePlaymode == false && 
@@ -58,9 +41,7 @@
                                 EditorApplication.isUpdating == false;
 
             if (idEditingMode) {
-                
-                node.Initialize(node.GraphData);
-                    
+
                 UpdatePortAttributes(node);
 
                 UpdateData(node);
@@ -73,13 +54,13 @@
 
             DrawPorts(node);
 
-            serializedObject.ApplyModifiedPropertiesWithoutUndo();
+            SerializedObject?.ApplyModifiedPropertiesWithoutUndo();
             
         }
 
-        public virtual void UpdateData(UniNode node) { }
+        public virtual void UpdateData(IUniNode node) { }
 
-        public void UpdatePortAttributes(UniNode node)
+        public void UpdatePortAttributes(IUniNode node)
         {
             var type = node.GetType();
             var fields = type.GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
@@ -97,7 +78,7 @@
 
         }
 
-        public void UpdateSerializedCommands(UniNode node,IPortValue port, object value)
+        public void UpdateSerializedCommands(IUniNode node,IPortValue port, object value)
         {
 
             switch (value) {
@@ -108,7 +89,7 @@
 
         }
 
-        public void DrawPorts(UniNode node)
+        public void DrawPorts(IUniNode node)
         {
             Draw(bodyDrawers);
         }

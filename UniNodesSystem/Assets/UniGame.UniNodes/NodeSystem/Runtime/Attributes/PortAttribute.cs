@@ -6,7 +6,7 @@
     using Core.Interfaces;
 
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = true)]
-    public class PortValueAttribute : Attribute , IPortData
+    public class PortAttribute : Attribute , IPortData
     {
         public bool             instancePortList = false;
         public string           fieldName        = string.Empty;
@@ -16,7 +16,7 @@
         public ShowBackingValue showBackingValue = ShowBackingValue.Always;
         public IReadOnlyList<Type> valueTypes;
 
-        public PortValueAttribute(
+        public PortAttribute(
             PortIO direction = PortIO.Input, 
             ConnectionType connectionType = ConnectionType.Multiple,
             ShowBackingValue backingValue = ShowBackingValue.Always)

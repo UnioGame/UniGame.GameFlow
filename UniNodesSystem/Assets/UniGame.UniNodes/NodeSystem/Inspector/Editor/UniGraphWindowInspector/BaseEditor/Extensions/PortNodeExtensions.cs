@@ -13,7 +13,7 @@
     {
         public static NodeFieldData GetPortData(this INode node, Type type, string fieldName)
         {
-            var field = type.GetFieldInfo(fieldName);
+            var field = type.GetFieldInfoCached(fieldName);
             return node.GetPortData(field, fieldName);
         }
 

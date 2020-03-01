@@ -248,14 +248,16 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
                         else if (IsHoveringNode && IsHoveringTitle(hoveredNode))
                         {
                             // If mousedown on node header, select or deselect
-                            if (!hoveredNode.IsSelected())
+                            if (!IsSelected(hoveredNode))
                             {
-                                AddToEditorSelection(hoveredNode as Object, e.control || e.shift);
+                                Select(hoveredNode, e.control || e.shift);
                                 if (!e.control && !e.shift) {
                                     selectedReroutes.Clear();
                                 }
                             }
-                            else if (e.control || e.shift) DeselectFromEditor(hoveredNode as Object);
+                            else if (e.control || e.shift) {
+                                Deselect(hoveredNode);
+                            }
 
                             e.Use();
                             currentActivity = NodeActivity.HoldNode;
@@ -287,7 +289,7 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
                             if (!e.control && !e.shift)
                             {
                                 selectedReroutes.Clear();
-                                Selection.activeObject = null;
+                                DeselectAll();
                             }
                         }
                     }
@@ -321,11 +323,12 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
                             EditorUtility.SetDirty(ActiveGraph);
                             if (this.GetSettings().autoSave) AssetDatabase.SaveAssets();
                         }
-                        else if (currentActivity == NodeActivity.DragNode)
-                        {
-                            var nodes = Selection.objects.OfType<Node>();
-                            foreach (var node in nodes) EditorUtility.SetDirty(node);
-                            if (this.GetSettings().autoSave) AssetDatabase.SaveAssets();
+                        else if (currentActivity == NodeActivity.DragNode) {
+                            var nodes = selection;
+                            foreach (var node in nodes) 
+                                node.SetDirty();
+                            if (this.GetSettings().autoSave) 
+                                AssetDatabase.SaveAssets();
                         }
                         else if (!IsHoveringNode)
                         {
@@ -342,7 +345,7 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
                         if (currentActivity == NodeActivity.HoldNode && !(e.control || e.shift))
                         {
                             selectedReroutes.Clear();
-                            AddToEditorSelection(hoveredNode as Object, false);
+                            Select(hoveredNode, false);
                         }
 
                         // If click reroute, select it.
@@ -381,7 +384,7 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
                             else if (IsHoveringNode && IsHoveringTitle(hoveredNode))
                             {
                                 if (!hoveredNode.IsSelected()) {
-                                    AddToEditorSelection(hoveredNode as Object, false);
+                                    Select(hoveredNode, false);
                                 }
                                 ShowNodeContextMenu();
                             }
@@ -462,15 +465,6 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
         
         public INode CreateNode(Type type,string nodeName, Vector2 position)
         {
-            if(!PrefabUtility.IsPartOfPrefabInstance(ActiveGraph))
-            {
-                Debug.LogError($"IsPartOfPrefabInstance {ActiveGraph.name}");
-            }
-            if(!PrefabUtility.IsAnyPrefabInstanceRoot(ActiveGraph.gameObject))
-            {
-                Debug.LogError($"IsAnyPrefabInstanceRoot {ActiveGraph.name}");
-            }
-            
             var node = ActiveGraph.AddNode(type,nodeName,position);
 
             Save();
@@ -525,13 +519,13 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
             
             var substitutes = new Dictionary<INode, INode>();
 
-            var srcNodes = Selection.objects.OfType<INode>().ToList();
+            var srcNodes = selection.ToList();
             
             foreach (var srcNode in srcNodes) {
                 if (srcNode.GraphData != ActiveGraph) continue; // ignore nodes selected in another graph
                 var newNode = graphEditor.CopyNode(srcNode);
                 substitutes.Add(srcNode, newNode);
-                newNode.SetPosition(srcNode.Position + new Vector2(30, 30));
+                newNode.Position = (srcNode.Position + new Vector2(30, 30));
             }
 
             // Walk through the selected nodes again, recreate connections, using the new nodes

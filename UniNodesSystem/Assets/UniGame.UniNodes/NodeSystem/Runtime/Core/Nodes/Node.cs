@@ -4,12 +4,12 @@
     using System.Collections.Generic;
     using System.Diagnostics;
     using Attributes;
-    using Inspector.Editor.UniGraphWindowInspector.Nodes;
     using Interfaces;
     using Runtime.Interfaces;
     using UniGreenModules.UniCore.Runtime.Attributes;
     using UniGreenModules.UniCore.Runtime.ProfilerTools;
     using UnityEngine;
+    using UUniGame.UniNodes.NodeSystem.Runtime.Core.Nodes;
     using Debug = UnityEngine.Debug;
 
     [Serializable]
@@ -17,7 +17,7 @@
     {
         public static INode DummyNode = new DummyNode();
         
-        #region inspctor
+        #region inspector
 
         [HideNodeInspector] 
         [ReadOnlyValue] 
@@ -37,8 +37,12 @@
       
         #endregion
         
-        protected IGraphData graph;
+        protected IUniNode serializableNode;
         
+        protected IGraphData graph;
+
+        protected IUniNode SNode => serializableNode = serializableNode ?? CreateInnerNode();
+
         #region public properties
 
         /// <summary>
@@ -55,12 +59,7 @@
         /// Iterate over all ports on this node.
         /// </summary>
         public IReadOnlyList<NodePort> Ports => ports.Ports;
-
-        /// <summary>
-        /// node width
-        /// </summary>
-        public int Width => width;
-
+        
         /// <summary>
         /// Iterate over all outputs on this node.
         /// </summary>
@@ -88,9 +87,20 @@
         }
 
         /// <summary>
+        /// node width
+        /// </summary>
+        public int Width {
+            get => width;
+            set => width = value;
+        }
+        
+        /// <summary>
         /// position of node 
         /// </summary>
-        public Vector2 Position => position;
+        public Vector2 Position {
+            get => position;
+            set => position = value;
+        }
 
         /// <summary>
         /// base context graph data
@@ -239,6 +249,7 @@
 
         #endregion
         
+        protected abstract IUniNode CreateInnerNode();
         
         [Conditional("UNITY_EDITOR")]
         protected void LogMessage(string message)

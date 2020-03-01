@@ -3,7 +3,9 @@
     using System;
     using System.Collections.Generic;
     using Interfaces;
+    using Runtime.Core;
     using Runtime.Core.Nodes;
+    using Runtime.Interfaces;
     using UnityEditor;
     using UnityEngine;
     using Object = UnityEngine.Object;
@@ -12,14 +14,14 @@
     public class NodeEditorBase<T, A, K> 
         where A : Attribute, INodeEditorAttribute
         where T : NodeEditorBase<T, A, K>
-        where K : class
+        where K : class,INode
     {
         #region static data
 
         /// <summary> Custom editors defined with [CustomNodeEditor] </summary>
         private static Dictionary<Type, Type> _editorsTypesMap;
 
-        private static Dictionary<K, T> editors = new Dictionary<K, T>();
+        private static Dictionary<object, T> editors = new Dictionary<object, T>();
 
         private static Dictionary<Type, Type> editorTypes
         {
@@ -32,60 +34,74 @@
 
                 return _editorsTypesMap;
             }
-            set { _editorsTypesMap = value; }
+            set => _editorsTypesMap = value;
         }
 
-
-        public static T GetEditor(K target)
+        public static T GetEditor(INode node)
         {
-            if (target == null) return null;
+            if (node == null) return null;
+            if (editors.TryGetValue(node, out var editorBase))
+                return editorBase;
+            return null;
+        }
 
-            if (!editors.TryGetValue(target, out var editor))
+        public static T GetEditor(EditorNode target)
+        {
+            if (!(target.Node is K node)) return null;
+
+            if (!editors.TryGetValue(node, out var editor))
             {
-                var type = target.GetType();
+                var type = node.GetType();
                 var editorType = GetEditorType(type);
                 
                 editor = Activator.CreateInstance(editorType) as T;
-
-                var assetTarget = CreateTargetAsset(target);
-                editor.target = target;
-                editor.serializedObject = new SerializedObject(assetTarget);
-                editors.Add(target, editor);
+                editors.Add(node, editor);
                 editor.OnEnable();
             }
-            
-            if (editor.target == null) 
-                editor.target = target;
-            if (editor.serializedObject == null) 
-                editor.serializedObject = new SerializedObject(CreateTargetAsset(target));
+
+            if (editor.Node == null ) {
+                editor.Initialize(target,node);
+            }
 
             return editor;
         }
 
-        public static Object CreateTargetAsset(K targetItem)
+        public static Object CreateTargetAsset(INode targetItem)
         {
             var assetTarget = targetItem as Object;
-            if (assetTarget == null) {
+            if (assetTarget == null)
+            {
+                return null;
                 var assetItem = ScriptableObject.
-                    CreateInstance(typeof(SerializableNodeContainer<K>)) as SerializableNodeContainer<K>;
+                    CreateInstance(typeof(SerializableNodeContainer)) as SerializableNodeContainer;
                 assetItem.target = targetItem;
                 assetTarget      = assetItem;
             }
 
             return assetTarget;
         }
-        
+
+
         #endregion
-
-
+        
+        public K Node;
+        public EditorNode EditorData;
+        
+        public SerializedObject SerializedObject { get; protected set; }
+        
+        public void Initialize(EditorNode editorNode, K node)
+        {
+            Node = node;
+            EditorData = editorNode;
+            if(node is Object target)
+                SerializedObject = new SerializedObject(target);
+        }
+        
         public virtual void OnEnable()
         {
-            target = serializedObject.targetObject as K;
+            Node = Node ?? SerializedObject?.targetObject as K;
         }
-
-        public K target;
-        public SerializedObject serializedObject;
-
+        
         private static Type GetEditorType(Type type)
         {
             if (type == null) return null;
