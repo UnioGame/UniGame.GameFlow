@@ -74,7 +74,7 @@
                 return null;
                 var assetItem = ScriptableObject.
                     CreateInstance(typeof(SerializableNodeContainer)) as SerializableNodeContainer;
-                assetItem.target = targetItem;
+                assetItem.Node = targetItem as SerializableNode;
                 assetTarget      = assetItem;
             }
 

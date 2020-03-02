@@ -12,8 +12,16 @@
     [Serializable]
     public abstract class UniNode : Node, IUniNode
     {       
+        
+        private IProxyNode serializableNode;
 
+        
         #region public properties
+        
+        /// <summary>
+        /// regular source node
+        /// </summary>
+        protected IUniNode SNode => GetSourceNode();
 
         /// <summary>
         /// Is node currently active
@@ -75,8 +83,21 @@
         /// <summary>
         /// create base node realization
         /// </summary>
-        protected override IUniNode CreateInnerNode() => new SNode(id, nodeName, ports, OnInitialize, UpdateCommands, OnExecute);
+        protected virtual IProxyNode CreateInnerNode() => new SNode(id, nodeName, ports);
 
+        /// <summary>
+        /// create target source node and bind with mono node methods
+        /// </summary>
+        /// <returns></returns>
+        private IProxyNode GetSourceNode()
+        {
+            if (serializableNode != null)
+                return serializableNode;
+            serializableNode = CreateInnerNode();
+            serializableNode.Bind(OnInitialize, UpdateCommands, OnExecute);
+            return serializableNode;
+        }
+        
         /// <summary>
         /// finish node life time
         /// </summary>

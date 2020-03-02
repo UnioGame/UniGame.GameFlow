@@ -243,7 +243,7 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
 
         private IEnumerable<NodePort> GetPorts(PortIO direction)
         {
-            for (var i = 0; i < ports.Count; i++) {
+            for (var i = 0; i < Ports.Count; i++) {
                 var port = Ports[i];
                 if (port.direction == direction)
                     yield return port;

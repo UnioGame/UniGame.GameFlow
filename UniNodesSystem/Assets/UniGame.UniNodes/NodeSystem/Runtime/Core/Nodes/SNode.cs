@@ -16,7 +16,7 @@ using UnityEngine;
 namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
 {
     [Serializable]
-    public class SNode : SerializableNode, IUniNode
+    public class SNode : SerializableNode, IProxyNode
     {
         #region inspector fields
 
@@ -28,9 +28,9 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
 
         #region private fields
         
-        private readonly Action                         onInitialize;
-        private readonly Action<List<ILifeTimeCommand>> onCommandsInitialize;
-        private readonly Action                         onExecute;
+        private Action                         onInitialize;
+        private Action<List<ILifeTimeCommand>> onCommandsInitialize;
+        private Action                         onExecute;
 
         [NonSerialized] private bool isInitialized = false;
 
@@ -54,15 +54,7 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
         public SNode(
             int id,
             string name,
-            NodePortDictionary ports,
-            Action onInitialize = null,
-            Action<List<ILifeTimeCommand>> onCommandsInitialize = null,
-            Action onExecute = null) : base(id, name, ports)
-        {
-            this.onInitialize         = onInitialize;
-            this.onCommandsInitialize = onCommandsInitialize;
-            this.onExecute            = onExecute;
-        }
+            NodePortDictionary ports) : base(id, name, ports){}
 
         #endregion
 
@@ -81,6 +73,16 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
 
         #region public methods
 
+        public void Bind(
+            Action initializeAction = null,
+            Action<List<ILifeTimeCommand>> initializeCommands = null,
+            Action executeAction = null)
+        {
+            this.onInitialize         = initializeAction;
+            this.onCommandsInitialize = initializeCommands;
+            this.onExecute            = executeAction;
+        }
+        
         public sealed override void Initialize(IGraphData graphData)
         {
             InitializeData(graphData);
@@ -103,8 +105,13 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
             //custom node initialization
             OnInitialize();
 
-            lifeTime.AddCleanUpAction(() => isActive = false);
-            lifeTime.AddCleanUpAction(() => portValues.Clear());
+            lifeTime.AddCleanUpAction(() => {
+                isActive = false;
+                portValues.Clear();
+                this.onInitialize         = null;
+                this.onCommandsInitialize = null;
+                this.onExecute            = null;
+            });
         }
 
         public bool AddPortValue(INodePort portValue)

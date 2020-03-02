@@ -10,6 +10,5 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
         IReadOnlyCollection<INodePort> PortValues { get; }
 
         bool AddPortValue(INodePort portValue);
-
     }
 }

@@ -22,7 +22,7 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
         void ClearConnections();
         
         void Initialize(IGraphData data);
-        
+
         NodePort AddPort(
             string fieldName,
             IReadOnlyList<Type> types, PortIO direction,

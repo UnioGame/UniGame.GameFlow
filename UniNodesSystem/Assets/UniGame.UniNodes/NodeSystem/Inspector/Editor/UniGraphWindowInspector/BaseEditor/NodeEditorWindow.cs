@@ -327,9 +327,9 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
                 !nodeGraph)
                 return nodeGraph;
 
-            nodeGraph.SaveScenes();
-            
-            AssetDatabase.SaveAssets();
+//            nodeGraph.SaveScenes();
+            nodeGraph.SetDirty();
+            activeObject?.ApplyModifiedProperties();
 
             var prefabResource = nodeGraph.GetPrefabDefinition();
             if (prefabResource.IsInstance)

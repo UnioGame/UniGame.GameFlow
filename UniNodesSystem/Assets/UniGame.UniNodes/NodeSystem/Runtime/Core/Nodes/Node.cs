@@ -36,12 +36,8 @@
         [SerializeField] public NodePortDictionary ports = new NodePortDictionary();
       
         #endregion
-        
-        protected IUniNode serializableNode;
-        
-        protected IGraphData graph;
 
-        protected IUniNode SNode => serializableNode = serializableNode ?? CreateInnerNode();
+        protected IGraphData graph;
 
         #region public properties
 
@@ -248,9 +244,7 @@
         }
 
         #endregion
-        
-        protected abstract IUniNode CreateInnerNode();
-        
+
         [Conditional("UNITY_EDITOR")]
         protected void LogMessage(string message)
         {

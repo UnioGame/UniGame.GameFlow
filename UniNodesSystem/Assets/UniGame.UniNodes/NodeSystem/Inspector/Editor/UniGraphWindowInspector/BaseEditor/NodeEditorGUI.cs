@@ -6,7 +6,9 @@
     using ContentContextWindow;
     using Runtime.Attributes;
     using Runtime.Core;
+    using Runtime.Core.Nodes;
     using Runtime.Interfaces;
+    using Sirenix.Utilities;
     using UniGreenModules.UniCore.EditorTools.Editor.Utility;
     using UnityEditor;
     using UnityEngine;
@@ -24,7 +26,7 @@
     {
         public  NodeGraphEditor graphEditor;
         
-        private HashSet<INode>    selection = new HashSet<INode>();
+        private List<INode>    selection = new List<INode>();
         private List<INode>     culledNodes = new List<INode>();
         
         private List<EditorNode>     regularNodes  = new List<EditorNode>();
@@ -34,7 +36,14 @@
 
         private int topPadding => isDocked() ? 19 : 22;
 
-        
+        private SerializableNodeContainer nodeContainer;
+        public SerializableNodeContainer Container {
+            get {
+                if (!nodeContainer)
+                    nodeContainer = ScriptableObject.CreateInstance<SerializableNodeContainer>();
+                return nodeContainer;
+            }
+        }
         
         private void OnGUI()
         {
@@ -206,7 +215,9 @@
                 var path = graphEditor.GetNodeMenuName(type);
                 if (string.IsNullOrEmpty(path)) continue;
 
-                contextMenu.AddItem(new GUIContent(path), false, () => { CreateNode(type, pos); });
+                contextMenu.AddItem(new GUIContent(path), false, () => {
+                    CreateNode(type, pos);
+                });
             }
 
             contextMenu.AddSeparator("");
@@ -449,9 +460,8 @@
             selectedNodes.Clear();
 
             if (activeEvent.type != EventType.Layout && currentActivity == NodeActivity.DragGrid)
-                Selection.objects = selection.
-                    Select(x => preSelection.Contains(x.Id)).
-                    OfType<Object>().ToArray();
+                selection.Where(x => preSelection.Contains(x.Id)).
+                    ForEach(x => x.AddToEditorSelection(true));
         }
 
         private void UpdateNodes(SerializedProperty property,IReadOnlyList<INode> nodes)
@@ -493,9 +503,17 @@
             if(add == false)
                 selection.Clear();
 
+            if (IsSelected(node))
+                return;
+            
             selection.Add(node);
+            
             if (node is Object asset) {
                 asset.AddToEditorSelection(add);
+            }
+            else {
+                Container.Node = node as SerializableNode;
+                Container.AddToEditorSelection(add);
             }
             
         }
