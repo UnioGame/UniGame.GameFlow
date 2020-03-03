@@ -78,7 +78,7 @@
                     continue;
                 
                 var portName = bracketsExpr.Replace(portValue.ItemName, string.Empty, 1);
-                var direction = portValue.direction;
+
                 var outputPortName = portName.GetFormatedPortName(PortIO.Output);
                 var inputPortName = portName.GetFormatedPortName(PortIO.Input);
 

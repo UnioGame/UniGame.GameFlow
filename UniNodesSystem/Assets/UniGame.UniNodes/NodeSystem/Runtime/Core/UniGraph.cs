@@ -35,7 +35,7 @@
         /// <summary>
         /// all child nodes
         /// </summary>
-        private List<IUniNode> allNodes = new List<IUniNode>();
+        private List<IUniNode> uniNodes = new List<IUniNode>();
 
         #endregion
 
@@ -70,12 +70,13 @@
             inputs.ForEach(x => BindConnections(this,GetPort(x.ItemName),x.PortValue) );
             outputs.ForEach(x => BindConnections(this,GetPort(x.ItemName),x.PortValue));
 
-            for (int i = 0; i < allNodes.Count; i++) {
-                var node = allNodes[i];
+            //bind all ports and only after that start execution
+            for (int i = 0; i < uniNodes.Count; i++) {
+                var node = uniNodes[i];
                 node.Ports.ForEach(x => BindConnections(node, x, x.Value));
             }
             
-            allNodes.ForEach( x => x.Execute());
+            uniNodes.ForEach( x => x.Execute());
 
         }
 
@@ -105,36 +106,34 @@
 
         private void InitializeGraphNodes()
         {
-            allNodes.Clear();
+            uniNodes.Clear();
             cancelationNodes.Clear();
             inputs.Clear();
             outputs.Clear();
             
-            for (var i = 0; i < nodes.Count; i++) {
+            for (var i = 0; i < Nodes.Count; i++) {
 
-                var node = nodes[i];
+                var node = Nodes[i];
                 
-                //skip all not unigraph nodes
-                if (!(node is IUniNode uniNode))
-                    continue;
-
                 //register graph ports by nodes
-                UpdatePortNode(uniNode);
+                UpdatePortNode(node);
 
                 //stop graph execution, if cancelation node output triggered
-                if (uniNode is IGraphCancelationNode cancelationNode) {
+                if (node is IGraphCancelationNode cancelationNode) {
                     cancelationNodes.Add(cancelationNode);
                 }
+                //initialize node
+                node.Initialize(this);
 
-                uniNode.Initialize(this);
-                
-                LifeTime.AddCleanUpAction(uniNode.Exit);
-                
-                allNodes.Add(uniNode);
+                if (node is IUniNode uniNode) {
+                    LifeTime.AddCleanUpAction(uniNode.Exit);
+                    uniNodes.Add(uniNode);
+                }
+   
             }
         }
         
-        private void UpdatePortNode(IUniNode uniNode)
+        private void UpdatePortNode(INode uniNode)
         {
             //register input/output nodes
             if (!(uniNode is IGraphPortNode graphPortNode)) {

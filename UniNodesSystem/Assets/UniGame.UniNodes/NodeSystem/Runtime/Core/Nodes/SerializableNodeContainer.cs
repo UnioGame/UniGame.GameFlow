@@ -6,8 +6,9 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
     {
 #if ODIN_INSPECTOR
         [Sirenix.OdinInspector.HideLabel]
-        [Sirenix.OdinInspector.InlineProperty]   
+        [Sirenix.OdinInspector.InlineProperty]
 #endif
         public SerializableNode Node;
+
     }
 }

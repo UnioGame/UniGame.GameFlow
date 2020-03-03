@@ -2,20 +2,68 @@
 
 namespace UniGame.UniNodes.Nodes.Runtime.SerializableNodes
 {
-    using NodeSystem.Runtime.Attributes;
+    using System.Collections.Generic;
     using NodeSystem.Runtime.Core.Nodes;
+    using NodeSystem.Runtime.Extensions;
+    using NodeSystem.Runtime.Interfaces;
+    using UniGreenModules.UniCore.Runtime.Interfaces;
+    using UniGreenModules.UniCore.Runtime.ProfilerTools;
+    using UniGreenModules.UniCore.Runtime.Rx.Extensions;
+    using UniRx;
 
-    [CreateNodeMenu("SNodes/Debug/Log",nodeName = "Log")]
-    public class SLogNode : SNode
+    [CreateNodeMenu("Debug/SLog",nodeName = "SLog")]
+    public class SLogNode : SNode,IMessagePublisher
     {
-        public int SintValue;
-
-        public float SfloatValue;
-
-        [Port()]
-        public int SintPort;
+        private const string logPortName = "log";
         
-        [Port(PortIO.Output)]
-        public int SintPortOut;
+        public LogMode mode = LogMode.Log;
+
+        public string message = "LogNode";
+
+        private IPortValue logPort;
+
+        protected override void OnExecute()
+        {
+            PrintLog(GetMessage(), mode);
+            logPort.Bind(this).
+                AddTo(LifeTime);
+        }
+
+        protected override void UpdateCommands(List<ILifeTimeCommand> nodeCommands)
+        {
+            base.UpdateCommands(nodeCommands);
+            logPort = this.UpdatePortValue(logPortName, PortIO.Input);
+        }
+
+        protected virtual string GetMessage()
+        {
+            return message;
+        }
+
+        public void Publish<T>(T value)
+        {
+            PrintLog($"{message}: GRAPH:{GraphData.ItemName} : {ItemName} \n\t {value.GetType().Name} : {value}", mode);
+        }
+        
+        private void PrintLog(string messageData, LogMode logMode)
+        {
+            switch (logMode) {
+                case LogMode.Runtime:
+                    GameLog.LogRuntime(messageData);
+                    break;
+                case LogMode.Log:
+                    GameLog.Log(messageData);
+                    break;
+                case LogMode.Warning:
+                    GameLog.LogWarning(messageData);
+                    break;
+                case LogMode.Error:
+                    GameLog.LogError(messageData);
+                    break;
+                case LogMode.Exception:
+                    GameLog.LogError(messageData);
+                    break;
+            }
+        }
     }
 }

@@ -326,11 +326,13 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
                 EditorApplication.isPlayingOrWillChangePlaymode ||
                 !nodeGraph)
                 return nodeGraph;
-
-//            nodeGraph.SaveScenes();
+            
+            //nodeGraph.SaveScenes();
             nodeGraph.SetDirty();
             activeObject?.ApplyModifiedProperties();
 
+            activeObject = new SerializedObject(nodeGraph);
+            
             var prefabResource = nodeGraph.GetPrefabDefinition();
             if (prefabResource.IsInstance)
                 return nodeGraph;

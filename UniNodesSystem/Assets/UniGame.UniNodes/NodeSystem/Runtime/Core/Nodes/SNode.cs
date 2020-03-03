@@ -100,11 +100,11 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
             InitializePorts();
             //initialize all node commands
             InitializeCommands();
-            //proxy outer initialization
-            onInitialize?.Invoke();
             //custom node initialization
             OnInitialize();
-
+            //proxy outer initialization
+            onInitialize?.Invoke();
+            
             lifeTime.AddCleanUpAction(() => {
                 isActive = false;
                 portValues.Clear();
@@ -147,10 +147,10 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
             isActive = true;
             //execute all node commands
             commands.ForEach(x => x.Execute(LifeTime));
-            //proxy outer execution
-            onExecute?.Invoke();
             //user defined logic
             OnExecute();
+            //proxy outer execution
+            onExecute?.Invoke();
         }
 
         /// <summary>
@@ -202,16 +202,6 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
         
         #endregion
 
-        private void InitializeData(IGraphData graphData)
-        {
-            graph = graphData;
-            //restart lifetime
-            lifeTimeDefinition = lifeTimeDefinition ?? new LifeTimeDefinition();
-            lifeTime           = lifeTimeDefinition.LifeTime;
-            portValues         = portValues ?? new HashSet<INodePort>();
-            commands           = commands ?? new List<ILifeTimeCommand>();
-        }
-        
         /// <summary>
         /// Call once on node initialization
         /// </summary>
@@ -234,6 +224,8 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
         {
         }
 
+        #region private methods
+        
         /// <summary>
         /// Initialize all node commands
         /// create port and bind them
@@ -249,10 +241,11 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
                     commands.Add(command.Create(this));
             }
 
-            //outer node commands
-            onCommandsInitialize?.Invoke(commands);
             //register node commands
             UpdateCommands(commands);
+            
+            //outer node commands
+            onCommandsInitialize?.Invoke(commands);
         }
 
         /// <summary>
@@ -270,6 +263,18 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
                     AddPortValue(nodePort);
             }
         }
+
+        private void InitializeData(IGraphData graphData)
+        {
+            graph = graphData;
+            //restart lifetime
+            lifeTimeDefinition = lifeTimeDefinition ?? new LifeTimeDefinition();
+            lifeTime           = lifeTimeDefinition.LifeTime;
+            portValues         = portValues ?? new HashSet<INodePort>();
+            commands           = commands ?? new List<ILifeTimeCommand>();
+        }
+        
+        #endregion
 
     }
 }
