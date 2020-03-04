@@ -5,14 +5,11 @@
     using UniGreenModules.UniCore.Runtime.Interfaces;
     using UniRx;
 
-    public interface IGameService : IDisposable, ILifeTimeContext
+    public interface IGameService : 
+        IDisposable, 
+        ILifeTimeContext, 
+        IReactiveStatus
     {
-
-        /// <summary>
-        /// is service ready to work
-        /// </summary>
-        IReadOnlyReactiveProperty<bool> IsReady { get; }
-        
         /// <summary>
         /// Bind to target context during lifetime
         /// if lifetime is null, use lifetime of context
