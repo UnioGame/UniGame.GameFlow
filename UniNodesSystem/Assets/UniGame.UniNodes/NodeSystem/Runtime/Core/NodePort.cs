@@ -388,10 +388,16 @@
 
         public void ClearConnections()
         {
-            connections.RemoveAll(x => x.Port == null);
-            while (connections.Count > 0) {
-                Disconnect(connections[0].Port);
+            var removedConnections = ClassPool.Spawn<List<PortConnection>>();
+            removedConnections.AddRange(connections);
+
+            foreach (var connection in removedConnections) {
+                if(connection.Port == null)continue;
+                Disconnect(connection.Port);
             }
+            
+            connections.Clear();
+            removedConnections.DespawnCollection();
         }
 
         /// <summary> Get reroute points for a given connection. This is used for organization </summary>

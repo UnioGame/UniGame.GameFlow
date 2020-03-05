@@ -512,7 +512,7 @@
                 asset.AddToEditorSelection(add);
             }
             else {
-                Container.Node = node as SerializableNode;
+                Container.Initialize(node as SerializableNode);
                 Container.AddToEditorSelection(add);
             }
             

@@ -10,8 +10,8 @@
     [Serializable]
     public class DummyNode : INode
     {
-        public int    Id       { get; }
-        public string ItemName { get; }
+        public int    Id       { get; private set; }
+        public string ItemName { get; private set;  }
 
         public IGraphData              GraphData { get; }
         public IReadOnlyList<NodePort> Ports     { get; }
@@ -26,6 +26,8 @@
         public NodePort GetPort(string fieldName) => null;
 
         public bool HasPort(string fieldName) => false;
+
+        public int SetId(int id) => Id = id;
 
         public Vector2 Position { get; set; } = Vector2.zero;
         

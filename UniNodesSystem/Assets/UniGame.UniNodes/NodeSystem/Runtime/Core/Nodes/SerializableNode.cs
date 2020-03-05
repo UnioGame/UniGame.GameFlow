@@ -111,6 +111,15 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
         
         #region abstract methods
 
+        public int SetId(int itemId)
+        {
+            var oldId = id;
+            var newId = itemId;
+            id = itemId;
+            OnIdUpdate(oldId,newId,this);
+            return id;
+        }
+
         public virtual void Initialize(IGraphData data)
         {
             graph = data;
@@ -241,6 +250,8 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
 
         #endregion
 
+        protected 
+        
         private IEnumerable<NodePort> GetPorts(PortIO direction)
         {
             for (var i = 0; i < Ports.Count; i++) {

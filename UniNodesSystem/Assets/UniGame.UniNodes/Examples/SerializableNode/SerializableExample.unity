@@ -183,10 +183,63 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4748815339571759597, guid: e36542ec82f3a194e99667be6b6a10ad,
+        type: 3}
+      propertyPath: serializableNodes.Array.data[0].ports.values.Array.data[0].connections.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4748815339571759597, guid: e36542ec82f3a194e99667be6b6a10ad,
+        type: 3}
+      propertyPath: uniqueId
+      value: 1266
+      objectReference: {fileID: 0}
+    - target: {fileID: 4748815339571759597, guid: e36542ec82f3a194e99667be6b6a10ad,
+        type: 3}
+      propertyPath: serializableNodes.Array.data[0].position.x
+      value: 392
+      objectReference: {fileID: 0}
+    - target: {fileID: 4748815339571759597, guid: e36542ec82f3a194e99667be6b6a10ad,
+        type: 3}
+      propertyPath: serializableNodes.Array.data[0].ports.values.Array.data[0].id
+      value: 1265
+      objectReference: {fileID: 0}
+    - target: {fileID: 4748815339571759597, guid: e36542ec82f3a194e99667be6b6a10ad,
+        type: 3}
+      propertyPath: nodes.Array.data[0]
+      value: 
+      objectReference: {fileID: 7160064982076870940}
     - target: {fileID: 8121955986882669422, guid: e36542ec82f3a194e99667be6b6a10ad,
         type: 3}
       propertyPath: m_Name
       value: UniGraph
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2126589237147687122, guid: e36542ec82f3a194e99667be6b6a10ad, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: e36542ec82f3a194e99667be6b6a10ad, type: 3}
+--- !u!1 &7160064982076870939 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8121955986882669422, guid: e36542ec82f3a194e99667be6b6a10ad,
+    type: 3}
+  m_PrefabInstance: {fileID: 7160064982076870938}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7160064982076870940
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7160064982076870939}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23f9640bdcee91f44b837897ec957069, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 1266
+  width: 220
+  nodeName: Log Node
+  position: {x: 392, y: 56}
+  ports:
+    keys: []
+    values: []
+  mode: 1
+  message: LogNode

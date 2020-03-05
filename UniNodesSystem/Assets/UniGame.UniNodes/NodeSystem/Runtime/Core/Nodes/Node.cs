@@ -112,18 +112,28 @@
         #endregion
         
         #region public methods
-        
-        public void OnIdUpdate(int oldId, int newId, IGraphItem updatedItem)
+
+        public virtual void OnIdUpdate(int oldId, int newId, IGraphItem updatedItem)
         {
-            return;
+        
         }
         
         public int UpdateId()
         {
+            var oldId = id;
             id = GraphData.UpdateId(id);
+            OnIdUpdate(oldId,id,this);
             return id;
         }
 
+        public int SetId(int itemId)
+        {
+            var oldId = id;
+            id = itemId;
+            OnIdUpdate(oldId,id,this);
+            return id;
+        }
+        
         public virtual string GetName() => nodeName;
 
         public void SetUpData(IGraphData parent)

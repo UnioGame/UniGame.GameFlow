@@ -244,6 +244,31 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 629425218373224180, guid: 38ead084f51e9fa4eb0d2070ddd409cf,
+        type: 3}
+      propertyPath: ports.keys.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 629425218373224180, guid: 38ead084f51e9fa4eb0d2070ddd409cf,
+        type: 3}
+      propertyPath: ports.values.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 629425218373224180, guid: 38ead084f51e9fa4eb0d2070ddd409cf,
+        type: 3}
+      propertyPath: id
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 629425218373224180, guid: 38ead084f51e9fa4eb0d2070ddd409cf,
+        type: 3}
+      propertyPath: position.x
+      value: 792
+      objectReference: {fileID: 0}
+    - target: {fileID: 629425218373224180, guid: 38ead084f51e9fa4eb0d2070ddd409cf,
+        type: 3}
+      propertyPath: position.y
+      value: -8
+      objectReference: {fileID: 0}
     - target: {fileID: 2433798348402033974, guid: 38ead084f51e9fa4eb0d2070ddd409cf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -304,5 +329,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: UniGraph1 2
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 6247017870777286961, guid: 38ead084f51e9fa4eb0d2070ddd409cf,
+        type: 3}
+      propertyPath: ports.keys.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247017870777286961, guid: 38ead084f51e9fa4eb0d2070ddd409cf,
+        type: 3}
+      propertyPath: ports.values.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247017870777286961, guid: 38ead084f51e9fa4eb0d2070ddd409cf,
+        type: 3}
+      propertyPath: position.y
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247017870777286961, guid: 38ead084f51e9fa4eb0d2070ddd409cf,
+        type: 3}
+      propertyPath: position.x
+      value: 408
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 629425218373224180, guid: 38ead084f51e9fa4eb0d2070ddd409cf, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 38ead084f51e9fa4eb0d2070ddd409cf, type: 3}

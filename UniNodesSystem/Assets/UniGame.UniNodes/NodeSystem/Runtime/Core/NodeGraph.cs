@@ -6,6 +6,8 @@
     using Runtime.Interfaces;
     using Sirenix.Utilities;
     using UniGreenModules.UniCore.Runtime.Attributes;
+    using UniGreenModules.UniCore.Runtime.ObjectPool.Runtime;
+    using UniGreenModules.UniCore.Runtime.ObjectPool.Runtime.Extensions;
     using UniRx;
     using UnityEngine;
     using Object = UnityEngine.Object;
@@ -183,10 +185,25 @@
             nodes.Clear();
             
             serializableNodes.RemoveAll(x => x == null);
-            
             nodes.AddRange(GetComponents<Node>());
             nodes.RemoveAll(x => !x);
             nodes.Remove(this);
+
+            var nodeItems = ClassPool.Spawn<List<INode>>();
+            var idCacne = ClassPool.Spawn<HashSet<int>>();
+            nodeItems.AddRange(serializableNodes);
+            nodeItems.AddRange(nodes);
+
+            foreach (var nodeItem in nodeItems) {
+                if (idCacne.Add(nodeItem.Id) == false) {
+                    nodeItem.SetUpData(this);
+                    nodeItem.SetId(GetId());
+                }
+            }
+            
+            idCacne.DespawnCollection();
+            nodeItems.DespawnCollection();
+
         }
 
         #endregion

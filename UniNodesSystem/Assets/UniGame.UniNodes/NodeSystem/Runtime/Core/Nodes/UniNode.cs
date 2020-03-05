@@ -21,7 +21,7 @@
         /// <summary>
         /// regular source node
         /// </summary>
-        protected IUniNode SNode => GetSourceNode();
+        protected IProxyNode SNode => GetSourceNode();
 
         /// <summary>
         /// Is node currently active
@@ -40,7 +40,10 @@
         {
             graph = graphData;
             
+            SNode.Bind(OnInitialize, UpdateCommands, OnExecute);
+            
             SNode.Initialize(graphData);
+            
         }
 
         public bool AddPortValue(INodePort portValue) => SNode.AddPortValue(portValue);
@@ -94,7 +97,6 @@
             if (serializableNode != null)
                 return serializableNode;
             serializableNode = CreateInnerNode();
-            serializableNode.Bind(OnInitialize, UpdateCommands, OnExecute);
             return serializableNode;
         }
         

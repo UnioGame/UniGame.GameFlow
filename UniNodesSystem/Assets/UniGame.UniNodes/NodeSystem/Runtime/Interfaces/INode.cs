@@ -33,6 +33,8 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
         void Validate();
 
         #region editor api
+
+        int SetId(int id);
         
         /// <summary>
         /// set up graph node position

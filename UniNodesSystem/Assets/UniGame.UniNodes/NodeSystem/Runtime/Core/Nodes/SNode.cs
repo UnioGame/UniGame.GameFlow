@@ -107,7 +107,6 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
             
             lifeTime.AddCleanUpAction(() => {
                 isActive = false;
-                portValues.Clear();
                 this.onInitialize         = null;
                 this.onCommandsInitialize = null;
                 this.onExecute            = null;
@@ -272,6 +271,8 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
             lifeTime           = lifeTimeDefinition.LifeTime;
             portValues         = portValues ?? new HashSet<INodePort>();
             commands           = commands ?? new List<ILifeTimeCommand>();
+            
+            portValues.Clear();
         }
         
         #endregion
