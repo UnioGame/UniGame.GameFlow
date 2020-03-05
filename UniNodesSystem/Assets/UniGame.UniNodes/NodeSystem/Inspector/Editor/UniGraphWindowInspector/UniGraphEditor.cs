@@ -12,9 +12,9 @@
 		public override void OnEnable()
 		{
 			base.OnEnable();
-			graph = target as UniGraph;
+			graph = Node as UniGraph;
 			if (Application.isPlaying == false) {
-				graph.Validate();
+				graph?.Validate();
 			}
 			
 		}

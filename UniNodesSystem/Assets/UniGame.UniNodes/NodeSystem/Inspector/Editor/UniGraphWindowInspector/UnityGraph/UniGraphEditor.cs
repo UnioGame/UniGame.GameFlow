@@ -49,7 +49,7 @@
 
         private void CreateNodes(UniGraph uniGraph)
         {
-            foreach (var graphNode in uniGraph.nodes)
+            foreach (var graphNode in uniGraph.Nodes)
             {
                 var editorNode = UnityGraphUniNode.Create(graphNode);
                 _uniNodes.Add(editorNode);

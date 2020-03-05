@@ -4,6 +4,7 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
     using System.Collections.Generic;
     using System.Linq;
     using Runtime.Core;
+    using Runtime.Interfaces;
     using UniGreenModules.UniCore.EditorTools.Editor.PrefabTools;
     using UniGreenModules.UniCore.EditorTools.Editor.Utility;
     using UniGreenModules.UniCore.Runtime.Rx.Extensions;
@@ -19,11 +20,11 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
         public const string ActiveGraphPath     = "ActiveGraphPath";
         public const string UniNodesWindowTitle = "UniNodes";
 
-        public NodeGraph LastEditorGraph;
+        public static HashSet<NodeEditorWindow> ActiveWindows { get; protected set; } = new HashSet<NodeEditorWindow>();
 
         private Dictionary<int, NodePort> _portsIds             = new Dictionary<int, NodePort>();
         private Dictionary<int, Rect>     _portConnectionPoints = new Dictionary<int, Rect>();
-        private Dictionary<Node, Vector2> _nodeSizes            = new Dictionary<Node, Vector2>();
+        private Dictionary<INode, Vector2> _nodeSizes            = new Dictionary<INode, Vector2>();
 
         private float   _zoom = 1;
         private Vector2 _panOffset;
@@ -32,15 +33,22 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
         [SerializeField] private NodePortReference[] _references = new NodePortReference[0];
         [SerializeField] private Rect[]              _rects      = new Rect[0];
 
-        public static HashSet<NodeEditorWindow> ActiveWindows { get; protected set; } = new HashSet<NodeEditorWindow>();
-
-
+        public NodeGraph LastEditorGraph;
         public NodeGraph ActiveGraph;
 
+        private SerializedObject activeObject;
+        public SerializedObject ActiveObject {
+            get {
+                if(ActiveGraph!=null && (activeObject == null || activeObject.targetObject != ActiveGraph))
+                    activeObject = new SerializedObject(ActiveGraph);
+                return activeObject;
+            }
+        }
+        
         /// <summary> Stores node positions for all nodePorts. </summary>
         public Dictionary<int, Rect> PortConnectionPoints => _portConnectionPoints;
 
-        public Dictionary<Node, Vector2> NodeSizes => _nodeSizes;
+        public Dictionary<INode, Vector2> NodeSizes => _nodeSizes;
 
         public string Title { get; protected set; }
 
@@ -196,23 +204,6 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
             return new Vector2(xOffset, yOffset);
         }
 
-        public void AddToEditorSelection(Object node, bool add)
-        {
-            if (add) {
-                var selection = new List<Object>(Selection.objects);
-                selection.Add(node);
-                Selection.objects = selection.ToArray();
-            }
-            else Selection.objects = new Object[] {node};
-        }
-
-        public void DeselectFromEditor(Object node)
-        {
-            var selection = new List<Object>(Selection.objects);
-            selection.Remove(node);
-            Selection.objects = selection.ToArray();
-        }
-
         private static NodeGraph GetGraphItem(string assetPath)
         {
             //var loadedGraphObject = AssetDatabase.LoadAssetAtPath<GameObject>(assetPath);
@@ -335,8 +326,12 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
                 EditorApplication.isPlayingOrWillChangePlaymode ||
                 !nodeGraph)
                 return nodeGraph;
+            
+            //nodeGraph.SaveScenes();
+            nodeGraph.SetDirty();
+            activeObject?.ApplyModifiedProperties();
 
-            nodeGraph.SaveScenes();
+            activeObject = new SerializedObject(nodeGraph);
             
             var prefabResource = nodeGraph.GetPrefabDefinition();
             if (prefabResource.IsInstance)

@@ -4,7 +4,5 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.N
 
     public interface IUniNodeEditor : INodeEditorData
     {
-        bool IsSelected();
-
     }
 }

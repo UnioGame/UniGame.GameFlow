@@ -19,7 +19,7 @@
 
         private void ShowGraph()
         {
-            var graph = target as UniGraphNode;
+            var graph = Node as UniGraphNode;
             if (graph == null) return;
 
             var targetGraph = graph.LoadOrigin();

@@ -4,9 +4,10 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
     using System.Collections.Generic;
     using System.Linq;
     using Runtime.Core;
+    using Runtime.Interfaces;
+    using UniGreenModules.UniCore.EditorTools.Editor.Utility;
     using UnityEditor;
     using UnityEngine;
-    using Object = UnityEngine.Object;
 
     public partial class NodeEditorWindow
     {
@@ -22,16 +23,18 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
 
         private bool IsHoveringReroute => hoveredReroute.port != null;
 
-        private Node hoveredNode;
+        private INode hoveredNode;
+        
         [NonSerialized] private NodePort hoveredPort;
         [NonSerialized] private NodePort draggedOutput;
         [NonSerialized] private NodePort draggedOutputTarget;
         [NonSerialized] private List<Vector2> draggedOutputReroutes = new List<Vector2>();
+        
         private RerouteReference hoveredReroute;
         private List<RerouteReference> selectedReroutes = new List<RerouteReference>();
         private Rect nodeRects;
         private Vector2 dragBoxStart;
-        private Object[] preBoxSelection;
+        private int[] preBoxSelection;
         private RerouteReference[] preBoxSelectionReroute;
         private Rect selectionBox;
 
@@ -115,49 +118,44 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
 
                             var mousePos = WindowToGridPosition(e.mousePosition);
                             // Move selected nodes with offset
-                            for (var i = 0; i < Selection.objects.Length; i++)
-                            {
-                                if (Selection.objects[i] is Node)
-                                {
-                                    var node = Selection.objects[i] as Node;
-                                    var initial = node.position;
-                                    node.position = mousePos + dragOffset[i];
-                                    if (gridSnap)
-                                    {
-                                        node.position.x = (Mathf.Round((node.position.x + 8) / 16) * 16) - 8;
-                                        node.position.y = (Mathf.Round((node.position.y + 8) / 16) * 16) - 8;
+                            for (var i = 0; i < selection.Count; i++) {
+                                var node    = selection[i];
+                                var initial = node.Position;
+                                node.Position = mousePos + dragOffset[i];
+                                if (gridSnap) {
+                                    var newPosition = new Vector2(
+                                        (Mathf.Round((node.Position.x + 8) / 16) * 16) - 8,
+                                        (Mathf.Round((node.Position.y + 8) / 16) * 16) - 8);
+                                    node.Position = newPosition;
+                                }
+
+                                // Offset portConnectionPoints instantly if a node is dragged so they aren't delayed by a frame.
+                                var offset = node.Position - initial;
+                                if (!(offset.sqrMagnitude > 0)) {
+                                    continue;
+                                }
+
+                                foreach (var output in node.Outputs) {
+                                    if (PortConnectionPoints.TryGetValue(output.Id, out var rect)) {
+                                        rect.position                   += offset;
+                                        PortConnectionPoints[output.Id] =  rect;
+                                    }
+                                }
+
+                                foreach (var input in node.Inputs) {
+                                    if (!PortConnectionPoints.TryGetValue(input.Id, out var rect)) {
+                                        continue;
                                     }
 
-                                    // Offset portConnectionPoints instantly if a node is dragged so they aren't delayed by a frame.
-                                    var offset = node.position - initial;
-                                    if (offset.sqrMagnitude > 0)
-                                    {
-                                        foreach (var output in node.Outputs)
-                                        {
-                                            if (PortConnectionPoints.TryGetValue(output.Id, out var rect))
-                                            {
-                                                rect.position += offset;
-                                                PortConnectionPoints[output.Id] = rect;
-                                            }
-                                        }
-
-                                        foreach (var input in node.Inputs)
-                                        {
-                                            if (!PortConnectionPoints.TryGetValue(input.Id, out var rect)) {
-                                                continue;
-                                            }
-
-                                            rect.position                  += offset;
-                                            PortConnectionPoints[input.Id] =  rect;
-                                        }
-                                    }
+                                    rect.position                  += offset;
+                                    PortConnectionPoints[input.Id] =  rect;
                                 }
                             }
 
                             // Move selected reroutes with offset
                             for (var i = 0; i < selectedReroutes.Count; i++)
                             {
-                                var pos = mousePos + dragOffset[Selection.objects.Length + i];
+                                var pos = mousePos + dragOffset[selection.Count + i];
                                 if (gridSnap)
                                 {
                                     pos.x = (Mathf.Round(pos.x / 16) * 16);
@@ -172,7 +170,10 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
                         else if (currentActivity == NodeActivity.HoldGrid)
                         {
                             currentActivity = NodeActivity.DragGrid;
-                            preBoxSelection = Selection.objects;
+                            preBoxSelection = selection.
+                                Select(x => x.Id).
+                                ToArray();
+                            
                             preBoxSelectionReroute = selectedReroutes.ToArray();
                             dragBoxStart = WindowToGridPosition(e.mousePosition);
                             Repaint();
@@ -240,12 +241,16 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
                         else if (IsHoveringNode && IsHoveringTitle(hoveredNode))
                         {
                             // If mousedown on node header, select or deselect
-                            if (!Selection.Contains(hoveredNode))
+                            if (!IsSelected(hoveredNode))
                             {
-                                AddToEditorSelection(hoveredNode, e.control || e.shift);
-                                if (!e.control && !e.shift) selectedReroutes.Clear();
+                                Select(hoveredNode, e.control || e.shift);
+                                if (!e.control && !e.shift) {
+                                    selectedReroutes.Clear();
+                                }
                             }
-                            else if (e.control || e.shift) DeselectFromEditor(hoveredNode);
+                            else if (e.control || e.shift) {
+                                Deselect(hoveredNode);
+                            }
 
                             e.Use();
                             currentActivity = NodeActivity.HoldNode;
@@ -261,7 +266,7 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
                                 else
                                 {
                                     selectedReroutes = new List<RerouteReference> {hoveredReroute};
-                                    Selection.activeObject = null;
+                                    DeselectAll();
                                 }
                             }
                             // Deselect
@@ -277,7 +282,7 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
                             if (!e.control && !e.shift)
                             {
                                 selectedReroutes.Clear();
-                                Selection.activeObject = null;
+                                DeselectAll();
                             }
                         }
                     }
@@ -293,7 +298,7 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
                             if (draggedOutputTarget != null)
                             {
                                 var node = draggedOutputTarget.Node;
-                                if (ActiveGraph.nodes.Count != 0) draggedOutput.Connect(draggedOutputTarget);
+                                if (ActiveGraph.Nodes.Count != 0) draggedOutput.Connect(draggedOutputTarget);
 
                                 // ConnectionIndex can be -1 if the connection is removed instantly after creation
                                 var connectionIndex = draggedOutput.GetConnectionIndex(draggedOutputTarget);
@@ -311,12 +316,12 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
                             EditorUtility.SetDirty(ActiveGraph);
                             if (this.GetSettings().autoSave) AssetDatabase.SaveAssets();
                         }
-                        else if (currentActivity == NodeActivity.DragNode)
-                        {
-                            var nodes = Selection.objects.Where(x => x is Node)
-                                .Select(x => x as Node);
-                            foreach (var node in nodes) EditorUtility.SetDirty(node);
-                            if (this.GetSettings().autoSave) AssetDatabase.SaveAssets();
+                        else if (currentActivity == NodeActivity.DragNode) {
+                            var nodes = selection;
+                            foreach (var node in nodes) 
+                                node.SetDirty();
+                            if (this.GetSettings().autoSave) 
+                                AssetDatabase.SaveAssets();
                         }
                         else if (!IsHoveringNode)
                         {
@@ -333,14 +338,13 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
                         if (currentActivity == NodeActivity.HoldNode && !(e.control || e.shift))
                         {
                             selectedReroutes.Clear();
-                            AddToEditorSelection(hoveredNode, false);
+                            Select(hoveredNode, false);
                         }
 
                         // If click reroute, select it.
                         if (IsHoveringReroute && !(e.control || e.shift))
                         {
                             selectedReroutes = new List<RerouteReference> {hoveredReroute};
-                            Selection.activeObject = null;
                         }
 
                         Repaint();
@@ -354,7 +358,8 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
                             {
                                 draggedOutputReroutes.Add(WindowToGridPosition(e.mousePosition));
                             }
-                            else if (currentActivity == NodeActivity.DragNode && Selection.activeObject == null &&
+                            else if (currentActivity == NodeActivity.DragNode && 
+                                     selection.Count > 0 &&
                                      selectedReroutes.Count == 1)
                             {
                                 selectedReroutes[0].InsertPoint(selectedReroutes[0].GetPoint());
@@ -371,7 +376,9 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
                             }
                             else if (IsHoveringNode && IsHoveringTitle(hoveredNode))
                             {
-                                if (!Selection.Contains(hoveredNode)) AddToEditorSelection(hoveredNode, false);
+                                if (!hoveredNode.IsSelected()) {
+                                    Select(hoveredNode, false);
+                                }
                                 ShowNodeContextMenu();
                             }
                             else if (!IsHoveringNode)
@@ -418,21 +425,18 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
 
         private void RecalculateDragOffsets(Event current)
         {
-            dragOffset = new Vector2[Selection.objects.Length + selectedReroutes.Count];
+            dragOffset = new Vector2[selection.Count + selectedReroutes.Count];
             // Selected nodes
-            for (var i = 0; i < Selection.objects.Length; i++)
+            for (var i = 0; i < selection.Count; i++)
             {
-                if (Selection.objects[i] is Node)
-                {
-                    var node = Selection.objects[i] as Node;
-                    dragOffset[i] = node.position - WindowToGridPosition(current.mousePosition);
-                }
+                var node = selection[i];
+                dragOffset[i] = node.Position - WindowToGridPosition(current.mousePosition);
             }
 
             // Selected reroutes
             for (var i = 0; i < selectedReroutes.Count; i++)
             {
-                dragOffset[Selection.objects.Length + i] =
+                dragOffset[selection.Count + i] =
                     selectedReroutes[i].GetPoint() - WindowToGridPosition(current.mousePosition);
             }
         }
@@ -444,29 +448,18 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
             PanOffset = Vector2.zero;
         }
 
-        public void CreateNode(Type type, Vector2 position)
+        public INode CreateNode(Type type, Vector2 position)
         {
-            CreateNode(type,ObjectNames.NicifyVariableName(type.Name), position);
+            return CreateNode(type,ObjectNames.NicifyVariableName(type.Name), position);
         }
         
-        public void CreateNode(Type type,string nodeName, Vector2 position)
+        public INode CreateNode(Type type,string nodeName, Vector2 position)
         {
-            if(!PrefabUtility.IsPartOfPrefabInstance(ActiveGraph))
-            {
-                Debug.LogError($"IsPartOfPrefabInstance {ActiveGraph.name}");
-            }
-            if(!PrefabUtility.IsAnyPrefabInstanceRoot(ActiveGraph.gameObject))
-            {
-                Debug.LogError($"IsAnyPrefabInstanceRoot {ActiveGraph.name}");
-            }
-            
-            var node = ActiveGraph.AddNode(type);
-            node.position = position;
-            node.nodeName = nodeName;
-            node.transform.parent = ActiveGraph.transform;
-            
+            var node = ActiveGraph.AddNode(type,nodeName,position);
+
             Save();
-            
+
+            return node;
         }
 
         /// <summary> Remove nodes in the graph in Selection.objects</summary>
@@ -480,87 +473,75 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
             }
 
             selectedReroutes.Clear();
-            foreach (var item in Selection.objects)
+            foreach (var item in selection)
             {
-                if (item is Node node)
-                {
-                    graphEditor.RemoveNode(node);
-                }
+                graphEditor.RemoveNode(item);
             }
         }
 
         /// <summary> Initiate a rename on the currently selected node </summary>
         public void RenameSelectedNode()
         {
-            if (Selection.objects.Length == 1 && Selection.activeObject is Node)
-            {
-                var node = Selection.activeObject as Node;
+            if (selection.Count == 1) {
+                var node = selection.FirstOrDefault();
                 NodeEditor.GetEditor(node).InitiateRename();
             }
         }
 
         /// <summary> Draw this node on top of other nodes by placing it last in the graph.nodes list </summary>
-        public void MoveNodeToTop(Node node)
+        public void MoveNodeToTop(INode node)
         {
             int index;
-            while ((index = ActiveGraph.nodes.IndexOf(node)) != ActiveGraph.nodes.Count - 1)
+            while ((index = ActiveGraph.Nodes.IndexOf(node)) != ActiveGraph.Nodes.Count - 1)
             {
-                ActiveGraph.nodes[index] = ActiveGraph.nodes[index + 1];
-                ActiveGraph.nodes[index + 1] = node;
+                ActiveGraph.Nodes[index] = ActiveGraph.Nodes[index + 1];
+                ActiveGraph.Nodes[index + 1] = node;
             }
         }
 
         /// <summary> Dublicate selected nodes and select the dublicates </summary>
         public void DublicateSelectedNodes()
         {
-            var newNodes = new Object[Selection.objects.Length];
-            var substitutes = new Dictionary<Node, Node>();
-            for (var i = 0; i < Selection.objects.Length; i++)
-            {
-                if (Selection.objects[i] is Node)
-                {
-                    var srcNode = Selection.objects[i] as Node;
-                    if (srcNode.Graph != ActiveGraph) continue; // ignore nodes selected in another graph
-                    var newNode = graphEditor.CopyNode(srcNode);
-                    substitutes.Add(srcNode, newNode);
-                    newNode.position = srcNode.position + new Vector2(30, 30);
-                    newNodes[i] = newNode;
-                }
+            
+            var substitutes = new Dictionary<INode, INode>();
+
+            var srcNodes = selection.ToList();
+            
+            foreach (var srcNode in srcNodes) {
+                if (srcNode.GraphData != ActiveGraph) continue; // ignore nodes selected in another graph
+                var newNode = graphEditor.CopyNode(srcNode);
+                substitutes.Add(srcNode, newNode);
+                newNode.Position = (srcNode.Position + new Vector2(30, 30));
             }
 
             // Walk through the selected nodes again, recreate connections, using the new nodes
-            for (var i = 0; i < Selection.objects.Length; i++)
-            {
-                if (Selection.objects[i] is Node)
+            foreach (var srcNode in srcNodes) {
+
+                if (srcNode.GraphData != ActiveGraph) continue; // ignore nodes selected in another graph
+                
+                foreach (var port in srcNode.Ports)
                 {
-                    var srcNode = Selection.objects[i] as Node;
-                    if (srcNode.graph != ActiveGraph) continue; // ignore nodes selected in another graph
-                    foreach (var port in srcNode.Ports)
+                    for (var c = 0; c < port.ConnectionCount; c++)
                     {
-                        for (var c = 0; c < port.ConnectionCount; c++)
+                        var inputPort = port.Direction == PortIO.Input ? port : port.GetConnection(c);
+                        var outputPort = port.Direction == PortIO.Output
+                            ? port
+                            : port.GetConnection(c);
+
+                        if (substitutes.TryGetValue(inputPort.Node, out var newNodeIn) &&
+                            substitutes.TryGetValue(outputPort.Node, out var  newNodeOut))
                         {
-                            var inputPort = port.Direction == PortIO.Input ? port : port.GetConnection(c);
-                            var outputPort = port.Direction == PortIO.Output
-                                ? port
-                                : port.GetConnection(c);
+                            inputPort  = newNodeIn.GetInputPort(inputPort.ItemName);
+                            outputPort = newNodeOut.GetOutputPort(outputPort.ItemName);
+                        }
 
-                            Node newNodeIn, newNodeOut;
-                            if (substitutes.TryGetValue(inputPort.Node, out newNodeIn) &&
-                                substitutes.TryGetValue(outputPort.Node, out newNodeOut))
-                            {
-                                inputPort = newNodeIn.GetInputPort(inputPort.ItemName);
-                                outputPort = newNodeOut.GetOutputPort(outputPort.ItemName);
-                            }
-
-                            if (!inputPort.IsConnectedTo(outputPort as NodePort)) {
-                                inputPort.Connect(outputPort as NodePort);
-                            }
+                        if (!inputPort.IsConnectedTo(outputPort as NodePort)) {
+                            inputPort.Connect(outputPort as NodePort);
                         }
                     }
                 }
             }
 
-            Selection.objects = newNodes;
         }
 
         /// <summary> Draw a connection as we are dragging it </summary>
@@ -570,8 +551,7 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
             {
                 var col = NodeEditorPreferences.GetTypeColor(draggedOutput.ValueType);
 
-                Rect fromRect;
-                if (!_portConnectionPoints.TryGetValue(draggedOutput.Id, out fromRect)) return;
+                if (!_portConnectionPoints.TryGetValue(draggedOutput.Id, out var fromRect)) return;
                 var from = fromRect.center;
                 col.a = 0.6f;
                 var to = Vector2.zero;
@@ -606,14 +586,13 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
             }
         }
 
-        bool IsHoveringTitle(Node node)
+        bool IsHoveringTitle(INode node)
         {
             var mousePos = Event.current.mousePosition;
             //Get node position
-            var nodePos = GridToWindowPosition(node.position);
+            var nodePos = GridToWindowPosition(node.Position);
             float width;
-            Vector2 size;
-            if (NodeSizes.TryGetValue(node, out size)) width = size.x;
+            if (NodeSizes.TryGetValue(node, out var size)) width = size.x;
             else width = 200;
             var windowRect = new Rect(nodePos, new Vector2(width / Zoom, 30 / Zoom));
             return windowRect.Contains(mousePos);

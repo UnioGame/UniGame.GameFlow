@@ -21,7 +21,7 @@
             this.styleSelector = styleProvider;
         }
         
-        public bool Update(INodeEditorData editor, Node baseNode)
+        public bool Update(INodeEditorData editor, INode baseNode)
         {
 
             DrawPorts(editor);
@@ -78,7 +78,7 @@
                     continue;
                 
                 var portName = bracketsExpr.Replace(portValue.ItemName, string.Empty, 1);
-                var direction = portValue.direction;
+
                 var outputPortName = portName.GetFormatedPortName(PortIO.Output);
                 var inputPortName = portName.GetFormatedPortName(PortIO.Input);
 

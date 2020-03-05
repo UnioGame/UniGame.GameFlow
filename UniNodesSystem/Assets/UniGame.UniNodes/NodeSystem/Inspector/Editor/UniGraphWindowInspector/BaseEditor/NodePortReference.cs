@@ -1,6 +1,7 @@
 namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.BaseEditor
 {
     using Runtime.Core;
+    using Runtime.Interfaces;
     using UnityEngine;
 
     public partial class NodeEditorWindow
@@ -8,7 +9,7 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
         [System.Serializable]
         public class NodePortReference
         {
-            [SerializeField] private Node _node;
+            [SerializeField] private INode _node;
             [SerializeField] private string _name;
 
             public NodePortReference(NodePort nodePort)

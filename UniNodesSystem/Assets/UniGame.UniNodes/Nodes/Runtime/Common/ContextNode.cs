@@ -3,45 +3,43 @@
     using System;
     using System.Collections.Generic;
     using NodeSystem.Runtime.Attributes;
+    using NodeSystem.Runtime.Core;
+    using NodeSystem.Runtime.Interfaces;
     using UniGreenModules.UniCore.Runtime.Interfaces;
-    using UniGreenModules.UniCore.Runtime.ProfilerTools;
+    using UniGreenModules.UniCore.Runtime.Interfaces.Rx;
     using UniGreenModules.UniCore.Runtime.Rx.Extensions;
     using UniRx;
 
     [Serializable]
     [HideNode]
-    public class ContextNode : 
-        TypeBridgeNode<IContext>, 
+    public class ContextNode : UniNode,
+        IReadonlyRecycleReactiveProperty<IContext>, 
         IMessageBroker
     {
-        /// <summary>
-        /// subscribe to selected data from active context value
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public IObservable<T> Receive<T>()
-        {
-            return Source.
-                Where(x => x != null).
-                Select(x => x.Receive<T>()).
-                Switch();
+        private SContextNode contextNode;
+        
+
+        public IDisposable Subscribe(IObserver<IContext> observer) => 
+            contextNode.Subscribe(observer);
+
+        public IContext Value => contextNode.Value;
+        
+        public bool HasValue => contextNode.HasValue;
+
+        public void Finish() => contextNode.Finish();
+        
+        public void Publish<T>(T message) => contextNode.Publish(message);
+
+        public IObservable<T> Receive<T>() => contextNode.Receive<T>();
+        
+        public IReadOnlyReactiveProperty<IContext> Source => contextNode.Source;
+        
+        protected override IProxyNode CreateInnerNode()
+        {  
+            contextNode = new SContextNode(id, nodeName, ports);
+            return contextNode;
         }
         
-        /// <summary>
-        /// data publishing to current context
-        /// </summary>
-        /// <param name="data"></param>
-        /// <typeparam name="T"></typeparam>
-        public void Publish<T>(T data)
-        {
-            if (Source.Value == null) {
-                GameLog.LogWarning($"You are try to Publish DATA {data} to {graph.name}:{ItemName} while context is NULL");
-                return;
-            }
-            Source.Value.Publish(data);
-        }
-
-
         protected override void UpdateCommands(List<ILifeTimeCommand> nodeCommands)
         {
             base.UpdateCommands(nodeCommands);
@@ -53,6 +51,5 @@
         }
 
         protected virtual void OnContextActivate(IContext context) { }
-        
     }
 }

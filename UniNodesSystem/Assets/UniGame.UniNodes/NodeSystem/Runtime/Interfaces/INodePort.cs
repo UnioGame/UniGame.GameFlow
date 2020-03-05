@@ -22,7 +22,7 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
         /// <summary> Is this port connected to anytihng? </summary>
         bool IsConnected { get; }
 
-        Node Node { get; }
+        INode Node { get; }
 
         int UpdateId();
 
@@ -63,6 +63,6 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
         void MoveConnections(NodePort targetPort);
 
         /// <summary> Swap connected nodes from the old list with nodes from the new list </summary>
-        void Redirect(List<Node> oldNodes, List<Node> newNodes);
+        void Redirect(List<INode> oldNodes, List<INode> newNodes);
     }
 }

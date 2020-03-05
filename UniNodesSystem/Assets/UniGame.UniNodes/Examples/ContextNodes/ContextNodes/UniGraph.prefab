@@ -15,6 +15,8 @@ GameObject:
   - component: {fileID: 6247017870777286962}
   - component: {fileID: 6247017870777286965}
   - component: {fileID: 6410009113510772399}
+  - component: {fileID: 6247017870777286961}
+  - component: {fileID: 629425218373224180}
   m_Layer: 0
   m_Name: UniGraph
   m_TagString: Untagged
@@ -55,16 +57,66 @@ MonoBehaviour:
   ports:
     keys: []
     values: []
-  graph: {fileID: 1558389282463737838}
-  serializableCommands: []
-  uniqueId: 12
+  uniqueId: 18
   nodes:
   - {fileID: 6247017870777286964}
   - {fileID: 6247017870777286963}
   - {fileID: 6247017870777286962}
   - {fileID: 6247017870777286965}
+  - {fileID: 6247017870777286961}
+  - {fileID: 629425218373224180}
+  serializableNodes:
+  - id: 0
   references:
     version: 1
+    00000000:
+      type: {class: SLogNode, ns: UniGame.UniNodes.Nodes.Runtime.SerializableNodes,
+        asm: unigame.nodesystem.commonnodes}
+      data:
+        id: 15
+        width: 220
+        nodeName: S Log Node
+        position: {x: 282.5, y: 55}
+        ports:
+          keys:
+          - SintPort
+          - SintPortOut
+          values:
+          - id: 17
+            nodeId: 15
+            fieldName: SintPort
+            direction: 0
+            connectionType: 0
+            showBackingValue: 2
+            isDynamic: 1
+            isInstancePortList: 0
+            portValue:
+              name: SintPort
+              serializedValueTypes:
+              - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+              broadcastersCount: 0
+            connections: []
+            instancePortList: 0
+          - id: 18
+            nodeId: 15
+            fieldName: SintPortOut
+            direction: 1
+            connectionType: 0
+            showBackingValue: 2
+            isDynamic: 1
+            isInstancePortList: 0
+            portValue:
+              name: SintPortOut
+              serializedValueTypes:
+              - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+              broadcastersCount: 0
+            connections: []
+            instancePortList: 0
+        serializableCommands: []
+        SintValue: 0
+        SfloatValue: 0
+        SintPort: 0
+        SintPortOut: 0
 --- !u!114 &6247017870777286964
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -87,7 +139,6 @@ MonoBehaviour:
     values:
     - id: 3
       nodeId: 2
-      node: {fileID: 6247017870777286964}
       fieldName: contextValue
       direction: 1
       connectionType: 0
@@ -105,15 +156,11 @@ MonoBehaviour:
         nodeId: 6
         reroutePoints: []
         portId: 8
-        node: {fileID: 6247017870777286964}
       - fieldName: '[in]context'
         nodeId: 9
         reroutePoints: []
         portId: 11
-        node: {fileID: 6247017870777286964}
       instancePortList: 0
-  graph: {fileID: 1558389282463737838}
-  serializableCommands: []
   contextValue:
     sendByBind: 1
     nodeId: 2
@@ -122,8 +169,6 @@ MonoBehaviour:
     value: 0
   intValue: 1
   floatValule: 1
-  references:
-    version: 1
 --- !u!114 &6247017870777286963
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -146,7 +191,6 @@ MonoBehaviour:
     values:
     - id: 5
       nodeId: 4
-      node: {fileID: 6247017870777286963}
       fieldName: contextValue
       direction: 1
       connectionType: 0
@@ -164,15 +208,11 @@ MonoBehaviour:
         nodeId: 9
         reroutePoints: []
         portId: 11
-        node: {fileID: 6247017870777286963}
       - fieldName: '[in]context'
         nodeId: 6
         reroutePoints: []
         portId: 8
-        node: {fileID: 6247017870777286963}
       instancePortList: 0
-  graph: {fileID: 1558389282463737838}
-  serializableCommands: []
   contextValue:
     sendByBind: 1
     nodeId: 4
@@ -181,8 +221,6 @@ MonoBehaviour:
     value: 0
   intValue: 5
   floatValule: 5
-  references:
-    version: 1
 --- !u!114 &6247017870777286962
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -198,7 +236,7 @@ MonoBehaviour:
   id: 6
   width: 220
   nodeName: Float Contex Resource Node
-  position: {x: 552, y: 56}
+  position: {x: 552, y: 184}
   ports:
     keys:
     - '[out]context'
@@ -206,7 +244,6 @@ MonoBehaviour:
     values:
     - id: 7
       nodeId: 6
-      node: {fileID: 6247017870777286962}
       fieldName: '[out]context'
       direction: 1
       connectionType: 0
@@ -221,7 +258,6 @@ MonoBehaviour:
       instancePortList: 0
     - id: 8
       nodeId: 6
-      node: {fileID: 6247017870777286962}
       fieldName: '[in]context'
       direction: 0
       connectionType: 0
@@ -237,20 +273,14 @@ MonoBehaviour:
         nodeId: 2
         reroutePoints: []
         portId: 3
-        node: {fileID: 6247017870777286962}
       - fieldName: contextValue
         nodeId: 4
         reroutePoints: []
         portId: 5
-        node: {fileID: 6247017870777286962}
       instancePortList: 0
-  graph: {fileID: 1558389282463737838}
-  serializableCommands: []
   distinctInput: 1
   currentIntSummValue: 0
   lastIntValue: 0
-  references:
-    version: 1
 --- !u!114 &6247017870777286965
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -274,7 +304,6 @@ MonoBehaviour:
     values:
     - id: 10
       nodeId: 9
-      node: {fileID: 6247017870777286965}
       fieldName: '[out]context'
       direction: 1
       connectionType: 0
@@ -289,7 +318,6 @@ MonoBehaviour:
       instancePortList: 0
     - id: 11
       nodeId: 9
-      node: {fileID: 6247017870777286965}
       fieldName: '[in]context'
       direction: 0
       connectionType: 0
@@ -305,20 +333,14 @@ MonoBehaviour:
         nodeId: 2
         reroutePoints: []
         portId: 3
-        node: {fileID: 6247017870777286965}
       - fieldName: contextValue
         nodeId: 4
         reroutePoints: []
         portId: 5
-        node: {fileID: 6247017870777286965}
       instancePortList: 0
-  graph: {fileID: 1558389282463737838}
-  serializableCommands: []
   distinctInput: 1
   currentIntSummValue: 0
   lastIntValue: 0
-  references:
-    version: 1
 --- !u!114 &6410009113510772399
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -332,3 +354,83 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   graph: {fileID: 0}
+--- !u!114 &6247017870777286961
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2965885517192480614}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23f9640bdcee91f44b837897ec957069, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 13
+  width: 220
+  nodeName: Log Node
+  position: {x: 552, y: 56}
+  ports:
+    keys:
+    - log
+    values:
+    - id: 14
+      nodeId: 13
+      fieldName: log
+      direction: 0
+      connectionType: 0
+      showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      portValue:
+        name: log
+        serializedValueTypes: []
+        broadcastersCount: 0
+      connections:
+      - fieldName: contextValue
+        nodeId: 2
+        reroutePoints: []
+        portId: 3
+      instancePortList: 0
+  mode: 1
+  message: LogNode
+--- !u!114 &629425218373224180
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2965885517192480614}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23f9640bdcee91f44b837897ec957069, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 13
+  width: 220
+  nodeName: Log Node
+  position: {x: 552, y: 56}
+  ports:
+    keys:
+    - log
+    values:
+    - id: 14
+      nodeId: 13
+      fieldName: log
+      direction: 0
+      connectionType: 0
+      showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      portValue:
+        name: log
+        serializedValueTypes: []
+        broadcastersCount: 0
+      connections:
+      - fieldName: contextValue
+        nodeId: 2
+        reroutePoints: []
+        portId: 3
+      instancePortList: 0
+  mode: 1
+  message: LogNode

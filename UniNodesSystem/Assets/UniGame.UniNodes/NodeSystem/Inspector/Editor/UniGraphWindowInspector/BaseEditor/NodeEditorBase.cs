@@ -3,21 +3,25 @@
     using System;
     using System.Collections.Generic;
     using Interfaces;
+    using Runtime.Core;
+    using Runtime.Core.Nodes;
+    using Runtime.Interfaces;
     using UnityEditor;
+    using UnityEngine;
     using Object = UnityEngine.Object;
 
     /// <summary> Handles caching of custom editor classes and their target types. Accessible with GetEditor(Type type) </summary>
     public class NodeEditorBase<T, A, K> 
         where A : Attribute, INodeEditorAttribute
         where T : NodeEditorBase<T, A, K>
-        where K : Object
+        where K : class,INode
     {
         #region static data
 
         /// <summary> Custom editors defined with [CustomNodeEditor] </summary>
         private static Dictionary<Type, Type> _editorsTypesMap;
 
-        private static Dictionary<K, T> editors = new Dictionary<K, T>();
+        private static Dictionary<object, T> editors = new Dictionary<object, T>();
 
         private static Dictionary<Type, Type> editorTypes
         {
@@ -30,42 +34,74 @@
 
                 return _editorsTypesMap;
             }
-            set { _editorsTypesMap = value; }
+            set => _editorsTypesMap = value;
         }
 
-
-        public static T GetEditor(K target)
+        public static T GetEditor(INode node)
         {
-            if (target == null) return null;
+            if (node == null) return null;
+            if (editors.TryGetValue(node, out var editorBase))
+                return editorBase;
+            return null;
+        }
 
-            if (!editors.TryGetValue(target, out var editor))
+        public static T GetEditor(EditorNode target)
+        {
+            if (!(target.Node is K node)) return null;
+
+            if (!editors.TryGetValue(node, out var editor))
             {
-                var type = target.GetType();
+                var type = node.GetType();
                 var editorType = GetEditorType(type);
+                
                 editor = Activator.CreateInstance(editorType) as T;
-                editor.target = target;
-                editor.serializedObject = new SerializedObject(target);
-                editors.Add(target, editor);
+                editors.Add(node, editor);
                 editor.OnEnable();
             }
 
-            if (editor.target == null) editor.target = target;
-            if (editor.serializedObject == null) editor.serializedObject = new SerializedObject(target);
+            if (editor.Node == null ) {
+                editor.Initialize(target,node);
+            }
 
             return editor;
         }
 
-        #endregion
-
-
-        public virtual void OnEnable()
+        public static Object CreateTargetAsset(INode targetItem)
         {
-            target = serializedObject.targetObject as K;
+            var assetTarget = targetItem as Object;
+            if (assetTarget == null)
+            {
+                return null;
+                var assetItem = ScriptableObject.
+                    CreateInstance(typeof(SerializableNodeContainer)) as SerializableNodeContainer;
+                assetItem.Node = targetItem as SerializableNode;
+                assetTarget      = assetItem;
+            }
+
+            return assetTarget;
         }
 
-        public K target;
-        public SerializedObject serializedObject;
 
+        #endregion
+        
+        public K Node;
+        public EditorNode EditorData;
+        
+        public SerializedObject SerializedObject { get; protected set; }
+        
+        public void Initialize(EditorNode editorNode, K node)
+        {
+            Node = node;
+            EditorData = editorNode;
+            if(node is Object target)
+                SerializedObject = new SerializedObject(target);
+        }
+        
+        public virtual void OnEnable()
+        {
+            Node = Node ?? SerializedObject?.targetObject as K;
+        }
+        
         private static Type GetEditorType(Type type)
         {
             if (type == null) return null;

@@ -7,7 +7,7 @@
     {
         public Event        Event;
         public Vector2      MousePosition;
-        public List<Object> PreSelection;
+        public List<int>    PreSelection;
         public EventType    EventType;
     }
 }

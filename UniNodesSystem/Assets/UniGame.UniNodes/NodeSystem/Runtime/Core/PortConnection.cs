@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using Runtime.Interfaces;
     using UnityEngine;
 
     [Serializable]
@@ -13,15 +14,17 @@
 
         [SerializeField] public int nodeId;
 
-        /// <summary> Extra connection path points for organization </summary>
+        /// <summary>
+        /// Extra connection path points for organization
+        /// </summary>
         [SerializeField] public List<Vector2> reroutePoints = new List<Vector2>();
 
         [SerializeField] public int portId;
-        
-        [SerializeField] private Node node;
-        
+    
         #endregion
-
+     
+        [NonSerialized] private INode node;
+        
         [NonSerialized] private NodePort port;
 
         public NodePort Port => GetPort();
@@ -34,23 +37,25 @@
             Initialize(port.node,id,port.fieldName);
         }
 
-        public void Initialize(Node data,int id, string portName)
+        public void Initialize(INode data,int id, string portName)
         {
             nodeId = id;
             fieldName = portName;
             Initialize(data);
         }
         
-        public void Initialize(Node data)
+        public void Initialize(INode data)
         {
             node   = data;
         }
 
-        /// <summary> Returns the port that this <see cref="PortConnection"/> points to </summary>
+        /// <summary>
+        /// Returns the port that this <see cref="PortConnection"/> points to
+        /// </summary>
         public NodePort GetPort()
         {
             //if (port != null) return port;
-            var targetNode = node.Graph.GetNode(nodeId);
+            var targetNode = node.GraphData.GetNode(nodeId);
             if (targetNode == null)
                 return null;
             port = targetNode.GetPort(fieldName);

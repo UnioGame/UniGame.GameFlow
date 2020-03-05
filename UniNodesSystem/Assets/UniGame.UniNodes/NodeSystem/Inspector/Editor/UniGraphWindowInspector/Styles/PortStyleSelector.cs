@@ -2,6 +2,7 @@
 {
     using BaseEditor;
     using Runtime.Core;
+    using Runtime.Interfaces;
     using UnityEngine;
 
     public class PortStyleSelector : IPortStyleProvider
@@ -10,9 +11,8 @@
         public virtual NodeGuiLayoutStyle Select(NodePort port)
         {
             var portStyle = NodeEditorGUILayout.GetDefaultPortStyle(port);
-            var uniNode = port.Node as UniNode;
-            
-            if (!uniNode) return portStyle;
+
+            if (!(port.Node is INode uniNode)) return portStyle;
 
             var portValue = port.Value;
             var hasData = portValue != null && portValue.HasValue;

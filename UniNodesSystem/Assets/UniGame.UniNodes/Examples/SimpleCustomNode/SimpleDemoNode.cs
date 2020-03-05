@@ -15,10 +15,10 @@ namespace UniGame.UniNodes.Examples.SimpleCustomNode
     
         public int intDataTwo;
 
-        [PortValue(PortIO.Input)]
+        [Port(PortIO.Input)]
         public int inInt;
 
-        [PortValue(PortIO.Output)] 
+        [Port(PortIO.Output)] 
         public float outInt;
 
         [ReactivePort()]

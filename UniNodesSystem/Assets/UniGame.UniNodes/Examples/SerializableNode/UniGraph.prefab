@@ -1,0 +1,170 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8121955986882669422
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3573533204080573478}
+  - component: {fileID: 4748815339571759597}
+  - component: {fileID: 7160064982076870940}
+  - component: {fileID: 2126589237147687122}
+  m_Layer: 0
+  m_Name: UniGraph
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3573533204080573478
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8121955986882669422}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4748815339571759597
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8121955986882669422}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 782945db79ce44748b3f294e0edf364e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 2
+  width: 220
+  nodeName: New Game Object
+  position: {x: 0, y: 0}
+  ports:
+    keys:
+    - input
+    values:
+    - id: 3
+      nodeId: 2
+      fieldName: input
+      direction: 0
+      connectionType: 0
+      showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      portValue:
+        name: input
+        serializedValueTypes: []
+        broadcastersCount: 0
+      connections: []
+      instancePortList: 0
+  uniqueId: 54
+  nodes:
+  - {fileID: 2126589237147687122}
+  serializableNodes:
+  - id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: SLogNode, ns: UniGame.UniNodes.Nodes.Runtime.SerializableNodes,
+        asm: unigame.nodesystem.commonnodes}
+      data:
+        id: 26
+        width: 220
+        nodeName: S Log Node
+        position: {x: 488, y: -104}
+        ports:
+          keys:
+          - log
+          values:
+          - id: 52
+            nodeId: 26
+            fieldName: log
+            direction: 0
+            connectionType: 0
+            showBackingValue: 2
+            isDynamic: 1
+            isInstancePortList: 0
+            portValue:
+              name: log
+              serializedValueTypes: []
+              broadcastersCount: 0
+            connections:
+            - fieldName: contextValue
+              nodeId: 53
+              reroutePoints: []
+              portId: 54
+            instancePortList: 0
+        serializableCommands: []
+        mode: 0
+        message: SLOG
+--- !u!114 &7160064982076870940
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8121955986882669422}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff87142bf9c884741bbcd295bab90ce7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  graph: {fileID: 0}
+--- !u!114 &2126589237147687122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8121955986882669422}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7817cc805a3da8143902915bc1728ac3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 53
+  width: 220
+  nodeName: Demo Context Source Node
+  position: {x: 72, y: -40}
+  ports:
+    keys:
+    - contextValue
+    values:
+    - id: 54
+      nodeId: 53
+      fieldName: contextValue
+      direction: 1
+      connectionType: 0
+      showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      portValue:
+        name: contextValue
+        serializedValueTypes:
+        - UniGreenModules.UniCore.Runtime.Interfaces.IContext, unigame.unicore.runtime,
+          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        broadcastersCount: 0
+      connections:
+      - fieldName: log
+        nodeId: 26
+        reroutePoints: []
+        portId: 52
+      instancePortList: 0
+  contextValue:
+    sendByBind: 1
+    nodeId: 53
+    portName: contextValue
+  clickToFireContext:
+    value: 0
+  intValue: 1
+  floatValule: 1
