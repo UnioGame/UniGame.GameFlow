@@ -121,7 +121,6 @@
             if (valueTypeFilter != null && 
                 valueTypeFilter.Count != 0  && 
                 !valueTypeFilter.Contains(typeof(TData))) {
-                GameLog.Log($"PUBLISH: You try to Publish wrong type value {nameof(TData)} into {ItemName}");
                 return;
             }
             
