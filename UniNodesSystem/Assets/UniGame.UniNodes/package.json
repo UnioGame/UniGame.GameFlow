@@ -4,7 +4,7 @@
   "displayName": "UniGame Nodes System Package",
   "description": "Nodes System for Unity. Include base nodes realisation",
   "unity": "2019.2",
-  "version": "1.3.7",
+  "version": "1.3.10",
   "homepage": "https://github.com/Mefodei/UniGameFlow#readme",
   "keywords": [
     "nodes",
@@ -14,13 +14,13 @@
   "dependencies": {
     "com.unigame.neuecc.unirx": "7.1.1",
     "com.unigame.neuecc.unirx.async": "1.2.0",
-    "com.unigame.unicore": "1.5.2",
-    "com.unigame.addressablestools": "1.2.3",
-    "com.unigame.contextdata": "1.3.1",
-    "com.unigame.uniroutine": "1.5.20",
-    "com.unigame.uisystem": "0.1.60",
+    "com.unigame.unicore": "1.5.5",
+    "com.unigame.addressablestools": "1.2.6",
+    "com.unigame.contextdata": "1.3.4",
+    "com.unigame.uniroutine": "1.5.23",
+    "com.unigame.uisystem": "0.1.63",
     "com.unity.addressables": "1.6.2",
-    "com.unigame.serializablecontext": "1.2.3"
+    "com.unigame.serializablecontext": "1.2.6"
   },
   "repository": {
     "type": "git",
