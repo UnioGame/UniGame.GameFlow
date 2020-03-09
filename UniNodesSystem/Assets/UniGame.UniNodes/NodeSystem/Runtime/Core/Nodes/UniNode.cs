@@ -39,11 +39,8 @@
         public sealed override void Initialize(IGraphData graphData)
         {
             graph = graphData;
-            
             SNode.Bind(OnInitialize, UpdateCommands, OnExecute);
-            
             SNode.Initialize(graphData);
-            
         }
 
         public bool AddPortValue(INodePort portValue) => SNode.AddPortValue(portValue);
@@ -56,7 +53,12 @@
         /// <summary>
         /// start node execution
         /// </summary>
-        public void Execute() => SNode.Execute();
+        public void Execute()
+        {
+            Initialize(GraphData);
+            
+            SNode.Execute();
+        }
 
         /// <summary>
         /// stop node execution
