@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88162cde27b3f0944a0ce6b0e05faf6f, type: 3}
   m_Name: 6
   m_EditorClassIdentifier: unigame.unieditortools:UniGreenModules.UniGame.Core.EditorTools.Editor.Controls.AssetDropDownControl.Examples:DemoAssetDropDownAsset
-  OneInt: 0
-  FloatValue: 0
-  TextureValue: {fileID: 0}
+  OneInt: 23232
+  FloatValue: 4444
+  TextureValue: {fileID: 2800000, guid: 286de6f385363d0479131d83431aee73, type: 3}
   Values: 0500000004000000030000000200000001000000
