@@ -10,6 +10,7 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.ContentContextWindow
     using UniGreenModules.UniCore.Runtime.Interfaces.Rx;
     using UniGreenModules.UniGame.Core.EditorTools.Editor.DrawersTools;
     using UniRx;
+    using UnityEditor;
     using UnityEditor.UIElements;
     using UnityEngine.UIElements;
     using Object = Object;
@@ -32,7 +33,7 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.ContentContextWindow
             return CreateVisualElement(data);
         }
         
-        public VisualElement CreateObjectView(Object target)
+        public VisualElement CreateObjectView(Object target,string label = "")
         {
             if(target == null) return new ObjectField();
 
@@ -44,15 +45,22 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.ContentContextWindow
                 allowSceneObjects = true,
                 visible = true,
             };
+            if (string.IsNullOrEmpty(label) == false) {
+                field.label = label;
+            }
             
             return field;
             
         }
         
-        public VisualElement CreateUnityObjectView(Object asset)
+        public VisualElement CreateUnityObjectView(Object asset,string label = "")
         {
             if (asset == null) return null;
-            var element = new IMGUIContainer(() => asset.DrawOdinPropertyInspector()) {
+            var foldOut = new []{false};
+            var element = new IMGUIContainer(() => {
+                foldOut[0] = asset.DrawOdinPropertyWithFoldout(foldOut[0],label);
+            }) 
+            {
                 style = {
                     minHeight = 20
                 }
@@ -62,8 +70,7 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.ContentContextWindow
         
         public VisualElement CreateSpriteView(Sprite sprite)
         {
-            if (sprite == null) return null;
-            return CreateTextureView(sprite.texture);
+            return sprite == null ? null : CreateTextureView(sprite.texture);
         }
         
         public VisualElement CreateTextureView(Texture asset)
@@ -94,14 +101,22 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.ContentContextWindow
             }
             
             var container = new VisualElement();
-            var fields = type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            var fields = type.GetFields(
+                BindingFlags.Instance | 
+                BindingFlags.Public | 
+                BindingFlags.NonPublic |
+                BindingFlags.Default);
+            
             foreach (var field in fields) {
                 var value = field.GetValue(target);
                 var element = CreateVisualElement(value);
                 if(element == null) continue;
 
+                var foldout = CreateFoldout($"{field.Name} [{field.FieldType}]");
                 element.name = field.Name;
-                container.Add(element);
+                
+                foldout.Add(element);
+                container.Add(foldout);
             }
 
             return container;
@@ -124,13 +139,8 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.ContentContextWindow
 
                 var value     = objectValue.GetValue();
                 var valueType = value?.GetType();
-                
-                var foldout = new Foldout() {
-                    text  = $"[Registered Type :{type.Name}] : [Value Type :{valueType?.Name}]",
-                    style = {
-                        paddingLeft = 4,
-                    }
-                };
+
+                var foldout = CreateFoldout($"[Registered Type :{type.Name}] : [Value Type :{valueType?.Name}]");
 
                 foldout.Add(foldOutItems);
                 container.Add(foldout);
@@ -162,12 +172,7 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.ContentContextWindow
                 if (element == null) continue;
                 
                 var label = $"Item {index++}";
-                var foldout = new Foldout() {
-                    text = $"[{label} : {value.GetType().Name}]",
-                    style = {
-                        paddingLeft = 4,
-                    }
-                };
+                var foldout = CreateFoldout($"[{label} : {value.GetType().Name}]");
                 
                 container.Add(foldout);
                 foldout.Add(element);
@@ -179,6 +184,17 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.ContentContextWindow
         }
    
         #region private methods
+
+        private Foldout CreateFoldout(string label, int marginLeft = 20)
+        {
+            var foldout = new Foldout() {
+                text = label,
+                style = {
+                    marginLeft = marginLeft,
+                }
+            };
+            return foldout;
+        }
         
         private Dictionary<Type, Func<object,VisualElement>> CreateDrawers()
         {

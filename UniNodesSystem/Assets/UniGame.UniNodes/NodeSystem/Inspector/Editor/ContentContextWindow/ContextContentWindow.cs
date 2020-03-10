@@ -59,7 +59,6 @@
                     backgroundColor = new StyleColor(new Color(0.5f,0.5f,0.5f)),
                 },
                 showVertical = true,
-                
             };
             rootVisualElement.Add(scrollView);
         }
