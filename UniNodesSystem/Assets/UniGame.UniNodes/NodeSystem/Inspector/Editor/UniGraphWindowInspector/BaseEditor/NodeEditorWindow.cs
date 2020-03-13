@@ -334,8 +334,8 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
             activeObject = new SerializedObject(nodeGraph);
             
             var prefabResource = nodeGraph.GetPrefabDefinition();
-            if (prefabResource.IsInstance)
-                return nodeGraph;
+            // if (prefabResource.IsInstance)
+            //     return nodeGraph;
 
             prefabResource.SavePrefab();
 
