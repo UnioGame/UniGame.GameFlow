@@ -15,6 +15,8 @@ using UnityEngine;
 
 namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
 {
+    using UniCore.Runtime.ProfilerTools;
+
     [Serializable]
     public class SNode : SerializableNode, IProxyNode
     {
@@ -178,7 +180,7 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
             }
 
             removedPorts.ForEach(RemovePort);
-            removedPorts.DespawnCollection();
+            removedPorts.Despawn();
 
             for (int i = 0; i < Ports.Count; i++) {
                 var port = Ports[i];

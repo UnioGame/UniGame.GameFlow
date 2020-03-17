@@ -2,6 +2,7 @@
 {
     using Context;
     using GameFlow.Runtime;
+    using UniCore.Runtime.ProfilerTools;
     using UniGreenModules.UniCore.Runtime.Attributes;
     using UniGreenModules.UniCore.Runtime.DataFlow.Interfaces;
     using UniGreenModules.UniCore.Runtime.Interfaces;

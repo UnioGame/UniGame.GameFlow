@@ -113,7 +113,7 @@
                 items.Add(connection);
             }
             
-            connections.DespawnCollection();
+            connections.Despawn();
             
             return items;
             
@@ -133,7 +133,7 @@
                 items.Add(node);
             }
             
-            connections.DespawnCollection();
+            connections.Despawn();
             
             return items;
         }
