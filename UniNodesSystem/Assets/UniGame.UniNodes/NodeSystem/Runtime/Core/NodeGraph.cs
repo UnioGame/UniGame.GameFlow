@@ -36,6 +36,9 @@
         public List<INode> serializableNodes = new List<INode>();
 
         #endregion
+
+        [NonSerialized]
+        private GraphData _graphMap;
         
         [NonSerialized] 
         private Dictionary<int, INode> nodesCache;
@@ -232,7 +235,7 @@
             }
             return node;
         }
-        
+
         private void Awake()
         {
             Validate();

@@ -9,6 +9,8 @@
     {
         List<INode> Nodes { get; }
 
+        IGraphData GraphData { get; }
+
         /// <summary> Add a node to the graph by type </summary>
         T AddNode<T>() 
             where T : class, INode;

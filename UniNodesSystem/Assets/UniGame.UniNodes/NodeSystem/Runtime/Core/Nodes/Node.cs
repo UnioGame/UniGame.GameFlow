@@ -5,12 +5,11 @@
     using System.Diagnostics;
     using Attributes;
     using Interfaces;
+    using Nodes;
     using Runtime.Interfaces;
     using UniCore.Runtime.ProfilerTools;
     using UniGreenModules.UniCore.Runtime.Attributes;
-    using UniGreenModules.UniCore.Runtime.ProfilerTools;
     using UnityEngine;
-    using UUniGame.UniNodes.NodeSystem.Runtime.Core.Nodes;
     using Debug = UnityEngine.Debug;
 
     [Serializable]
@@ -164,7 +163,7 @@
                 return ports[fieldName];
             }    
 
-            var port = new NodePort(this,fieldName, direction, connectionType,showBackingValue,types);
+            var port = new NodePort(GraphData.GetId(),this,fieldName, direction, connectionType,showBackingValue,types);
             port.Initialize(this);
             
             ports.Add(fieldName, port);

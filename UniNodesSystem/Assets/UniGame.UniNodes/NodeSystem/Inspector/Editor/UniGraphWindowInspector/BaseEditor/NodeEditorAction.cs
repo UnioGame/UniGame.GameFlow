@@ -136,19 +136,19 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
                                 }
 
                                 foreach (var output in node.Outputs) {
-                                    if (PortConnectionPoints.TryGetValue(output.Id, out var rect)) {
+                                    if (PortConnectionPoints.TryGetValue(output, out var rect)) {
                                         rect.position                   += offset;
-                                        PortConnectionPoints[output.Id] =  rect;
+                                        PortConnectionPoints[output] =  rect;
                                     }
                                 }
 
                                 foreach (var input in node.Inputs) {
-                                    if (!PortConnectionPoints.TryGetValue(input.Id, out var rect)) {
+                                    if (!PortConnectionPoints.TryGetValue(input, out var rect)) {
                                         continue;
                                     }
 
                                     rect.position                  += offset;
-                                    PortConnectionPoints[input.Id] =  rect;
+                                    PortConnectionPoints[input] =  rect;
                                 }
                             }
 
@@ -544,14 +544,16 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
 
         }
 
-        /// <summary> Draw a connection as we are dragging it </summary>
+        /// <summary>
+        /// Draw a connection as we are dragging it
+        /// </summary>
         public void DrawDraggedConnection()
         {
             if (IsDraggingPort)
             {
                 var col = NodeEditorPreferences.GetTypeColor(draggedOutput.ValueType);
 
-                if (!_portConnectionPoints.TryGetValue(draggedOutput.Id, out var fromRect)) return;
+                if (!_portConnectionPoints.TryGetValue(draggedOutput, out var fromRect)) return;
                 var from = fromRect.center;
                 col.a = 0.6f;
                 var to = Vector2.zero;
@@ -562,7 +564,8 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
                     from = to;
                 }
 
-                to = draggedOutputTarget!=null && PortConnectionPoints.TryGetValue(draggedOutputTarget.Id, out var targetRect) ?
+                to = draggedOutputTarget!=null && 
+                     PortConnectionPoints.TryGetValue(draggedOutputTarget, out var targetRect) ?
                      targetRect.center : 
                      WindowToGridPosition(Event.current.mousePosition);
   

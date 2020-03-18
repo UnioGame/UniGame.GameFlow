@@ -22,31 +22,7 @@
         public const string OutputTriggerPrefix = "[out]";       
         
         public static Func<string, string[]> portNameCache = MemorizeTool.Create((string x) => new string[2]);
-        
-        public static List<TTarget> GetOutputConnections<TTarget>(this INode node)
-            where TTarget :Node
-        {
-            var items = ClassPool.Spawn<List<TTarget>>();
-            
-            foreach (var nodeOutput in node.Outputs)
-            {
-                var connectedNode = nodeOutput.GetConnectedNode<TTarget>();
-                if(connectedNode == null)
-                    continue;
-                items.Add(connectedNode);
-            }
-
-            return items;
-        }
-
-            
-        public static (IPortValue inputValue, IPortValue outputValue) 
-            CreatePortPair(this IUniNode node, string outputPortName, bool connectInOut = false)
-        {
-            var inputName = outputPortName.GetFormatedPortName(PortIO.Input);
-            return node.CreatePortPair(inputName, outputPortName, connectInOut);
-        }
-
+   
 #region port names
         
         private static string GetFormatedInputPortName(this string portName)
@@ -95,47 +71,6 @@
                 inputValue.Bind(outputValue);
         
             return (inputValue,outputValue);
-        }
-        
-        public static List<INodePort> GetConnectionToNodes<TTarget>(this INodePort port)
-            where TTarget :Node
-        {
-            
-            var items = ClassPool.Spawn<List<INodePort>>();
-            
-            var connections = port.GetConnections();
-            
-            foreach (var connection in connections)
-            {
-                if(!(connection.Node is TTarget node))
-                    continue;
-                
-                items.Add(connection);
-            }
-            
-            connections.Despawn();
-            
-            return items;
-            
-        }
-        
-        public static List<TTarget> GetConnectedNodes<TTarget>(this INodePort port)
-            where TTarget :IUniNode
-        {
-            var items = ClassPool.Spawn<List<TTarget>>();
-            
-            var connections = port.GetConnections();
-            
-            foreach (var connection in connections)
-            {
-                if(!(connection.Node is TTarget node))
-                    continue;
-                items.Add(node);
-            }
-            
-            connections.Despawn();
-            
-            return items;
         }
 
         public static TValue GetConnectedNode<TValue>(this INodePort port)

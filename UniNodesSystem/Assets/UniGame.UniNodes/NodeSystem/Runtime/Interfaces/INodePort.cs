@@ -1,11 +1,12 @@
 namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
 {
+    using System;
     using System.Collections.Generic;
     using Core;
-    using Core.Interfaces;
+    using UniGreenModules.UniCore.Runtime.Interfaces;
     using UnityEngine;
 
-    public interface INodePort : IGraphItem
+    public interface INodePort : INamedItem
     {
 
         int ConnectionCount { get; }
@@ -14,6 +15,8 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
         INodePort Connection { get; }
 
         IPortValue Value { get; }
+
+        IReadOnlyList<IPortConnection> Connections { get; }
 
         PortIO Direction { get; }
         
@@ -24,26 +27,32 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
 
         INode Node { get; }
 
-        int UpdateId();
+        int NodeId { get; }
 
+        IReadOnlyList<Type> ValueTypes { get; }
+        
         /// <summary> Checks all connections for invalid references, and removes them. </summary>
         void VerifyConnections();
 
+        IPortConnection CreateConnection(int nodeId,string portName);
+        
+        void RemoveConnection(IPortConnection connection);
+        
         /// <summary> Connect this <see cref="NodePort"/> to another </summary>
         /// <param name="port">The <see cref="NodePort"/> to connect to</param>
-        void Connect(NodePort port);
+        void Connect(INodePort port);
 
-        List<INodePort> GetConnections();
+        IEnumerable<INodePort> GetConnections();
         
         INodePort GetConnection(int i);
 
         /// <summary> Get index of the connection connecting this and specified ports </summary>
-        int GetConnectionIndex(NodePort port);
+        int GetConnectionIndex(INodePort port);
 
-        bool IsConnectedTo(NodePort port);
+        bool IsConnectedTo(INodePort port);
 
         /// <summary> Disconnect this port from another port </summary>
-        void Disconnect(NodePort port);
+        void Disconnect(INodePort port);
 
         /// <summary> Disconnect this port from another port </summary>
         void Disconnect(int i);
@@ -52,17 +61,9 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
 
         /// <summary> Get reroute points for a given connection. This is used for organization </summary>
         List<Vector2> GetReroutePoints(int index);
-
-        /// <summary> Swap connections with another node </summary>
-        void SwapConnections(NodePort targetPort);
-
+        
         /// <summary> Copy all connections pointing to a node and add them to this one </summary>
-        void AddConnections(NodePort targetPort);
+        void AddConnections(INodePort targetPort);
 
-        /// <summary> Move all connections pointing to this node, to another node </summary>
-        void MoveConnections(NodePort targetPort);
-
-        /// <summary> Swap connected nodes from the old list with nodes from the new list </summary>
-        void Redirect(List<INode> oldNodes, List<INode> newNodes);
     }
 }

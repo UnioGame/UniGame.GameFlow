@@ -7,6 +7,8 @@
     using Interfaces;
     using Runtime.Attributes;
     using Runtime.Interfaces;
+    using UniCore.Runtime.ProfilerTools;
+    using UniGreenModules.UniCore.EditorTools.Editor.Utility;
     using UniGreenModules.UniCore.Runtime.ReflectionUtils;
     using UnityEditor;
     using UnityEngine;
@@ -14,6 +16,8 @@
     public class BaseBodyDrawer : INodeEditorHandler
     {
         private List<string> _excludes;
+
+        private int counter = 0;
 
         public BaseBodyDrawer()
         {
@@ -43,26 +47,28 @@
                 true);
         }
 
-        private int counter = 0;
-
         public virtual IEnumerable<NodeItemEditorData> GetNodeItems(INodeEditorData editor, INode node)
         {
             var editorNode       = editor.EditorNode;
             var serializedObject = editor.SerializedObject;
+            var parent = editorNode.Parent;
 
             var targetProperty = serializedObject == null ? 
                 editorNode.Property : 
                 serializedObject.GetIterator();
 
             var property = targetProperty.Copy();
-            
+ 
             var type = node.GetType();
 
             EditorGUIUtility.labelWidth = 84;
-
+            
             var moveNext = property.NextVisible(true);
+            var next = parent?.GetNextArrayProperty(targetProperty);
 
-            while (moveNext && !property.Equals(targetProperty))
+            while (moveNext 
+                   && !property.IsEquals(targetProperty) 
+                   && (next == null || !next.IsEquals(property)))
             {
                 yield return new NodeItemEditorData() {
                     Node     = node,
