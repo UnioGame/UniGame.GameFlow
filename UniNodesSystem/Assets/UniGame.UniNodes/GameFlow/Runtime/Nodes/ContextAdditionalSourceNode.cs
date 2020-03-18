@@ -26,7 +26,7 @@
                 await dataSource.RegisterAsync(context);
             }
             
-            results.DespawnCollection();
+            results.Despawn();
             
             Finish();
         }

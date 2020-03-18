@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UniGame.UniNodes.NodeSystem.Inspector.Editor.ContentContextWindow;
 using UniGreenModules.UniContextData.Runtime.Entities;
-using UniGreenModules.UniCore.Runtime.Common;
 using UniGreenModules.UniGame.Core.EditorTools.Editor.Controls.AssetDropDownControl.Examples;
 using UniRx;
 using UnityEngine;
@@ -70,30 +68,30 @@ public class DemoTypeDataContainer : ScriptableObject
     {
         var data = new EntityContext();
         data.Publish(serializableClassValue);
-        // data.Publish(so);
-        // data.Publish(intListValue);
-        // data.Publish(go);
-        // data.Publish(sprite);
-        // data.Publish(texture);
-        // data.Publish(vector2Value);
-        // data.Publish(vector3Value);
-        // data.Publish(stringValue);
-        // data.Publish(gameObjects);
-        // data.Publish(objects);
-        // data.Publish(soItems);
-        // data.Publish(vectorItems);
-        //
-        // //inner context
-        // innerContext = new EntityContext();
-        // innerContext.Publish(new DemoContextClass());
-        // innerContext.Publish("INNER CONTEXT");
-        // innerContext.Publish(6666666666666);
-        // innerContext.Publish(true);
-        // innerContext.Publish(new List<string>() {
-        //     "odwda","awfasf","xxxx","ooo"
-        // });
-        //
-        // data.Publish(innerContext);
+        data.Publish(so);
+        data.Publish(intListValue);
+        data.Publish(go);
+        data.Publish(sprite);
+        data.Publish(texture);
+        data.Publish(vector2Value);
+        data.Publish(vector3Value);
+        data.Publish(stringValue);
+        data.Publish(gameObjects);
+        data.Publish(objects);
+        data.Publish(soItems);
+        data.Publish(vectorItems);
+        
+        //inner context
+        innerContext = new EntityContext();
+        innerContext.Publish(new DemoContextClass());
+        innerContext.Publish("INNER CONTEXT");
+        innerContext.Publish(6666666666666);
+        innerContext.Publish(true);
+        innerContext.Publish(new List<string>() {
+            "odwda","awfasf","xxxx","ooo"
+        });
+        
+        data.Publish(innerContext);
         
         ContextContentWindow.Open(data);
     }

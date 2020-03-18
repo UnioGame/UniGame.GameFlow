@@ -101,7 +101,7 @@
                     AddTo(LifeTime);
             }
 
-            connections.DespawnCollection();
+            connections.Despawn();
         }
 
         private void InitializeGraphNodes()

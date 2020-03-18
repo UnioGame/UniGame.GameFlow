@@ -2,6 +2,7 @@
 {
     using Nodes.Runtime.Common;
     using NodeSystem.Runtime.Core;
+    using UniCore.Runtime.ProfilerTools;
     using UniGreenModules.UniCore.Runtime.ProfilerTools;
     using UniGreenModules.UniCore.Runtime.Rx.Extensions;
     using UniRx;

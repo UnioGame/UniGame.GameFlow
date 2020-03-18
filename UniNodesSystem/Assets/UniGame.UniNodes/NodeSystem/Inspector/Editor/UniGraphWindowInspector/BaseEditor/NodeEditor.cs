@@ -7,10 +7,7 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
     using Interfaces;
     using Runtime.Core;
     using Runtime.Interfaces;
-    using Styles;
-    using UniGreenModules.UniCore.EditorTools.Editor.Utility;
     using UnityEngine;
-    using Object = UnityEngine.Object;
 
     /// <summary> Base class to derive custom Node editors from. Use this to create your own custom inspectors and editors for your nodes. </summary>
     [CustomNodeEditor(typeof(INode))]

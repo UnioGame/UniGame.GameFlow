@@ -5,12 +5,12 @@
     using System.Linq;
     using Interfaces;
     using Runtime.Interfaces;
+    using UniCore.Runtime.ProfilerTools;
     using UniGreenModules.UniCore.Runtime.Attributes;
     using UniGreenModules.UniCore.Runtime.DataFlow;
     using UniGreenModules.UniCore.Runtime.DataFlow.Interfaces;
     using UniGreenModules.UniCore.Runtime.ObjectPool.Runtime;
     using UniGreenModules.UniCore.Runtime.ObjectPool.Runtime.Extensions;
-    using UniGreenModules.UniCore.Runtime.ProfilerTools;
     using UnityEngine;
 
     [Serializable]
@@ -261,7 +261,7 @@
             }
 
             removedConnections.ForEach(x => connections.Remove(x));
-            removedConnections.DespawnCollection();
+            removedConnections.Despawn();
         }
 
         /// <summary> Connect this <see cref="NodePort"/> to another </summary>
@@ -397,7 +397,7 @@
             }
             
             connections.Clear();
-            removedConnections.DespawnCollection();
+            removedConnections.Despawn();
         }
 
         /// <summary> Get reroute points for a given connection. This is used for organization </summary>

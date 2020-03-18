@@ -6,6 +6,7 @@
     using Attributes;
     using Interfaces;
     using Runtime.Interfaces;
+    using UniCore.Runtime.ProfilerTools;
     using UniGreenModules.UniCore.Runtime.Attributes;
     using UniGreenModules.UniCore.Runtime.ProfilerTools;
     using UnityEngine;

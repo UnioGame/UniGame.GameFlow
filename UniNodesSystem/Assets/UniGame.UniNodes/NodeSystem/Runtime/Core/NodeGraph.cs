@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Linq;
     using Runtime.Interfaces;
-    using Sirenix.Utilities;
     using UniGreenModules.UniCore.Runtime.Attributes;
     using UniGreenModules.UniCore.Runtime.ObjectPool.Runtime;
     using UniGreenModules.UniCore.Runtime.ObjectPool.Runtime.Extensions;
@@ -201,8 +200,8 @@
                 }
             }
             
-            idCacne.DespawnCollection();
-            nodeItems.DespawnCollection();
+            idCacne.Despawn();
+            nodeItems.Despawn();
 
         }
 
