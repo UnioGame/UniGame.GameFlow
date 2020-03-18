@@ -128,6 +128,41 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2126589237147687122, guid: e36542ec82f3a194e99667be6b6a10ad,
+        type: 3}
+      propertyPath: ports.values.Array.data[0].connections.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2126589237147687122, guid: e36542ec82f3a194e99667be6b6a10ad,
+        type: 3}
+      propertyPath: ports.values.Array.data[0].connections.Array.data[1].fieldName
+      value: log
+      objectReference: {fileID: 0}
+    - target: {fileID: 2126589237147687122, guid: e36542ec82f3a194e99667be6b6a10ad,
+        type: 3}
+      propertyPath: ports.values.Array.data[0].connections.Array.data[1].nodeId
+      value: 66
+      objectReference: {fileID: 0}
+    - target: {fileID: 2126589237147687122, guid: e36542ec82f3a194e99667be6b6a10ad,
+        type: 3}
+      propertyPath: ports.values.Array.data[0].connections.Array.data[1].portId
+      value: 67
+      objectReference: {fileID: 0}
+    - target: {fileID: 2126589237147687122, guid: e36542ec82f3a194e99667be6b6a10ad,
+        type: 3}
+      propertyPath: ports.values.Array.data[0].connections.Array.data[2].fieldName
+      value: log
+      objectReference: {fileID: 0}
+    - target: {fileID: 2126589237147687122, guid: e36542ec82f3a194e99667be6b6a10ad,
+        type: 3}
+      propertyPath: ports.values.Array.data[0].connections.Array.data[2].nodeId
+      value: 66
+      objectReference: {fileID: 0}
+    - target: {fileID: 2126589237147687122, guid: e36542ec82f3a194e99667be6b6a10ad,
+        type: 3}
+      propertyPath: ports.values.Array.data[0].connections.Array.data[2].portId
+      value: 67
+      objectReference: {fileID: 0}
     - target: {fileID: 3573533204080573478, guid: e36542ec82f3a194e99667be6b6a10ad,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -185,152 +220,88 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4748815339571759597, guid: e36542ec82f3a194e99667be6b6a10ad,
         type: 3}
-      propertyPath: serializableNodes.Array.data[0].ports.values.Array.data[0].connections.Array.size
+      propertyPath: serializableNodes.Array.data[1].ports.keys.Array.size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4748815339571759597, guid: e36542ec82f3a194e99667be6b6a10ad,
         type: 3}
-      propertyPath: nodes.Array.size
-      value: 2
+      propertyPath: serializableNodes.Array.data[1].ports.values.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4748815339571759597, guid: e36542ec82f3a194e99667be6b6a10ad,
+        type: 3}
+      propertyPath: serializableNodes.Array.data[1].ports.values.Array.data[0].connections.Array.size
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4748815339571759597, guid: e36542ec82f3a194e99667be6b6a10ad,
         type: 3}
       propertyPath: uniqueId
-      value: 1270
+      value: 68
       objectReference: {fileID: 0}
     - target: {fileID: 4748815339571759597, guid: e36542ec82f3a194e99667be6b6a10ad,
         type: 3}
-      propertyPath: serializableNodes.Array.data[0].position.x
-      value: 392
+      propertyPath: serializableNodes.Array.data[1].position.x
+      value: 440
       objectReference: {fileID: 0}
     - target: {fileID: 4748815339571759597, guid: e36542ec82f3a194e99667be6b6a10ad,
         type: 3}
-      propertyPath: serializableNodes.Array.data[0].ports.values.Array.data[0].id
-      value: 1265
+      propertyPath: serializableNodes.Array.data[1].position.y
+      value: 56
       objectReference: {fileID: 0}
     - target: {fileID: 4748815339571759597, guid: e36542ec82f3a194e99667be6b6a10ad,
         type: 3}
-      propertyPath: nodes.Array.data[0]
-      value: 
-      objectReference: {fileID: 7160064982076870940}
-    - target: {fileID: 4748815339571759597, guid: e36542ec82f3a194e99667be6b6a10ad,
-        type: 3}
-      propertyPath: nodes.Array.data[1]
-      value: 
-      objectReference: {fileID: 7160064982076870941}
-    - target: {fileID: 4748815339571759597, guid: e36542ec82f3a194e99667be6b6a10ad,
-        type: 3}
-      propertyPath: serializableNodes.Array.data[0].ports.values.Array.data[0].connections.Array.data[0].nodeId
-      value: 1269
+      propertyPath: serializableNodes.Array.data[1].ports.keys.Array.data[0]
+      value: log
       objectReference: {fileID: 0}
     - target: {fileID: 4748815339571759597, guid: e36542ec82f3a194e99667be6b6a10ad,
         type: 3}
-      propertyPath: serializableNodes.Array.data[0].ports.values.Array.data[0].connections.Array.data[0].portId
-      value: 1270
+      propertyPath: serializableNodes.Array.data[1].ports.values.Array.data[0].id
+      value: 68
+      objectReference: {fileID: 0}
+    - target: {fileID: 4748815339571759597, guid: e36542ec82f3a194e99667be6b6a10ad,
+        type: 3}
+      propertyPath: serializableNodes.Array.data[1].ports.values.Array.data[0].nodeId
+      value: 66
+      objectReference: {fileID: 0}
+    - target: {fileID: 4748815339571759597, guid: e36542ec82f3a194e99667be6b6a10ad,
+        type: 3}
+      propertyPath: serializableNodes.Array.data[1].ports.values.Array.data[0].fieldName
+      value: log
+      objectReference: {fileID: 0}
+    - target: {fileID: 4748815339571759597, guid: e36542ec82f3a194e99667be6b6a10ad,
+        type: 3}
+      propertyPath: serializableNodes.Array.data[1].ports.values.Array.data[0].showBackingValue
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4748815339571759597, guid: e36542ec82f3a194e99667be6b6a10ad,
+        type: 3}
+      propertyPath: serializableNodes.Array.data[1].ports.values.Array.data[0].isDynamic
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4748815339571759597, guid: e36542ec82f3a194e99667be6b6a10ad,
+        type: 3}
+      propertyPath: serializableNodes.Array.data[1].ports.values.Array.data[0].portValue.name
+      value: log
+      objectReference: {fileID: 0}
+    - target: {fileID: 4748815339571759597, guid: e36542ec82f3a194e99667be6b6a10ad,
+        type: 3}
+      propertyPath: serializableNodes.Array.data[1].ports.values.Array.data[0].connections.Array.data[0].fieldName
+      value: contextValue
+      objectReference: {fileID: 0}
+    - target: {fileID: 4748815339571759597, guid: e36542ec82f3a194e99667be6b6a10ad,
+        type: 3}
+      propertyPath: serializableNodes.Array.data[1].ports.values.Array.data[0].connections.Array.data[0].nodeId
+      value: 53
+      objectReference: {fileID: 0}
+    - target: {fileID: 4748815339571759597, guid: e36542ec82f3a194e99667be6b6a10ad,
+        type: 3}
+      propertyPath: serializableNodes.Array.data[1].ports.values.Array.data[0].connections.Array.data[0].portId
+      value: 54
       objectReference: {fileID: 0}
     - target: {fileID: 8121955986882669422, guid: e36542ec82f3a194e99667be6b6a10ad,
         type: 3}
       propertyPath: m_Name
-      value: UniGraph
+      value: UniGraphInstance
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 2126589237147687122, guid: e36542ec82f3a194e99667be6b6a10ad, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e36542ec82f3a194e99667be6b6a10ad, type: 3}
---- !u!1 &7160064982076870939 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8121955986882669422, guid: e36542ec82f3a194e99667be6b6a10ad,
-    type: 3}
-  m_PrefabInstance: {fileID: 7160064982076870938}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &7160064982076870940
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7160064982076870939}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23f9640bdcee91f44b837897ec957069, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  id: 1266
-  width: 220
-  nodeName: Log Node
-  position: {x: 392, y: 56}
-  ports:
-    keys:
-    - log
-    values:
-    - id: 1268
-      nodeId: 1266
-      fieldName: log
-      direction: 0
-      connectionType: 0
-      showBackingValue: 2
-      isDynamic: 1
-      isInstancePortList: 0
-      portValue:
-        name: log
-        serializedValueTypes: []
-        broadcastersCount: 0
-      connections:
-      - fieldName: contextValue
-        nodeId: 1269
-        reroutePoints: []
-        portId: 1270
-      instancePortList: 0
-  mode: 1
-  message: LogNode
---- !u!114 &7160064982076870941
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7160064982076870939}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7817cc805a3da8143902915bc1728ac3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  id: 1269
-  width: 220
-  nodeName: Demo Context Source Node
-  position: {x: 24, y: -24}
-  ports:
-    keys:
-    - contextValue
-    values:
-    - id: 1270
-      nodeId: 1269
-      fieldName: contextValue
-      direction: 1
-      connectionType: 0
-      showBackingValue: 2
-      isDynamic: 1
-      isInstancePortList: 0
-      portValue:
-        name: contextValue
-        serializedValueTypes:
-        - UniGreenModules.UniCore.Runtime.Interfaces.IContext, unigame.unicore.runtime,
-          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-        broadcastersCount: 0
-      connections:
-      - fieldName: log
-        nodeId: 26
-        reroutePoints: []
-        portId: 1265
-      - fieldName: log
-        nodeId: 1266
-        reroutePoints: []
-        portId: 1268
-      instancePortList: 0
-  contextValue:
-    sendByBind: 1
-    nodeId: 1269
-    portName: contextValue
-  clickToFireContext:
-    value: 0
-  intValue: 1
-  floatValule: 1

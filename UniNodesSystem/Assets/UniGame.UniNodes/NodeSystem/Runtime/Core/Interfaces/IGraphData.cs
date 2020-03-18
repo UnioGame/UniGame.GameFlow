@@ -1,5 +1,6 @@
 ﻿namespace UniGame.UniNodes.NodeSystem.Runtime.Core
 {
+    using Interfaces;
     using Runtime.Interfaces;
     using UniGreenModules.UniCore.Runtime.Interfaces;
 
@@ -10,5 +11,9 @@
         INode GetNode(int nodeId);
 
         IGraphData RemoveNode(INode node);
+
+//        IGraphData AddItem(IGraphItem item);
+//
+//        IGraphItem Get(int id);
     }
 }

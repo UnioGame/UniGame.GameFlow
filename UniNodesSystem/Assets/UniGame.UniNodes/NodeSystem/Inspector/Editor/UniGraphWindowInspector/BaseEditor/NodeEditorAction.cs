@@ -544,7 +544,9 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
 
         }
 
-        /// <summary> Draw a connection as we are dragging it </summary>
+        /// <summary>
+        /// Draw a connection as we are dragging it
+        /// </summary>
         public void DrawDraggedConnection()
         {
             if (IsDraggingPort)

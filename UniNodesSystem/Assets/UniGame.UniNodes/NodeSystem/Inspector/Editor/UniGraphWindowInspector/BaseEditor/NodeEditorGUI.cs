@@ -317,7 +317,7 @@
                 foreach (var output in node.Outputs) {
                     //Needs cleanup. Null checks are ugly
                     var item = _portConnectionPoints.FirstOrDefault(x => x.Key == output.Id);
-
+ 
                     if (item.Key == 0) continue;
 
                     if (output == null)

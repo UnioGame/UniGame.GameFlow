@@ -88,20 +88,18 @@
                 return;
             }
 
-            var connections = sourcePort.GetConnections();
+            var connections = sourcePort.Connections;
             
             for (var i = 0; i < connections.Count; i++) {
                 var connection = connections[i];
-                var port       = connection;
+                var port       = connection.Port;
                 if(port.Direction == PortIO.Input || port.Id == Id)
                     continue;
                 
-                var value = connection.Value;
+                var value = port.Value;
                 value.Bind(publisher).
                     AddTo(LifeTime);
             }
-
-            connections.Despawn();
         }
 
         private void InitializeGraphNodes()

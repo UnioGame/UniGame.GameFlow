@@ -6,7 +6,7 @@
     using UnityEngine;
 
     [Serializable]
-    public class PortConnection
+    public class PortConnection : IPortConnection
     {
         #region inspector
 
@@ -23,43 +23,57 @@
     
         #endregion
      
-        [NonSerialized] private INode node;
+        [NonSerialized] private IGraphData _data;
         
-        [NonSerialized] private NodePort port;
+        [NonSerialized] private INodePort _port;
 
-        public NodePort Port => GetPort();
+        public INodePort Port => GetPort();
 
-        public PortConnection(NodePort connectionPort, int id)
+        public int PortId => portId;
+
+        public int NodeId => nodeId;
+
+        public string PortName => fieldName;
+        
+        
+        
+        public PortConnection(int targetPort, int targetNode,string portName)
         {
-            port      = connectionPort;
-            portId = port.id;
-            
-            Initialize(port.node,id,port.fieldName);
+            portId = targetPort;
+            nodeId = targetNode;
+            fieldName = portName;
+        }
+        
+        public PortConnection(INodePort connectionPort, int id)
+        {
+            _port      = connectionPort;
+            portId = _port.Id;
+            Initialize(_port.Node,id,_port.ItemName);
         }
 
         public void Initialize(INode data,int id, string portName)
         {
             nodeId = id;
             fieldName = portName;
-            Initialize(data);
+            Initialize(data.GraphData);
         }
         
-        public void Initialize(INode data)
+        public void Initialize(IGraphData data)
         {
-            node   = data;
+            _data   = data;
         }
 
         /// <summary>
         /// Returns the port that this <see cref="PortConnection"/> points to
         /// </summary>
-        public NodePort GetPort()
+        public INodePort GetPort()
         {
             //if (port != null) return port;
-            var targetNode = node.GraphData.GetNode(nodeId);
+            var targetNode = _data.GetNode(nodeId);
             if (targetNode == null)
                 return null;
-            port = targetNode.GetPort(fieldName);
-            return port;
+            _port = targetNode.GetPort(fieldName);
+            return _port;
         }
     }
 }
