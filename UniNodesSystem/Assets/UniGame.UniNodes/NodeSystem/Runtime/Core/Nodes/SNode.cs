@@ -87,6 +87,8 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
         
         public sealed override void Initialize(IGraphData graphData)
         {
+            base.Initialize(graphData);
+            
             InitializeData(graphData);
             
             if (Application.isEditor && Application.isPlaying == false) {

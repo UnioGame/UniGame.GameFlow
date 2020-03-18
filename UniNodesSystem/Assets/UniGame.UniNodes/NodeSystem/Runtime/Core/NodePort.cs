@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Extensions;
     using Interfaces;
     using Runtime.Interfaces;
     using UniCore.Runtime.ProfilerTools;
@@ -14,7 +15,7 @@
     using UnityEngine;
 
     [Serializable]
-    public class NodePort : INodePort, IPortData
+    public class NodePort : INodePort, IPortData, IEqualityComparer<INodePort>
     {
         #region inspector
 
@@ -23,7 +24,7 @@
         /// </summary>
         [ReadOnlyValue]
         [SerializeField]
-        public int id;
+        private int id;
         /// <summary>
         /// parent Node id
         /// </summary>
@@ -72,8 +73,9 @@
         /// <summary>
         /// Copy a nodePort but assign it to another node.
         /// </summary>
-        public NodePort(NodePort nodePort, INode node) :
-            this(node,
+        public NodePort(int id,NodePort nodePort, INode node) :
+            this(id,
+                node,
                 nodePort.ItemName,
                 nodePort.Direction,
                 nodePort.ConnectionType,
@@ -84,8 +86,9 @@
             connections.AddRange(nodePort.connections);
         }
 
-        public NodePort(INode node, IPortData portData) :
-            this(node,
+        public NodePort(int id,INode node, IPortData portData) :
+            this(id,
+                node,
                 portData.ItemName,
                 portData.Direction,
                 portData.ConnectionType,
@@ -98,18 +101,21 @@
         /// Construct a dynamic port. Dynamic ports are not forgotten on reimport,
         /// and is ideal for runtime-created ports.
         /// </summary>
-        public NodePort(INode node,
+        public NodePort(
+            int id,
+            INode node,
             string fieldName,
             Type type,
             PortIO direction = PortIO.Input,
             ConnectionType connectionType = ConnectionType.Multiple,
             ShowBackingValue showBackingValue = ShowBackingValue.Always) :
-            this(node, fieldName, direction, connectionType, showBackingValue, new List<Type>() {type})
+            this(id,node, fieldName, direction, connectionType, showBackingValue, new List<Type>() {type})
         {
         }
 
 
         public NodePort(
+            int id,
             INode node,
             string fieldName,
             PortIO direction = PortIO.Input,
@@ -117,15 +123,16 @@
             ShowBackingValue showBackingValue = ShowBackingValue.Always,
             IReadOnlyList<Type> types = null)
         {
+            this.id = id;
+            this.node   = node;
+            this.nodeId = node.Id;
             this.fieldName        = fieldName;
             this.direction        = direction;
             this.connectionType   = connectionType;
             this.showBackingValue = showBackingValue;
             portValue.SetValueTypeFilter(types);
-
+            
             Initialize(node);
-
-            UpdateId();
         }
 
         #endregion
@@ -144,8 +151,6 @@
                     to.ValueTypes.Count == 0 || source.ValueTypes.Count == 0 ||
                     source.ValueTypes.Any(to.Value.IsValidPortValueType),
             };
-
-        public int Id => id == 0 ? UpdateId() : id;
 
         public bool InstancePortList => instancePortList;
 
@@ -180,6 +185,8 @@
         public Type             ValueType        => portValue.ValueTypes.FirstOrDefault();
 
         public ILifeTime LifeTime => lifeTime;
+
+        public int NodeId => nodeId;
 
         #endregion
 
@@ -223,14 +230,6 @@
         /// <param name="updatedItem"></param>
         public void OnIdUpdate(int oldId, int newId, IGraphItem updatedItem)
         {
-            if (nodeId == oldId) {
-                nodeId = newId;
-            }
-
-            connections.ForEach(x => {
-                if (x.nodeId == oldId)
-                    x.nodeId = newId;
-            });
         }
 
 
@@ -242,17 +241,38 @@
             lifeTimeDefinition.Terminate();
         }
 
+        
+        #region comperer api
+
+        public bool Equals(INodePort x, INodePort y)
+        {
+            return x?.NodeId == y?.NodeId && x?.ItemName == y?.ItemName;
+        }
+
+        public int GetHashCode(INodePort obj)
+        {
+            var hash = 89 * obj.NodeId + obj.ItemName.GetHashCode();
+            return hash;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is INodePort port))
+                return false;
+
+            return port.NodeId == NodeId && ItemName == port.ItemName;
+        }
+
+        public override int GetHashCode()
+        {
+            return GetHashCode(this);
+        }
+
+        #endregion
+        
         #region node methods
 
         public INode Node => node;
-
-        public int UpdateId()
-        {
-            var oldId = id;
-            id = node.GraphData.UpdateId(id);
-            OnIdUpdate(oldId, id, this);
-            return id;
-        }
 
         /// <summary> Checks all connections for invalid references, and removes them. </summary>
         public void VerifyConnections()
@@ -295,12 +315,12 @@
             connections.Add(new PortConnection(port, portNode.Id));
 
             if (!port.IsConnectedTo(this))
-                port.CreateConnection(id, nodeId, ItemName);
+                port.CreateConnection(nodeId, ItemName);
         }
 
-        public IPortConnection CreateConnection(int portId, int targetNodeId, string portName)
+        public IPortConnection CreateConnection(int targetNodeId, string portName)
         {
-            var portConnection = new PortConnection(portId, targetNodeId, portName);
+            var portConnection = new PortConnection(targetNodeId, portName);
             portConnection.Initialize(node.GraphData);
             connections.Add(portConnection);
             return portConnection;
@@ -326,10 +346,6 @@
 
         public void Validate()
         {
-            if (id == 0) {
-                UpdateId();
-            }
-
             VerifyConnections();
         }
 
@@ -337,7 +353,9 @@
         public int GetConnectionIndex(INodePort port)
         {
             for (var i = 0; i < ConnectionCount; i++) {
-                if (connections[i].portId == port.Id) return i;
+                var connection = connections[i];
+                if(connection.NodeId == port.NodeId && connection.PortName == port.ItemName)
+                    return i;
             }
 
             return -1;
@@ -345,20 +363,19 @@
 
         public bool IsConnectedTo(INodePort port)
         {
-            var result = false;
             for (var i = 0; i < connections.Count; i++) {
-                if (connections[i].portId != port.Id) {
-                    continue;
+                var connection = connections[i];
+                if (connection.IsTarget(port)) {
+                    return true;
                 }
-
-                result = true;
-                break;
             }
-
-            return result;
+            
+            return false;
         }
-
-        /// <summary> Disconnect this port from another port </summary>
+        
+        /// <summary>
+        /// Disconnect this port from another port
+        /// </summary>
         public void Disconnect(INodePort port)
         {
             // Remove this ports connection to the other
@@ -368,7 +385,7 @@
 
             for (var i = connections.Count - 1; i >= 0; i--) {
                 var connection = connections[i];
-                if (connection.portId == port.Id) {
+                if (connection.IsTarget(port)) {
                     connections.RemoveAt(i);
                 }
             }
@@ -376,7 +393,7 @@
             // Remove the other ports connection to this port
             for (var i = 0; i < port.Connections.Count; i++) {
                 var connection = port.Connections[i];
-                if (connection.PortId == id) {
+                if (connection.IsTarget(port)) {
                     port.RemoveConnection(connection);
                 }
             }
@@ -398,9 +415,8 @@
             if (otherPort != null) {
                 for (var k = 0; k < otherPort.Connections.Count; k++) {
                     var connection = otherPort.Connections[i];
-                    if (connection.PortId == id) {
+                    if (connection.IsTarget(this)) {
                         otherPort.RemoveConnection(connection);
-                        ;
                     }
                 }
             }
@@ -441,5 +457,6 @@
         }
 
         #endregion
+
     }
 }

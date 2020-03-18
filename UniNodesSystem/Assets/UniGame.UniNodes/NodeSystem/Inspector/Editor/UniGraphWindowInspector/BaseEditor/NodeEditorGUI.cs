@@ -6,6 +6,7 @@
     using ContentContextWindow;
     using Runtime.Attributes;
     using Runtime.Core;
+    using Runtime.Core.Extensions;
     using Runtime.Core.Nodes;
     using Runtime.Interfaces;
     using Sirenix.Utilities;
@@ -18,25 +19,27 @@
     {
         public INode              Node;
         public SerializedProperty Property;
+        public SerializedProperty Parent;
         public INodeGraph         Graph;
     }
 
     /// <summary> Contains GUI methods </summary>
     public partial class NodeEditorWindow
     {
-        public  NodeGraphEditor graphEditor;
-        
-        private List<INode>    selection = new List<INode>();
-        private List<INode>     culledNodes = new List<INode>();
-        
-        private List<EditorNode>     regularNodes  = new List<EditorNode>();
-        private List<EditorNode>     selectedNodes = new List<EditorNode>();
-        
-        private Vector2         activeGraphsScroll;
+        public NodeGraphEditor graphEditor;
+
+        private List<INode> selection   = new List<INode>();
+        private List<INode> culledNodes = new List<INode>();
+
+        private List<EditorNode> regularNodes  = new List<EditorNode>();
+        private List<EditorNode> selectedNodes = new List<EditorNode>();
+
+        private Vector2 activeGraphsScroll;
 
         private int topPadding => isDocked() ? 19 : 22;
 
         private SerializableNodeContainer nodeContainer;
+
         public SerializableNodeContainer Container {
             get {
                 if (!nodeContainer)
@@ -44,7 +47,7 @@
                 return nodeContainer;
             }
         }
-        
+
         private void OnGUI()
         {
             var e = Event.current;
@@ -56,13 +59,14 @@
             }
 
             //Initialize(ActiveGraph);
-            
+
             var editorNode = new EditorNode() {
-                Graph = ActiveGraph,
-                Node = ActiveGraph,
+                Graph    = ActiveGraph,
+                Node     = ActiveGraph,
+                Parent = null,
                 Property = null,
             };
-            
+
             graphEditor          = NodeGraphEditor.GetEditor(editorNode);
             graphEditor.position = position;
 
@@ -194,7 +198,7 @@
 
             contextMenu.AddItem(new GUIContent("Duplicate"), false, DublicateSelectedNodes);
             contextMenu.AddItem(new GUIContent("Remove"), false, RemoveSelectedNodes);
-            
+
             contextMenu.DropDown(new Rect(Event.current.mousePosition, Vector2.zero));
         }
 
@@ -215,9 +219,7 @@
                 var path = graphEditor.GetNodeMenuName(type);
                 if (string.IsNullOrEmpty(path)) continue;
 
-                contextMenu.AddItem(new GUIContent(path), false, () => {
-                    CreateNode(type, pos);
-                });
+                contextMenu.AddItem(new GUIContent(path), false, () => { CreateNode(type, pos); });
             }
 
             contextMenu.AddSeparator("");
@@ -316,12 +318,12 @@
                 // Draw full connections and output > reroute
                 foreach (var output in node.Outputs) {
                     //Needs cleanup. Null checks are ugly
-                    var item = _portConnectionPoints.FirstOrDefault(x => x.Key == output.Id);
- 
-                    if (item.Key == 0) continue;
+                    var item = _portConnectionPoints.FirstOrDefault(x => x.Key.IsEqual(output));
 
+                    if (item.Key == null) continue;
                     if (output == null)
                         continue;
+
                     var types           = output.ValueTypes;
                     var fromRect        = item.Value;
                     var connectionColor = NodeEditorPreferences.GetTypeColor(types.FirstOrDefault());
@@ -337,7 +339,7 @@
                         }
 
                         Rect toRect;
-                        if (!_portConnectionPoints.TryGetValue(input.Id, out toRect)) continue;
+                        if (!_portConnectionPoints.TryGetValue(input, out toRect)) continue;
 
                         var from          = fromRect.center;
                         var to            = Vector2.zero;
@@ -433,11 +435,10 @@
                 culledNodes = new List<INode>();
 
             var serializableNodes = ActiveObject.FindProperty(nameof(ActiveGraph.serializableNodes));
-            var assetNodes = ActiveObject.FindProperty(nameof(ActiveGraph.nodes));
-            
-            UpdateNodes(serializableNodes,ActiveGraph.SerializableNodes);
-            UpdateNodes(assetNodes,ActiveGraph.ObjectNodes);
-            
+            var assetNodes        = ActiveObject.FindProperty(nameof(ActiveGraph.nodes));
+
+            UpdateNodes(serializableNodes, ActiveGraph.SerializableNodes);
+            UpdateNodes(assetNodes, ActiveGraph.ObjectNodes);
 
             var eventType = activeEvent.type == EventType.Ignore ||
                             activeEvent.rawType == EventType.Ignore
@@ -460,11 +461,10 @@
             selectedNodes.Clear();
 
             if (activeEvent.type != EventType.Layout && currentActivity == NodeActivity.DragGrid)
-                selection.Where(x => preSelection.Contains(x.Id)).
-                    ForEach(x => x.AddToEditorSelection(true));
+                selection.Where(x => preSelection.Contains(x.Id)).ForEach(x => x.AddToEditorSelection(true));
         }
 
-        private void UpdateNodes(SerializedProperty property,IReadOnlyList<INode> nodes)
+        private void UpdateNodes(SerializedProperty property, IReadOnlyList<INode> nodes)
         {
             for (var i = 0; i < nodes.Count; i++) {
                 var node = nodes[i];
@@ -476,9 +476,10 @@
                 var editorNode = new EditorNode() {
                     Node     = node,
                     Graph    = ActiveGraph,
+                    Parent = property,
                     Property = property.GetArrayElementAtIndex(i),
                 };
-                
+
                 if (IsSelected(node)) {
                     selectedNodes.Add(editorNode);
                 }
@@ -486,7 +487,6 @@
                     regularNodes.Add(editorNode);
                 }
             }
-
         }
 
         public bool IsSelected(INode node) => selection.Contains(node);
@@ -497,17 +497,17 @@
         }
 
         public void DeselectAll() => selection.Clear();
-        
+
         public void Select(INode node, bool add)
         {
-            if(add == false)
+            if (add == false)
                 selection.Clear();
 
             if (IsSelected(node))
                 return;
-            
+
             selection.Add(node);
-            
+
             if (node is Object asset) {
                 asset.AddToEditorSelection(add);
             }
@@ -515,7 +515,6 @@
                 Container.Initialize(node as SerializableNode);
                 Container.AddToEditorSelection(add);
             }
-            
         }
 
         private void DrawNodes(List<EditorNode> nodes, NodeEditorGuiState state)
@@ -566,12 +565,12 @@
         private void DrawNode(ref EditorNode editorNode, NodeEditorGuiState state)
         {
             var node = editorNode.Node;
-            
+
             if (IsIgnoredNode(node, state))
                 return;
-            
+
             if (state.EventType == EventType.Repaint) {
-                _portConnectionPoints = _portConnectionPoints.Where(x => x.Key != node.Id)
+                _portConnectionPoints = _portConnectionPoints
                     .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
             }
 
@@ -588,7 +587,7 @@
             var node = editorNode.Node;
 
             nodeEditor.IsSelected = IsSelected(node);
-            
+
             //Get node position
             var nodePos = GridToWindowPositionNoClipped(node.Position);
             //node area
@@ -645,29 +644,29 @@
             //Check input ports
             foreach (var input in node.Inputs) {
                 //Check if port rect is available
-                if (!PortConnectionPoints.ContainsKey(input.Id)) continue;
-                var r                                 = GridToWindowRectNoClipped(PortConnectionPoints[input.Id]);
+                if (!PortConnectionPoints.ContainsKey(input)) continue;
+                var r                                 = GridToWindowRectNoClipped(PortConnectionPoints[input]);
                 if (r.Contains(mousePos)) hoveredPort = input;
             }
 
             //Check all output ports
             foreach (var output in node.Outputs) {
                 //Check if port rect is available
-                if (!PortConnectionPoints.ContainsKey(output.Id)) continue;
-                var r                                 = GridToWindowRectNoClipped(PortConnectionPoints[output.Id]);
+                if (!PortConnectionPoints.ContainsKey(output)) continue;
+                var r = GridToWindowRectNoClipped(PortConnectionPoints[output]);
                 if (r.Contains(mousePos)) hoveredPort = output;
             }
         }
 
         private void DrawNodeEditorArea(
-            NodeEditor nodeEditor, 
-            EditorNode editorNode, 
+            NodeEditor nodeEditor,
+            EditorNode editorNode,
             NodeEditorGuiState state)
         {
             var eventType  = state.EventType;
             var stateEvent = state.Event;
-            var node = editorNode.Node;
-            
+            var node       = editorNode.Node;
+
             if (eventType == EventType.Ignore ||
                 stateEvent.type == EventType.Ignore ||
                 stateEvent.rawType == EventType.Ignore)
@@ -718,7 +717,7 @@
                 else NodeSizes.Add(node, size);
 
                 foreach (var portPairs in NodeEditor.PortPositions) {
-                    var id            = portPairs.Key.Id;
+                    var id = portPairs.Key;
                     var portHandlePos = portPairs.Value;
                     portHandlePos += node.Position;
                     var rect = new Rect(portHandlePos.x - 8, portHandlePos.y - 8, 16, 16);

@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using Runtime.Interfaces;
+    using UniCore.Runtime.ProfilerTools;
     using UnityEngine;
 
     [Serializable]
@@ -29,17 +30,14 @@
 
         public INodePort Port => GetPort();
 
-        public int PortId => portId;
-
         public int NodeId => nodeId;
 
         public string PortName => fieldName;
         
         
         
-        public PortConnection(int targetPort, int targetNode,string portName)
+        public PortConnection(int targetNode,string portName)
         {
-            portId = targetPort;
             nodeId = targetNode;
             fieldName = portName;
         }
@@ -47,7 +45,6 @@
         public PortConnection(INodePort connectionPort, int id)
         {
             _port      = connectionPort;
-            portId = _port.Id;
             Initialize(_port.Node,id,_port.ItemName);
         }
 
@@ -72,6 +69,7 @@
             var targetNode = _data.GetNode(nodeId);
             if (targetNode == null)
                 return null;
+            
             _port = targetNode.GetPort(fieldName);
             return _port;
         }

@@ -3,10 +3,10 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
     using System;
     using System.Collections.Generic;
     using Core;
-    using Core.Interfaces;
+    using UniGreenModules.UniCore.Runtime.Interfaces;
     using UnityEngine;
 
-    public interface INodePort : IGraphItem
+    public interface INodePort : INamedItem
     {
 
         int ConnectionCount { get; }
@@ -27,14 +27,14 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
 
         INode Node { get; }
 
+        int NodeId { get; }
+
         IReadOnlyList<Type> ValueTypes { get; }
         
-        int UpdateId();
-
         /// <summary> Checks all connections for invalid references, and removes them. </summary>
         void VerifyConnections();
 
-        IPortConnection CreateConnection(int portid, int nodeId,string portName);
+        IPortConnection CreateConnection(int nodeId,string portName);
         
         void RemoveConnection(IPortConnection connection);
         

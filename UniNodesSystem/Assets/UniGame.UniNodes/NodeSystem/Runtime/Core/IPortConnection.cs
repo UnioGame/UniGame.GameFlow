@@ -5,7 +5,6 @@
 
     public interface IPortConnection 
     {
-        int PortId { get; }
 
         int NodeId { get; }
 

@@ -22,8 +22,7 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
 
         public static HashSet<NodeEditorWindow> ActiveWindows { get; protected set; } = new HashSet<NodeEditorWindow>();
 
-        private Dictionary<int, NodePort> _portsIds             = new Dictionary<int, NodePort>();
-        private Dictionary<int, Rect>     _portConnectionPoints = new Dictionary<int, Rect>();
+        private Dictionary<INodePort, Rect>     _portConnectionPoints = new Dictionary<INodePort, Rect>();
         private Dictionary<INode, Vector2> _nodeSizes            = new Dictionary<INode, Vector2>();
 
         private float   _zoom = 1;
@@ -46,7 +45,7 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
         }
         
         /// <summary> Stores node positions for all nodePorts. </summary>
-        public Dictionary<int, Rect> PortConnectionPoints => _portConnectionPoints;
+        public Dictionary<INodePort, Rect> PortConnectionPoints => _portConnectionPoints;
 
         public Dictionary<INode, Vector2> NodeSizes => _nodeSizes;
 
@@ -241,11 +240,9 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
             var index = 0;
 
             foreach (var portConnectionPoint in PortConnectionPoints) {
-                if (_portsIds.TryGetValue(portConnectionPoint.Key, out var port)) {
-                    _references[index] = new NodePortReference(port);
-                    _rects[index]      = portConnectionPoint.Value;
-                    index++;
-                }
+                _references[index] = new NodePortReference(portConnectionPoint.Key);
+                _rects[index]      = portConnectionPoint.Value;
+                index++;
             }
         }
 
@@ -282,8 +279,7 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
                 for (var i = 0; i < length; i++) {
                     var nodePort = _references[i].GetNodePort();
                     if (nodePort != null) {
-                        _portsIds[nodePort.Id]             = nodePort;
-                        _portConnectionPoints[nodePort.Id] = _rects[i];
+                        _portConnectionPoints[nodePort] = _rects[i];
                     }
                 }
             }
@@ -327,8 +323,10 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
                 !nodeGraph)
                 return nodeGraph;
             
-            //nodeGraph.SaveScenes();
             nodeGraph.SetDirty();
+            nodeGraph.SaveScenes();
+            AssetDatabase.SaveAssets();
+            
             activeObject?.ApplyModifiedProperties();
 
             activeObject = new SerializedObject(nodeGraph);

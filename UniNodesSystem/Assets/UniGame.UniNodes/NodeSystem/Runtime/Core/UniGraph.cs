@@ -4,6 +4,7 @@
     using System.Runtime.CompilerServices;
     using Attributes;
     using Extensions;
+    using Runtime.Extensions;
     using Runtime.Interfaces;
     using Sirenix.Utilities;
     using UniGreenModules.UniCore.Runtime.ObjectPool.Runtime.Extensions;
@@ -49,8 +50,9 @@
 
         #region private methods
 
-        protected override void OnInitialize()
+        protected sealed override void OnInitialize()
         {
+            base.OnInitialize();
             InitializeGraphNodes();
         }
 
@@ -93,7 +95,7 @@
             for (var i = 0; i < connections.Count; i++) {
                 var connection = connections[i];
                 var port       = connection.Port;
-                if(port.Direction == PortIO.Input || port.Id == Id)
+                if(port.Direction == PortIO.Input || port.NodeId == Id)
                     continue;
                 
                 var value = port.Value;

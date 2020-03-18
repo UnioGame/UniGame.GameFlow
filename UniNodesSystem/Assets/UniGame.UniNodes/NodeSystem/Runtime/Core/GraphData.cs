@@ -27,7 +27,9 @@
         public string ItemName => _name;
 
         public int Id => _id;
-        
+
+        public int GetId() => throw new NotImplementedException();
+
         public int UpdateId(int oldId) => throw new NotImplementedException();
 
         public INode GetNode(int nodeId) => throw new NotImplementedException();

@@ -1,12 +1,14 @@
-﻿namespace UUniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
+﻿namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
 {
     using System;
     using System.Collections.Generic;
+    using UniGame.UniNodes.NodeSystem.Runtime.Attributes;
     using UniGame.UniNodes.NodeSystem.Runtime.Core;
     using UniGame.UniNodes.NodeSystem.Runtime.Core.Interfaces;
     using UniGame.UniNodes.NodeSystem.Runtime.Interfaces;
     using UnityEngine;
 
+    [HideNode]
     [Serializable]
     public class DummyNode : INode
     {

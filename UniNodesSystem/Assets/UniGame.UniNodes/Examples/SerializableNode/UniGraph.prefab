@@ -67,28 +67,30 @@ MonoBehaviour:
         broadcastersCount: 0
       connections: []
       instancePortList: 0
-  uniqueId: 68
+  uniqueId: 152
   nodes:
   - {fileID: 2126589237147687122}
   serializableNodes:
   - id: 0
   - id: 1
+  - id: 2
+  - id: 3
   references:
     version: 1
     00000000:
       type: {class: SLogNode, ns: UniGame.UniNodes.Nodes.Runtime.SerializableNodes,
         asm: unigame.nodesystem.commonnodes}
       data:
-        id: 26
+        id: 142
         width: 220
         nodeName: S Log Node
-        position: {x: 440, y: -136}
+        position: {x: 504, y: -264}
         ports:
           keys:
           - log
           values:
-          - id: 52
-            nodeId: 26
+          - id: 144
+            nodeId: 142
             fieldName: log
             direction: 0
             connectionType: 0
@@ -103,25 +105,25 @@ MonoBehaviour:
             - fieldName: contextValue
               nodeId: 53
               reroutePoints: []
-              portId: 54
+              portId: 0
             instancePortList: 0
         serializableCommands: []
-        mode: 0
-        message: SLOG
+        mode: 1
+        message: LogNode
     00000001:
       type: {class: SLogNode, ns: UniGame.UniNodes.Nodes.Runtime.SerializableNodes,
         asm: unigame.nodesystem.commonnodes}
       data:
-        id: 66
+        id: 145
         width: 220
         nodeName: S Log Node
-        position: {x: 440, y: 56}
+        position: {x: 504, y: -40}
         ports:
           keys:
           - log
           values:
-          - id: 68
-            nodeId: 66
+          - id: 146
+            nodeId: 145
             fieldName: log
             direction: 0
             connectionType: 0
@@ -136,7 +138,73 @@ MonoBehaviour:
             - fieldName: contextValue
               nodeId: 53
               reroutePoints: []
-              portId: 54
+              portId: 0
+            instancePortList: 0
+        serializableCommands: []
+        mode: 1
+        message: LogNode
+    00000002:
+      type: {class: SLogNode, ns: UniGame.UniNodes.Nodes.Runtime.SerializableNodes,
+        asm: unigame.nodesystem.commonnodes}
+      data:
+        id: 147
+        width: 220
+        nodeName: S Log Node
+        position: {x: 504, y: 168}
+        ports:
+          keys:
+          - log
+          values:
+          - id: 149
+            nodeId: 147
+            fieldName: log
+            direction: 0
+            connectionType: 0
+            showBackingValue: 2
+            isDynamic: 1
+            isInstancePortList: 0
+            portValue:
+              name: log
+              serializedValueTypes: []
+              broadcastersCount: 0
+            connections:
+            - fieldName: contextValue
+              nodeId: 53
+              reroutePoints: []
+              portId: 0
+            instancePortList: 0
+        serializableCommands: []
+        mode: 1
+        message: LogNode
+    00000003:
+      type: {class: SLogNode, ns: UniGame.UniNodes.Nodes.Runtime.SerializableNodes,
+        asm: unigame.nodesystem.commonnodes}
+      data:
+        id: 150
+        width: 220
+        nodeName: S Log Node
+        position: {x: 504, y: 344}
+        ports:
+          keys:
+          - log
+          values:
+          - id: 152
+            nodeId: 150
+            fieldName: log
+            direction: 0
+            connectionType: 0
+            showBackingValue: 2
+            isDynamic: 1
+            isInstancePortList: 0
+            portValue:
+              name: log
+              serializedValueTypes: []
+              broadcastersCount: 0
+            connections:
+            - fieldName: contextValue
+              nodeId: 53
+              reroutePoints: []
+              portId: 0
             instancePortList: 0
         serializableCommands: []
         mode: 1
@@ -169,7 +237,7 @@ MonoBehaviour:
   id: 53
   width: 220
   nodeName: Demo Context Source Node
-  position: {x: 72, y: -104}
+  position: {x: 168, y: -40}
   ports:
     keys:
     - contextValue
@@ -190,13 +258,21 @@ MonoBehaviour:
         broadcastersCount: 0
       connections:
       - fieldName: log
-        nodeId: 26
+        nodeId: 142
         reroutePoints: []
-        portId: 52
+        portId: 0
       - fieldName: log
-        nodeId: 66
+        nodeId: 145
         reroutePoints: []
-        portId: 68
+        portId: 0
+      - fieldName: log
+        nodeId: 147
+        reroutePoints: []
+        portId: 0
+      - fieldName: log
+        nodeId: 150
+        reroutePoints: []
+        portId: 0
       instancePortList: 0
   contextValue:
     sendByBind: 1
