@@ -139,6 +139,8 @@
 
         #region public properties
 
+        public int Id => id;
+
         public IReadOnlyList<IPortConnection> Connections => connections;
 
         public IReadOnlyList<Func<INodePort, INodePort, bool>> ConnectionsValidators =>
@@ -223,24 +225,12 @@
         }
 
         /// <summary>
-        /// update related port id
-        /// </summary>
-        /// <param name="oldId"></param>
-        /// <param name="newId"></param>
-        /// <param name="updatedItem"></param>
-        public void OnIdUpdate(int oldId, int newId, IGraphItem updatedItem)
-        {
-        }
-
-
-        /// <summary>
         /// terminate Port lifetime, release resources
         /// </summary>
         public void Release()
         {
             lifeTimeDefinition.Terminate();
         }
-
         
         #region comperer api
 
