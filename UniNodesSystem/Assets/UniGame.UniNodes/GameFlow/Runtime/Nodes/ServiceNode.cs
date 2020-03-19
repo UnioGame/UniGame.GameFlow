@@ -58,7 +58,7 @@
 
             _serviceDisposable = service.IsReady.
                 Where(x => x || !waitForServiceReady).
-                Do(_ => context.Publish(service)).
+                Do(_ => context.Publish<TServiceApi>(service)).
                 Do(_ => Finish()).
                 Subscribe().
                 AddTo(LifeTime);
