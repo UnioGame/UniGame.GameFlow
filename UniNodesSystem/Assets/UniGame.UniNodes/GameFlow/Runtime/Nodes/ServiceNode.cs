@@ -14,13 +14,12 @@
     /// <typeparam name="TService"></typeparam>
     /// <typeparam name="TServiceApi"></typeparam>
     [HideNode]
-    public abstract class ServiceNode<TService,TServiceApi> : 
+    public abstract class ServiceNode<TServiceApi> : 
         ContextNode
         where TServiceApi : IGameService
-        where TService : TServiceApi
     {
         [SerializeField]
-        protected TService service;
+        protected TServiceApi service;
 
         #region inspector
 
@@ -33,7 +32,7 @@
         
         public bool waitForServiceReady = true;
 
-        protected abstract TService CreateService();
+        protected abstract TServiceApi CreateService();
 
         protected override void OnInitialize()
         {
@@ -47,7 +46,7 @@
                 Do(x => service.Bind(x,LifeTime)).
                 CombineLatest(service.IsReady, (ctx, ready) => (ctx,ready)).
                 Where(x => x.ready || !waitForServiceReady).
-                Do(x => x.ctx.Publish<TServiceApi>(service)).
+                Do(x => x.ctx.Publish(service)).
                 Do(x => Finish()).
                 Subscribe().
                 AddTo(LifeTime);
