@@ -26,7 +26,7 @@
         
         public bool HasValue => contextNode.HasValue;
 
-        public void Finish() => contextNode.Finish();
+        public void Finish() => contextNode.Complete();
         
         public void Publish<T>(T message) => contextNode.Publish(message);
 
