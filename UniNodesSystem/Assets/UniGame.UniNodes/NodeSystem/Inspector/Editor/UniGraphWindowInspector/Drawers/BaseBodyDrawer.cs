@@ -43,8 +43,7 @@
             var node = item.Node;
             node.DrawNodePropertyField(
                 item.Property,
-                new GUIContent(item.Name, item.Tooltip),
-                true);
+                new GUIContent(item.Name, item.Tooltip),true);
         }
 
         public virtual IEnumerable<NodeItemEditorData> GetNodeItems(INodeEditorData editor, INode node)
