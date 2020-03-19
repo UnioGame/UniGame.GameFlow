@@ -8,6 +8,7 @@
     using UniGreenModules.UniCore.Runtime.Rx.Extensions;
     using UniNodes.Nodes.Runtime.Common;
     using UniRx;
+    using UniRx.Async;
     using UnityEngine;
 
     /// <summary>
@@ -34,15 +35,17 @@
         
         public bool waitForServiceReady = true;
 
-        protected abstract TServiceApi CreateService(IContext context);
+        protected abstract UniTask<TServiceApi> CreateService(IContext context);
 
         private IDisposable _serviceDisposable;
         
         protected override void OnExecute()
         {
             Source.Where(x => x != null).
-                Do(x=>service = CreateService(x)).
-                Do(BindService).
+                Do(async x => {
+                    service = await CreateService(x);
+                    BindService(x);
+                }).
                 Subscribe().
                 AddTo(LifeTime);
         }

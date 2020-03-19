@@ -3,6 +3,7 @@
     using Interfaces;
     using NodeSystem.Runtime.Attributes;
     using UniGreenModules.UniCore.Runtime.Interfaces;
+    using UniRx.Async;
 
     [HideNode]
     public abstract class GameServiceNode<TService> :
@@ -20,7 +21,7 @@
         where TService : class, TServiceApi, new()
     {
  
-        protected override TServiceApi CreateService(IContext context) => service ?? new TService();
+        protected override async UniTask<TServiceApi> CreateService(IContext context) => service ?? new TService();
         
     }
 }
