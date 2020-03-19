@@ -383,7 +383,7 @@
             // Remove the other ports connection to this port
             for (var i = 0; i < port.Connections.Count; i++) {
                 var connection = port.Connections[i];
-                if (connection.IsTarget(port)) {
+                if (connection.IsTarget(this)) {
                     port.RemoveConnection(connection);
                 }
             }
@@ -446,6 +446,36 @@
             }
         }
 
+        /// <summary> Swap connections with another node </summary>
+        public void SwapConnections(INodePort targetPort)
+        {
+            var aConnectionCount = connections.Count;
+            var bConnectionCount = targetPort.Connections.Count;
+
+            var portConnections       = new List<INodePort>();
+            var targetPortConnections = new List<INodePort>();
+
+            // Cache port connections
+            for (var i = 0; i < aConnectionCount; i++)
+                portConnections.Add(connections[i].Port);
+
+            // Cache target port connections
+            for (var i = 0; i < bConnectionCount; i++)
+                targetPortConnections.Add(targetPort.Connections[i].Port);
+
+            ClearConnections();
+
+            targetPort.ClearConnections();
+
+            // Add port connections to targetPort
+            for (var i = 0; i < portConnections.Count; i++)
+                targetPort.Connect(portConnections[i]);
+
+            // Add target port connections to this one
+            for (var i = 0; i < targetPortConnections.Count; i++)
+                Connect(targetPortConnections[i]);
+        }
+        
         #endregion
 
     }

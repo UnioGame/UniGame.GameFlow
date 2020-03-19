@@ -28,7 +28,7 @@
             
             results.Despawn();
             
-            Finish();
+            Complete();
         }
 
         protected sealed override void OnExecute()

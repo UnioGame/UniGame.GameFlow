@@ -109,7 +109,7 @@
                 EditorGUILayout.PropertyField(property, label, includeChildren, GUILayout.MinWidth(30));
             }
             else {
-                DrawFieldPort(property, label,node, port, includeChildren, options);
+                DrawFieldPort(property, label, node, port, includeChildren, options);
             }
         }
 
@@ -139,24 +139,24 @@
 
             rect          = GUILayoutUtility.GetLastRect();
             rect.position = port.Direction == PortIO.Input ? rect.position - new Vector2(16, 0) : rect.position + new Vector2(rect.width, 0);
-            rect.size = new Vector2(16, 16);
+            rect.size     = new Vector2(16, 16);
 
             Color backgroundColor = new Color32(90, 97, 105, 255);
             if (NodeEditorWindow.nodeTint.TryGetValue(port.Node.GetType(), out var tint)) {
                 backgroundColor *= tint;
             }
-            
+
             Profiler.BeginSample("DrawPortHandle");
             var col = NodeEditorPreferences.GetTypeColor(port.ValueType);
             DrawPortHandle(rect, backgroundColor, col);
             Profiler.EndSample();
-            
+
             // Register the handle position
             var portPos = rect.center;
 
             //TODO REMOTE
             NodeEditor.PortPositions[port] = portPos;
-            
+
             portData.Despawn();
         }
 
@@ -434,56 +434,54 @@
                 rect => { EditorGUI.LabelField(rect, label); };
             list.onSelectCallback =
                 rl => { reorderableListIndex = rl.index; };
-//            list.onReorderCallback =
-                    //                rl => {
-                    //                    // Move up
-                    //                    if (rl.index > reorderableListIndex) {
-                    //                        for (var i = reorderableListIndex; i < rl.index; ++i) {
-                    //                            var port     = node.GetPort(arrayData.name + " " + i);
-                    //                            var nextPort = node.GetPort(arrayData.name + " " + (i + 1));
-                    //                            var id       = port.Id;
-                    //
-                    //                            port.SwapConnections(nextPort);
-                    //
-                    //                            // Swap cached positions to mitigate twitching
-                    //                            var rect = portConnections[id];
-                    //                            portConnections[id] = portConnections[id];
-                    //                            portConnections[id] = rect;
-                    //                        }
-                    //                    }
-                    //                    // Move down
-                    //                    else {
-                    //                        for (var i = reorderableListIndex; i > rl.index; --i) {
-                    //                            var port     = node.GetPort(arrayData.name + " " + i);
-                    //                            var nextPort = node.GetPort(arrayData.name + " " + (i - 1));
-                    //                            port.SwapConnections(nextPort);
-                    //
-                    //                            var id = port.Id;
-                    //                            // Swap cached positions to mitigate twitching
-                    //                            var rect = portConnections[id];
-                    //                            portConnections[id] = portConnections[id];
-                    //                            portConnections[id] = rect;
-                    //                        }
-                    //                    }
-                    //
-                    //                    // Apply changes
-                    //                    serializedObject.ApplyModifiedProperties();
-                    //                    serializedObject.Update();
-                    //
-                    //                    // Move array data if there is any
-                    //                    if (hasArrayData) {
-                    //                        var arrayDataOriginal = arrayData.Copy();
-                    //                        arrayData.MoveArrayElement(reorderableListIndex, rl.index);
-                    //                    }
-                    //
-                    //                    // Apply changes
-                    //                    serializedObject.ApplyModifiedProperties();
-                    //                    serializedObject.Update();
-                    //
-                    //                    var window = NodeEditorWindow.ActiveWindows.FirstOrDefault(x => x.ActiveGraph == node.GraphData);
-                    //                    window.Repaint();
-                    ////                    EditorApplication.delayCall += window.Repaint;
-                    //                };
+            list.onReorderCallback = rl => {
+                // Move up
+                if (rl.index > reorderableListIndex) {
+                    for (var i = reorderableListIndex; i < rl.index; ++i) {
+                        var port     = node.GetPort(arrayData.name + " " + i);
+                        var nextPort = node.GetPort(arrayData.name + " " + (i + 1));
+  
+                        port.SwapConnections(nextPort);
+
+                        // Swap cached positions to mitigate twitching
+                        var rect = portConnections[port];
+                        portConnections[port] = portConnections[port];
+                        portConnections[port] = rect;
+                    }
+                }
+                // Move down
+                else {
+                    for (var i = reorderableListIndex; i > rl.index; --i) {
+                        var port     = node.GetPort(arrayData.name + " " + i);
+                        var nextPort = node.GetPort(arrayData.name + " " + (i - 1));
+                        
+                        port.SwapConnections(nextPort);
+
+                        // Swap cached positions to mitigate twitching
+                        var rect = portConnections[port];
+                        portConnections[port] = portConnections[port];
+                        portConnections[port] = rect;
+                    }
+                }
+
+                // Apply changes
+                serializedObject.ApplyModifiedProperties();
+                serializedObject.Update();
+
+                // Move array data if there is any
+                if (hasArrayData) {
+                    var arrayDataOriginal = arrayData.Copy();
+                    arrayData.MoveArrayElement(reorderableListIndex, rl.index);
+                }
+
+                // Apply changes
+                serializedObject.ApplyModifiedProperties();
+                serializedObject.Update();
+
+                var window = NodeEditorWindow.ActiveWindows.FirstOrDefault(x => x.ActiveGraph == node.GraphData);
+                window.Repaint();
+                //                    EditorApplication.delayCall += window.Repaint;
+            };
             list.onAddCallback = rl => {
                 // Add instance port postfixed with an index number
                 var newName = arrayData.name + " 0";

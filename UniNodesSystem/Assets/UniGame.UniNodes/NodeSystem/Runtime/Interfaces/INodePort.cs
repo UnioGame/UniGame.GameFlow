@@ -65,5 +65,7 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
         /// <summary> Copy all connections pointing to a node and add them to this one </summary>
         void AddConnections(INodePort targetPort);
 
+        void SwapConnections(INodePort targetPort);
+
     }
 }
