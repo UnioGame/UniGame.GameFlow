@@ -2,6 +2,7 @@
 {
     using Interfaces;
     using NodeSystem.Runtime.Attributes;
+    using UniGreenModules.UniCore.Runtime.Interfaces;
 
     [HideNode]
     public abstract class GameServiceNode<TService> :
@@ -19,7 +20,7 @@
         where TService : class, TServiceApi, new()
     {
  
-        protected override TServiceApi CreateService() => service ?? new TService();
+        protected override TServiceApi CreateService(IContext context) => service ?? new TService();
         
     }
 }

@@ -1,8 +1,10 @@
 ﻿namespace UniGame.UniNodes.GameFlow.Runtime.Nodes
 {
+    using System;
     using Interfaces;
     using NodeSystem.Runtime.Attributes;
     using UniGreenModules.UniCore.Runtime.Attributes;
+    using UniGreenModules.UniCore.Runtime.Interfaces;
     using UniGreenModules.UniCore.Runtime.Rx.Extensions;
     using UniNodes.Nodes.Runtime.Common;
     using UniRx;
@@ -32,25 +34,31 @@
         
         public bool waitForServiceReady = true;
 
-        protected abstract TServiceApi CreateService();
+        protected abstract TServiceApi CreateService(IContext context);
 
-        protected override void OnInitialize()
-        {
-            base.OnInitialize();
-            service = CreateService();
-        }
-
+        private IDisposable _serviceDisposable;
+        
         protected override void OnExecute()
         {
             Source.Where(x => x != null).
-                Do(x => service.Bind(x,LifeTime)).
-                CombineLatest(service.IsReady, (ctx, ready) => (ctx,ready)).
-                Where(x => x.ready || !waitForServiceReady).
-                Do(x => x.ctx.Publish(service)).
-                Do(x => Finish()).
+                Do(x=>service = CreateService(x)).
+                Do(BindService).
                 Subscribe().
                 AddTo(LifeTime);
         }
 
+        private void BindService(IContext context)
+        {
+            service.Bind(context, LifeTime);
+            
+            _serviceDisposable?.Dispose();
+
+            _serviceDisposable = service.IsReady.
+                Where(x => x || !waitForServiceReady).
+                Do(_ => context.Publish(service)).
+                Do(_ => Finish()).
+                Subscribe().
+                AddTo(LifeTime);
+        }
     }
 }
