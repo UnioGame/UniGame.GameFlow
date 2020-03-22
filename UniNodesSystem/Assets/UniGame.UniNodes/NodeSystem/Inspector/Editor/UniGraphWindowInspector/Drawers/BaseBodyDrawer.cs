@@ -7,8 +7,6 @@
     using Interfaces;
     using Runtime.Attributes;
     using Runtime.Interfaces;
-    using UniCore.Runtime.ProfilerTools;
-    using UniGreenModules.UniCore.EditorTools.Editor.Utility;
     using UniGreenModules.UniCore.Runtime.ReflectionUtils;
     using UnityEditor;
     using UnityEngine;
@@ -38,15 +36,14 @@
             return true;
         }
 
-        public virtual void DrawItem(NodeItemEditorData item)
+        public virtual void DrawItem(PropertyEditorData item)
         {
-            var node = item.Node;
-            node.DrawNodePropertyField(
-                item.Property,
+            var node = item.Target as INode;
+            node.DrawNodePropertyField(item.Property,
                 new GUIContent(item.Name, item.Tooltip),true);
         }
 
-        public virtual IEnumerable<NodeItemEditorData> GetNodeItems(INodeEditorData editor, INode node)
+        public virtual IEnumerable<PropertyEditorData> GetNodeItems(INodeEditorData editor, INode node)
         {
             var editorNode       = editor.EditorNode;
             var serializedObject = editor.SerializedObject;
@@ -55,32 +52,8 @@
             var targetProperty = serializedObject == null ? 
                 editorNode.Property : 
                 serializedObject.GetIterator();
-
-            var property = targetProperty.Copy();
- 
-            var type = node.GetType();
-
-            EditorGUIUtility.labelWidth = 84;
             
-            var moveNext = property.NextVisible(true);
-            var next = parent?.GetNextArrayProperty(targetProperty);
-
-            while (moveNext 
-                   && !property.IsEquals(targetProperty) 
-                   && (next == null || !next.IsEquals(property)))
-            {
-                yield return new NodeItemEditorData() {
-                    Node     = node,
-                    Name     = property.name,
-                    Tooltip  = property.tooltip,
-                    Source   = node,
-                    Type     = type,
-                    Property = property,
-                };
-                moveNext = property.NextVisible(false);
-            }
-
-            counter++;
+            return node.GetProperties(targetProperty, parent);
         }
 
         public bool IsItemVisible(Type type, string fieldName)

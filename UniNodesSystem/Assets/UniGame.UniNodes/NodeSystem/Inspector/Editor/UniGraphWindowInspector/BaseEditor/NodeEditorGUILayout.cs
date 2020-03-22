@@ -3,16 +3,21 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Drawers;
     using Drawers.ReactivePortDrawers;
     using Extensions;
+    using Interfaces;
+    using Runtime.Attributes;
     using Runtime.Core;
     using Runtime.Interfaces;
     using UniGreenModules.UniCore.EditorTools.Editor.Utility;
     using UniGreenModules.UniCore.Runtime.ObjectPool.Runtime.Extensions;
+    using UniGreenModules.UniCore.Runtime.ReflectionUtils;
     using UnityEditor;
     using UnityEditorInternal;
     using UnityEngine;
     using UnityEngine.Profiling;
+    using Object = UnityEngine.Object;
 
     /// <summary> UniNodeSystem-specific version of <see cref="EditorGUILayout"/> </summary>
     public static class NodeEditorGUILayout
@@ -22,6 +27,71 @@
 
         private static int reorderableListIndex = -1;
 
+        public static IEnumerable<PropertyEditorData> GetProperties(this INode node,SerializedObject serializedObject)
+        {
+            return node.GetProperties(serializedObject.GetIterator(), null);
+        }
+
+        private static List<string> excludes = new List<string>() {"m_Script"};
+        
+        public static void DrawNode(this INode node, Object target)
+        {
+            var serializedObject = new SerializedObject(target);
+            
+            var drawedItems      = node.GetProperties(serializedObject);
+
+            foreach (var item in drawedItems) {
+                if (!node.IsFieldVisible(item.Type, item.Name))
+                    continue;
+                
+                node.DrawNodePropertyField(
+                    item.Property,
+                    new GUIContent(item.Name, item.Tooltip),
+                    true);
+            }
+        }
+        
+        public static bool IsFieldVisible(this object value, Type type, string fieldName)
+        {
+            if (excludes.Contains(fieldName))
+                return false;
+            
+            //is node field should be draw
+            var field         = type.GetFieldInfoCached(fieldName);
+            var hideInspector = field?.GetCustomAttributes(typeof(HideNodeInspectorAttribute), false).Length > 0;
+            return !hideInspector;
+        }
+        
+        public static IEnumerable<PropertyEditorData> GetProperties(
+            this object target,
+            SerializedProperty targetProperty,
+            SerializedProperty parent)
+        {
+            var property = targetProperty.Copy();
+ 
+            var type = target.GetType();
+
+            EditorGUIUtility.labelWidth = 84;
+            
+            var moveNext = property.NextVisible(true);
+            var next     = parent?.GetNextArrayProperty(targetProperty);
+
+            while (moveNext 
+                   && !property.IsEquals(targetProperty) 
+                   && (next == null || !next.IsEquals(property)))
+            {
+                yield return new PropertyEditorData() {
+                    Target   = target,
+                    Name     = property.name,
+                    Tooltip  = property.tooltip,
+                    Source   = target,
+                    Type     = type,
+                    Property = property,
+                };
+                moveNext = property.NextVisible(false);
+            }
+        }
+        
         /// <summary> Make a field for a serialized property. Automatically displays relevant node port. </summary>
         public static void DrawNodePropertyField(
             this INode node,
