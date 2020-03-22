@@ -96,7 +96,7 @@
             this INode node,
             SerializedProperty property,
             GUIContent label,
-            NodePort port,
+            INodePort port,
             bool includeChildren = true,
             params GUILayoutOption[] options)
         {
@@ -117,7 +117,7 @@
             SerializedProperty property,
             GUIContent label,
             INode node,
-            NodePort port,
+            INodePort port,
             bool includeChildren = true,
             params GUILayoutOption[] options)
         {
@@ -168,13 +168,14 @@
         }
 
         /// <summary> Make a simple port field. </summary>
-        public static void PortField(NodePort port, params GUILayoutOption[] options)
+        public static void PortField(INodePort port, params GUILayoutOption[] options)
         {
             PortField(null, port, options);
         }
 
         /// <summary> Make a simple port field. </summary>
-        public static void PortField(GUIContent label, NodePort port,
+        public static void PortField(GUIContent label, 
+            INodePort port,
             params GUILayoutOption[] layoutOptions)
         {
             if (port == null) return;
@@ -188,7 +189,7 @@
             PortField(port, defaultStyle);
         }
 
-        public static void PortField(NodePort port, NodeGuiLayoutStyle portStyle)
+        public static void PortField(INodePort port, NodeGuiLayoutStyle portStyle)
         {
             if (port == null) return;
 
@@ -221,7 +222,7 @@
 
 
         /// <summary> Make a simple port field. </summary>
-        public static void PortField(Vector2 position, NodePort port)
+        public static void PortField(Vector2 position, INodePort port)
         {
             if (port == null) return;
 
@@ -230,7 +231,7 @@
             PortField(position, port, col);
         }
 
-        public static NodeGuiLayoutStyle GetDefaultPortStyle(NodePort port)
+        public static NodeGuiLayoutStyle GetDefaultPortStyle(INodePort port)
         {
             var name  = port == null ? string.Empty : port.ItemName;
             var label = port == null ? new GUIContent(string.Empty) : new GUIContent(port.ItemName);
@@ -246,7 +247,7 @@
             return style;
         }
 
-        public static Color GetMainPortColor(NodePort port)
+        public static Color GetMainPortColor(INodePort port)
         {
             if (port == null)
                 return Color.magenta;
@@ -254,7 +255,7 @@
             return NodeEditorPreferences.GetTypeColor(port.ValueType);
         }
 
-        public static Color GetBackgroundPortColor(NodePort port)
+        public static Color GetBackgroundPortColor(INodePort port)
         {
             Color backgroundColor = new Color32(90, 97, 105, 255);
             if (port == null)
@@ -264,7 +265,7 @@
             return backgroundColor;
         }
 
-        public static void PortField(Vector2 position, NodePort port, Color color)
+        public static void PortField(Vector2 position, INodePort port, Color color)
         {
             if (port == null) return;
 
@@ -273,7 +274,7 @@
             PortField(position, port, color, backgroundColor);
         }
 
-        public static void PortField(Vector2 position, NodePort port, Color color, Color backgroundColor)
+        public static void PortField(Vector2 position, INodePort port, Color color, Color backgroundColor)
         {
             if (port == null) return;
 
@@ -327,7 +328,7 @@
             GUILayout.EndHorizontal();
         }
 
-        public static void PortPair(NodePort input, NodePort output,
+        public static void PortPair(INodePort input, INodePort output,
             NodeGuiLayoutStyle intputStyle, NodeGuiLayoutStyle outputStyle)
         {
             GUILayout.BeginHorizontal(GUILayout.ExpandWidth(true));
@@ -398,9 +399,14 @@
             list.DoLayoutList();
         }
 
-        private static ReorderableList CreateReorderableList(List<NodePort> instancePorts,
-            SerializedProperty arrayData, Type type, SerializedObject serializedObject, PortIO io,
-            string label, ConnectionType connectionType = ConnectionType.Multiple)
+        private static ReorderableList CreateReorderableList(
+            List<INodePort> instancePorts,
+            SerializedProperty arrayData, 
+            Type type, 
+            SerializedObject serializedObject, 
+            PortIO io,
+            string label, 
+            ConnectionType connectionType = ConnectionType.Multiple)
         {
             var hasArrayData = arrayData != null && arrayData.isArray;
             var arraySize    = hasArrayData ? arrayData.arraySize : 0;
@@ -419,7 +425,10 @@
                     }
                     else EditorGUI.LabelField(rect, port.ItemName);
 
-                    var pos = rect.position + (port.IsOutput ? new Vector2(rect.width + 6, 0) : new Vector2(-36, 0));
+                    var pos = rect.position + (port.Direction == PortIO.Output ? 
+                                  new Vector2(rect.width + 6, 0) : 
+                                  new Vector2(-36, 0));
+                    
                     PortField(pos, port);
                 };
             list.elementHeightCallback =

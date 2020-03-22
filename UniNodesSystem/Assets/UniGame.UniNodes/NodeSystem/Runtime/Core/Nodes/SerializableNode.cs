@@ -74,7 +74,7 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
         /// <summary>
         /// Iterate over all ports on this node.
         /// </summary>
-        public IReadOnlyList<NodePort> Ports => ports.Ports;
+        public IReadOnlyList<INodePort> Ports => ports.Ports;
 
         /// <summary>
         /// node width
@@ -95,12 +95,12 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
         /// <summary>
         /// Iterate over all outputs on this node.
         /// </summary>
-        public IEnumerable<NodePort> Outputs => GetPorts(PortIO.Output);
+        public IEnumerable<INodePort> Outputs => GetPorts(PortIO.Output);
 
         /// <summary>
         /// Iterate over all inputs on this node.
         /// </summary>
-        public IEnumerable<NodePort> Inputs => GetPorts(PortIO.Input);
+        public IEnumerable<INodePort> Inputs => GetPorts(PortIO.Input);
         
         /// <summary>
         /// base context graph data
@@ -186,7 +186,7 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
         /// <summary>
         /// Remove an instance port from the node
         /// </summary>
-        public virtual void RemovePort(NodePort port)
+        public virtual void RemovePort(INodePort port)
         {
             if (port == null) throw new ArgumentNullException("port");
             port.ClearConnections();
@@ -196,7 +196,7 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
         /// <summary>
         /// Returns output port which matches fieldName
         /// </summary>
-        public NodePort GetOutputPort(string fieldName)
+        public INodePort GetOutputPort(string fieldName)
         {
             var port = GetPort(fieldName);
             if (port == null || port.Direction != PortIO.Output) return null;
@@ -206,7 +206,7 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
         /// <summary>
         /// Returns input port which matches fieldName
         /// </summary>
-        public NodePort GetInputPort(string fieldName)
+        public INodePort GetInputPort(string fieldName)
         {
             var port = GetPort(fieldName);
             if (port == null || port.Direction != PortIO.Input) return null;
@@ -216,13 +216,13 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
         public IPortValue GetPortValue(string portName)
         {
             var port = GetPort(portName);
-            return port?.portValue;
+            return port?.Value;
         }
         
         /// <summary>
         /// Returns port which matches fieldName
         /// </summary>
-        public NodePort GetPort(string portName)
+        public INodePort GetPort(string portName)
         {
             if (string.IsNullOrEmpty(portName))
                 return null;
@@ -250,13 +250,11 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
 
         #endregion
 
-        protected 
-        
-        private IEnumerable<NodePort> GetPorts(PortIO direction)
+        protected IEnumerable<INodePort> GetPorts(PortIO direction)
         {
             for (var i = 0; i < Ports.Count; i++) {
                 var port = Ports[i];
-                if (port.direction == direction)
+                if (port.Direction == direction)
                     yield return port;
             }
         }

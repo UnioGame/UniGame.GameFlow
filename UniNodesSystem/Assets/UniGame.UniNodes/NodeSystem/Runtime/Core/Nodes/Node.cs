@@ -54,17 +54,17 @@
         /// <summary>
         /// Iterate over all ports on this node.
         /// </summary>
-        public IReadOnlyList<NodePort> Ports => ports.Ports;
+        public IReadOnlyList<INodePort> Ports => ports.Ports;
         
         /// <summary>
         /// Iterate over all outputs on this node.
         /// </summary>
-        public IEnumerable<NodePort> Outputs
+        public IEnumerable<INodePort> Outputs
         {
             get {
                 for (var i = 0; i < Ports.Count; i++) {
                     var port = Ports[i];
-                    if (port.IsOutput) yield return port;
+                    if (port.Direction == PortIO.Output) yield return port;
                 }
             }
         }
@@ -72,12 +72,12 @@
         /// <summary>
         /// Iterate over all inputs on this node.
         /// </summary>
-        public IEnumerable<NodePort> Inputs
+        public IEnumerable<INodePort> Inputs
         {
             get {
                 for (var i = 0; i < Ports.Count; i++) {
                     var port = Ports[i];
-                    if (port.IsInput) yield return port;
+                    if (port.Direction == PortIO.Input) yield return port;
                 }
             }
         }
@@ -186,7 +186,7 @@
         /// <summary>
         /// Remove an instance port from the node
         /// </summary>
-        public virtual void RemovePort(NodePort port)
+        public virtual void RemovePort(INodePort port)
         {
             if (port == null) throw new ArgumentNullException("port");
             port.ClearConnections();
@@ -196,7 +196,7 @@
         /// <summary>
         /// Returns output port which matches fieldName
         /// </summary>
-        public NodePort GetOutputPort(string fieldName)
+        public INodePort GetOutputPort(string fieldName)
         {
             var port = GetPort(fieldName);
             if (port == null || port.Direction != PortIO.Output) return null;
@@ -206,7 +206,7 @@
         /// <summary>
         /// Returns input port which matches fieldName
         /// </summary>
-        public NodePort GetInputPort(string fieldName)
+        public INodePort GetInputPort(string fieldName)
         {
             var port = GetPort(fieldName);
             if (port == null || port.Direction != PortIO.Input) return null;
@@ -216,13 +216,13 @@
         public IPortValue GetPortValue(string portName)
         {
             var port = GetPort(portName);
-            return port?.portValue;
+            return port?.Value;
         }
         
         /// <summary>
         /// Returns port which matches fieldName
         /// </summary>
-        public NodePort GetPort(string portName)
+        public INodePort GetPort(string portName)
         {
             if (string.IsNullOrEmpty(portName))
                 return null;

@@ -17,7 +17,7 @@
             return port;
         }
 
-        public static NodePort DrawPortField(this NodePort port, NodeGuiLayoutStyle style)
+        public static INodePort DrawPortField(this INodePort port, NodeGuiLayoutStyle style)
         {
             NodeEditorGUILayout.PortField(port, style);
 
@@ -26,8 +26,8 @@
 
         public static void DrawPortPairField(
             this INode node,
-            NodePort input,
-            NodePort output,
+            INodePort input,
+            INodePort output,
             NodeGuiLayoutStyle intputStyle,
             NodeGuiLayoutStyle outputStyle)
         {

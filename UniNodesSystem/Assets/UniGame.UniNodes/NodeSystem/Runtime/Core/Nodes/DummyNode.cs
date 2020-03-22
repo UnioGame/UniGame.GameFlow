@@ -16,16 +16,16 @@
         public string ItemName { get; private set;  }
 
         public IGraphData              GraphData { get; }
-        public IReadOnlyList<NodePort> Ports     { get; }
-        public IEnumerable<NodePort>   Outputs   { get; }
+        public IReadOnlyList<INodePort> Ports     { get; }
+        public IEnumerable<INodePort>   Outputs   { get; }
     
-        public IEnumerable<NodePort> Inputs { get; }
+        public IEnumerable<INodePort> Inputs { get; }
 
-        public NodePort GetOutputPort(string fieldName) => null;
+        public INodePort GetOutputPort(string fieldName) => null;
 
-        public NodePort GetInputPort(string fieldName) => null;
+        public INodePort GetInputPort(string fieldName) => null;
 
-        public NodePort GetPort(string fieldName) => null;
+        public INodePort GetPort(string fieldName) => null;
 
         public bool HasPort(string fieldName) => false;
 
@@ -44,7 +44,7 @@
 
         public void RemovePort(string fieldName) { }
 
-        public void RemovePort(NodePort port) { }
+        public void RemovePort(INodePort port) { }
 
         public void ClearConnections() { }
         public void Initialize(IGraphData data) {}

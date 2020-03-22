@@ -14,7 +14,7 @@
         private readonly IPortStyleProvider styleSelector;
         
         private Regex bracketsExpr = new Regex(UniNodeExtension.InputPattern);
-        private Dictionary<string, NodePort> _drawedPorts = new Dictionary<string, NodePort>();
+        private Dictionary<string, INodePort> _drawedPorts = new Dictionary<string, INodePort>();
 
         public UniPortsDrawer(IPortStyleProvider styleProvider)
         {
@@ -46,7 +46,7 @@
             
         }
 
-        public bool DrawPortPair(INode node,NodePort inputPort, NodePort outputPort)
+        public bool DrawPortPair(INode node,INodePort inputPort, INodePort outputPort)
         {
             if (outputPort == null || inputPort == null)
             {
@@ -100,7 +100,7 @@
             }
         }
 
-        public void DrawPort(NodePort port)
+        public void DrawPort(INodePort port)
         {
             var portStyle = styleSelector.Select(port);
             port.DrawPortField(portStyle);

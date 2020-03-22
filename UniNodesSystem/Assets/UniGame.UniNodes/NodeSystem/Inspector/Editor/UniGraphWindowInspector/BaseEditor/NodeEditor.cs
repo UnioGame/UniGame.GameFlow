@@ -22,7 +22,7 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
         /// <summary>
         /// nodes port positions
         /// </summary>
-        public static Dictionary<NodePort, Vector2> PortPositions = new Dictionary<NodePort, Vector2>();
+        public static Dictionary<INodePort, Vector2> PortPositions = new Dictionary<INodePort, Vector2>();
 
         public static int Renaming;
 
@@ -32,7 +32,7 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
 
         public INode Target => Node;
 
-        public IReadOnlyDictionary<NodePort, Vector2> HandledPorts => PortPositions;
+        public IReadOnlyDictionary<INodePort, Vector2> HandledPorts => PortPositions;
 
         public EditorNode EditorNode => EditorData;
         
@@ -54,7 +54,7 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
         /// <summary> Draws standard field editors for all public fields </summary>
         public virtual void OnBodyGUI()
         {
-            PortPositions = PortPositions ?? new Dictionary<NodePort, Vector2>();
+            PortPositions = PortPositions ?? new Dictionary<INodePort, Vector2>();
             PortPositions.Clear();
 
             SerializedObject?.Update();

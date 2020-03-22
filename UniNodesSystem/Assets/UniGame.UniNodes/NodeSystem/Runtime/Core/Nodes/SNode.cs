@@ -184,13 +184,6 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
             removedPorts.ForEach(RemovePort);
             removedPorts.Despawn();
 
-            for (int i = 0; i < Ports.Count; i++) {
-                var port = Ports[i];
-                port.nodeId = id;
-                port.node   = this;
-                port.Validate();
-            }
-
             CleanUpSerializableCommands();
         }
 

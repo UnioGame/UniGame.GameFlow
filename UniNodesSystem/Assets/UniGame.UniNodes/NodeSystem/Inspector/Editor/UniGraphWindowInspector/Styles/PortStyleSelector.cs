@@ -8,7 +8,7 @@
     public class PortStyleSelector : IPortStyleProvider
     {
     
-        public virtual NodeGuiLayoutStyle Select(NodePort port)
+        public virtual NodeGuiLayoutStyle Select(INodePort port)
         {
             var portStyle = NodeEditorGUILayout.GetDefaultPortStyle(port);
 

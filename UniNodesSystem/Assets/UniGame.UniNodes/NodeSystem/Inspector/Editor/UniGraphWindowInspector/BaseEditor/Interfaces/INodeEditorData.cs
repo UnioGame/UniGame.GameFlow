@@ -26,7 +26,7 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
 
         INode Target { get; }
 
-        IReadOnlyDictionary<NodePort, Vector2> HandledPorts { get; }
+        IReadOnlyDictionary<INodePort, Vector2> HandledPorts { get; }
 
     }
 }

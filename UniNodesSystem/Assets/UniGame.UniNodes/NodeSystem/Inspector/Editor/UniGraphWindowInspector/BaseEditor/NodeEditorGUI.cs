@@ -574,7 +574,7 @@
                     .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
             }
 
-            NodeEditor.PortPositions = new Dictionary<NodePort, Vector2>();
+            NodeEditor.PortPositions = new Dictionary<INodePort, Vector2>();
 
             DrawNodeArea(ref editorNode, state);
         }

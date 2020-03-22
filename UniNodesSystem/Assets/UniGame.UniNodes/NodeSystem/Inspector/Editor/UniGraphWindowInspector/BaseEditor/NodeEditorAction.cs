@@ -25,9 +25,9 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
 
         private INode hoveredNode;
         
-        [NonSerialized] private NodePort hoveredPort;
-        [NonSerialized] private NodePort draggedOutput;
-        [NonSerialized] private NodePort draggedOutputTarget;
+        [NonSerialized] private INodePort hoveredPort;
+        [NonSerialized] private INodePort draggedOutput;
+        [NonSerialized] private INodePort draggedOutputTarget;
         [NonSerialized] private List<Vector2> draggedOutputReroutes = new List<Vector2>();
         
         private RerouteReference hoveredReroute;
@@ -40,11 +40,11 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
 
         private struct RerouteReference
         {
-            public NodePort port;
+            public INodePort port;
             public int connectionIndex;
             public int pointIndex;
 
-            public RerouteReference(NodePort port, int connectionIndex, int pointIndex)
+            public RerouteReference(INodePort port, int connectionIndex, int pointIndex)
             {
                 this.port = port;
                 this.connectionIndex = connectionIndex;
@@ -89,7 +89,7 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
                     {
                         if (IsDraggingPort)
                         {
-                            if (IsHoveringPort && hoveredPort.IsInput)
+                            if (IsHoveringPort && hoveredPort.Direction == PortIO.Input)
                             {
                                 if (!draggedOutput.IsConnectedTo(hoveredPort))
                                 {
