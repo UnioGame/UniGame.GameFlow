@@ -1,7 +1,7 @@
 ﻿namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.ContentContextWindow
 {
-    using System;
     using System.Linq;
+    using Core.EditorTools.Editor.UiElements;
     using UniGreenModules.UniCore.Runtime.Interfaces;
     using UniGreenModules.UniCore.Runtime.Interfaces.Rx;
     using UnityEditor;
