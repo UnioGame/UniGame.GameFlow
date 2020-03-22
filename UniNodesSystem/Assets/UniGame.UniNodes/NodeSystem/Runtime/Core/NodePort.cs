@@ -47,6 +47,9 @@
         /// </summary>
         [SerializeField]
         public List<PortConnection> connections = new List<PortConnection>();
+        /// <summary>
+        /// dynamic port list
+        /// </summary>
         [SerializeField] public bool instancePortList;
 
         #endregion
