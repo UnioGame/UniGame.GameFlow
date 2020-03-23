@@ -316,27 +316,11 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
         }
 
 
-        private NodeGraph Save(NodeGraph nodeGraph)
+        public NodeGraph Save(NodeGraph nodeGraph)
         {
-            if (EditorApplication.isPlaying || 
-                EditorApplication.isPlayingOrWillChangePlaymode ||
-                !nodeGraph)
-                return nodeGraph;
-            
-            nodeGraph.SetDirty();
-            nodeGraph.SaveScenes();
-            AssetDatabase.SaveAssets();
-            
+            nodeGraph = nodeGraph.Save();
             activeObject?.ApplyModifiedProperties();
-
             activeObject = new SerializedObject(nodeGraph);
-            
-            var prefabResource = nodeGraph.GetPrefabDefinition();
-            // if (prefabResource.IsInstance)
-            //     return nodeGraph;
-
-            prefabResource.SavePrefab();
-
             return nodeGraph;
         }
     }
