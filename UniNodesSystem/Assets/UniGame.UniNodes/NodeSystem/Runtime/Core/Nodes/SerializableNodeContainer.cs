@@ -26,11 +26,12 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
         public SerializableNode Node;
 
 
-        public void Initialize(SerializableNode node)
+        public SerializableNodeContainer Initialize(SerializableNode node)
         {
             Node = node;
             Type = node?.GetType().Name;
             FullType = node?.GetType().AssemblyQualifiedName;
+            return this;
         }
         
         private Object DrawScriptField(Object target,GUIContent label)

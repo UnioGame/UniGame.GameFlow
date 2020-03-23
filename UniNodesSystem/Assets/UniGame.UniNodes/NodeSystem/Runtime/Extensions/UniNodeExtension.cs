@@ -5,8 +5,6 @@
     using Core;
     using Core.Interfaces;
     using Interfaces;
-    using UniGreenModules.UniCore.Runtime.ObjectPool.Runtime;
-    using UniGreenModules.UniCore.Runtime.ObjectPool.Runtime.Extensions;
     using UniGreenModules.UniCore.Runtime.Rx.Extensions;
     using UniGreenModules.UniCore.Runtime.Utils;
     using UniRx;
@@ -57,7 +55,7 @@
         }
         
 #endregion
-        
+
         public static (IPortValue inputValue, IPortValue outputValue) 
             CreatePortPair(this IUniNode node,string inputPortName, string outputPortName, bool connectInOut = false)
         {

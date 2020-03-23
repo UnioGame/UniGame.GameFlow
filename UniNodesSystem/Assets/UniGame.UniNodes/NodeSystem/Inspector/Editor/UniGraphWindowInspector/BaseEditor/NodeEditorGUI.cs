@@ -216,7 +216,7 @@
                     continue;
 
                 //Get node context menu path
-                var path = graphEditor.GetNodeMenuName(type);
+                var path = type.GetNodeMenuName();
                 if (string.IsNullOrEmpty(path)) continue;
 
                 contextMenu.AddItem(new GUIContent(path), false, () => { CreateNode(type, pos); });
