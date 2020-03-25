@@ -24,7 +24,7 @@
         [SerializeField] public int id;
 
         [HideNodeInspector]
-        [SerializeField] public int width = 220;
+        [SerializeField] public int width = 250;
 
         [HideNodeInspector]
         [SerializeField] public string nodeName;

@@ -60,16 +60,15 @@
         /// </summary>
         [NonSerialized]
         private ILifeTime lifeTime;
-        /// <summary>
-        /// draft validator refactoring. Move rule to SO files
-        /// </summary>
-        [NonSerialized]
-        private IReadOnlyList<Func<INodePort, INodePort, bool>> connectionsValidators;
+
         /// <summary>
         /// port parent info
         /// </summary>    
         [NonSerialized]
         public INode node;
+
+        [NonSerialized]
+        private IPortConnectionValidator connectionValidator;
 
         #region constructor
 
@@ -146,16 +145,10 @@
 
         public IReadOnlyList<IPortConnection> Connections => connections;
 
-        public IReadOnlyList<Func<INodePort, INodePort, bool>> ConnectionsValidators =>
-            connectionsValidators ?? new List<Func<INodePort, INodePort, bool>>() {
-                (source, to) => to != null && source != null,
-                (source, to) => to != source,
-                (source, to) => !source.IsConnectedTo(to),
-                (source, to) => source.Direction != to.Direction,
-                (source, to) =>
-                    to.ValueTypes.Count == 0 || source.ValueTypes.Count == 0 ||
-                    source.ValueTypes.Any(to.Value.IsValidPortValueType),
-            };
+
+        public IPortConnectionValidator ConnectionValidator => connectionValidator = 
+            connectionValidator ?? 
+            new PortConnectionValidator();
 
         public bool InstancePortList => instancePortList;
 
@@ -291,8 +284,8 @@
             if (connections == null)
                 connections = new List<PortConnection>();
 
-            if (!ConnectionsValidators.All(x => x(this, port))) {
-                GameLog.LogError($"{node.GraphData.ItemName}:{Node.ItemName}:{ItemName} Connection Error. Validation Failed");
+            if (!ConnectionValidator.Validate(this, port)) {
+                GameLog.LogError($"{node?.GraphData.ItemName}:{Node?.ItemName}:{ItemName} Connection Error. Validation Failed");
                 return;
             }
 

@@ -46,6 +46,11 @@
         
         public IReadOnlyList<IGraphPortNode> InputsPorts => inputs;
 
+        public void Initialize()
+        {
+            Initialize(this);
+        }
+        
         public override void Dispose() => Exit();
 
         #region private methods
