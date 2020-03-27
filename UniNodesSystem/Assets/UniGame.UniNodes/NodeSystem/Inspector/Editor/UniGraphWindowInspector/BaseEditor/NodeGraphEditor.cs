@@ -26,9 +26,9 @@
         }
 
         /// <summary> Return default settings for this graph type. This is the settings the user will load if no previous settings have been saved. </summary>
-        public virtual NodeEditorSettings GetDefaultPreferences() 
+        public virtual GameFlowEditorSettings GetDefaultPreferences() 
         {
-            return new NodeEditorSettings();
+            return new GameFlowEditorSettings();
         }
 
 

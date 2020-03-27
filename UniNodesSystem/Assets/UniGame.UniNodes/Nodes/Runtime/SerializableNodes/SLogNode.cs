@@ -2,6 +2,7 @@
 
 namespace UniGame.UniNodes.Nodes.Runtime.SerializableNodes
 {
+    using System;
     using System.Collections.Generic;
     using NodeSystem.Runtime.Core.Nodes;
     using NodeSystem.Runtime.Extensions;
@@ -13,6 +14,7 @@ namespace UniGame.UniNodes.Nodes.Runtime.SerializableNodes
     using UniRx;
 
     [CreateNodeMenu("Debug/SLog",nodeName = "SLog")]
+    [Serializable]
     public class SLogNode : SNode,IMessagePublisher
     {
         private const string logPortName = "log";

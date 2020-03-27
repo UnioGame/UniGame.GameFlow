@@ -3,12 +3,12 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
-    using Attributes;
     using Interfaces;
     using Nodes;
     using Runtime.Interfaces;
     using UniCore.Runtime.ProfilerTools;
     using UniGreenModules.UniCore.Runtime.Attributes;
+    using UniGreenModules.UniGame.Core.Runtime.Attributes.FieldTypeDrawer;
     using UnityEngine;
     using Debug = UnityEngine.Debug;
 
@@ -20,22 +20,26 @@
         #region inspector
 
         [HideNodeInspector] 
+        [HideInInspector]
         [ReadOnlyValue] 
         [SerializeField] public int id;
 
+        [HideInInspector]
         [HideNodeInspector]
         [SerializeField] public int width = 250;
 
+        [HideInInspector]
         [HideNodeInspector]
         [SerializeField] public string nodeName;
         
-        
         /// <summary> Position on the <see cref="NodeGraph"/> </summary>
+        [HideInInspector]
         [HideNodeInspector] 
         [SerializeField] public Vector2 position;
 
         /// <summary> It is recommended not to modify these at hand. Instead, see <see cref="NodeInputAttribute"/> and <see cref="NodeOutputAttribute"/> </summary>
         [SerializeField] 
+        [HideInInspector]
         [HideNodeInspector] 
         public NodePortDictionary ports = new NodePortDictionary();
       

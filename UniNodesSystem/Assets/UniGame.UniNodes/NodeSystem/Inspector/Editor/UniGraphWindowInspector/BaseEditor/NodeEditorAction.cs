@@ -551,7 +551,7 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
         {
             if (IsDraggingPort)
             {
-                var col = NodeEditorPreferences.GetTypeColor(draggedOutput.ValueType);
+                var col = GameFlowPreferences.GetTypeColor(draggedOutput.ValueType);
 
                 if (!_portConnectionPoints.TryGetValue(draggedOutput, out var fromRect)) return;
                 var from = fromRect.center;

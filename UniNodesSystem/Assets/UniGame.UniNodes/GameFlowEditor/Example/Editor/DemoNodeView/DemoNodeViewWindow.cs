@@ -14,7 +14,6 @@ public class DemoNodeViewWindow : EditorWindow
 
     private UniGraph             containerValue;
     private string               portName;
-    private UiElementValueDrawer drawer;
 
 
     private ScrollView scrollView;
@@ -42,7 +41,6 @@ public class DemoNodeViewWindow : EditorWindow
 
     public void OnEnable()
     {
-        drawer                                = new UiElementValueDrawer();
         rootVisualElement.style.flexDirection = FlexDirection.Column;
 
         refreshButton = new Button(Refresh) {

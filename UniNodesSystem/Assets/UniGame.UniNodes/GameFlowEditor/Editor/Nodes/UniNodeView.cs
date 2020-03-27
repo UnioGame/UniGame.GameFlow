@@ -2,18 +2,34 @@
 
 namespace UniGame.GameFlowEditor.Editor
 {
+    using Core.EditorTools.Editor.UiElements;
     using Runtime;
     using UniGreenModules.UniCore.EditorTools.Editor.Utility;
-    using UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.BaseEditor;
+    using UniNodes.NodeSystem.Runtime.Core;
+    using UniNodes.NodeSystem.Runtime.Core.Nodes;
     using UnityEngine;
     using UnityEngine.UIElements;
 
     [NodeCustomEditor(typeof(UniBaseNode))]
     public class UniNodeView : BaseNodeView
     {
+        
+        private SerializableNodeContainer serializableNode;
+        protected SerializableNodeContainer NodeContainer {
+            get {
+                if (!serializableNode)
+                    serializableNode = ScriptableObject.CreateInstance<SerializableNodeContainer>();
+                return serializableNode;
+            }
+        }
+        
         #region public properties
         
         public UniBaseNode Context { get; protected set; }
+
+        public string Guid => Context.GUID;
+
+        public int Id => Context.SourceNode.Id;
 
         #endregion
         
@@ -21,19 +37,20 @@ namespace UniGame.GameFlowEditor.Editor
         {
             Context = nodeTarget as UniBaseNode;
             var sourceNode = Context?.SourceNode;
+
+            if (!(sourceNode is Object assetNode)) {
+                NodeContainer.Initialize(sourceNode as SerializableNode);
+                assetNode = NodeContainer;
+            }
+
+            var container = UiElementFactory.Create(sourceNode);
+            var containerStyle = container.style;
             
-            if(!(sourceNode is Object assetNode))
-                return;
-            
-            var container = new IMGUIContainer(
-                () => sourceNode.DrawNode(assetNode)) {
-                style = {
-                    paddingTop = 4,
-                    paddingBottom = 4,
-                    marginLeft = 4,
-                    marginRight = 4,
-                }
-            };
+            containerStyle.paddingTop = 4;
+            containerStyle.paddingBottom = 4;
+            containerStyle.marginLeft = 4;
+            containerStyle.marginRight = 4;
+            containerStyle.minWidth = 220;
 
             controlsContainer.Add(container);
         }

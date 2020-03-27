@@ -5,6 +5,7 @@ namespace UniGame.GameFlowEditor.Editor
     using Runtime;
     using UniCore.Runtime.ProfilerTools;
     using UniGreenModules.UniCore.EditorTools.Editor.PrefabTools;
+    using UniNodes.GameFlowEditor.Editor;
     using UniNodes.NodeSystem.Runtime.Core;
     using UnityEditor;
     using UnityEditor.SceneManagement;
@@ -81,9 +82,17 @@ namespace UniGame.GameFlowEditor.Editor
         {
             titleContent = new GUIContent(ActiveGraph.name);
             uniGraphView = new GameFlowGraphView(this);
+            
             rootView.Add(uniGraphView);
-
+            
             BindEvents();
+        }
+        
+        protected override void InitializeGraphView(BaseGraphView view)
+        {
+            view.Add(new MiniMapView(view));
+            CreatePinned(uniGraphView);
+            CreateToolbar(uniGraphView);
         }
 
         private void BindEvents()
@@ -93,6 +102,17 @@ namespace UniGame.GameFlowEditor.Editor
             //redraw editor if assembly reloaded
             AssemblyReloadEvents.afterAssemblyReload += Refresh;
             AssemblyReloadEvents.beforeAssemblyReload += Save;
+        }
+
+        private void CreateToolbar(BaseGraphView view)
+        {
+            var toolbar = new UniGraphToolbarView(view);
+            view.Add(toolbar);
+        }
+
+        private void CreatePinned(BaseGraphView view)
+        {
+            view.OpenPinned< UniGraphSettingsPinnedView >();
         }
         
     }

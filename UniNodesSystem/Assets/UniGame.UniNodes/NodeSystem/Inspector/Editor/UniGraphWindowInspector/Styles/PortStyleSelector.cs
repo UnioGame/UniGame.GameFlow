@@ -21,7 +21,7 @@
             portStyle.Background = port.Direction == PortIO.Input ? 
                 hasData ? new Color(128, 128, 0) : Color.green :
                 hasData ? new Color(128, 128, 0) : Color.blue;
-            portStyle.Color = NodeEditorPreferences.GetTypeColor(port.ValueType);
+            portStyle.Color = GameFlowPreferences.GetTypeColor(port.ValueType);
             
             return portStyle;
         }

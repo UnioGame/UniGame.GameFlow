@@ -17,7 +17,6 @@
 
         private ITypeData            containerValue;
         private string               portName;
-        private UiElementValueDrawer drawers;
 
 
         private ScrollView scrollView;
@@ -45,7 +44,6 @@
 
         public void OnEnable()
         {
-            drawers                               = new UiElementValueDrawer();
             rootVisualElement.style.flexDirection = FlexDirection.Column;
 
             refreshButton = new Button(Refresh) {
@@ -95,7 +93,7 @@
                 
                 container.Add(foldout);
 
-                var element = drawers.Create(value);
+                var element = UiElementFactory.Create(value);
                 //is empty value or value already shown
                 if (element == null)
                     continue;

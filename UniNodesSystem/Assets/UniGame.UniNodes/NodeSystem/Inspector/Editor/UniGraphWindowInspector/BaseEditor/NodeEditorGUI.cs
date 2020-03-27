@@ -326,7 +326,7 @@
 
                     var types           = output.ValueTypes;
                     var fromRect        = item.Value;
-                    var connectionColor = NodeEditorPreferences.GetTypeColor(types.FirstOrDefault());
+                    var connectionColor = GameFlowPreferences.GetTypeColor(types.FirstOrDefault());
 
                     for (var k = 0; k < output.ConnectionCount; k++) {
                         var input = output.GetConnection(k);

@@ -31,10 +31,12 @@
         [SerializeField]
         public List<Node> nodes = new List<Node>();
   
-        //[NonSerialized]
         [SerializeReference]
         public List<INode> serializableNodes = new List<INode>();
 
+        [SerializeReference]
+        public List<INodesGroup> nodeGroups = new List<INodesGroup>();
+        
         #endregion
 
         [NonSerialized]

@@ -16,6 +16,7 @@ using UnityEngine;
 namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
 {
     using UniCore.Runtime.ProfilerTools;
+    using UniGreenModules.UniGame.Core.Runtime.Attributes.FieldTypeDrawer;
 
     [Serializable]
     public class SNode : SerializableNode, IProxyNode

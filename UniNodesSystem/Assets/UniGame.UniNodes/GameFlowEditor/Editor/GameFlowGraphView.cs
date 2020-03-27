@@ -46,14 +46,13 @@ namespace UniGame.GameFlowEditor.Editor
         
         #region public properties
 
-        public IUniGraph ActiveGraph { get; protected set; }
+        public IUniGraph ActiveGraph => SourceGraph.UniGraph;
 
         public UniAssetGraph SourceGraph { get; protected set; }
 
         public ILifeTime LifeTime => lifeTimeDefinition;
         
         #endregion
-
 
         public void Focus(INode node)
         {
@@ -65,11 +64,28 @@ namespace UniGame.GameFlowEditor.Editor
 
         public void Save()
         {
+            var graphData = SourceGraph.UniGraph;
+            
+            SaveGroupInfo(graphData);
+            SaveStackNodeInfo(graphData);
+
             UpdateNodePositions();
+            //save prefab data
             SourceGraph.UniGraph.Save();
         }
 
         #region graph api
+
+        public List<int> GetNodesIdsByGuid(List<string> guids)
+        {
+            var ids = nodeViews.
+                OfType<UniNodeView>().
+                Where(x => guids.Contains(x.Guid)).
+                Select(x => x.Id).
+                ToList();
+            
+            return ids;
+        }
         
         public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
         {
@@ -106,10 +122,12 @@ namespace UniGame.GameFlowEditor.Editor
             SourceGraph = graph as UniAssetGraph;
 
             BindEvents();
-
+            CreateGroupViews(SourceGraph.UniGraph);
+            
             lifeTimeDefinition.AddCleanUpAction(() => registeredNodes.Clear());
         }
 
+        
         private void BindEvents()
         {
             RegisterCallback<AttachToPanelEvent>(_ => UpdateGraph());
@@ -134,6 +152,46 @@ namespace UniGame.GameFlowEditor.Editor
             selectionUpdated = false;
         }
 
+        private void CreateGroupViews(UniGraph graphData)
+        {
+            foreach (var group in graphData.nodeGroups) {
+                var groupData = new Group(group.Title,group.Size) {
+                    color = group.Color,
+                    position = group.Position,
+                    innerNodeGUIDs = nodeViews.
+                        OfType<UniNodeView>().
+                        Where(x => group.NodeIds.Contains(x.Id)).
+                        Select(x => x.Guid).
+                        ToList()
+                };
+                AddGroup(groupData);
+            }
+        }
+        
+        private void SaveStackNodeInfo(UniGraph graphData)
+        {
+            foreach (var groupView in stackNodeViews) {
+                
+            }
+        }
+        
+        private void SaveGroupInfo(UniGraph graphData)
+        {
+            graphData.nodeGroups.Clear();
+
+            foreach (var groupView in groupViews) {
+                var groupData = groupView.@group;
+                var groupInfo = new NodesGroup() {
+                    color    = groupData.color,
+                    position = groupData.position,
+                    size     = groupData.size,
+                    title    = groupData.title,
+                    nodeIds  = GetNodesIdsByGuid(groupData.innerNodeGUIDs),
+                };
+                graphData.nodeGroups.Add(groupInfo);
+            }
+        }
+        
         private bool UpdateSelection(UniNodeView nodeView,UniBaseNode nodeData)
         {
             if (selectionUpdated || !nodeView.selected) 
@@ -159,35 +217,35 @@ namespace UniGame.GameFlowEditor.Editor
         {
             if (!(nodeData is UniBaseNode uniNode))
                 return;
-            CheckNodeInitialization(nodeView,uniNode);
             
+            CheckNodeInitialization(nodeView,uniNode);
             selectionUpdated = UpdateSelection(nodeView,uniNode);
         }
         
         private void OnOnGraphChanges(GraphChanges changes)
         {
             switch (changes) {
-                case GraphChanges value when changes.addedNode != null :
+                case GraphChanges _ when changes.addedNode != null :
                     UniNodeAction(changes.addedNode,OnNodeAdded);
                     break;
-                case GraphChanges value when changes.removedNode != null :
+                case GraphChanges _ when changes.removedNode != null :
                     UniNodeAction(changes.removedNode,OnNodeRemoved);
                     break;
-                case GraphChanges value when changes.removedEdge != null :
+                case GraphChanges _ when changes.removedEdge != null :
                     UniPortAction(changes.removedEdge,OnEdgeRemoved);
                     break;
-                case GraphChanges value when changes.addedEdge != null :
+                case GraphChanges _ when changes.addedEdge != null :
                     UniPortAction(changes.addedEdge,OnEdgeAdded);
                     break;
-                case GraphChanges value when changes.addedGroups != null :
+                case GraphChanges _ when changes.addedGroups != null :
                     break;
-                case GraphChanges value when changes.removedGroups != null :
+                case GraphChanges _ when changes.removedGroups != null :
                     break;
-                case GraphChanges value when changes.removedStackNode != null :
+                case GraphChanges _ when changes.removedStackNode != null :
                     break;
-                case GraphChanges value when changes.addedStackNode != null :
+                case GraphChanges _ when changes.addedStackNode != null :
                     break;
-                case GraphChanges value when changes.nodeChanged != null :
+                case GraphChanges _ when changes.nodeChanged != null :
                     UniNodeAction(changes.nodeChanged,OnNodeChanged);
                     break;
             }

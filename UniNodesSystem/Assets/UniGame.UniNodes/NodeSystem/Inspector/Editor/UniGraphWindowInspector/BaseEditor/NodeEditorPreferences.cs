@@ -6,7 +6,7 @@
     using UnityEngine;
     using Random = UnityEngine.Random;
 
-    public static class NodeEditorPreferences
+    public static class GameFlowPreferences
     {
         private static Type NodeEditorType = typeof(NodeGraphEditor.CustomNodeGraphEditorAttribute);
         
@@ -18,11 +18,12 @@
 
         private static Dictionary<string, Color> typeColors = new Dictionary<string, Color>();
         
-        private static Dictionary<string, NodeEditorSettings> settings = new Dictionary<string, NodeEditorSettings>();
+        private static Dictionary<string, GameFlowEditorSettings> settings = new Dictionary<string, GameFlowEditorSettings>();
 
+        public static bool isDebug;
         
         /// <summary> Get settings of current active editor </summary>
-        public static NodeEditorSettings GetSettings(this NodeGraphEditor editor)
+        public static GameFlowEditorSettings GetSettings(this NodeGraphEditor editor)
         {
             var graphEditor   = editor;
             
@@ -46,16 +47,16 @@
         }
         
         /// <summary> Get settings of current active editor </summary>
-        public static NodeEditorSettings GetSettings(this NodeEditorWindow window)
+        public static GameFlowEditorSettings GetSettings(this NodeEditorWindow window)
         {
             return window.graphEditor.GetSettings();
         }
 
-        [PreferenceItem("Node Editor")]
+        [PreferenceItem("Game Flow Editor")]
         private static void PreferencesGUI()
         {
             VerifyLoaded();
-            var settings = NodeEditorPreferences.settings[lastKey];
+            var settings = GameFlowPreferences.settings[lastKey];
 
             NodeSettingsGUI(lastKey, settings);
             GridSettingsGUI(lastKey, settings);
@@ -67,7 +68,7 @@
             }
         }
 
-        private static void GridSettingsGUI(string key, NodeEditorSettings settings)
+        private static void GridSettingsGUI(string key, GameFlowEditorSettings settings)
         {
             //Label
             EditorGUILayout.LabelField("Grid", EditorStyles.boldLabel);
@@ -86,7 +87,7 @@
             EditorGUILayout.Space();
         }
 
-        private static void SystemSettingsGUI(string key, NodeEditorSettings settings)
+        private static void SystemSettingsGUI(string key, GameFlowEditorSettings settings)
         {
             //Label
             EditorGUILayout.LabelField("System", EditorStyles.boldLabel);
@@ -97,7 +98,7 @@
             EditorGUILayout.Space();
         }
 
-        private static void NodeSettingsGUI(string key, NodeEditorSettings settings)
+        private static void NodeSettingsGUI(string key, GameFlowEditorSettings settings)
         {
             //Label
             EditorGUILayout.LabelField("Node", EditorStyles.boldLabel);
@@ -112,7 +113,7 @@
             EditorGUILayout.Space();
         }
 
-        private static void TypeColorsGUI(string key, NodeEditorSettings settings)
+        private static void TypeColorsGUI(string key, GameFlowEditorSettings settings)
         {
             //Label
             EditorGUILayout.LabelField("Types", EditorStyles.boldLabel);
@@ -138,17 +139,17 @@
         }
 
         /// <summary> Load prefs if they exist. Create if they don't </summary>
-        private static NodeEditorSettings LoadPrefs()
+        private static GameFlowEditorSettings LoadPrefs()
         {
             // Create settings if it doesn't exist
             if (!EditorPrefs.HasKey(lastKey))
             {
                 if (lastEditor != null)
                     EditorPrefs.SetString(lastKey, JsonUtility.ToJson(lastEditor.GetDefaultPreferences()));
-                else EditorPrefs.SetString(lastKey, JsonUtility.ToJson(new NodeEditorSettings()));
+                else EditorPrefs.SetString(lastKey, JsonUtility.ToJson(new GameFlowEditorSettings()));
             }
 
-            return JsonUtility.FromJson<NodeEditorSettings>(EditorPrefs.GetString(lastKey));
+            return JsonUtility.FromJson<GameFlowEditorSettings>(EditorPrefs.GetString(lastKey));
         }
 
         /// <summary> Delete all prefs </summary>
@@ -162,7 +163,7 @@
         }
 
         /// <summary> Save preferences in EditorPrefs </summary>
-        private static void SavePrefs(string key, NodeEditorSettings settings)
+        private static void SavePrefs(string key, GameFlowEditorSettings settings)
         {
             EditorPrefs.SetString(key, JsonUtility.ToJson(settings));
         }

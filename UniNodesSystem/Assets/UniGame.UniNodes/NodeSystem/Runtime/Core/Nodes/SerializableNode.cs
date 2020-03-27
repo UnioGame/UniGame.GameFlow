@@ -11,31 +11,37 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
     using Runtime.Interfaces;
     using UniCore.Runtime.ProfilerTools;
     using UniGreenModules.UniCore.Runtime.Attributes;
+    using UniGreenModules.UniGame.Core.Runtime.Attributes.FieldTypeDrawer;
 
     [Serializable]
     public class SerializableNode : INode
     {
         public static INode DummyNode = new DummyNode();
         
-        #region inspctor
+        #region inspector
 
+        [HideInInspector]
         [HideNodeInspector] 
         [ReadOnlyValue] 
         [SerializeField] public int id;
 
+        [HideInInspector]
         [HideNodeInspector]
         [SerializeField] public int width = 220;
 
+        [HideInInspector]
         [HideNodeInspector]
         [SerializeField] public string nodeName;
         
         /// <summary> Position on the <see cref="NodeGraph"/> </summary>
+        [HideInInspector]
         [SerializeField] public Vector2 position;
 
         /// <summary>
         /// It is recommended not to modify these at hand. Instead,
         /// see <see cref="NodeInputAttribute"/> and <see cref="NodeOutputAttribute"/>
         /// </summary>
+        [HideInInspector]
         [SerializeField] public NodePortDictionary ports = new NodePortDictionary();
       
         #endregion

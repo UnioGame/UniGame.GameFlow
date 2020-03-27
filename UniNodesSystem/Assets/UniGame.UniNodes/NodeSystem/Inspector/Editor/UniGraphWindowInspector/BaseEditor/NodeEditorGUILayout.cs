@@ -13,6 +13,7 @@
     using UniGreenModules.UniCore.EditorTools.Editor.Utility;
     using UniGreenModules.UniCore.Runtime.ObjectPool.Runtime.Extensions;
     using UniGreenModules.UniCore.Runtime.ReflectionUtils;
+    using UniGreenModules.UniGame.Core.Runtime.Attributes.FieldTypeDrawer;
     using UnityEditor;
     using UnityEditorInternal;
     using UnityEngine;
@@ -217,7 +218,7 @@
             }
 
             Profiler.BeginSample("DrawPortHandle");
-            var col = NodeEditorPreferences.GetTypeColor(port.ValueType);
+            var col = GameFlowPreferences.GetTypeColor(port.ValueType);
             DrawPortHandle(rect, backgroundColor, col);
             Profiler.EndSample();
 
@@ -322,7 +323,7 @@
             if (port == null)
                 return Color.magenta;
 
-            return NodeEditorPreferences.GetTypeColor(port.ValueType);
+            return GameFlowPreferences.GetTypeColor(port.ValueType);
         }
 
         public static Color GetBackgroundPortColor(INodePort port)
@@ -380,7 +381,7 @@
             Color backgroundColor = new Color32(90, 97, 105, 255);
             Color tint;
             if (NodeEditorWindow.nodeTint.TryGetValue(port.Node.GetType(), out tint)) backgroundColor *= tint;
-            var col                                                                                   = NodeEditorPreferences.GetTypeColor(port.ValueType);
+            var col                                                                                   = GameFlowPreferences.GetTypeColor(port.ValueType);
             DrawPortHandle(rect, backgroundColor, col);
 
             // Register the handle position

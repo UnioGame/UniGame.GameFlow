@@ -8,6 +8,7 @@
     using Runtime.Attributes;
     using Runtime.Interfaces;
     using UniGreenModules.UniCore.Runtime.ReflectionUtils;
+    using UniGreenModules.UniGame.Core.Runtime.Attributes.FieldTypeDrawer;
     using UnityEditor;
     using UnityEngine;
 
