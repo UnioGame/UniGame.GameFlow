@@ -78,7 +78,7 @@ MonoBehaviour:
         id: 8
         width: 220
         nodeName: Demo Flow Node
-        position: {x: 622, y: -953}
+        position: {x: 610, y: -891}
         ports:
           keys: []
           values: []
@@ -95,7 +95,19 @@ MonoBehaviour:
         Sprite: {fileID: 21300000, guid: e709b6ba7d65bbc488db2605714f30ed, type: 3}
         asset: {fileID: 0}
         Animator: {fileID: 0}
-        Node:
+        AssetReference1:
+          m_AssetGUID: 
+          m_SubObjectName: 
+        GameObjectAssetRef:
+          m_AssetGUID: 
+          m_SubObjectName: 
+        ScriptableObjectAssetReference:
+          m_AssetGUID: 
+          m_SubObjectName: 
+        SpriteRefence1:
+          m_AssetGUID: 
+          m_SubObjectName: 
+        LogNode:
           id: 1
     00000001:
       type: {class: , ns: , asm: }

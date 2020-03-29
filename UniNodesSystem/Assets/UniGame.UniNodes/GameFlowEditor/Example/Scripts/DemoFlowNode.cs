@@ -1,10 +1,11 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+using UniGame.UniNodes.Nodes.Runtime.SerializableNodes;
 using UniGame.UniNodes.NodeSystem.Runtime.Core;
 using UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes;
 using UniGame.UniNodes.NodeSystem.Runtime.Interfaces;
+using UniGreenModules.UniGame.SerializableContext.Runtime.Addressables;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using Object = UnityEngine.Object;
 
 [Serializable]
@@ -26,8 +27,13 @@ public class DemoFlowNode : SNode
     
     public Object asset;
     public Animator Animator;
+
+    public AssetReference AssetReference1;
+    public AssetReferenceGameObject GameObjectAssetRef;
+    public AssetReferenceDisposableObject ScriptableObjectAssetReference;
+    public AssetReferenceSprite SpriteRefence1;
     
     [SerializeReference]
-    public INode Node;
+    public INode LogNode = new SLogNode();
 
 }
