@@ -16,7 +16,7 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
         void RemovePort(string fieldName);
 
         /// <summary> Remove an instance port from the node </summary>
-        void RemovePort(NodePort port);
+        void RemovePort(INodePort port);
 
         /// <summary> Disconnect everything from this node </summary>
         void ClearConnections();
@@ -32,6 +32,8 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
         
         void Validate();
 
+        bool AddPortValue(INodePort portValue);
+        
         #region editor api
 
         int SetId(int id);

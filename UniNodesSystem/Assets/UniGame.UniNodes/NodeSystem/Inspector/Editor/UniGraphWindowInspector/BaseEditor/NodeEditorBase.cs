@@ -6,6 +6,7 @@
     using Runtime.Core;
     using Runtime.Core.Nodes;
     using Runtime.Interfaces;
+    using UniGreenModules.UniCore.Runtime.ReflectionUtils;
     using UnityEditor;
     using UnityEngine;
     using Object = UnityEngine.Object;
@@ -117,7 +118,7 @@
             editorTypes = new Dictionary<Type, Type>();
 
             //Get all classes deriving from NodeEditor via reflection
-            var nodeEditors = NodeEditorWindow.GetDerivedTypes(typeof(T));
+            var nodeEditors = typeof(T).GetAssignableTypes();
             for (var i = 0; i < nodeEditors.Count; i++)
             {
                 if (nodeEditors[i].IsAbstract) continue;

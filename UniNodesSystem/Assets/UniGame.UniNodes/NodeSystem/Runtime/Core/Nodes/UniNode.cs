@@ -43,7 +43,7 @@
             SNode.Initialize(graphData);
         }
 
-        public bool AddPortValue(INodePort portValue) => SNode.AddPortValue(portValue);
+        public override bool AddPortValue(INodePort portValue) => SNode.AddPortValue(portValue);
         
         /// <summary>
         /// stop execution

@@ -3,12 +3,12 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
-    using Attributes;
     using Interfaces;
     using Nodes;
     using Runtime.Interfaces;
     using UniCore.Runtime.ProfilerTools;
     using UniGreenModules.UniCore.Runtime.Attributes;
+    using UniGreenModules.UniGame.Core.Runtime.Attributes.FieldTypeDrawer;
     using UnityEngine;
     using Debug = UnityEngine.Debug;
 
@@ -20,20 +20,28 @@
         #region inspector
 
         [HideNodeInspector] 
+        [HideInInspector]
         [ReadOnlyValue] 
         [SerializeField] public int id;
 
+        [HideInInspector]
         [HideNodeInspector]
-        [SerializeField] public int width = 220;
+        [SerializeField] public int width = 250;
 
+        [HideInInspector]
         [HideNodeInspector]
         [SerializeField] public string nodeName;
         
         /// <summary> Position on the <see cref="NodeGraph"/> </summary>
+        [HideInInspector]
+        [HideNodeInspector] 
         [SerializeField] public Vector2 position;
 
         /// <summary> It is recommended not to modify these at hand. Instead, see <see cref="NodeInputAttribute"/> and <see cref="NodeOutputAttribute"/> </summary>
-        [SerializeField] public NodePortDictionary ports = new NodePortDictionary();
+        [SerializeField] 
+        [HideInInspector]
+        [HideNodeInspector] 
+        public NodePortDictionary ports = new NodePortDictionary();
       
         #endregion
 
@@ -54,17 +62,17 @@
         /// <summary>
         /// Iterate over all ports on this node.
         /// </summary>
-        public IReadOnlyList<NodePort> Ports => ports.Ports;
+        public IReadOnlyList<INodePort> Ports => ports.Ports;
         
         /// <summary>
         /// Iterate over all outputs on this node.
         /// </summary>
-        public IEnumerable<NodePort> Outputs
+        public IEnumerable<INodePort> Outputs
         {
             get {
                 for (var i = 0; i < Ports.Count; i++) {
                     var port = Ports[i];
-                    if (port.IsOutput) yield return port;
+                    if (port.Direction == PortIO.Output) yield return port;
                 }
             }
         }
@@ -72,12 +80,12 @@
         /// <summary>
         /// Iterate over all inputs on this node.
         /// </summary>
-        public IEnumerable<NodePort> Inputs
+        public IEnumerable<INodePort> Inputs
         {
             get {
                 for (var i = 0; i < Ports.Count; i++) {
                     var port = Ports[i];
-                    if (port.IsInput) yield return port;
+                    if (port.Direction == PortIO.Input) yield return port;
                 }
             }
         }
@@ -113,6 +121,8 @@
         
         #region public methods
 
+        
+        
         public virtual void OnIdUpdate(int oldId, int newId, IGraphItem updatedItem)
         {
         
@@ -125,6 +135,8 @@
             OnIdUpdate(oldId,id,this);
             return id;
         }
+
+        public abstract bool AddPortValue(INodePort portValue);
 
         public int SetId(int itemId)
         {
@@ -186,7 +198,7 @@
         /// <summary>
         /// Remove an instance port from the node
         /// </summary>
-        public virtual void RemovePort(NodePort port)
+        public virtual void RemovePort(INodePort port)
         {
             if (port == null) throw new ArgumentNullException("port");
             port.ClearConnections();
@@ -196,7 +208,7 @@
         /// <summary>
         /// Returns output port which matches fieldName
         /// </summary>
-        public NodePort GetOutputPort(string fieldName)
+        public INodePort GetOutputPort(string fieldName)
         {
             var port = GetPort(fieldName);
             if (port == null || port.Direction != PortIO.Output) return null;
@@ -206,7 +218,7 @@
         /// <summary>
         /// Returns input port which matches fieldName
         /// </summary>
-        public NodePort GetInputPort(string fieldName)
+        public INodePort GetInputPort(string fieldName)
         {
             var port = GetPort(fieldName);
             if (port == null || port.Direction != PortIO.Input) return null;
@@ -216,13 +228,13 @@
         public IPortValue GetPortValue(string portName)
         {
             var port = GetPort(portName);
-            return port?.portValue;
+            return port?.Value;
         }
         
         /// <summary>
         /// Returns port which matches fieldName
         /// </summary>
-        public NodePort GetPort(string portName)
+        public INodePort GetPort(string portName)
         {
             if (string.IsNullOrEmpty(portName))
                 return null;
@@ -260,5 +272,6 @@
         {
             GameLog.Log($"{GraphData.ItemName}:{ItemName}: {message}");
         }
+        
     }
 }

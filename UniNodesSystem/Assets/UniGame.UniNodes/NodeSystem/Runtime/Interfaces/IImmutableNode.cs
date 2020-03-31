@@ -11,22 +11,22 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
 
         IGraphData GraphData { get; }
 
-        IReadOnlyList<NodePort> Ports { get; }
+        IReadOnlyList<INodePort> Ports { get; }
 
         /// <summary> Iterate over all outputs on this node. </summary>
-        IEnumerable<NodePort> Outputs { get; }
+        IEnumerable<INodePort> Outputs { get; }
 
         /// <summary> Iterate over all inputs on this node. </summary>
-        IEnumerable<NodePort> Inputs { get; }
+        IEnumerable<INodePort> Inputs { get; }
 
         /// <summary> Returns output port which matches fieldName </summary>
-        NodePort GetOutputPort(string fieldName);
+        INodePort GetOutputPort(string fieldName);
 
         /// <summary> Returns input port which matches fieldName </summary>
-        NodePort GetInputPort(string fieldName);
+        INodePort GetInputPort(string fieldName);
 
         /// <summary> Returns port which matches fieldName </summary>
-        NodePort GetPort(string fieldName);
+        INodePort GetPort(string fieldName);
 
         bool HasPort(string fieldName);
 

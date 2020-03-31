@@ -11,6 +11,7 @@
     using Runtime.Interfaces;
     using Sirenix.Utilities;
     using UniGreenModules.UniCore.EditorTools.Editor.Utility;
+    using UniRx;
     using UnityEditor;
     using UnityEngine;
     using Object = UnityEngine.Object;
@@ -20,7 +21,7 @@
         public INode              Node;
         public SerializedProperty Property;
         public SerializedProperty Parent;
-        public INodeGraph         Graph;
+        public SerializedObject   Source;
     }
 
     /// <summary> Contains GUI methods </summary>
@@ -61,7 +62,6 @@
             //Initialize(ActiveGraph);
 
             var editorNode = new EditorNode() {
-                Graph    = ActiveGraph,
                 Node     = ActiveGraph,
                 Parent = null,
                 Property = null,
@@ -178,7 +178,10 @@
 
         public void ShowPortContextValues(IPortValue port)
         {
-            ContextContentWindow.Open(port);
+            ContextContentWindow.Open(new ContextDescription() {
+                Data = port,
+                Label = port.ItemName
+            });
         }
 
         /// <summary>
@@ -216,7 +219,7 @@
                     continue;
 
                 //Get node context menu path
-                var path = graphEditor.GetNodeMenuName(type);
+                var path = type.GetNodeMenuName();
                 if (string.IsNullOrEmpty(path)) continue;
 
                 contextMenu.AddItem(new GUIContent(path), false, () => { CreateNode(type, pos); });
@@ -326,7 +329,7 @@
 
                     var types           = output.ValueTypes;
                     var fromRect        = item.Value;
-                    var connectionColor = NodeEditorPreferences.GetTypeColor(types.FirstOrDefault());
+                    var connectionColor = GameFlowPreferences.GetTypeColor(types.FirstOrDefault());
 
                     for (var k = 0; k < output.ConnectionCount; k++) {
                         var input = output.GetConnection(k);
@@ -475,9 +478,11 @@
 
                 var editorNode = new EditorNode() {
                     Node     = node,
-                    Graph    = ActiveGraph,
                     Parent = property,
                     Property = property.GetArrayElementAtIndex(i),
+                    Source = (node is Object nodeObject) ? 
+                        new SerializedObject(nodeObject) : 
+                        null, 
                 };
 
                 if (IsSelected(node)) {
@@ -574,7 +579,7 @@
                     .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
             }
 
-            NodeEditor.PortPositions = new Dictionary<NodePort, Vector2>();
+            NodeEditor.PortPositions = new Dictionary<INodePort, Vector2>();
 
             DrawNodeArea(ref editorNode, state);
         }

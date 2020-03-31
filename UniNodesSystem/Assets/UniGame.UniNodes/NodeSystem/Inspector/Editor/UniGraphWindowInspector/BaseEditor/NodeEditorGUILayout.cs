@@ -3,16 +3,22 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Drawers;
     using Drawers.ReactivePortDrawers;
     using Extensions;
+    using Interfaces;
+    using Runtime.Attributes;
     using Runtime.Core;
     using Runtime.Interfaces;
     using UniGreenModules.UniCore.EditorTools.Editor.Utility;
     using UniGreenModules.UniCore.Runtime.ObjectPool.Runtime.Extensions;
+    using UniGreenModules.UniCore.Runtime.ReflectionUtils;
+    using UniGreenModules.UniGame.Core.Runtime.Attributes.FieldTypeDrawer;
     using UnityEditor;
     using UnityEditorInternal;
     using UnityEngine;
     using UnityEngine.Profiling;
+    using Object = UnityEngine.Object;
 
     /// <summary> UniNodeSystem-specific version of <see cref="EditorGUILayout"/> </summary>
     public static class NodeEditorGUILayout
@@ -22,6 +28,70 @@
 
         private static int reorderableListIndex = -1;
 
+        public static IEnumerable<PropertyEditorData> GetProperties(this INode node,SerializedObject serializedObject)
+        {
+            return node.GetProperties(serializedObject.GetIterator(), null);
+        }
+
+        private static List<string> excludes = new List<string>() {"m_Script"};
+        
+        public static void DrawNode(this INode node, Object target)
+        {
+            var serializedObject = new SerializedObject(target);
+            
+            var drawedItems      = node.GetProperties(serializedObject);
+
+            foreach (var item in drawedItems) {
+                if (!node.IsFieldVisible(item.Type, item.Name))
+                    continue;
+                
+                node.DrawNodePropertyField(
+                    item.Property,
+                    new GUIContent(item.Name, item.Tooltip),
+                    true);
+            }
+        }
+        
+        public static bool IsFieldVisible(this object value, Type type, string fieldName)
+        {
+            if (excludes.Contains(fieldName))
+                return false;
+            
+            //is node field should be draw
+            var field         = type.GetFieldInfoCached(fieldName);
+            var hideInspector = field?.GetCustomAttributes(typeof(HideNodeInspectorAttribute), false).Length > 0;
+            return !hideInspector;
+        }
+
+        public static IEnumerable<PropertyEditorData> GetProperties(
+            this object target,
+            SerializedProperty targetProperty,
+            SerializedProperty parent)
+        {
+            var property = targetProperty.Copy();
+            var type = target.GetType();
+            
+            var moveNext = property.NextVisible(true);
+            var next     = parent?.GetNextArrayProperty(targetProperty);
+
+            while (moveNext 
+                   && !property.IsEquals(targetProperty) 
+                   && (next == null || !next.IsEquals(property)))
+            {
+                var propertyData = new PropertyEditorData() {
+                    Target   = target,
+                    Name     = property.name,
+                    Tooltip  = property.tooltip,
+                    Source   = target,
+                    Type     = type,
+                    Property = property.Copy(),
+                };
+                yield return propertyData;
+                moveNext = property.NextVisible(false);
+            }
+        }
+        
+        
         /// <summary> Make a field for a serialized property. Automatically displays relevant node port. </summary>
         public static void DrawNodePropertyField(
             this INode node,
@@ -96,7 +166,7 @@
             this INode node,
             SerializedProperty property,
             GUIContent label,
-            NodePort port,
+            INodePort port,
             bool includeChildren = true,
             params GUILayoutOption[] options)
         {
@@ -117,7 +187,7 @@
             SerializedProperty property,
             GUIContent label,
             INode node,
-            NodePort port,
+            INodePort port,
             bool includeChildren = true,
             params GUILayoutOption[] options)
         {
@@ -147,7 +217,7 @@
             }
 
             Profiler.BeginSample("DrawPortHandle");
-            var col = NodeEditorPreferences.GetTypeColor(port.ValueType);
+            var col = GameFlowPreferences.GetTypeColor(port.ValueType);
             DrawPortHandle(rect, backgroundColor, col);
             Profiler.EndSample();
 
@@ -168,13 +238,14 @@
         }
 
         /// <summary> Make a simple port field. </summary>
-        public static void PortField(NodePort port, params GUILayoutOption[] options)
+        public static void PortField(INodePort port, params GUILayoutOption[] options)
         {
             PortField(null, port, options);
         }
 
         /// <summary> Make a simple port field. </summary>
-        public static void PortField(GUIContent label, NodePort port,
+        public static void PortField(GUIContent label, 
+            INodePort port,
             params GUILayoutOption[] layoutOptions)
         {
             if (port == null) return;
@@ -188,7 +259,7 @@
             PortField(port, defaultStyle);
         }
 
-        public static void PortField(NodePort port, NodeGuiLayoutStyle portStyle)
+        public static void PortField(INodePort port, NodeGuiLayoutStyle portStyle)
         {
             if (port == null) return;
 
@@ -221,7 +292,7 @@
 
 
         /// <summary> Make a simple port field. </summary>
-        public static void PortField(Vector2 position, NodePort port)
+        public static void PortField(Vector2 position, INodePort port)
         {
             if (port == null) return;
 
@@ -230,7 +301,7 @@
             PortField(position, port, col);
         }
 
-        public static NodeGuiLayoutStyle GetDefaultPortStyle(NodePort port)
+        public static NodeGuiLayoutStyle GetDefaultPortStyle(INodePort port)
         {
             var name  = port == null ? string.Empty : port.ItemName;
             var label = port == null ? new GUIContent(string.Empty) : new GUIContent(port.ItemName);
@@ -246,15 +317,15 @@
             return style;
         }
 
-        public static Color GetMainPortColor(NodePort port)
+        public static Color GetMainPortColor(INodePort port)
         {
             if (port == null)
                 return Color.magenta;
 
-            return NodeEditorPreferences.GetTypeColor(port.ValueType);
+            return GameFlowPreferences.GetTypeColor(port.ValueType);
         }
 
-        public static Color GetBackgroundPortColor(NodePort port)
+        public static Color GetBackgroundPortColor(INodePort port)
         {
             Color backgroundColor = new Color32(90, 97, 105, 255);
             if (port == null)
@@ -264,7 +335,7 @@
             return backgroundColor;
         }
 
-        public static void PortField(Vector2 position, NodePort port, Color color)
+        public static void PortField(Vector2 position, INodePort port, Color color)
         {
             if (port == null) return;
 
@@ -273,7 +344,7 @@
             PortField(position, port, color, backgroundColor);
         }
 
-        public static void PortField(Vector2 position, NodePort port, Color color, Color backgroundColor)
+        public static void PortField(Vector2 position, INodePort port, Color color, Color backgroundColor)
         {
             if (port == null) return;
 
@@ -309,7 +380,7 @@
             Color backgroundColor = new Color32(90, 97, 105, 255);
             Color tint;
             if (NodeEditorWindow.nodeTint.TryGetValue(port.Node.GetType(), out tint)) backgroundColor *= tint;
-            var col                                                                                   = NodeEditorPreferences.GetTypeColor(port.ValueType);
+            var col                                                                                   = GameFlowPreferences.GetTypeColor(port.ValueType);
             DrawPortHandle(rect, backgroundColor, col);
 
             // Register the handle position
@@ -327,7 +398,7 @@
             GUILayout.EndHorizontal();
         }
 
-        public static void PortPair(NodePort input, NodePort output,
+        public static void PortPair(INodePort input, INodePort output,
             NodeGuiLayoutStyle intputStyle, NodeGuiLayoutStyle outputStyle)
         {
             GUILayout.BeginHorizontal(GUILayout.ExpandWidth(true));
@@ -398,9 +469,14 @@
             list.DoLayoutList();
         }
 
-        private static ReorderableList CreateReorderableList(List<NodePort> instancePorts,
-            SerializedProperty arrayData, Type type, SerializedObject serializedObject, PortIO io,
-            string label, ConnectionType connectionType = ConnectionType.Multiple)
+        private static ReorderableList CreateReorderableList(
+            List<INodePort> instancePorts,
+            SerializedProperty arrayData, 
+            Type type, 
+            SerializedObject serializedObject, 
+            PortIO io,
+            string label, 
+            ConnectionType connectionType = ConnectionType.Multiple)
         {
             var hasArrayData = arrayData != null && arrayData.isArray;
             var arraySize    = hasArrayData ? arrayData.arraySize : 0;
@@ -419,7 +495,10 @@
                     }
                     else EditorGUI.LabelField(rect, port.ItemName);
 
-                    var pos = rect.position + (port.IsOutput ? new Vector2(rect.width + 6, 0) : new Vector2(-36, 0));
+                    var pos = rect.position + (port.Direction == PortIO.Output ? 
+                                  new Vector2(rect.width + 6, 0) : 
+                                  new Vector2(-36, 0));
+                    
                     PortField(pos, port);
                 };
             list.elementHeightCallback =

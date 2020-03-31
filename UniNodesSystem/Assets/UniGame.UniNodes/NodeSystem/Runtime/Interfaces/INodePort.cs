@@ -3,11 +3,18 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
     using System;
     using System.Collections.Generic;
     using Core;
+    using Core.Interfaces;
     using UniGreenModules.UniCore.Runtime.Interfaces;
+    using UniGreenModules.UniCore.Runtime.ObjectPool.Runtime.Interfaces;
     using UnityEngine;
 
-    public interface INodePort : INamedItem
+    public interface INodePort : INamedItem, IPoolable
     {
+        Type ValueType { get; }
+
+        bool IsInput { get; }
+
+        bool IsOutput { get; }
 
         int ConnectionCount { get; }
 
@@ -30,6 +37,8 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
         int NodeId { get; }
 
         IReadOnlyList<Type> ValueTypes { get; }
+
+        void Initialize(INode node);
         
         /// <summary> Checks all connections for invalid references, and removes them. </summary>
         void VerifyConnections();
@@ -46,6 +55,8 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
         
         INodePort GetConnection(int i);
 
+        void SetPortData(IPortData portData);
+        
         /// <summary> Get index of the connection connecting this and specified ports </summary>
         int GetConnectionIndex(INodePort port);
 

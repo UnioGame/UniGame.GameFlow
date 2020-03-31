@@ -5,8 +5,6 @@
     using Core;
     using Core.Interfaces;
     using Interfaces;
-    using UniGreenModules.UniCore.Runtime.ObjectPool.Runtime;
-    using UniGreenModules.UniCore.Runtime.ObjectPool.Runtime.Extensions;
     using UniGreenModules.UniCore.Runtime.Rx.Extensions;
     using UniGreenModules.UniCore.Runtime.Utils;
     using UniRx;
@@ -57,7 +55,7 @@
         }
         
 #endregion
-        
+
         public static (IPortValue inputValue, IPortValue outputValue) 
             CreatePortPair(this IUniNode node,string inputPortName, string outputPortName, bool connectInOut = false)
         {
@@ -107,7 +105,8 @@
         }
 
         
-        public static IPortValue UpdatePortValue(this IUniNode node , IPortData portData)
+        
+        public static IPortValue UpdatePortValue(this INode node , IPortData portData)
         {
             if (portData == null)
                 return null;
@@ -124,7 +123,7 @@
         }
 
         public static IPortValue UpdatePortValue(
-            this IUniNode node,
+            this INode node,
             string portName,
             PortIO direction = PortIO.Output,
             ConnectionType connectionType = ConnectionType.Multiple, 

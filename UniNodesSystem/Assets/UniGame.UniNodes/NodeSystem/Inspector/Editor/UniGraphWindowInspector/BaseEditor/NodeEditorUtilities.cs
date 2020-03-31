@@ -6,6 +6,10 @@
     using System.Linq;
     using System.Reflection;
     using System.Text;
+    using Runtime.Attributes;
+    using Runtime.Core;
+    using Runtime.Interfaces;
+    using UniGreenModules.UniCore.Runtime.ReflectionUtils;
     using UnityEditor;
     using UnityEngine;
     using Object = UnityEngine.Object;
@@ -15,7 +19,44 @@
     {
         /// <summary>C#'s Script Icon [The one MonoBhevaiour Scripts have].</summary>
         private static Texture2D scriptIcon = (EditorGUIUtility.IconContent("cs Script Icon").image as Texture2D);
+        
+        [NonSerialized] private static List<Type> _nodeTypes = null;
+        
+        public static List<Type> NodeTypes
+        {
+            get => _nodeTypes = (_nodeTypes == null || _nodeTypes.Count == 0) ?
+                NodeEditorUtilities.GetVisibleNodeTypes() :
+                _nodeTypes;
+        }
+        
+        public static List<Type> GetNodeTypes()
+        {
+            //Get all classes deriving from Node via reflection
+            return typeof(INode).GetAssignableTypes();
+        }
 
+        public static List<Type> GetVisibleNodeTypes()
+        {
+            var nodeTypes = GetNodeTypes();
+            nodeTypes.RemoveAll(x => !x.IsVisible);
+            //Get all classes deriving from Node via reflection
+            return nodeTypes;
+        }
+
+        public static bool IsValidNode(this Type nodeType)
+        {
+            return !NodeEditorUtilities.GetAttrib<HideNodeAttribute>(nodeType, out var hideNodeAttribute);
+        }
+        
+        /// <summary> Returns context node menu path. Null or empty strings for hidden nodes. </summary>
+        public static string GetNodeMenuName(this Type type) {
+            //Check if type has the CreateNodeMenuAttribute
+            CreateNodeMenuAttribute attrib;
+            return NodeEditorUtilities.GetAttrib(type, out attrib) ? 
+                attrib.menuName : 
+                ObjectNames.NicifyVariableName(type.ToString().Replace('.', '/'));
+        }
+        
         public static bool GetAttrib<T>(Type classType, out T attribOut) where T : Attribute
         {
             var attribs = classType.GetCustomAttributes(typeof(T), false);

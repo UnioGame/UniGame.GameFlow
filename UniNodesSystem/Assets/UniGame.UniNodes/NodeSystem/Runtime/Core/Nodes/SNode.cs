@@ -16,6 +16,7 @@ using UnityEngine;
 namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
 {
     using UniCore.Runtime.ProfilerTools;
+    using UniGreenModules.UniGame.Core.Runtime.Attributes.FieldTypeDrawer;
 
     [Serializable]
     public class SNode : SerializableNode, IProxyNode
@@ -42,8 +43,6 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
 
         private ILifeTime lifeTime;
 
-        private HashSet<INodePort> portValues;
-
         private List<ILifeTimeCommand> commands;
 
         #endregion
@@ -68,8 +67,6 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
         public bool IsActive => isActive;
 
         public ILifeTime LifeTime => lifeTimeDefinition.LifeTime;
-
-        public IReadOnlyCollection<INodePort> PortValues => portValues;
 
         #endregion
 
@@ -115,18 +112,6 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
                 this.onCommandsInitialize = null;
                 this.onExecute            = null;
             });
-        }
-
-        public bool AddPortValue(INodePort portValue)
-        {
-            if (portValue == null) {
-                GameLog.LogErrorFormat("Try add NULL port value to {0}", this);
-                return false;
-            }
-
-            portValues.Add(portValue);
-
-            return true;
         }
 
         /// <summary>
@@ -183,13 +168,6 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
 
             removedPorts.ForEach(RemovePort);
             removedPorts.Despawn();
-
-            for (int i = 0; i < Ports.Count; i++) {
-                var port = Ports[i];
-                port.nodeId = id;
-                port.node   = this;
-                port.Validate();
-            }
 
             CleanUpSerializableCommands();
         }
