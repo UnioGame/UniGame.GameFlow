@@ -43,7 +43,7 @@ public class DemoFlowNode : SNode
     [DrawWithUnity]
     [ShowAssetReference]
     public AssetReferenceGameObject GameObjectAssetRef;
-    public AssetReferenceDisposableObject ScriptableObjectAssetReference;
+    public AssetReferenceScriptableObject ScriptableObjectAssetReference;
     public AssetReferenceSprite SpriteRefence1;
     
     [SerializeReference]
