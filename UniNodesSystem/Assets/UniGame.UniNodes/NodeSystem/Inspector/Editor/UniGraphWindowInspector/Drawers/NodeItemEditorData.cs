@@ -4,7 +4,7 @@
     using Runtime.Interfaces;
     using UnityEditor;
 
-    public struct PropertyEditorData
+    public class PropertyEditorData
     {
         public Type               Type;
         public string             Name;

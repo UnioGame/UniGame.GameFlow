@@ -71,7 +71,7 @@
             {
                 var portValue = node.Ports[i];
                 
-                if(editor.HandledPorts.ContainsKey(portValue))
+                if(editor.Ports.ContainsKey(portValue))
                     continue;
                 
                 if (_drawedPorts.ContainsKey(portValue.ItemName) )

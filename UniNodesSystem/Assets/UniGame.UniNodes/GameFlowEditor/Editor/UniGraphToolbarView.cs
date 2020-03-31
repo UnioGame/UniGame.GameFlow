@@ -16,8 +16,10 @@ namespace UniGame.UniNodes.GameFlowEditor.Editor
         {
             var conditionalProcessorVisible = graphView.GetPinnedElementStatus< UniGraphSettingsPinnedView >() != 
                                                DropdownMenuAction.Status.Hidden;
-            AddToggle("Show Conditional Processor", conditionalProcessorVisible, 
+            
+            AddToggle("Show Actions", conditionalProcessorVisible, 
                 (v) => graphView.ToggleView< UniGraphSettingsPinnedView>());
+            
         }
     }
 }

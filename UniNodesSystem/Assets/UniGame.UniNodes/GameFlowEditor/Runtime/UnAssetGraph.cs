@@ -21,8 +21,13 @@ namespace UniGame.GameFlowEditor.Runtime
         public void Activate(UniGraph graph)
         {
             sourceGraph = graph;
-            sourceGraph.Initialize();
+            position = sourceGraph.Position;
+            scale    = sourceGraph.Scale;
+            
             serializableObject = new SerializedObject(sourceGraph);
+            
+            sourceGraph.Initialize();
+            
             UpdateGraph();
         }
 
@@ -83,15 +88,16 @@ namespace UniGame.GameFlowEditor.Runtime
                     var sourcePort = node.GetPort(portData.displayName);
                     
                     foreach (var connection in sourcePort.Connections) {
-                        var targetNodeView = uniNodes[connection.NodeId];
-                        var targetNode = targetNodeView.SourceNode;
+                        if(!uniNodes.TryGetValue(connection.NodeId,out var connectionNode))
+                            continue;
+                        var targetNode = connectionNode.SourceNode;
                         var port = targetNode.GetPort(connection.PortName);
                         
                         if(port.Direction != PortIO.Input)
                             continue;
                         
-                        var inputPortView = targetNodeView.
-                            GetPort(nameof(targetNodeView.inputs),connection.PortName);
+                        var inputPortView = connectionNode.
+                            GetPort(nameof(connectionNode.inputs),connection.PortName);
                         
                         Connect(inputPortView,outputPortView);
                     }

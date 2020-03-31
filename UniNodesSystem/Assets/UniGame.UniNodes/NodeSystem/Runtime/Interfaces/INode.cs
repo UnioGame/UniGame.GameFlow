@@ -32,6 +32,8 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
         
         void Validate();
 
+        bool AddPortValue(INodePort portValue);
+        
         #region editor api
 
         int SetId(int id);

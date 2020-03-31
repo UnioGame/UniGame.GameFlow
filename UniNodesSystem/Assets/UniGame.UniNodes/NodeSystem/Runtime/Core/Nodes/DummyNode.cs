@@ -29,6 +29,11 @@
 
         public bool HasPort(string fieldName) => false;
 
+        public bool AddPortValue(INodePort portValue)
+        {
+            return false;
+        }
+
         public int SetId(int id) => Id = id;
 
         public Vector2 Position { get; set; } = Vector2.zero;

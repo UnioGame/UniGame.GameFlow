@@ -105,7 +105,8 @@
         }
 
         
-        public static IPortValue UpdatePortValue(this IUniNode node , IPortData portData)
+        
+        public static IPortValue UpdatePortValue(this INode node , IPortData portData)
         {
             if (portData == null)
                 return null;
@@ -122,7 +123,7 @@
         }
 
         public static IPortValue UpdatePortValue(
-            this IUniNode node,
+            this INode node,
             string portName,
             PortIO direction = PortIO.Output,
             ConnectionType connectionType = ConnectionType.Multiple, 

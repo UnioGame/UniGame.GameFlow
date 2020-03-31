@@ -7,26 +7,16 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
     using UnityEditor;
     using UnityEngine;
 
-    public interface INodeEditorData : IEditorItem
+    public interface INodeEditorData 
     {
-        
-        int GetWidth();
-        
-        Color GetTint();
-        
-        GUIStyle GetBodyStyle();
-        
-        void Rename(string newName);
-
-        bool IsSelected { get; set; }
 
         EditorNode EditorNode { get; }
 
         SerializedObject SerializedObject { get; }
 
         INode Target { get; }
-
-        IReadOnlyDictionary<INodePort, Vector2> HandledPorts { get; }
+        
+        IReadOnlyDictionary<INodePort, Vector2> Ports { get; }
 
     }
 }

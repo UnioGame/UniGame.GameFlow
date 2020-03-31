@@ -121,6 +121,8 @@
         
         #region public methods
 
+        
+        
         public virtual void OnIdUpdate(int oldId, int newId, IGraphItem updatedItem)
         {
         
@@ -133,6 +135,8 @@
             OnIdUpdate(oldId,id,this);
             return id;
         }
+
+        public abstract bool AddPortValue(INodePort portValue);
 
         public int SetId(int itemId)
         {
@@ -268,5 +272,6 @@
         {
             GameLog.Log($"{GraphData.ItemName}:{ItemName}: {message}");
         }
+        
     }
 }

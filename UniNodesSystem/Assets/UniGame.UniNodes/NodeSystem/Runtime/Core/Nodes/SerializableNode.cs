@@ -47,7 +47,9 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
         #endregion
         
         protected IGraphData graph;
-       
+        
+        protected HashSet<INodePort> portValues;
+        
         #region constructor
 
         public SerializableNode(){}
@@ -64,8 +66,9 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
         
         #endregion
         
-        
         #region public properties
+
+        public IReadOnlyCollection<INodePort> PortValues => portValues;
 
         /// <summary>
         /// unique node id
@@ -146,6 +149,18 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
             return id;
         }
 
+        public bool AddPortValue(INodePort portValue)
+        {
+            if (portValue == null) {
+                GameLog.LogErrorFormat("Try add NULL port value to {0}", this);
+                return false;
+            }
+
+            portValues.Add(portValue);
+
+            return true;
+        }
+        
         public virtual string GetName() => nodeName;
 
         public void SetUpData(IGraphData parent)

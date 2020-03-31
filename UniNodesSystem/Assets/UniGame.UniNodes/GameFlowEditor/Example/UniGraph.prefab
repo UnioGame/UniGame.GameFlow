@@ -52,7 +52,7 @@ MonoBehaviour:
   id: 2
   width: 220
   nodeName: DemoGraph
-  position: {x: 0, y: 0}
+  position: {x: 244, y: 350.4}
   ports:
     keys:
     - input
@@ -71,7 +71,7 @@ MonoBehaviour:
         broadcastersCount: 0
       connections: []
       instancePortList: 0
-  uniqueId: 32
+  uniqueId: 46
   nodes:
   - {fileID: 6731485210373775985}
   - {fileID: 8483962403633602121}
@@ -79,84 +79,11 @@ MonoBehaviour:
   - {fileID: 8066610591147827006}
   - {fileID: 3482473944225351194}
   - {fileID: 8066610591147827005}
-  serializableNodes:
-  - id: 0
-  - id: 1
-  nodeGroups:
-  - id: 2
+  serializableNodes: []
+  nodeGroups: []
+  graphScale: {x: 0.65751624, y: 0.65751624, z: 1}
   references:
     version: 1
-    00000000:
-      type: {class: SLogNode, ns: UniGame.UniNodes.Nodes.Runtime.SerializableNodes,
-        asm: unigame.nodesystem.commonnodes}
-      data:
-        id: 13
-        width: 220
-        nodeName: S Log Node
-        position: {x: 315, y: -448}
-        ports:
-          keys:
-          - log
-          values:
-          - id: 14
-            nodeId: 13
-            fieldName: log
-            direction: 0
-            connectionType: 0
-            showBackingValue: 2
-            isDynamic: 1
-            isInstancePortList: 0
-            portValue:
-              name: log
-              serializedValueTypes: []
-              broadcastersCount: 0
-            connections:
-            - fieldName: '[out]data'
-              nodeId: 10
-              reroutePoints: []
-              portId: 0
-            instancePortList: 0
-        serializableCommands: []
-        mode: 1
-        message: LogNode
-    00000001:
-      type: {class: DemoFlowNode, ns: , asm: Assembly-CSharp}
-      data:
-        id: 32
-        width: 220
-        nodeName: Demo Flow Node
-        position: {x: 580, y: -384}
-        ports:
-          keys: []
-          values: []
-        serializableCommands: []
-        intValue: 0
-        gameObject: {fileID: 0}
-        Vector2: {x: 0, y: 0}
-        Vector3: {x: 0, y: 0, z: 0}
-        floatValue: 0
-        Component: {fileID: 0}
-        Texture: {fileID: 0}
-        Sprite: {fileID: 0}
-        asset: {fileID: 0}
-        Animator: {fileID: 0}
-        Node:
-          id: 3
-    00000002:
-      type: {class: NodesGroup, ns: UniGame.UniNodes.NodeSystem.Runtime.Core, asm: unigame.nodesystem.runtime}
-      data:
-        title: Demo Group
-        color: {r: 0.06170094, g: 1, b: 0, a: 0.3}
-        nodeIds: 0d00000020000000080000000f000000
-        position:
-          serializedVersion: 2
-          x: 285.0435
-          y: -650.1131
-          width: 400
-          height: 200
-        size: {x: 400, y: 200}
-    00000003:
-      type: {class: , ns: , asm: }
 --- !u!114 &6731485210373775985
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -172,7 +99,7 @@ MonoBehaviour:
   id: 1
   width: 220
   nodeName: input
-  position: {x: -8, y: 40}
+  position: {x: 0, y: 0}
   ports:
     keys:
     - '[out]data'
@@ -211,6 +138,18 @@ MonoBehaviour:
         nodeId: 13
         reroutePoints: []
         portId: 0
+      - fieldName: intPort
+        nodeId: 6
+        reroutePoints: []
+        portId: 0
+      - fieldName: stringPort
+        nodeId: 6
+        reroutePoints: []
+        portId: 0
+      - fieldName: boolReactivePort
+        nodeId: 6
+        reroutePoints: []
+        portId: 0
       instancePortList: 0
     - id: 5
       nodeId: 1
@@ -243,10 +182,13 @@ MonoBehaviour:
   id: 6
   width: 220
   nodeName: Log Node
-  position: {x: 304, y: 46}
+  position: {x: 738, y: -37}
   ports:
     keys:
     - log
+    - stringPort
+    - boolReactivePort
+    - intPort
     values:
     - id: 7
       nodeId: 6
@@ -266,6 +208,63 @@ MonoBehaviour:
         reroutePoints: []
         portId: 4
       instancePortList: 0
+    - id: 33
+      nodeId: 6
+      fieldName: stringPort
+      direction: 0
+      connectionType: 0
+      showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      portValue:
+        name: stringPort
+        serializedValueTypes:
+        - System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+        broadcastersCount: 0
+      connections:
+      - fieldName: '[out]data'
+        nodeId: 1
+        reroutePoints: []
+        portId: 0
+      instancePortList: 0
+    - id: 43
+      nodeId: 6
+      fieldName: boolReactivePort
+      direction: 0
+      connectionType: 0
+      showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      portValue:
+        name: boolReactivePort
+        serializedValueTypes:
+        - System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+        broadcastersCount: 0
+      connections:
+      - fieldName: '[out]data'
+        nodeId: 1
+        reroutePoints: []
+        portId: 0
+      instancePortList: 0
+    - id: 44
+      nodeId: 6
+      fieldName: intPort
+      direction: 0
+      connectionType: 0
+      showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      portValue:
+        name: intPort
+        serializedValueTypes:
+        - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+        broadcastersCount: 0
+      connections:
+      - fieldName: '[out]data'
+        nodeId: 1
+        reroutePoints: []
+        portId: 0
+      instancePortList: 0
   mode: 1
   message: LogNode
 --- !u!114 &-7558999285924506509
@@ -283,10 +282,13 @@ MonoBehaviour:
   id: 8
   width: 220
   nodeName: Log Node
-  position: {x: 323, y: -159}
+  position: {x: 353, y: -227}
   ports:
     keys:
     - log
+    - stringPort
+    - boolReactivePort
+    - intPort
     values:
     - id: 9
       nodeId: 8
@@ -306,6 +308,51 @@ MonoBehaviour:
         reroutePoints: []
         portId: 0
       instancePortList: 0
+    - id: 34
+      nodeId: 8
+      fieldName: stringPort
+      direction: 0
+      connectionType: 0
+      showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      portValue:
+        name: stringPort
+        serializedValueTypes:
+        - System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+        broadcastersCount: 0
+      connections: []
+      instancePortList: 0
+    - id: 45
+      nodeId: 8
+      fieldName: boolReactivePort
+      direction: 0
+      connectionType: 0
+      showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      portValue:
+        name: boolReactivePort
+        serializedValueTypes:
+        - System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+        broadcastersCount: 0
+      connections: []
+      instancePortList: 0
+    - id: 46
+      nodeId: 8
+      fieldName: intPort
+      direction: 0
+      connectionType: 0
+      showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      portValue:
+        name: intPort
+        serializedValueTypes:
+        - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+        broadcastersCount: 0
+      connections: []
+      instancePortList: 0
   mode: 1
   message: LogNode
 --- !u!114 &8066610591147827006
@@ -323,7 +370,7 @@ MonoBehaviour:
   id: 10
   width: 220
   nodeName: Context Data Node
-  position: {x: 305, y: 230}
+  position: {x: 342, y: -361}
   ports:
     keys:
     - '[out]data'
@@ -387,7 +434,7 @@ MonoBehaviour:
   id: 15
   width: 220
   nodeName: Data Delay Node
-  position: {x: 318, y: -289}
+  position: {x: 767, y: 231}
   ports:
     keys:
     - '[out]Value'
@@ -441,7 +488,7 @@ MonoBehaviour:
   id: 20
   width: 220
   nodeName: In Out Ports Node
-  position: {x: 625, y: 164}
+  position: {x: 651, y: -378}
   ports:
     keys:
     - '[out]data'

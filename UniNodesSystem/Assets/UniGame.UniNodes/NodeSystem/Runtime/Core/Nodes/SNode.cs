@@ -43,8 +43,6 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
 
         private ILifeTime lifeTime;
 
-        private HashSet<INodePort> portValues;
-
         private List<ILifeTimeCommand> commands;
 
         #endregion
@@ -69,8 +67,6 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
         public bool IsActive => isActive;
 
         public ILifeTime LifeTime => lifeTimeDefinition.LifeTime;
-
-        public IReadOnlyCollection<INodePort> PortValues => portValues;
 
         #endregion
 
@@ -116,18 +112,6 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
                 this.onCommandsInitialize = null;
                 this.onExecute            = null;
             });
-        }
-
-        public bool AddPortValue(INodePort portValue)
-        {
-            if (portValue == null) {
-                GameLog.LogErrorFormat("Try add NULL port value to {0}", this);
-                return false;
-            }
-
-            portValues.Add(portValue);
-
-            return true;
         }
 
         /// <summary>

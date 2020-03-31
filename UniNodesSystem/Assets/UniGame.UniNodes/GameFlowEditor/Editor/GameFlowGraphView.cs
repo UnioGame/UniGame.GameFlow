@@ -38,13 +38,16 @@ namespace UniGame.GameFlowEditor.Editor
         
         #region constructor
         
-        public GameFlowGraphView(EditorWindow window) : base(window)
+        public GameFlowGraphView(UniGameFlowWindow window) : base(window)
         {
+            GameFlowWindow = window;
         }
         
         #endregion
         
         #region public properties
+
+        public UniGameFlowWindow GameFlowWindow { get; private set; }
 
         public IUniGraph ActiveGraph => SourceGraph.UniGraph;
 
@@ -65,6 +68,9 @@ namespace UniGame.GameFlowEditor.Editor
         public void Save()
         {
             var graphData = SourceGraph.UniGraph;
+
+            graphData.SetPosition(graph.position);
+            graphData.SetScale(graph.scale);
             
             SaveGroupInfo(graphData);
             SaveStackNodeInfo(graphData);
@@ -154,8 +160,10 @@ namespace UniGame.GameFlowEditor.Editor
 
         private void CreateGroupViews(UniGraph graphData)
         {
+            graphData.nodeGroups.RemoveAll(x => x == null);
             foreach (var group in graphData.nodeGroups) {
-                var groupData = new Group(group.Title,group.Size) {
+                var title = string.IsNullOrEmpty(group.Title) ? string.Empty : group.Title;
+                var groupData = new Group(title,group.Size) {
                     color = group.Color,
                     position = group.Position,
                     innerNodeGUIDs = nodeViews.

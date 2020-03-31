@@ -32,7 +32,7 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
 
         public INode Target => Node;
 
-        public IReadOnlyDictionary<INodePort, Vector2> HandledPorts => PortPositions;
+        public IReadOnlyDictionary<INodePort, Vector2> Ports => PortPositions;
 
         public EditorNode EditorNode => EditorData;
         

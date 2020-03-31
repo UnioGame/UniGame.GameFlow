@@ -62,17 +62,14 @@
             var hideInspector = field?.GetCustomAttributes(typeof(HideNodeInspectorAttribute), false).Length > 0;
             return !hideInspector;
         }
-        
+
         public static IEnumerable<PropertyEditorData> GetProperties(
             this object target,
             SerializedProperty targetProperty,
             SerializedProperty parent)
         {
             var property = targetProperty.Copy();
- 
             var type = target.GetType();
-
-            EditorGUIUtility.labelWidth = 84;
             
             var moveNext = property.NextVisible(true);
             var next     = parent?.GetNextArrayProperty(targetProperty);
@@ -81,17 +78,19 @@
                    && !property.IsEquals(targetProperty) 
                    && (next == null || !next.IsEquals(property)))
             {
-                yield return new PropertyEditorData() {
+                var propertyData = new PropertyEditorData() {
                     Target   = target,
                     Name     = property.name,
                     Tooltip  = property.tooltip,
                     Source   = target,
                     Type     = type,
-                    Property = property,
+                    Property = property.Copy(),
                 };
+                yield return propertyData;
                 moveNext = property.NextVisible(false);
             }
         }
+        
         
         /// <summary> Make a field for a serialized property. Automatically displays relevant node port. </summary>
         public static void DrawNodePropertyField(

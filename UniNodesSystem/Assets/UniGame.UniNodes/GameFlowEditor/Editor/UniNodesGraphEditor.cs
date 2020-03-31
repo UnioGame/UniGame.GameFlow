@@ -2,6 +2,7 @@
 {
     using BaseEditor;
     using Runtime.Core;
+    using UniGame.GameFlowEditor.Editor;
     using UnityEditor;
     using UnityEngine;
     using Editor = UnityEditor.Editor;
@@ -21,16 +22,14 @@
 
             GUILayout.BeginVertical();
         
-            if (GUILayout.Button("Show Graph", GUILayout.Height(26)))
+            if (GUILayout.Button("Show Graph(obsolete)", GUILayout.Height(26)))
             {
                 NodeEditorWindow.Open(graph);
             }
-#if UNITY_GRAPH_ENABLED
-            if (GUILayout.Button("Show Unity Graph", GUILayout.Height(26)))
+            if (GUILayout.Button("Show Graph", GUILayout.Height(26)))
             {
-                UnityGraphWindow.Show(graph);
+                UniGameFlowWindow.Open(graph);
             }   
-#endif
 
         
             GUILayout.EndVertical();

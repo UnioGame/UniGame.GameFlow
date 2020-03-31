@@ -28,7 +28,7 @@ namespace UniGame.UniNodes.GameFlowEditor.Editor
                 text = "Reload"
             };
             
-            var saveButton = new Button(ReloadGraphView) {
+            var saveButton = new Button(SaveGraphView) {
                 name = "SaveAction", 
                 text = "Save"
             };
@@ -39,12 +39,13 @@ namespace UniGame.UniNodes.GameFlowEditor.Editor
 
         private void ReloadGraphView()
         {
-            
+            SaveGraphView();
+            graphView.GameFlowWindow.Reload();
         }
         
         private void SaveGraphView()
         {
-            graphView.Save();
+            graphView.GameFlowWindow.Save();
         }
     }
 }

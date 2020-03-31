@@ -36,6 +36,8 @@
 
         [SerializeReference]
         public List<INodesGroup> nodeGroups = new List<INodesGroup>();
+
+        public Vector3 graphScale = Vector3.one;
         
         #endregion
 
@@ -57,6 +59,8 @@
 
         public sealed override IGraphData GraphData => this;
 
+        public Vector3 Scale => graphScale;
+        
         #endregion
 
         #region graph operations
@@ -69,6 +73,8 @@
 
         public int UpdateId(int oldId) => GetId();
 
+        public void SetScale(Vector3 scale) => this.graphScale = scale;
+        
         public List<INode> GetNodes()
         {
             if (allNodes != null) {
