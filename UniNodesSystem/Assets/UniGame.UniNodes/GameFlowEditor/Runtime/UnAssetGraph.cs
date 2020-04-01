@@ -12,8 +12,7 @@ namespace UniGame.GameFlowEditor.Runtime
     public class UniAssetGraph : BaseGraph
     {
         private UniGraph sourceGraph;
-        private SerializedObject serializableObject;
-        
+
         public Dictionary<int,UniBaseNode> uniNodes = new Dictionary<int,UniBaseNode>(16);
 
         public UniGraph UniGraph => sourceGraph;
@@ -23,9 +22,7 @@ namespace UniGame.GameFlowEditor.Runtime
             sourceGraph = graph;
             position = sourceGraph.Position;
             scale    = sourceGraph.Scale;
-            
-            serializableObject = new SerializedObject(sourceGraph);
-            
+
             sourceGraph.Initialize();
             
             UpdateGraph();
@@ -41,10 +38,16 @@ namespace UniGame.GameFlowEditor.Runtime
 
         public UniBaseNode CreateNode(Type type, Vector2 nodePosition)
         {
+            var name = type.Name;
+            
+            #if UNITY_EDITOR
+            name = ObjectNames.NicifyVariableName(name);
+            #endif
             var newNode = sourceGraph.AddNode(
                 type,
-                ObjectNames.NicifyVariableName(type.Name),
+                name,
                 nodePosition);
+            
             return CreateNode(newNode);
         }
 
