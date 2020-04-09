@@ -200,18 +200,14 @@
             nodes.Remove(this);
 
             var nodeItems = ClassPool.Spawn<List<INode>>();
-            var idCacne = ClassPool.Spawn<HashSet<int>>();
             nodeItems.AddRange(serializableNodes);
             nodeItems.AddRange(nodes);
 
             foreach (var nodeItem in nodeItems) {
-                if (idCacne.Add(nodeItem.Id) == false) {
-                    nodeItem.SetUpData(this);
-                    nodeItem.SetId(GetId());
-                }
+                nodeItem.SetUpData(this);
+                nodeItem.Validate();
             }
             
-            idCacne.Despawn();
             nodeItems.Despawn();
 
         }

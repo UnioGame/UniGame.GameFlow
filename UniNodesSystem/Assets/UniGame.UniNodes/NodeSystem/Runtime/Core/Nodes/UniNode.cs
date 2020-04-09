@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using Attributes;
-    using Nodes;
     using Runtime.Interfaces;
     using UniGreenModules.UniCore.Runtime.DataFlow.Interfaces;
     using UniGreenModules.UniCore.Runtime.Interfaces;
@@ -11,17 +10,8 @@
     [HideNode]
     [Serializable]
     public abstract class UniNode : Node, IUniNode
-    {       
-        
-        private IProxyNode serializableNode;
-
-        
+    {
         #region public properties
-        
-        /// <summary>
-        /// regular source node
-        /// </summary>
-        protected IProxyNode SNode => GetSourceNode();
 
         /// <summary>
         /// Is node currently active
@@ -29,8 +19,6 @@
         public bool IsActive => SNode.IsActive;
 
         public ILifeTime LifeTime => SNode.LifeTime;
-
-        public IReadOnlyCollection<INodePort> PortValues => SNode.PortValues;
 
         #endregion
 
@@ -43,8 +31,6 @@
             SNode.Initialize(graphData);
         }
 
-        public override bool AddPortValue(INodePort portValue) => SNode.AddPortValue(portValue);
-        
         /// <summary>
         /// stop execution
         /// </summary>
@@ -85,23 +71,7 @@
         /// </summary>
         protected virtual void UpdateCommands(List<ILifeTimeCommand> nodeCommands){}
 
-        /// <summary>
-        /// create base node realization
-        /// </summary>
-        protected virtual IProxyNode CreateInnerNode() => new SNode(id, nodeName, ports);
 
-        /// <summary>
-        /// create target source node and bind with mono node methods
-        /// </summary>
-        /// <returns></returns>
-        private IProxyNode GetSourceNode()
-        {
-            if (serializableNode != null)
-                return serializableNode;
-            serializableNode = CreateInnerNode();
-            return serializableNode;
-        }
-        
         /// <summary>
         /// finish node life time
         /// </summary>

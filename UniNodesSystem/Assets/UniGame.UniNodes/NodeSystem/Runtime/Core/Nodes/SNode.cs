@@ -21,14 +21,6 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
     [Serializable]
     public class SNode : SerializableNode, IProxyNode
     {
-        #region inspector fields
-
-        [HideNodeInspector]
-        [SerializeReference]
-        public List<ILifeTimeCommandSource> serializableCommands = new List<ILifeTimeCommandSource>();
-
-        #endregion
-
         #region private fields
         
         private Action                         onInitialize;
@@ -145,41 +137,6 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
         /// stop node execution
         /// </summary>
         public void Release() => Exit();
-
-        
-        #region inspector call
-
-        public override void Validate()
-        {
-            var removedPorts = ClassPool.Spawn<List<NodePort>>();
-            foreach (var portPair in ports) {
-                var port = portPair.Value;
-                if (port == null || string.IsNullOrEmpty(port.fieldName) || port.nodeId == 0) {
-                    removedPorts.Add(port);
-                    continue;
-                }
-
-                var value = PortValues.FirstOrDefault(x => x.ItemName == port.ItemName &&
-                                                           x.Direction == port.Direction);
-                if (value == null || string.IsNullOrEmpty(value.ItemName)) {
-                    removedPorts.Add(port);
-                }
-            }
-
-            removedPorts.ForEach(RemovePort);
-            removedPorts.Despawn();
-
-            CleanUpSerializableCommands();
-        }
-
-        [Conditional("UNITY_EDITOR")]
-        public void CleanUpSerializableCommands()
-        {
-            //remove all temp commands
-            serializableCommands.RemoveAll(x => x == null || x.Validate() == false);
-        }
-
-        #endregion
         
         #endregion
 
@@ -215,13 +172,6 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
         {
             commands.Clear();
 
-            //register all backed commands to main list
-            for (var i = 0; i < serializableCommands.Count; i++) {
-                var command = serializableCommands[i];
-                if (command != null)
-                    commands.Add(command.Create(this));
-            }
-
             //register node commands
             UpdateCommands(commands);
             
@@ -234,14 +184,14 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
         /// </summary>
         private void InitializePorts()
         {
+            if (!Application.isPlaying)
+                return;
+            
             //initialize ports
-            for (var i = 0; i < Ports.Count; i++) {
-                var nodePort = Ports[i];
-                nodePort.Initialize(this);
-                lifeTime.AddCleanUpAction(nodePort.Release);
-
-                if (Application.isPlaying)
-                    AddPortValue(nodePort);
+            foreach (var port in Ports) {
+                port.Initialize(this);
+                lifeTime.AddCleanUpAction(port.Release);
+                AddPortValue(port);
             }
         }
 
@@ -251,10 +201,7 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
             //restart lifetime
             lifeTimeDefinition = lifeTimeDefinition ?? new LifeTimeDefinition();
             lifeTime           = lifeTimeDefinition.LifeTime;
-            portValues         = portValues ?? new HashSet<INodePort>();
             commands           = commands ?? new List<ILifeTimeCommand>();
-            
-            portValues.Clear();
         }
         
         #endregion

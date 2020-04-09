@@ -21,6 +21,7 @@
         private static Dictionary<INode,EditorNode> nodeDataCache = 
             new Dictionary<INode, EditorNode>(16);
         
+        
         private NodeFieldsContainer fiedlsContainer = new NodeFieldsContainer();
 
         public bool IsTypeSupported(Type type)
@@ -34,19 +35,22 @@
             string label = "",
             Action<object> onValueChanged = null)
         {
+            var backgroundColor = new Color(0.5f, 0.5f, 0.5f);
             var node = source as INode;
-
             var container = new Foldout() {
                 text = string.IsNullOrEmpty(label) ? "content" : label,
                 value = false,
                 style = {
-                    paddingLeft = 4,
-                    color = new StyleColor(Color.black),
-                    backgroundColor = new StyleColor(new Color(0.5f,0.5f,0.5f))
+                    paddingLeft     = 4,
+                    color           = new StyleColor(Color.black),
+                    backgroundColor = new StyleColor(backgroundColor)
                 }
             };
             
-            DrawNode(container,node,onValueChanged);
+            var view = DrawNode(node,onValueChanged);
+            view.style.backgroundColor = new StyleColor(backgroundColor);
+            
+            container?.Add(view);
             
             return container;
         }
@@ -61,11 +65,14 @@
             return nodeDataCache[node];
         }
 
-        public void DrawNode(VisualElement container,INode node,Action<object> onValueChanged)
+        public VisualElement DrawNode(INode node,Action<object> onValueChanged)
         {
+            VisualElement element = null;
+            
 #if ODIN_INSPECTOR
-            container.Add( new IMGUIContainer(() => node.DrawOdinPropertyInspector()));
-            return;
+            element = new IMGUIContainer(() => node.DrawOdinPropertyInspector());
+#else
+            element = new VisualElement();
 #endif
             var data = GetData(node);
             var fields = fiedlsContainer.GetFields(data);
@@ -73,13 +80,14 @@
             foreach (var field in fields) {
                 var view = DrawField(field);
                 view.style.marginBottom = 4;
-                
-                container.Add(view);
+                element.Add(view);
             }
             
             //save source object
             data.Property.serializedObject.
                 ApplyModifiedPropertiesWithoutUndo();
+
+            return element;
         }
 
         private VisualElement DrawField(PropertyEditorData field)

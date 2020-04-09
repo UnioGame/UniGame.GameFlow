@@ -44,10 +44,17 @@
         public NodePortDictionary ports = new NodePortDictionary();
       
         #endregion
+        
+        private IProxyNode serializableNode;
 
         protected IGraphData graph;
 
         #region public properties
+        
+        /// <summary>
+        /// regular source node
+        /// </summary>
+        protected IProxyNode SNode => GetSourceNode();
 
         /// <summary>
         /// unique node id
@@ -62,7 +69,7 @@
         /// <summary>
         /// Iterate over all ports on this node.
         /// </summary>
-        public IReadOnlyList<INodePort> Ports => ports.Ports;
+        public IEnumerable<INodePort> Ports => SNode.Ports;
         
         /// <summary>
         /// Iterate over all outputs on this node.
@@ -70,9 +77,10 @@
         public IEnumerable<INodePort> Outputs
         {
             get {
-                for (var i = 0; i < Ports.Count; i++) {
-                    var port = Ports[i];
-                    if (port.Direction == PortIO.Output) yield return port;
+                foreach (var port in Ports) {
+                    if (port.Direction == PortIO.Output) {
+                        yield return port;
+                    }
                 }
             }
         }
@@ -83,9 +91,10 @@
         public IEnumerable<INodePort> Inputs
         {
             get {
-                for (var i = 0; i < Ports.Count; i++) {
-                    var port = Ports[i];
-                    if (port.Direction == PortIO.Input) yield return port;
+                foreach (var port in Ports) {
+                    if (port.Direction == PortIO.Input) {
+                        yield return port;
+                    }
                 }
             }
         }
@@ -120,8 +129,6 @@
         #endregion
         
         #region public methods
-
-        
         
         public virtual void OnIdUpdate(int oldId, int newId, IGraphItem updatedItem)
         {
@@ -135,9 +142,7 @@
             OnIdUpdate(oldId,id,this);
             return id;
         }
-
-        public abstract bool AddPortValue(INodePort portValue);
-
+        
         public int SetId(int itemId)
         {
             var oldId = id;
@@ -265,6 +270,24 @@
             nodeName = itemName;
         }
 
+        
+        /// <summary>
+        /// create target source node and bind with mono node methods
+        /// </summary>
+        /// <returns></returns>
+        private IProxyNode GetSourceNode()
+        {
+            if (serializableNode != null)
+                return serializableNode;
+            serializableNode = CreateInnerNode();
+            return serializableNode;
+        }
+        
+        /// <summary>
+        /// create base node realization
+        /// </summary>
+        protected virtual IProxyNode CreateInnerNode() => new SNode(id, nodeName, ports);
+        
         #endregion
 
         [Conditional("UNITY_EDITOR")]

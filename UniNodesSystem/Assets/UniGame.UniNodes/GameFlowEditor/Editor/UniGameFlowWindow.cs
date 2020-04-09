@@ -11,6 +11,7 @@ namespace UniGame.GameFlowEditor.Editor
     using UniNodes.GameFlowEditor.Editor;
     using UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector;
     using UniNodes.NodeSystem.Runtime.Core;
+    using UniNodes.NodeSystem.Runtime.Extensions;
     using UnityEditor;
     using UnityEditor.Experimental.GraphView;
     using UnityEditor.SceneManagement;
@@ -100,24 +101,47 @@ namespace UniGame.GameFlowEditor.Editor
 
         public void Reload()
         {
+            GameLog.Log("GameFlowWindow : Window Reload");
             if (!ActiveGraph) {
-                GameLog.LogError($"{nameof(UniGameFlowWindow)} : Null Source UniGraph data",this);
+                GameLog.LogWarning($"{nameof(UniGameFlowWindow)} : Null Source UniGraph data",this);
                 return;
             }
 
-            graph = null;
+            LogGraph();
             
-            InitializeGraph(ActiveGraph);
-            InitializeGraph(CreateAssetGraph(ActiveGraph));
+            graph = null;
+
+            var assetGraph = CreateAssetGraph(ActiveGraph);
+            
+            LogGraph();
+            
+            InitializeGraph(assetGraph);
+            
+            LogGraph();
+        }
+
+        private void LogGraph()
+        {
+                        
+            var nodes = ActiveGraph.Nodes;
+            foreach (var node in nodes) {
+                var debug = $"{node.ItemName} : ";
+                 
+                foreach (var port in node.Ports) {
+                    debug += $"{port.ItemName} ";
+                }
+
+                GameLog.Log(debug);
+            }
         }
         
-        public UniAssetGraph CreateAssetGraph(UniGraph uniGraph)
+        public virtual UniAssetGraph CreateAssetGraph(UniGraph uniGraph)
         {
-            ActiveGraph = uniGraph;
+            uniGraph.Initialize();
+            uniGraph.Validate();
             
             AssetGraph = ScriptableObject.CreateInstance<UniAssetGraph>();
-            AssetGraph.Activate(ActiveGraph);
-            
+            AssetGraph.Activate(uniGraph);
             return AssetGraph;
         }
 
@@ -130,6 +154,14 @@ namespace UniGame.GameFlowEditor.Editor
         
         #endregion
 
+        protected override void OnEnable()
+        {
+            GameLog.Log("GameFlowWindow : OnEnable");
+            graph = null;
+            base.OnEnable();
+            Reload();
+        }
+        
         protected override void OnDestroy()
         {
             Windows.Remove(this);
@@ -137,7 +169,7 @@ namespace UniGame.GameFlowEditor.Editor
             //save graph when ctrl + s pressed
             EditorSceneManager.sceneSaved -= OnSave;
             //redraw editor if assembly reloaded
-            AssemblyReloadEvents.afterAssemblyReload  -= OnAssemblyReloaded;
+            //AssemblyReloadEvents.afterAssemblyReload  -= OnAssemblyReloaded;
             AssemblyReloadEvents.beforeAssemblyReload -= OnBeforeAssemblyReload;
             EditorApplication.playModeStateChanged    -= OnPlayModeChanged;
             base.OnDestroy();
@@ -154,6 +186,9 @@ namespace UniGame.GameFlowEditor.Editor
         {
             if (AssetEditorTools.IsPureEditorMode == false)
                 return;
+            
+            graph = null;
+            
             Save();
         }
         
@@ -174,27 +209,12 @@ namespace UniGame.GameFlowEditor.Editor
             CreatePinned(view);
         }
 
-        protected void InitializeGraph(UniGraph targetGraph)
-        {
-
-            var idEditingMode = AssetEditorTools.IsPureEditorMode;
-            
-            if (idEditingMode == false)
-                return;
-
-            foreach (var node in targetGraph.Nodes) {
-                node.Initialize(targetGraph);
-                node.UpdatePortAttributes();
-            }
-            
-        }
-
         private void BindEvents()
         {
             //save graph when ctrl + s pressed
             EditorSceneManager.sceneSaved += OnSave;
             //redraw editor if assembly reloaded
-            AssemblyReloadEvents.afterAssemblyReload += OnAssemblyReloaded;
+            //AssemblyReloadEvents.afterAssemblyReload += OnAssemblyReloaded;
             AssemblyReloadEvents.beforeAssemblyReload += OnBeforeAssemblyReload;
             EditorApplication.playModeStateChanged += OnPlayModeChanged;
         }

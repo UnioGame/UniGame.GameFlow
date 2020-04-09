@@ -29,11 +29,10 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
             ConnectionType connectionType = ConnectionType.Multiple,
             ShowBackingValue showBackingValue = ShowBackingValue.Always);
         
+        //NodePort AddPort(INodePort port);
         
         void Validate();
 
-        bool AddPortValue(INodePort portValue);
-        
         #region editor api
 
         int SetId(int id);
