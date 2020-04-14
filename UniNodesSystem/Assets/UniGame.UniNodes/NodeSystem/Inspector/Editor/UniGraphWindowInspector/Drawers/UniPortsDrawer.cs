@@ -67,10 +67,8 @@
 
             var node = editor.Target;
             
-            for (var i = 0; i < node.Ports.Count; i++)
+            foreach (var portValue in node.Ports)
             {
-                var portValue = node.Ports[i];
-                
                 if(editor.Ports.ContainsKey(portValue))
                     continue;
                 

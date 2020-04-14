@@ -2,12 +2,19 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Linq;
+    using System.Reflection;
     using Core;
     using Core.Interfaces;
+    using Inspector.Editor.UniGraphWindowInspector.BaseEditor.Extensions;
     using Interfaces;
+    using UniGreenModules.UniCore.Runtime.ObjectPool.Runtime;
+    using UniGreenModules.UniCore.Runtime.ObjectPool.Runtime.Extensions;
     using UniGreenModules.UniCore.Runtime.Rx.Extensions;
     using UniGreenModules.UniCore.Runtime.Utils;
     using UniRx;
+    using UnityEngine;
 
     public static class UniNodeExtension
     {
@@ -22,6 +29,57 @@
         public static Func<string, string[]> portNameCache = MemorizeTool.Create((string x) => new string[2]);
    
 #region port names
+
+        [Conditional("UNITY_EDITOR")]
+        public static void UpdatePorts(this INode node, IGraphData data)
+        {
+            var portList = ClassPool.Spawn<List<INodePort>>();
+
+            node.Initialize(data);
+            
+            portList.AddRange(node.Ports);
+
+            node.UpdatePortByAttributes();
+
+            portList.Despawn();
+        }
+        
+        [Conditional("UNITY_EDITOR")]
+        public static void UpdatePortByAttributes(this INode node)
+        {
+            if (Application.isPlaying)
+                return;
+            
+            var type = node.GetType();
+            
+            var fields = type.GetFields(
+                BindingFlags.Public | 
+                BindingFlags.Instance | 
+                BindingFlags.NonPublic);
+
+            foreach (var portField in fields) {
+                var data = node.GetPortData(portField, portField.Name);
+                if(data.PortData == null)
+                    continue;
+                        
+                var port  = node.UpdatePortValue(data.PortData);
+                var value = portField.GetValue(node);
+
+                UpdateSerializedCommands(node, port, value);
+            }
+
+        }
+        
+        public static void UpdateSerializedCommands(INode node,IPortValue port, object value)
+        {
+
+            switch (value) {
+                case IReactiveSource reactiveSource:
+                    reactiveSource.Bind(node,port.ItemName);
+                    return;
+            }
+
+        }
         
         private static string GetFormatedInputPortName(this string portName)
         {
@@ -130,24 +188,20 @@
             ShowBackingValue showBackingValue = ShowBackingValue.Always,
             IReadOnlyList<Type> types = null)
         {
-            var port = node.GetPort(portName);
+            types = types ?? new List<Type>();
+            var port = node.AddPort(portName, types, direction, connectionType, showBackingValue);
 
-            if (port == null) {
-                types = types ?? new List<Type>();
-                port = node.AddPort(portName, types, direction, connectionType, showBackingValue);
-            }
-
-            var portData = new NodePortData() {
-                direction        = direction,
-                fieldName        = portName,
-                connectionType   = connectionType,
-                showBackingValue = showBackingValue,
-                valueTypes       = types == null ? new List<Type>() : new List<Type>(types),
-            };
-            
-            port.SetPortData(portData);
-            
-            node.AddPortValue(port);
+//            var portData = new NodePortData() {
+//                direction        = direction,
+//                fieldName        = portName,
+//                connectionType   = connectionType,
+//                showBackingValue = showBackingValue,
+//                valueTypes       = types == null ? new List<Type>() : new List<Type>(types),
+//            };
+//            
+//            port.SetPortData(portData);
+//            
+//            node.AddPort(port);
 
             return port.Value;
         }

@@ -71,8 +71,8 @@
             graphEditor.position = position;
 
             if (EditorApplication.isPlayingOrWillChangePlaymode == false) {
-                ActiveGraph.Validate();
                 ActiveGraph.Initialize(ActiveGraph);
+                ActiveGraph.Validate();
             }
 
             Controls();

@@ -39,39 +39,7 @@
             }
             return items;
         }
-        
-        
-        public static void UpdatePortAttributes(this INode node)
-        {
-            var type = node.GetType();
-            var fields = type.GetFields(
-                BindingFlags.Public | 
-                BindingFlags.Instance | 
-                BindingFlags.NonPublic);
 
-            foreach (var portField in fields) {
-                var data = node.GetPortData(portField, portField.Name);
-                if(data.PortData == null)
-                    continue;
-                
-                var port  = node.UpdatePortValue(data.PortData);
-                var value = portField.GetValue(node);
-
-                UpdateSerializedCommands(node, port, value);
-            }
-
-        }
-        
-        public static void UpdateSerializedCommands(INode node,IPortValue port, object value)
-        {
-
-            switch (value) {
-                case IReactiveSource reactiveSource:
-                    reactiveSource.Bind(node,port.ItemName);
-                    return;
-            }
-
-        }
         
         public static NodePort DrawPortField(this NodePort port, GUIContent label, GUILayoutOption[] options)
         {

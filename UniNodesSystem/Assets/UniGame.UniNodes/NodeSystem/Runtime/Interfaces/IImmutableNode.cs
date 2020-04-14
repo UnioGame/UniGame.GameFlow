@@ -11,7 +11,7 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
 
         IGraphData GraphData { get; }
 
-        IReadOnlyList<INodePort> Ports { get; }
+        IEnumerable<INodePort> Ports { get; }
 
         /// <summary> Iterate over all outputs on this node. </summary>
         IEnumerable<INodePort> Outputs { get; }

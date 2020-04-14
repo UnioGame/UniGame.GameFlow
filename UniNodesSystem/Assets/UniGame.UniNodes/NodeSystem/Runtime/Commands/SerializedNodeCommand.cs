@@ -8,7 +8,7 @@
     [Serializable]
     public class SerializedNodeCommand : ILifeTimeCommandSource, IValidator
     {
-        public virtual bool IsUpdatable { get; }
+        public virtual bool IsUpdatable { get; protected set; } = false;
 
         public virtual ILifeTimeCommand Create(IUniNode node) => null;
 
