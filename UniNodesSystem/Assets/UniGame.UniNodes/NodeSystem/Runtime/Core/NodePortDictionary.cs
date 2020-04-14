@@ -7,7 +7,5 @@
     [Serializable]
     public class NodePortDictionary : SerializableDictionary<string, NodePort>
     {
-        public IReadOnlyList<NodePort> Ports => values;
-
     }
 }

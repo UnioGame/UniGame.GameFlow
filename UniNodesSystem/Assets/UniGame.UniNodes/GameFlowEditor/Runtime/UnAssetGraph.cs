@@ -23,8 +23,7 @@ namespace UniGame.GameFlowEditor.Runtime
             position = sourceGraph.Position;
             scale    = sourceGraph.Scale;
 
-            sourceGraph.Initialize();
-            
+            //update dynamic graph ports
             UpdateGraph();
         }
 

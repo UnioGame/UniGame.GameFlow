@@ -10,9 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 62531897943396465}
   - component: {fileID: 7736257595766597421}
-  - component: {fileID: 2560118951257910373}
-  - component: {fileID: 2409914698246893267}
-  - component: {fileID: 5165020967493874029}
   - component: {fileID: 1626862260}
   m_Layer: 0
   m_Name: UniGraph 1
@@ -50,7 +47,7 @@ MonoBehaviour:
   id: 3
   width: 250
   nodeName: New Game Object
-  position: {x: 199.2, y: 288.8}
+  position: {x: 80, y: 880.8}
   ports:
     keys:
     - input
@@ -69,192 +66,56 @@ MonoBehaviour:
         broadcastersCount: 0
       connections: []
       instancePortList: 0
-  uniqueId: 19
-  nodes:
-  - {fileID: 2560118951257910373}
-  - {fileID: 2409914698246893267}
-  - {fileID: 5165020967493874029}
-  serializableNodes: []
+  uniqueId: 356
+  nodes: []
+  serializableNodes:
+  - id: 0
   nodeGroups: []
-  graphScale: {x: 0.7561437, y: 0.7561437, z: 1}
+  graphScale: {x: 1.7490063, y: 1.7490063, z: 1}
   references:
     version: 1
---- !u!114 &2560118951257910373
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3830966417042498334}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e220d9478c8c56748a8e2f1b11bb82f5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  id: 9
-  width: 250
-  nodeName: Demo Value Summ Reactive Node
-  position: {x: 303, y: 5}
-  ports:
-    keys:
-    - IntIn
-    - IntResult
-    values:
-    - id: 10
-      nodeId: 9
-      fieldName: IntIn
-      direction: 0
-      connectionType: 0
-      showBackingValue: 2
-      isDynamic: 1
-      isInstancePortList: 0
-      portValue:
-        name: IntIn
-        serializedValueTypes:
-        - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-        broadcastersCount: 0
-      connections:
-      - fieldName: IntOut
-        nodeId: 12
-        reroutePoints: []
-        portId: 0
-      instancePortList: 0
-    - id: 11
-      nodeId: 9
-      fieldName: IntResult
-      direction: 1
-      connectionType: 0
-      showBackingValue: 2
-      isDynamic: 1
-      isInstancePortList: 0
-      portValue:
-        name: IntResult
-        serializedValueTypes:
-        - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-        broadcastersCount: 0
-      connections:
-      - fieldName: log
-        nodeId: 15
-        reroutePoints: []
-        portId: 0
-      instancePortList: 0
-  IntIn:
-    sendByBind: 1
-    value: 0
-    nodeId: 9
-    portName: IntIn
-  IntResult:
-    sendByBind: 1
-    value: 0
-    nodeId: 9
-    portName: IntResult
---- !u!114 &2409914698246893267
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3830966417042498334}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 620ad14d07f226747a9b5c5c8f7686a9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  id: 12
-  width: 250
-  nodeName: Demo Reactive Source Node
-  position: {x: 0, y: 0}
-  ports:
-    keys:
-    - IntOut
-    - customOutput
-    values:
-    - id: 13
-      nodeId: 12
-      fieldName: IntOut
-      direction: 1
-      connectionType: 0
-      showBackingValue: 2
-      isDynamic: 1
-      isInstancePortList: 0
-      portValue:
-        name: IntOut
-        serializedValueTypes:
-        - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-        broadcastersCount: 0
-      connections:
-      - fieldName: IntIn
-        nodeId: 9
-        reroutePoints: []
-        portId: 0
-      instancePortList: 0
-    - id: 14
-      nodeId: 12
-      fieldName: customOutput
-      direction: 1
-      connectionType: 0
-      showBackingValue: 2
-      isDynamic: 1
-      isInstancePortList: 0
-      portValue:
-        name: customOutput
-        serializedValueTypes:
-        - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-        broadcastersCount: 0
-      connections: []
-      instancePortList: 0
-  delay: 2
-  value: 1
-  IntOut:
-    sendByBind: 1
-    value: 0
-    nodeId: 12
-    portName: IntOut
-  outValue:
-    sendByBind: 1
-    value: 0
-    nodeId: 12
-    portName: customOutput
---- !u!114 &5165020967493874029
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3830966417042498334}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23f9640bdcee91f44b837897ec957069, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  id: 15
-  width: 250
-  nodeName: Log Node
-  position: {x: 639, y: 13}
-  ports:
-    keys:
-    - log
-    values:
-    - id: 16
-      nodeId: 15
-      fieldName: log
-      direction: 0
-      connectionType: 0
-      showBackingValue: 2
-      isDynamic: 1
-      isInstancePortList: 0
-      portValue:
-        name: log
-        serializedValueTypes: []
-        broadcastersCount: 0
-      connections:
-      - fieldName: IntResult
-        nodeId: 9
-        reroutePoints: []
-        portId: 0
-      instancePortList: 0
-  mode: 1
-  message: LogNode
+    00000000:
+      type: {class: DemoFlowNode, ns: , asm: Assembly-CSharp}
+      data:
+        id: 351
+        width: 220
+        nodeName: Demo Flow Node
+        position: {x: 172, y: -332}
+        ports:
+          keys: []
+          values: []
+        intIn: 0
+        intIn1: 0
+        intOut: 0
+        boolRIn:
+          sendByBind: 1
+          value: 0
+          nodeId: 351
+          portName: boolRIn
+        boolROut:
+          sendByBind: 1
+          value: 0
+          nodeId: 351
+          portName: boolROut
+        intValue: 0
+        gameObject: {fileID: 0}
+        Vector2Int: {x: 0, y: 0}
+        Vector2: {x: 0, y: 0}
+        LogNode:
+          id: 1
+    00000001:
+      type: {class: SLogNode, ns: UniGame.UniNodes.Nodes.Runtime.SerializableNodes,
+        asm: unigame.nodesystem.commonnodes}
+      data:
+        id: 0
+        width: 220
+        nodeName: 
+        position: {x: 0, y: 0}
+        ports:
+          keys: []
+          values: []
+        mode: 1
+        message: LogNode
 --- !u!114 &1626862260
 MonoBehaviour:
   m_ObjectHideFlags: 0

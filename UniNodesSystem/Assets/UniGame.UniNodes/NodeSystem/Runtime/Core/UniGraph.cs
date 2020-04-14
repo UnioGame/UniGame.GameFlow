@@ -127,12 +127,21 @@
                 }
                 //initialize node
                 node.Initialize(this);
-
+                
+#if UNITY_EDITOR
+                //Editor Only
+                node.UpdatePortByAttributes();
+#endif
+                
                 if (node is IUniNode uniNode) {
                     LifeTime.AddCleanUpAction(uniNode.Exit);
                     uniNodes.Add(uniNode);
                 }
    
+#if UNITY_EDITOR
+                node.Validate();
+#endif
+                
             }
         }
         

@@ -16,7 +16,7 @@
         public string ItemName { get; private set;  }
 
         public IGraphData              GraphData { get; }
-        public IReadOnlyList<INodePort> Ports     { get; }
+        public IEnumerable<INodePort> Ports     { get; }
         public IEnumerable<INodePort>   Outputs   { get; }
     
         public IEnumerable<INodePort> Inputs { get; }

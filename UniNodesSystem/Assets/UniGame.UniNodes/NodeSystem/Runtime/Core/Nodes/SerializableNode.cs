@@ -5,12 +5,14 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
-    using Attributes;
+    using System.Linq;
     using Interfaces;
     using Nodes;
     using Runtime.Interfaces;
     using UniCore.Runtime.ProfilerTools;
     using UniGreenModules.UniCore.Runtime.Attributes;
+    using UniGreenModules.UniCore.Runtime.ObjectPool.Runtime;
+    using UniGreenModules.UniCore.Runtime.ObjectPool.Runtime.Extensions;
     using UniGreenModules.UniGame.Core.Runtime.Attributes.FieldTypeDrawer;
 
     [Serializable]
@@ -48,7 +50,7 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
         
         protected IGraphData graph;
         
-        protected HashSet<INodePort> portValues;
+        private HashSet<INodePort> portValues;
         
         #region constructor
 
@@ -68,8 +70,9 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
         
         #region public properties
 
-        public IReadOnlyCollection<INodePort> PortValues => portValues;
-
+        public HashSet<INodePort> RuntimePorts => portValues = 
+            portValues ?? (portValues = new HashSet<INodePort>());
+        
         /// <summary>
         /// unique node id
         /// </summary>
@@ -83,7 +86,7 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
         /// <summary>
         /// Iterate over all ports on this node.
         /// </summary>
-        public IReadOnlyList<INodePort> Ports => ports.Ports;
+        public IEnumerable<INodePort> Ports => ports.Values;
 
         /// <summary>
         /// node width
@@ -132,6 +135,7 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
         public virtual void Initialize(IGraphData data)
         {
             graph = data;
+            RuntimePorts.Clear();
         }
 
         #endregion
@@ -149,18 +153,6 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
             return id;
         }
 
-        public bool AddPortValue(INodePort portValue)
-        {
-            if (portValue == null) {
-                GameLog.LogErrorFormat("Try add NULL port value to {0}", this);
-                return false;
-            }
-
-            portValues.Add(portValue);
-
-            return true;
-        }
-        
         public virtual string GetName() => nodeName;
 
         public void SetUpData(IGraphData parent)
@@ -178,16 +170,26 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
             ConnectionType connectionType = ConnectionType.Multiple,
             ShowBackingValue showBackingValue = ShowBackingValue.Always)
         {
-            if (HasPort(fieldName))
+            var port = HasPort(fieldName) ? ports[fieldName] :
+                        new NodePort(GraphData.GetId(),this, fieldName, direction, connectionType,showBackingValue,types);
+            return AddPort(port);
+        }
+
+        public NodePort AddPort(NodePort port)
+        {
+            var fieldName = port.ItemName;
+
+            AddPortValue(port);
+            
+            if (HasPort(port.ItemName))
             {
                 GameLog.LogWarning("Port '" + fieldName + "' already exists in " + ItemName);
                 return ports[fieldName];
             }    
-
-            var port = new NodePort(GraphData.GetId(),this, fieldName, direction, connectionType,showBackingValue,types);
-            port.Initialize(this);
             
-            ports.Add(fieldName, port);
+            port.Initialize(this);
+            ports.Add(port.ItemName,port);
+            
             return port;
         }
 
@@ -262,19 +264,51 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
             foreach (var port in Ports) port.ClearConnections();
         }
 
-        public virtual void Validate(){}
-
         public void SetName(string itemName)
         {
             nodeName = itemName;
         }
+        
+        public virtual void Validate()
+        {
+            var removedPorts = ClassPool.Spawn<List<NodePort>>();
+            foreach (var portPair in ports) {
+                var port = portPair.Value;
+                if (port == null || string.IsNullOrEmpty(port.fieldName)) {
+                    removedPorts.Add(port);
+                    continue;
+                }
+
+                var value = RuntimePorts.FirstOrDefault(x => x.ItemName == port.ItemName &&
+                                                            x.Direction == port.Direction);
+                if (value == null || string.IsNullOrEmpty(value.ItemName)) {
+                    removedPorts.Add(port);
+                }
+            }
+
+            removedPorts.ForEach(RemovePort);
+            removedPorts.Despawn();
+        }
 
         #endregion
 
+        protected bool AddPortValue(INodePort runtimePort)
+        {
+            portValues = portValues ?? new HashSet<INodePort>();  
+            
+            if (runtimePort == null) {
+                GameLog.LogErrorFormat("Try add NULL port value to {0}", this);
+                return false;
+            }
+
+            portValues.Add(runtimePort);
+
+            return true;
+        }
+
         protected IEnumerable<INodePort> GetPorts(PortIO direction)
         {
-            for (var i = 0; i < Ports.Count; i++) {
-                var port = Ports[i];
+            foreach (var port in Ports) {
                 if (port.Direction == direction)
                     yield return port;
             }
