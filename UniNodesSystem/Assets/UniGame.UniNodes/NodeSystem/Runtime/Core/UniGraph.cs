@@ -3,11 +3,9 @@
     using System.Collections.Generic;
     using System.Runtime.CompilerServices;
     using Attributes;
-    using Extensions;
     using Runtime.Extensions;
     using Runtime.Interfaces;
     using Sirenix.Utilities;
-    using UniGreenModules.UniCore.Runtime.ObjectPool.Runtime.Extensions;
     using UniGreenModules.UniCore.Runtime.Rx.Extensions;
     using UniRx;
     using UnityEngine;
@@ -19,9 +17,9 @@
         #region private properties
 
         /// <summary>
-        /// graph cancelation
+        /// graph cancellation
         /// </summary>
-        private List<IGraphCancelationNode> cancelationNodes = new List<IGraphCancelationNode>();
+        private List<IGraphCancelationNode> cancellationNodes = new List<IGraphCancelationNode>();
         
         /// <summary>
         /// graph inputs
@@ -46,6 +44,11 @@
         
         public IReadOnlyList<IGraphPortNode> InputsPorts => inputs;
 
+        public void Initialize()
+        {
+            Initialize(this);
+        }
+        
         public override void Dispose() => Exit();
 
         #region private methods
@@ -62,8 +65,8 @@
 
             LifeTime.AddCleanUpAction(() => ActiveGraphs.Remove(this));
 
-            for (var i = 0; i < cancelationNodes.Count; i++) {
-                var x = cancelationNodes[i];
+            for (var i = 0; i < cancellationNodes.Count; i++) {
+                var x = cancellationNodes[i];
                 x.PortValue.PortValueChanged.
                     Subscribe(unit => Exit()).
                     AddTo(LifeTime);
@@ -107,7 +110,7 @@
         private void InitializeGraphNodes()
         {
             uniNodes.Clear();
-            cancelationNodes.Clear();
+            cancellationNodes.Clear();
             inputs.Clear();
             outputs.Clear();
             
@@ -120,7 +123,7 @@
 
                 //stop graph execution, if cancelation node output triggered
                 if (node is IGraphCancelationNode cancelationNode) {
-                    cancelationNodes.Add(cancelationNode);
+                    cancellationNodes.Add(cancelationNode);
                 }
                 //initialize node
                 node.Initialize(this);

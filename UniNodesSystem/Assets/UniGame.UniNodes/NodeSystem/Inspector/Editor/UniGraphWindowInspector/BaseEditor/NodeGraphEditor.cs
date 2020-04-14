@@ -26,19 +26,12 @@
         }
 
         /// <summary> Return default settings for this graph type. This is the settings the user will load if no previous settings have been saved. </summary>
-        public virtual NodeEditorSettings GetDefaultPreferences() 
+        public virtual GameFlowEditorSettings GetDefaultPreferences() 
         {
-            return new NodeEditorSettings();
+            return new GameFlowEditorSettings();
         }
 
-        /// <summary> Returns context node menu path. Null or empty strings for hidden nodes. </summary>
-        public virtual string GetNodeMenuName(Type type) {
-            //Check if type has the CreateNodeMenuAttribute
-            CreateNodeMenuAttribute attrib;
-            return NodeEditorUtilities.GetAttrib(type, out attrib) ? 
-                attrib.menuName : 
-                ObjectNames.NicifyVariableName(type.ToString().Replace('.', '/'));
-        }
+
 
         /// <summary> Creates a copy of the original node in the graph </summary>
         public INode CopyNode(INode original)

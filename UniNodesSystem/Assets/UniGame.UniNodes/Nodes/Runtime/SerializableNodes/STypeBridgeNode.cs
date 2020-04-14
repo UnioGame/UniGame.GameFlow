@@ -79,7 +79,7 @@
             nodeCommands.Add(valueSource);
         }
 
-        public void Finish()
+        public void Complete()
         {
             valueSource.Complete();
         }

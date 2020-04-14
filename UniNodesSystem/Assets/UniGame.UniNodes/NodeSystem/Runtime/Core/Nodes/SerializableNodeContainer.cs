@@ -5,6 +5,7 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
     using System;
     using System.IO;
     using System.Linq;
+    using Runtime.Interfaces;
     using UniGreenModules.UniCore.Runtime.Attributes;
     using Object = UnityEngine.Object;
 
@@ -13,24 +14,25 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
 #if ODIN_INSPECTOR
         [Sirenix.OdinInspector.CustomValueDrawer(nameof(DrawScriptField))]
 #endif
-        public Object Script;
+        public Object script;
+        [HideInInspector]
+        public string type;
+        [HideInInspector]
+        public string fullType;
         
-        public string Type;
-
-        public string FullType;
-        
-#if ODIN_INSPECTOR
-        [Sirenix.OdinInspector.HideLabel]
-        [Sirenix.OdinInspector.InlineProperty]
-#endif
+//#if ODIN_INSPECTOR
+//        [Sirenix.OdinInspector.HideLabel]
+//        [Sirenix.OdinInspector.InlineProperty]
+//#endif
+        [SerializeReference]
         public SerializableNode Node;
 
-
-        public void Initialize(SerializableNode node)
+        public SerializableNodeContainer Initialize(SerializableNode node)
         {
             Node = node;
-            Type = node?.GetType().Name;
-            FullType = node?.GetType().AssemblyQualifiedName;
+            type = node?.GetType().Name;
+            fullType = node?.GetType().AssemblyQualifiedName;
+            return this;
         }
         
         private Object DrawScriptField(Object target,GUIContent label)
@@ -57,12 +59,8 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
                 return null;
             
             UnityEditor.EditorGUI.BeginDisabledGroup(true);
-            UnityEditor.EditorGUILayout.ObjectField("Script", asset, null, false);
+            UnityEditor.EditorGUILayout.ObjectField(new GUIContent(), asset, null, false);
             UnityEditor.EditorGUI.EndDisabledGroup();
-            
-            if (GUILayout.Button("open")) {
-                UnityEditor.AssetDatabase.OpenAsset(asset.GetInstanceID(), 0, 0);
-            }
 
             return asset;
 #endif

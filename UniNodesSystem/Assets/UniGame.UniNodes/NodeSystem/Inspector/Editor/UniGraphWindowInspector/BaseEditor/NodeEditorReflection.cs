@@ -30,20 +30,8 @@
         [NonSerialized] private static Dictionary<Type, int> _nodeWidth;
 
         
-        [NonSerialized] private static List<Type> _nodeTypes = null;
-
         /// <summary> All available node types </summary>
-        public static List<Type> NodeTypes
-        {
-            get
-            {
-                if (_nodeTypes == null || _nodeTypes.Count == 0)
-                {
-                    _nodeTypes = GetNodeTypes();
-                }
-                return _nodeTypes;
-            }
-        }
+        public static List<Type> NodeTypes => NodeEditorUtilities.NodeTypes;
 
         private Func<bool> isDocked
         {
@@ -63,12 +51,6 @@
         }
 
         private Func<bool> _isDocked;
-
-        public static List<Type> GetNodeTypes()
-        {
-            //Get all classes deriving from Node via reflection
-            return GetDerivedTypes(typeof(INode));
-        }
 
         public static Dictionary<Type, Color> GetNodeTint()
         {
@@ -96,28 +78,6 @@
             }
 
             return widths;
-        }
-
-        /// <summary> Get all classes deriving from baseType via reflection </summary>
-        public static List<Type> GetDerivedTypes(Type baseType)
-        {
-            var types = new List<Type>();
-            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            foreach (var assembly in assemblies)
-            {
-                try
-                {
-                    var asmTypes = assembly.GetTypes();
-                    var items = asmTypes.Where(t => !t.IsAbstract && baseType.IsAssignableFrom(t));
-                    types.AddRange(items);
-                }
-                catch (ReflectionTypeLoadException e)
-                {
-                    Debug.LogWarningFormat("assembly : {0} {1}", assembly.FullName, e);
-                };
-            }
-            
-            return types;
         }
 
         public static object ObjectFromType(Type type)

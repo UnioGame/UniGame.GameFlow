@@ -45,7 +45,7 @@
                 Do(x => isGameReady = x.IsGameReady.Value).
                 Do(x => GameLog.Log("Game Status: Ready")).
                 Do(x => x.SetGameStatus(true)).
-                Do(x => Finish()).
+                Do(x => Complete()).
                 Subscribe().
                 AddTo(LifeTime);
         }

@@ -4,12 +4,12 @@
     using Runtime.Interfaces;
     using UnityEditor;
 
-    public struct NodeItemEditorData
+    public class PropertyEditorData
     {
         public Type               Type;
         public string             Name;
         public string             Tooltip;
-        public INode              Node;
+        public object             Target;
         public object             Source;
         public SerializedProperty Property;
     }

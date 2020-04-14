@@ -41,7 +41,7 @@
                     return true;
                 }
 
-                editor.Rename(target.ItemName);
+                node.SetName(target.ItemName);
                 NodeEditor.Renaming = 0;
             }
             else

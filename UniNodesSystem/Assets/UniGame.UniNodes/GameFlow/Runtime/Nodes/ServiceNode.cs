@@ -1,11 +1,14 @@
 ﻿namespace UniGame.UniNodes.GameFlow.Runtime.Nodes
 {
+    using System;
     using Interfaces;
     using NodeSystem.Runtime.Attributes;
     using UniGreenModules.UniCore.Runtime.Attributes;
+    using UniGreenModules.UniCore.Runtime.Interfaces;
     using UniGreenModules.UniCore.Runtime.Rx.Extensions;
     using UniNodes.Nodes.Runtime.Common;
     using UniRx;
+    using UniRx.Async;
     using UnityEngine;
 
     /// <summary>
@@ -14,13 +17,12 @@
     /// <typeparam name="TService"></typeparam>
     /// <typeparam name="TServiceApi"></typeparam>
     [HideNode]
-    public abstract class ServiceNode<TService,TServiceApi> : 
+    public abstract class ServiceNode<TServiceApi> : 
         ContextNode
         where TServiceApi : IGameService
-        where TService : TServiceApi
     {
         [SerializeField]
-        protected TService service;
+        protected TServiceApi service;
 
         #region inspector
 
@@ -33,25 +35,33 @@
         
         public bool waitForServiceReady = true;
 
-        protected abstract TService CreateService();
+        protected abstract UniTask<TServiceApi> CreateService(IContext context);
 
-        protected override void OnInitialize()
-        {
-            base.OnInitialize();
-            service = CreateService();
-        }
-
+        private IDisposable _serviceDisposable;
+        
         protected override void OnExecute()
         {
             Source.Where(x => x != null).
-                Do(x => service.Bind(x,LifeTime)).
-                CombineLatest(service.IsReady, (ctx, ready) => (ctx,ready)).
-                Where(x => x.ready || !waitForServiceReady).
-                Do(x => x.ctx.Publish<TServiceApi>(service)).
-                Do(x => Finish()).
+                Do(async x => {
+                    service = await CreateService(x);
+                    BindService(x);
+                }).
                 Subscribe().
                 AddTo(LifeTime);
         }
 
+        private void BindService(IContext context)
+        {
+            service.Bind(context, LifeTime);
+            
+            _serviceDisposable?.Dispose();
+
+            _serviceDisposable = service.IsReady.
+                Where(x => x || !waitForServiceReady).
+                Do(_ => context.Publish<TServiceApi>(service)).
+                Do(_ => Complete()).
+                Subscribe().
+                AddTo(LifeTime);
+        }
     }
 }

@@ -16,12 +16,17 @@
         [ReactivePort(PortIO.Output)]
         public IntReactivePort IntResult = new IntReactivePort();
 
+        protected override void OnInitialize()
+        {
+            IntIn.Bind(this,nameof(IntIn));
+            IntResult.Bind(this,nameof(IntResult));
+        }
+        
         protected override void OnExecute()
         {
-            
             base.OnExecute();
 
-            IntIn.Do(value => IntResult.Publish(IntResult.Value - value)).
+            IntIn.Do(value => IntResult.Publish(IntResult.Value + value)).
                 Subscribe().
                 AddTo(LifeTime);
             

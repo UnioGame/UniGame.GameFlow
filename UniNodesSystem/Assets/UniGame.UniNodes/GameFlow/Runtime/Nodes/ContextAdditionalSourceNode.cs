@@ -6,8 +6,8 @@
     using UniGreenModules.UniCore.Runtime.ObjectPool.Runtime;
     using UniGreenModules.UniCore.Runtime.ObjectPool.Runtime.Extensions;
     using UniGreenModules.UniGame.AddressableTools.Runtime.Extensions;
-    using UniGreenModules.UniGame.Context.Runtime.Interfaces;
     using UniGreenModules.UniGame.SerializableContext.Runtime.Addressables;
+    using UniModules.UniGame.Context.Runtime.Abstract;
     using UniNodes.Nodes.Runtime.Common;
 
     [CreateNodeMenu("GameSystem/Context Additional Sources", nodeName = "ContextRegisterValues")]
@@ -28,7 +28,7 @@
             
             results.Despawn();
             
-            Finish();
+            Complete();
         }
 
         protected sealed override void OnExecute()

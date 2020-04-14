@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1725365fb9a146c48a492ba25d846309, type: 3}
   m_Name: CommonAsyncDataSource
   m_EditorClassIdentifier: 
+  disposeOnUnload: 1
   sourceAssets:
   - m_AssetGUID: 7ac5f3a92dc42094b9fbb6a31ecd86be
     m_SubObjectName: 

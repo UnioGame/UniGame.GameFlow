@@ -2,9 +2,10 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.S
 {
     using BaseEditor;
     using Runtime.Core;
+    using Runtime.Interfaces;
     using UniGreenModules.UniCore.Runtime.Interfaces;
 
-    public interface IPortStyleProvider : ISelector<NodePort,NodeGuiLayoutStyle>
+    public interface IPortStyleProvider : ISelector<INodePort,NodeGuiLayoutStyle>
     {
 
     }

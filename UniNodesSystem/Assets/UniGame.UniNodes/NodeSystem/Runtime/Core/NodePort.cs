@@ -47,6 +47,9 @@
         /// </summary>
         [SerializeField]
         public List<PortConnection> connections = new List<PortConnection>();
+        /// <summary>
+        /// dynamic port list
+        /// </summary>
         [SerializeField] public bool instancePortList;
 
         #endregion
@@ -57,16 +60,15 @@
         /// </summary>
         [NonSerialized]
         private ILifeTime lifeTime;
-        /// <summary>
-        /// draft validator refactoring. Move rule to SO files
-        /// </summary>
-        [NonSerialized]
-        private IReadOnlyList<Func<INodePort, INodePort, bool>> connectionsValidators;
+
         /// <summary>
         /// port parent info
         /// </summary>    
         [NonSerialized]
         public INode node;
+
+        [NonSerialized]
+        private IPortConnectionValidator connectionValidator;
 
         #region constructor
 
@@ -143,16 +145,10 @@
 
         public IReadOnlyList<IPortConnection> Connections => connections;
 
-        public IReadOnlyList<Func<INodePort, INodePort, bool>> ConnectionsValidators =>
-            connectionsValidators ?? new List<Func<INodePort, INodePort, bool>>() {
-                (source, to) => to != null && source != null,
-                (source, to) => to != source,
-                (source, to) => !source.IsConnectedTo(to),
-                (source, to) => source.Direction != to.Direction,
-                (source, to) =>
-                    to.ValueTypes.Count == 0 || source.ValueTypes.Count == 0 ||
-                    source.ValueTypes.Any(to.Value.IsValidPortValueType),
-            };
+
+        public IPortConnectionValidator ConnectionValidator => connectionValidator = 
+            connectionValidator ?? 
+            new PortConnectionValidator();
 
         public bool InstancePortList => instancePortList;
 
@@ -288,8 +284,8 @@
             if (connections == null)
                 connections = new List<PortConnection>();
 
-            if (!ConnectionsValidators.All(x => x(this, port))) {
-                GameLog.LogError($"{node.GraphData.ItemName}:{Node.ItemName}:{ItemName} Connection Error. Validation Failed");
+            if (!ConnectionValidator.Validate(this, port)) {
+                GameLog.LogError($"{node?.GraphData.ItemName}:{Node?.ItemName}:{ItemName} Connection Error. Validation Failed");
                 return;
             }
 
@@ -383,7 +379,7 @@
             // Remove the other ports connection to this port
             for (var i = 0; i < port.Connections.Count; i++) {
                 var connection = port.Connections[i];
-                if (connection.IsTarget(port)) {
+                if (connection.IsTarget(this)) {
                     port.RemoveConnection(connection);
                 }
             }
@@ -446,6 +442,36 @@
             }
         }
 
+        /// <summary> Swap connections with another node </summary>
+        public void SwapConnections(INodePort targetPort)
+        {
+            var aConnectionCount = connections.Count;
+            var bConnectionCount = targetPort.Connections.Count;
+
+            var portConnections       = new List<INodePort>();
+            var targetPortConnections = new List<INodePort>();
+
+            // Cache port connections
+            for (var i = 0; i < aConnectionCount; i++)
+                portConnections.Add(connections[i].Port);
+
+            // Cache target port connections
+            for (var i = 0; i < bConnectionCount; i++)
+                targetPortConnections.Add(targetPort.Connections[i].Port);
+
+            ClearConnections();
+
+            targetPort.ClearConnections();
+
+            // Add port connections to targetPort
+            for (var i = 0; i < portConnections.Count; i++)
+                targetPort.Connect(portConnections[i]);
+
+            // Add target port connections to this one
+            for (var i = 0; i < targetPortConnections.Count; i++)
+                Connect(targetPortConnections[i]);
+        }
+        
         #endregion
 
     }

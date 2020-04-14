@@ -31,7 +31,6 @@
         /// subscribe to selected data from active context value
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
         public IObservable<T> Receive<T>()
         {
             return Source.

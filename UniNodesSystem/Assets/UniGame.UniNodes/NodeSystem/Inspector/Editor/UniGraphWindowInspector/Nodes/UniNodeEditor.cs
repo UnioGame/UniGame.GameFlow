@@ -41,13 +41,8 @@
                                 EditorApplication.isUpdating == false;
 
             if (idEditingMode) {
-
-                UpdatePortAttributes(node);
-
-                UpdateData(node);
-
+                node.UpdatePortAttributes();
                 node.Validate();
-                
             }
             
             base.OnBodyGUI();
@@ -56,37 +51,6 @@
 
             SerializedObject?.ApplyModifiedPropertiesWithoutUndo();
             
-        }
-
-        public virtual void UpdateData(IUniNode node) { }
-
-        public void UpdatePortAttributes(IUniNode node)
-        {
-            var type = node.GetType();
-            var fields = type.GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
-
-            foreach (var portField in fields) {
-                var data = node.GetPortData(portField, portField.Name);
-                if(data.PortData == null)
-                    continue;
-                
-                var port = node.UpdatePortValue(data.PortData);
-                var value = portField.GetValue(node);
-
-                UpdateSerializedCommands(node, port, value);
-            }
-
-        }
-
-        public void UpdateSerializedCommands(IUniNode node,IPortValue port, object value)
-        {
-
-            switch (value) {
-                case IReactiveSource reactiveSource:
-                    reactiveSource.Bind(node,port.ItemName);
-                    return;
-            }
-
         }
 
         public void DrawPorts(IUniNode node)
