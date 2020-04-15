@@ -240,10 +240,5 @@
             return node;
         }
 
-        private void Awake()
-        {
-            Validate();
-        }
-
     }
 }
