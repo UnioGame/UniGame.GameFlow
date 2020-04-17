@@ -81,7 +81,7 @@ MonoBehaviour:
   - {fileID: 8066610591147827005}
   serializableNodes: []
   nodeGroups: []
-  graphScale: {x: 0.65751624, y: 0.65751624, z: 1}
+  graphScale: {x: 1.15, y: 1.15, z: 1}
   references:
     version: 1
 --- !u!114 &6731485210373775985
@@ -99,7 +99,7 @@ MonoBehaviour:
   id: 1
   width: 220
   nodeName: input
-  position: {x: 0, y: 0}
+  position: {x: -9, y: -5}
   ports:
     keys:
     - '[out]data'
@@ -138,18 +138,6 @@ MonoBehaviour:
         nodeId: 13
         reroutePoints: []
         portId: 0
-      - fieldName: intPort
-        nodeId: 6
-        reroutePoints: []
-        portId: 0
-      - fieldName: stringPort
-        nodeId: 6
-        reroutePoints: []
-        portId: 0
-      - fieldName: boolReactivePort
-        nodeId: 6
-        reroutePoints: []
-        portId: 0
       instancePortList: 0
     - id: 5
       nodeId: 1
@@ -182,13 +170,10 @@ MonoBehaviour:
   id: 6
   width: 220
   nodeName: Log Node
-  position: {x: 738, y: -37}
+  position: {x: 625, y: 151}
   ports:
     keys:
     - log
-    - stringPort
-    - boolReactivePort
-    - intPort
     values:
     - id: 7
       nodeId: 6
@@ -208,63 +193,6 @@ MonoBehaviour:
         reroutePoints: []
         portId: 4
       instancePortList: 0
-    - id: 33
-      nodeId: 6
-      fieldName: stringPort
-      direction: 0
-      connectionType: 0
-      showBackingValue: 2
-      isDynamic: 1
-      isInstancePortList: 0
-      portValue:
-        name: stringPort
-        serializedValueTypes:
-        - System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-        broadcastersCount: 0
-      connections:
-      - fieldName: '[out]data'
-        nodeId: 1
-        reroutePoints: []
-        portId: 0
-      instancePortList: 0
-    - id: 43
-      nodeId: 6
-      fieldName: boolReactivePort
-      direction: 0
-      connectionType: 0
-      showBackingValue: 2
-      isDynamic: 1
-      isInstancePortList: 0
-      portValue:
-        name: boolReactivePort
-        serializedValueTypes:
-        - System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-        broadcastersCount: 0
-      connections:
-      - fieldName: '[out]data'
-        nodeId: 1
-        reroutePoints: []
-        portId: 0
-      instancePortList: 0
-    - id: 44
-      nodeId: 6
-      fieldName: intPort
-      direction: 0
-      connectionType: 0
-      showBackingValue: 2
-      isDynamic: 1
-      isInstancePortList: 0
-      portValue:
-        name: intPort
-        serializedValueTypes:
-        - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-        broadcastersCount: 0
-      connections:
-      - fieldName: '[out]data'
-        nodeId: 1
-        reroutePoints: []
-        portId: 0
-      instancePortList: 0
   mode: 1
   message: LogNode
 --- !u!114 &-7558999285924506509
@@ -282,13 +210,10 @@ MonoBehaviour:
   id: 8
   width: 220
   nodeName: Log Node
-  position: {x: 353, y: -227}
+  position: {x: 570, y: -24}
   ports:
     keys:
     - log
-    - stringPort
-    - boolReactivePort
-    - intPort
     values:
     - id: 9
       nodeId: 8
@@ -308,51 +233,6 @@ MonoBehaviour:
         reroutePoints: []
         portId: 0
       instancePortList: 0
-    - id: 34
-      nodeId: 8
-      fieldName: stringPort
-      direction: 0
-      connectionType: 0
-      showBackingValue: 2
-      isDynamic: 1
-      isInstancePortList: 0
-      portValue:
-        name: stringPort
-        serializedValueTypes:
-        - System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-        broadcastersCount: 0
-      connections: []
-      instancePortList: 0
-    - id: 45
-      nodeId: 8
-      fieldName: boolReactivePort
-      direction: 0
-      connectionType: 0
-      showBackingValue: 2
-      isDynamic: 1
-      isInstancePortList: 0
-      portValue:
-        name: boolReactivePort
-        serializedValueTypes:
-        - System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-        broadcastersCount: 0
-      connections: []
-      instancePortList: 0
-    - id: 46
-      nodeId: 8
-      fieldName: intPort
-      direction: 0
-      connectionType: 0
-      showBackingValue: 2
-      isDynamic: 1
-      isInstancePortList: 0
-      portValue:
-        name: intPort
-        serializedValueTypes:
-        - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-        broadcastersCount: 0
-      connections: []
-      instancePortList: 0
   mode: 1
   message: LogNode
 --- !u!114 &8066610591147827006
@@ -370,7 +250,7 @@ MonoBehaviour:
   id: 10
   width: 220
   nodeName: Context Data Node
-  position: {x: 342, y: -361}
+  position: {x: 260, y: -262}
   ports:
     keys:
     - '[out]data'
@@ -434,7 +314,7 @@ MonoBehaviour:
   id: 15
   width: 220
   nodeName: Data Delay Node
-  position: {x: 767, y: 231}
+  position: {x: 484, y: 280}
   ports:
     keys:
     - '[out]Value'
@@ -488,7 +368,7 @@ MonoBehaviour:
   id: 20
   width: 220
   nodeName: In Out Ports Node
-  position: {x: 651, y: -378}
+  position: {x: 666, y: -196}
   ports:
     keys:
     - '[out]data'

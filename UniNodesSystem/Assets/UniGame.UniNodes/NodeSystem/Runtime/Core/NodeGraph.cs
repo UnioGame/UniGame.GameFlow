@@ -154,8 +154,8 @@
         public virtual Node CopyNode(Node original)
         {
             var node = Instantiate(original);
+            node.SetId(GetId());
             node.SetUpData(this);
-            node.UpdateId();
             node.ClearConnections();
             nodes.Add(node);
             return node;

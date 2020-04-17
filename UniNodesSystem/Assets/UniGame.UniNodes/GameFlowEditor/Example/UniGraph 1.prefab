@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 62531897943396465}
   - component: {fileID: 7736257595766597421}
   - component: {fileID: 1626862260}
+  - component: {fileID: 3196602648258412298}
   m_Layer: 0
   m_Name: UniGraph 1
   m_TagString: Untagged
@@ -47,7 +48,7 @@ MonoBehaviour:
   id: 3
   width: 250
   nodeName: New Game Object
-  position: {x: 80, y: 880.8}
+  position: {x: 30.4, y: 952.8}
   ports:
     keys:
     - input
@@ -66,56 +67,14 @@ MonoBehaviour:
         broadcastersCount: 0
       connections: []
       instancePortList: 0
-  uniqueId: 356
-  nodes: []
-  serializableNodes:
-  - id: 0
+  uniqueId: 389
+  nodes:
+  - {fileID: 3196602648258412298}
+  serializableNodes: []
   nodeGroups: []
-  graphScale: {x: 1.7490063, y: 1.7490063, z: 1}
+  graphScale: {x: 0.8695652, y: 0.8695652, z: 1}
   references:
     version: 1
-    00000000:
-      type: {class: DemoFlowNode, ns: , asm: Assembly-CSharp}
-      data:
-        id: 351
-        width: 220
-        nodeName: Demo Flow Node
-        position: {x: 172, y: -332}
-        ports:
-          keys: []
-          values: []
-        intIn: 0
-        intIn1: 0
-        intOut: 0
-        boolRIn:
-          sendByBind: 1
-          value: 0
-          nodeId: 351
-          portName: boolRIn
-        boolROut:
-          sendByBind: 1
-          value: 0
-          nodeId: 351
-          portName: boolROut
-        intValue: 0
-        gameObject: {fileID: 0}
-        Vector2Int: {x: 0, y: 0}
-        Vector2: {x: 0, y: 0}
-        LogNode:
-          id: 1
-    00000001:
-      type: {class: SLogNode, ns: UniGame.UniNodes.Nodes.Runtime.SerializableNodes,
-        asm: unigame.nodesystem.commonnodes}
-      data:
-        id: 0
-        width: 220
-        nodeName: 
-        position: {x: 0, y: 0}
-        ports:
-          keys: []
-          values: []
-        mode: 1
-        message: LogNode
 --- !u!114 &1626862260
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -129,3 +88,53 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   graph: {fileID: 0}
+--- !u!114 &3196602648258412298
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3830966417042498334}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e89358e430ac0024f833379b0ac39605, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 361
+  width: 250
+  nodeName: In Out Port Node
+  position: {x: 432, y: -544}
+  ports:
+    keys:
+    - '[out]data'
+    - '[in]data'
+    values:
+    - id: 388
+      nodeId: 361
+      fieldName: '[out]data'
+      direction: 1
+      connectionType: 0
+      showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      portValue:
+        name: '[out]data'
+        serializedValueTypes: []
+        broadcastersCount: 0
+      connections: []
+      instancePortList: 0
+    - id: 389
+      nodeId: 361
+      fieldName: '[in]data'
+      direction: 0
+      connectionType: 0
+      showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      portValue:
+        name: '[in]data'
+        serializedValueTypes: []
+        broadcastersCount: 0
+      connections: []
+      instancePortList: 0
+  bindInOut: 0

@@ -10,7 +10,6 @@
     using UniGreenModules.UniCore.Runtime.Attributes;
     using UniGreenModules.UniGame.Core.Runtime.Attributes.FieldTypeDrawer;
     using UnityEngine;
-    using Debug = UnityEngine.Debug;
 
     [Serializable]
     public abstract class Node : MonoBehaviour, INode
@@ -59,7 +58,12 @@
         /// <summary>
         /// unique node id
         /// </summary>
-        public int Id => id == 0 ? UpdateId() : id;
+        public int Id {
+            get {
+                if (id != 0) return id;
+                return SetId(graph.GetId());
+            }
+        }
 
         /// <summary>
         /// Node name
@@ -70,41 +74,26 @@
         /// Iterate over all ports on this node.
         /// </summary>
         public IEnumerable<INodePort> Ports => SNode.Ports;
-        
+
         /// <summary>
         /// Iterate over all outputs on this node.
         /// </summary>
-        public IEnumerable<INodePort> Outputs
-        {
-            get {
-                foreach (var port in Ports) {
-                    if (port.Direction == PortIO.Output) {
-                        yield return port;
-                    }
-                }
-            }
-        }
+        public IEnumerable<INodePort> Outputs => SNode.Outputs;
 
         /// <summary>
         /// Iterate over all inputs on this node.
         /// </summary>
-        public IEnumerable<INodePort> Inputs
-        {
-            get {
-                foreach (var port in Ports) {
-                    if (port.Direction == PortIO.Input) {
-                        yield return port;
-                    }
-                }
-            }
-        }
+        public IEnumerable<INodePort> Inputs => SNode.Inputs;
 
         /// <summary>
         /// node width
         /// </summary>
         public int Width {
             get => width;
-            set => width = value;
+            set { 
+              width = value;  
+              SNode.Width = value;
+            }
         }
         
         /// <summary>
@@ -112,7 +101,10 @@
         /// </summary>
         public Vector2 Position {
             get => position;
-            set => position = value;
+            set {
+                position = value;
+                SNode.Position = value;
+            }
         }
 
         /// <summary>
@@ -121,76 +113,48 @@
         public virtual IGraphData GraphData => graph;
 
         #endregion
-        
-        #region abstract methods
 
-        public abstract void Initialize(IGraphData data);
-
-        #endregion
-        
         #region public methods
-        
+
+
+        public virtual void Initialize(IGraphData data)
+        {
+            graph = data;
+            if (id != 0) SNode.SetId(id);
+        }
+
         public virtual void OnIdUpdate(int oldId, int newId, IGraphItem updatedItem)
         {
         
         }
-        
-        public int UpdateId()
-        {
-            var oldId = id;
-            id = GraphData.UpdateId(id);
-            OnIdUpdate(oldId,id,this);
-            return id;
-        }
-        
+
         public int SetId(int itemId)
         {
-            var oldId = id;
             id = itemId;
-            OnIdUpdate(oldId,id,this);
-            return id;
+            return SNode.SetId(itemId);
         }
-        
-        public virtual string GetName() => nodeName;
 
         public void SetUpData(IGraphData parent)
         {
             if (graph == parent)
                 return;
             graph = parent;
-            UpdateId();       
+            SNode.SetUpData(parent);
         }
         
-        /// <summary> Add a serialized port to this node. </summary>
+        /// <summary>
+        /// Add a serialized port to this node.
+        /// </summary>
         public NodePort AddPort(
             string fieldName,
             IReadOnlyList<Type> types, PortIO direction,
             ConnectionType connectionType = ConnectionType.Multiple,
             ShowBackingValue showBackingValue = ShowBackingValue.Always)
         {
-            if (fieldName == null)
-            {
-                fieldName = "instanceInput_0";
-                var i = 0;
-                while (HasPort(fieldName)) fieldName = "instanceInput_" + (++i);
-            }
-            else if (HasPort(fieldName))
-            {
-                Debug.LogWarning("Port '" + fieldName + "' already exists in " + name, this);
-                return ports[fieldName];
-            }    
-
-            var port = new NodePort(GraphData.GetId(),this,fieldName, direction, connectionType,showBackingValue,types);
-            port.Initialize(this);
-            
-            ports.Add(fieldName, port);
-            return port;
+            return SNode.AddPort(fieldName, types, direction, connectionType, showBackingValue);
         }
 
-        public void SetPosition(Vector2 newPosition)
-        {
-            position = newPosition;
-        }
+        public void SetPosition(Vector2 newPosition) => SNode.Position = position;
 
         /// <summary>
         /// Remove an instance port from the node
@@ -208,53 +172,27 @@
             if (port == null) throw new ArgumentNullException("port");
             port.ClearConnections();
             ports.Remove(port.ItemName);
+            SNode.RemovePort(port);
         }
 
         /// <summary>
         /// Returns output port which matches fieldName
         /// </summary>
-        public INodePort GetOutputPort(string fieldName)
-        {
-            var port = GetPort(fieldName);
-            if (port == null || port.Direction != PortIO.Output) return null;
-            return port;
-        }
+        public INodePort GetOutputPort(string fieldName) => SNode.GetOutputPort(fieldName);
 
         /// <summary>
         /// Returns input port which matches fieldName
         /// </summary>
-        public INodePort GetInputPort(string fieldName)
-        {
-            var port = GetPort(fieldName);
-            if (port == null || port.Direction != PortIO.Input) return null;
-            return port;
-        }
+        public INodePort GetInputPort(string fieldName) => SNode.GetInputPort(fieldName);
 
-        public IPortValue GetPortValue(string portName)
-        {
-            var port = GetPort(portName);
-            return port?.Value;
-        }
-        
         /// <summary>
         /// Returns port which matches fieldName
         /// </summary>
-        public INodePort GetPort(string portName)
-        {
-            if (string.IsNullOrEmpty(portName))
-                return null;
+        public INodePort GetPort(string portName) => SNode.GetPort(portName);
 
-            return ports.TryGetValue(portName, out var port) ? port : null;
-        }
-
-        public void SetWidth(int nodeWidth)
-        {
-            width = nodeWidth;
-        }
-        
         public bool HasPort(string fieldName)
         {
-            return ports.ContainsKey(fieldName);
+            return SNode.HasPort(fieldName);
         }
 
         /// <summary> Disconnect everything from this node </summary>

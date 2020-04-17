@@ -26,7 +26,7 @@
 
         public sealed override void Initialize(IGraphData graphData)
         {
-            graph = graphData;
+            base.Initialize(graphData);
             SNode.Bind(OnInitialize, UpdateCommands, OnExecute);
             SNode.Initialize(graphData);
         }

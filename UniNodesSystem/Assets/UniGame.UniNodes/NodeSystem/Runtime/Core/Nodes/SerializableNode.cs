@@ -6,7 +6,6 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
-    using Interfaces;
     using Nodes;
     using Runtime.Interfaces;
     using UniCore.Runtime.ProfilerTools;
@@ -125,10 +124,7 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
 
         public int SetId(int itemId)
         {
-            var oldId = id;
-            var newId = itemId;
             id = itemId;
-            OnIdUpdate(oldId,newId,this);
             return id;
         }
 
@@ -141,12 +137,7 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
         #endregion
         
         #region public methods
-        
-        public void OnIdUpdate(int oldId, int newId, IGraphItem updatedItem)
-        {
-            return;
-        }
-        
+
         public int UpdateId()
         {
             id = GraphData.UpdateId(id);
@@ -177,18 +168,16 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
 
         public NodePort AddPort(NodePort port)
         {
-            var fieldName = port.ItemName;
+            var portName = port.ItemName;
 
             AddPortValue(port);
             
-            if (HasPort(port.ItemName))
+            if (!HasPort(portName))
             {
-                GameLog.LogWarning("Port '" + fieldName + "' already exists in " + ItemName);
-                return ports[fieldName];
+                ports.Add(portName,port);
             }    
             
             port.Initialize(this);
-            ports.Add(port.ItemName,port);
             
             return port;
         }

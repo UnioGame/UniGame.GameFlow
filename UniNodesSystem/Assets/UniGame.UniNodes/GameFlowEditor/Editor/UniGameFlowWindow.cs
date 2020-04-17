@@ -9,9 +9,7 @@ namespace UniGame.GameFlowEditor.Editor
     using UniCore.Runtime.ProfilerTools;
     using UniGreenModules.UniCore.EditorTools.Editor.AssetOperations;
     using UniNodes.GameFlowEditor.Editor;
-    using UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector;
     using UniNodes.NodeSystem.Runtime.Core;
-    using UniNodes.NodeSystem.Runtime.Extensions;
     using UnityEditor;
     using UnityEditor.Experimental.GraphView;
     using UnityEditor.SceneManagement;
@@ -101,12 +99,13 @@ namespace UniGame.GameFlowEditor.Editor
 
         public void Reload()
         {
-            GameLog.Log("GameFlowWindow : Window Reload");
             if (!ActiveGraph) {
                 GameLog.LogWarning($"{nameof(UniGameFlowWindow)} : Null Source UniGraph data",this);
                 return;
             }
 
+            GameLog.Log($"GameFlowWindow : Window Reload [{ActiveGraph.name}]");
+            
             LogGraph();
             
             graph = null;
@@ -125,6 +124,7 @@ namespace UniGame.GameFlowEditor.Editor
                         
             var nodes = ActiveGraph.Nodes;
             foreach (var node in nodes) {
+
                 var debug = $"{node.ItemName} : ";
                  
                 foreach (var port in node.Ports) {
