@@ -184,14 +184,12 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
         /// </summary>
         private void InitializePorts()
         {
-            if (!Application.isPlaying)
-                return;
-            
             //initialize ports
             foreach (var port in Ports) {
                 port.Initialize(this);
                 lifeTime.AddCleanUpAction(port.Release);
-                AddPortValue(port);
+                if (Application.isPlaying)
+                    AddPortValue(port);
             }
         }
 

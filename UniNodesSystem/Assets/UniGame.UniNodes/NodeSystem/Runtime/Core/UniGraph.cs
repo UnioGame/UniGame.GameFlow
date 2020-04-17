@@ -57,6 +57,13 @@
         {
             base.OnInitialize();
             InitializeGraphNodes();
+               
+#if UNITY_EDITOR
+            if (Application.isPlaying == false) {
+                Validate();
+            }
+#endif
+
         }
 
         protected override void OnExecute()
@@ -137,11 +144,7 @@
                     LifeTime.AddCleanUpAction(uniNode.Exit);
                     uniNodes.Add(uniNode);
                 }
-   
-#if UNITY_EDITOR
-                node.Validate();
-#endif
-                
+
             }
         }
         
