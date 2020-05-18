@@ -51,8 +51,9 @@
 
         public IReadOnlyReactiveProperty<bool> IsReady => isReady;
 
-        protected abstract IContext OnBind(IContext context, ILifeTime lifeTime);
-
-
+        protected virtual IContext OnBind(IContext context, ILifeTime lifeTime)
+        {
+            return context;
+        }
     }
 }
