@@ -78,6 +78,9 @@ namespace UniGame.GameFlowEditor.Editor
         
         #region private fields
 
+        private Vector2 _minimapPosition = new Vector2(50,50);
+        private Vector2 _settingsPinnedPosition = new Vector2(50,250);
+        
         private GameFlowGraphView uniGraphView;
         private UniGraphSettingsPinnedView settingsPinnedView;
         private UniGraphToolbarView graphToolbarView;
@@ -254,11 +257,15 @@ namespace UniGame.GameFlowEditor.Editor
                 view.OpenPinned< UniGraphSettingsPinnedView >();
                 return view.Q<UniGraphSettingsPinnedView>();
             },settingsPinnedView);
+
+            settingsPinnedView.SetPosition(new Rect(_settingsPinnedPosition,settingsPinnedView.GetPosition().size));
+
         }
         
         private void CreateMinimap(BaseGraphView view)
         {
             miniMapView = CreateGraphView(() => new MiniMapView(view),miniMapView);
+            miniMapView.SetPosition(new Rect(_minimapPosition,miniMapView.GetPosition().size));
             
             view.Add(miniMapView);
         }
