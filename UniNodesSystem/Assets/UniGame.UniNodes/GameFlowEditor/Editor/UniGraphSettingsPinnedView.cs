@@ -3,10 +3,11 @@ using UnityEngine.UIElements;
 
 namespace UniGame.UniNodes.GameFlowEditor.Editor
 {
+    using System;
     using UniGame.GameFlowEditor.Editor;
     using UnityEngine;
 
-    public class UniGraphSettingsPinnedView : PinnedElementView
+    public class UniGraphSettingsPinnedView : PinnedElementView, IUniGraphSettings
     {
         protected GameFlowGraphView graphView;
     
@@ -17,24 +18,30 @@ namespace UniGame.UniNodes.GameFlowEditor.Editor
             styleSheets.Add(Resources.Load<StyleSheet>(exposedParameterViewStyle));
         }
         
+        #region public methods
+
+        public void AddElement(VisualElement visualElement) => content.Add(visualElement);
+
+        public void AddButton(string name, string title, Action action)
+        {
+            var runButton = new Button(action) {
+                name = name, 
+                text = title
+            };
+            AddElement(runButton);
+        }
+        
+        #endregion
+        
+        
         protected override void Initialize(BaseGraphView graphView)
         {
             title = string.Empty;
             
             this.graphView = graphView as GameFlowGraphView;
-            
-            var runButton = new Button(ReloadGraphView) {
-                name = "ReloadAction", 
-                text = "Reload"
-            };
-            
-            var saveButton = new Button(SaveGraphView) {
-                name = "SaveAction", 
-                text = "Save"
-            };
-        
-            content.Add(runButton);
-            content.Add(saveButton);
+
+            AddButton("ReloadAction","Reload",ReloadGraphView);
+            AddButton("SaveAction","Save",SaveGraphView);
         }
 
         private void ReloadGraphView()
