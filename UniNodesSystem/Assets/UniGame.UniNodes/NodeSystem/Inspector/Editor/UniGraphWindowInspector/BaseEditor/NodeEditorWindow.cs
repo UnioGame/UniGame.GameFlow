@@ -284,7 +284,8 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
                 }
             }
 
-            graphUpdateDisposable = NodeGraph.ActiveGraphs.ObserveCountChanged().Subscribe(x => {
+            graphUpdateDisposable = NodeGraph.ActiveGraphs.
+                ObserveCountChanged().Subscribe(x => {
                 var target = NodeGraph.ActiveGraphs.FirstOrDefault(y => Title == y.name);
                 Open(target);
             });

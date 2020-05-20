@@ -80,6 +80,7 @@ namespace UniGame.GameFlowEditor.Editor
         
         #region private fields
 
+        private string _graphName = string.Empty;
         private ReactiveProperty<UniGraph> _targetGraph = new ReactiveProperty<UniGraph>();
         private Vector2 _minimapPosition = new Vector2(50,50);
         private Vector2 _settingsPinnedPosition = new Vector2(50,250);
@@ -107,6 +108,8 @@ namespace UniGame.GameFlowEditor.Editor
 
         public void Reload()
         {
+            titleContent.text = ActiveGraph == null ? "(null)" : ActiveGraph.name;
+            
             if (!ActiveGraph) {
                 GameLog.LogWarning($"{nameof(UniGameFlowWindow)} : Null Source UniGraph data",this);
                 return;
@@ -119,7 +122,7 @@ namespace UniGame.GameFlowEditor.Editor
             graph = null;
 
             var assetGraph = CreateAssetGraph(ActiveGraph);
-            
+
             LogGraph();
             
             InitializeGraph(assetGraph);
@@ -145,8 +148,16 @@ namespace UniGame.GameFlowEditor.Editor
         
         public virtual UniAssetGraph CreateAssetGraph(UniGraph uniGraph)
         {
-            uniGraph.Initialize();
-            uniGraph.Validate();
+            if (!uniGraph) {
+                uniGraph = FindActiveGraph(_graphName);
+            }
+            
+            if (Application.isPlaying == false) {
+                uniGraph.Initialize();
+                uniGraph.Validate();
+            }
+            
+            _graphName = uniGraph == null ? string.Empty : uniGraph.name;
             
             AssetGraph = ScriptableObject.CreateInstance<UniAssetGraph>();
             AssetGraph.Activate(uniGraph);
@@ -166,7 +177,16 @@ namespace UniGame.GameFlowEditor.Editor
         {
             GameLog.Log("GameFlowWindow : OnEnable");
             graph = null;
+            
             base.OnEnable();
+            
+            NodeGraph.ActiveGraphs.
+                ObserveCountChanged().Subscribe(x => {
+                    var target = NodeGraph.ActiveGraphs.
+                        FirstOrDefault(y => _graphName == y.name);
+                    Initialize(target as UniGraph);
+                });
+            
             Reload();
         }
         
@@ -237,17 +257,22 @@ namespace UniGame.GameFlowEditor.Editor
                     break;
                 case PlayModeStateChange.EnteredEditMode:
                 case PlayModeStateChange.EnteredPlayMode:
-                    var target = NodeGraph.ActiveGraphs.
-                        OfType<UniGraph>().
-                        FirstOrDefault(x => x.name == titleContent.text);
-                    if (target!=null) {
-                        GameLog.Log($"Update GameFlow Editor Window with name {target.name}");
-                        Initialize(target);
-                    }
+                    Reload();
                     break;
                 case PlayModeStateChange.ExitingPlayMode:
                     break;
             }
+        }
+
+        private UniGraph FindActiveGraph(string graphName)
+        {
+            var target = NodeGraph.ActiveGraphs.
+                OfType<UniGraph>().
+                FirstOrDefault(x => x.name == graphName);
+            if (target) return target;
+            target = GameObject.FindObjectsOfType<UniGraph>().
+                FirstOrDefault(x => x.name == graphName);
+            return target;
         }
         
         private void CreateToolbar(BaseGraphView view)

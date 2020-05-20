@@ -1,5 +1,6 @@
 ﻿namespace UniGame.UniNodes.NodeSystem.Runtime.Core
 {
+    using System;
     using System.Collections.Generic;
     using System.Runtime.CompilerServices;
     using Attributes;
@@ -67,8 +68,6 @@
 
         protected override void OnExecute()
         {
-            ActiveGraphs.Add(this);
-
             LifeTime.AddCleanUpAction(() => ActiveGraphs.Remove(this));
 
             for (var i = 0; i < cancellationNodes.Count; i++) {
@@ -89,6 +88,7 @@
             
             uniNodes.ForEach( x => x.Execute());
 
+            ActiveGraphs.Add(this);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -165,7 +165,7 @@
         }
 
         private void OnDisable() => Dispose();
-        
+
         #endregion
         
         
