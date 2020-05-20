@@ -223,6 +223,7 @@ namespace UniGame.GameFlowEditor.Editor
 
         private void OnPlayModeChanged(PlayModeStateChange state)
         {
+            GameLog.Log($"PlayMode Changed To: {state}",Color.blue);
             switch (state) {
                 case PlayModeStateChange.ExitingEditMode:
                     break;
@@ -231,8 +232,10 @@ namespace UniGame.GameFlowEditor.Editor
                     var target = NodeGraph.ActiveGraphs.
                         OfType<UniGraph>().
                         FirstOrDefault(x => x.name == titleContent.text);
-                    if(target)
+                    if (target!=null) {
+                        GameLog.Log($"Update GameFlow Editor Window with name {target.name}");
                         Initialize(target);
+                    }
                     break;
                 case PlayModeStateChange.ExitingPlayMode:
                     break;
@@ -256,6 +259,7 @@ namespace UniGame.GameFlowEditor.Editor
         private void CreateMinimap(BaseGraphView view)
         {
             miniMapView = CreateGraphView(() => new MiniMapView(view),miniMapView);
+            
             view.Add(miniMapView);
         }
 
