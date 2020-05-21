@@ -39,15 +39,20 @@
 
         private IDisposable _serviceDisposable;
         
-        protected override void OnExecute()
+        protected sealed override void OnExecute()
         {
             Source.Where(x => x != null).
                 Do(async x => {
                     service = await CreateService(x);
                     BindService(x);
+                    OnServiceCreated();
                 }).
                 Subscribe().
                 AddTo(LifeTime);
+        }
+
+        protected virtual void OnServiceCreated()
+        {
         }
 
         private void BindService(IContext context)
