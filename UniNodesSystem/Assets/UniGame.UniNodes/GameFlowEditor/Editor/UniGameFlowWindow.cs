@@ -108,8 +108,12 @@ namespace UniGame.GameFlowEditor.Editor
 
         public void Reload()
         {
-            titleContent.text = ActiveGraph == null ? "(null)" : ActiveGraph.name;
+            _targetGraph.Value = ActiveGraph == null ? 
+                FindActiveGraph(_graphName) :
+                ActiveGraph;
             
+            titleContent.text = ActiveGraph == null ? "(null)" : ActiveGraph.name;
+
             if (!ActiveGraph) {
                 GameLog.LogWarning($"{nameof(UniGameFlowWindow)} : Null Source UniGraph data",this);
                 return;
@@ -148,10 +152,6 @@ namespace UniGame.GameFlowEditor.Editor
         
         public virtual UniAssetGraph CreateAssetGraph(UniGraph uniGraph)
         {
-            if (!uniGraph) {
-                uniGraph = FindActiveGraph(_graphName);
-            }
-            
             if (Application.isPlaying == false) {
                 uniGraph.Initialize();
                 uniGraph.Validate();
