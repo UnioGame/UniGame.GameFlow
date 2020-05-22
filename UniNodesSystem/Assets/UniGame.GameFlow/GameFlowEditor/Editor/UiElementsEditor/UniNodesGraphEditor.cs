@@ -37,9 +37,8 @@
             if (GUILayout.Button("Show Graph", GUILayout.Height(26)))
             {
                 UniGameFlowWindow.Open(graph);
-            }   
+            }
 
-        
             GUILayout.EndVertical();
         
             GUILayout.EndHorizontal();

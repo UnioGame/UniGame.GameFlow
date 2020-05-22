@@ -78,9 +78,9 @@
             Controls();
 
             DrawGrid(position, Zoom, PanOffset);
+            DrawZoomedNodes();
             DrawConnections();
             DrawDraggedConnection();
-            DrawZoomedNodes();
             DrawSelectionBox();
             DrawTooltip();
             DrawGraphsControlls();
@@ -342,7 +342,7 @@
                         }
 
                         Rect toRect;
-                        if (!_portConnectionPoints.TryGetValue(input, out toRect)) continue;
+                        if (!PortConnectionPoints.TryGetValue(input, out toRect)) continue;
 
                         var from          = fromRect.center;
                         var to            = Vector2.zero;
@@ -574,14 +574,15 @@
             if (IsIgnoredNode(node, state))
                 return;
 
+            NodeEditor.PortPositions = new Dictionary<INodePort, Vector2>();
+
+            DrawNodeArea(ref editorNode, state);
+            
             if (state.EventType == EventType.Repaint) {
                 _portConnectionPoints = _portConnectionPoints
                     .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
             }
 
-            NodeEditor.PortPositions = new Dictionary<INodePort, Vector2>();
-
-            DrawNodeArea(ref editorNode, state);
         }
 
         private void DrawNodeArea(ref EditorNode editorNode, NodeEditorGuiState state)
@@ -726,8 +727,7 @@
                     var portHandlePos = portPairs.Value;
                     portHandlePos += node.Position;
                     var rect = new Rect(portHandlePos.x - 8, portHandlePos.y - 8, 16, 16);
-                    if (PortConnectionPoints.ContainsKey(id)) PortConnectionPoints[id] = rect;
-                    else PortConnectionPoints.Add(id, rect);
+                    PortConnectionPoints[id] = rect;
                 }
             }
 

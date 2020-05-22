@@ -135,6 +135,9 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
             Title          = nodeGraph.name;
             wantsMouseMove = true;
             ActiveGraph    = nodeGraph;
+            
+            if(Application.isPlaying == false)
+                nodeGraph.Initialize(nodeGraph);
         }
 
         public void Save()
@@ -257,41 +260,43 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
         private void OnDisable()
         {
             _lifeTime.Terminate();
-            // Cache portConnectionPoints before serialization starts
-            var count = PortConnectionPoints.Count;
-            _references = new NodePortReference[count];
-            _rects      = new Rect[count];
-            var index = 0;
-
-            foreach (var portConnectionPoint in PortConnectionPoints) {
-                _references[index] = new NodePortReference(portConnectionPoint.Key);
-                _rects[index]      = portConnectionPoint.Value;
-                index++;
-            }
         }
         
         private void OnEnable()
         {
-            Observable.FromEvent(
-                ev => EditorApplication.playModeStateChanged += OnPlayModeChanged, 
-                ev => EditorApplication.playModeStateChanged -= OnPlayModeChanged).Subscribe().
+            var stateObservable =  Observable.FromEvent(
+                    ev => EditorApplication.playModeStateChanged += OnPlayModeChanged, 
+                    ev => EditorApplication.playModeStateChanged -= OnPlayModeChanged);
+            
+            stateObservable.
+                Subscribe(x => PortConnectionPoints.Clear()).
+                AddTo(_lifeTime);
+                    
+            stateObservable.
+                Subscribe().
                 AddTo(_lifeTime);
 
+            Observable.FromEvent(
+                    ev => AssemblyReloadEvents.beforeAssemblyReload += OnBeforeAssemblyReload,
+                    ev => AssemblyReloadEvents.beforeAssemblyReload -= OnBeforeAssemblyReload).
+                Subscribe().
+                AddTo(_lifeTime);
+            
             ActiveWindows.Add(this);
             
             _lifeTime.AddCleanUpAction(() => ActiveWindows.Remove(this));
             _lifeTime.AddCleanUpAction(() => graphUpdateDisposable.Cancel());
 
-            // Reload portConnectionPoints if there are any
-            var length = _references.Length;
-            if (length == _rects.Length) {
-                for (var i = 0; i < length; i++) {
-                    var nodePort = _references[i].GetNodePort();
-                    if (nodePort != null) {
-                        _portConnectionPoints[nodePort] = _rects[i];
-                    }
-                }
-            }
+            // // Reload portConnectionPoints if there are any
+            // var length = _references.Length;
+            // if (length == _rects.Length) {
+            //     for (var i = 0; i < length; i++) {
+            //         var nodePort = _references[i].GetNodePort();
+            //         if (nodePort != null) {
+            //             _portConnectionPoints[nodePort] = _rects[i];
+            //         }
+            //     }
+            // }
             
             NodeGraph.ActiveGraphs.
                 ObserveCountChanged().
@@ -303,6 +308,11 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
                 AddTo(_lifeTime);
 
             graphEditor?.OnEnable();
+        }
+
+        private void OnBeforeAssemblyReload()
+        {
+            PortConnectionPoints.Clear();
         }
 
         private void OnPlayModeChanged(PlayModeStateChange modeStateChange)

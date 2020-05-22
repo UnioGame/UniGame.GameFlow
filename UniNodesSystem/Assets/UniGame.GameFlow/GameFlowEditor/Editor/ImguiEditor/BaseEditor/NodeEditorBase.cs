@@ -7,6 +7,7 @@
     using Runtime.Core.Nodes;
     using Runtime.Interfaces;
     using UniGreenModules.UniCore.Runtime.ReflectionUtils;
+    using UniGreenModules.UniCore.Runtime.Utils;
     using UnityEditor;
     using UnityEngine;
     using Object = UnityEngine.Object;
@@ -22,7 +23,7 @@
         /// <summary> Custom editors defined with [CustomNodeEditor] </summary>
         private static Dictionary<Type, Type> _editorsTypesMap;
 
-        private static Dictionary<object, T> editors = new Dictionary<object, T>();
+        private static Func<INode, T> _nodeEditorsCache = MemorizeTool.Create<INode,T>(GetNodeEditor);
 
         private static Dictionary<Type, Type> editorTypes
         {
@@ -41,47 +42,10 @@
         public static T GetEditor(INode node)
         {
             if (node == null) return null;
-            if (editors.TryGetValue(node, out var editorBase))
-                return editorBase;
-            return null;
+            return _nodeEditorsCache(node);
         }
 
-        public static T GetEditor(EditorNode target)
-        {
-            if (!(target.Node is K node)) return null;
-
-            if (!editors.TryGetValue(node, out var editor))
-            {
-                var type = node.GetType();
-                var editorType = GetEditorType(type);
-                
-                editor = Activator.CreateInstance(editorType) as T;
-                editors.Add(node, editor);
-                editor.OnEnable();
-            }
-
-            if (editor.Node == null ) {
-                editor.Initialize(target,node);
-            }
-
-            return editor;
-        }
-
-        public static Object CreateTargetAsset(INode targetItem)
-        {
-            var assetTarget = targetItem as Object;
-            if (assetTarget == null)
-            {
-                return null;
-                var assetItem = ScriptableObject.
-                    CreateInstance(typeof(SerializableNodeContainer)) as SerializableNodeContainer;
-                assetItem.Node = targetItem as SerializableNode;
-                assetTarget      = assetItem;
-            }
-
-            return assetTarget;
-        }
-
+        public static T GetEditor(EditorNode target) => GetCachedEditor(target);
 
         #endregion
         
@@ -127,6 +91,31 @@
                 var attrib = attribs[0] as A;
                 editorTypes.Add(attrib.GetInspectedType(), nodeEditors[i]);
             }
+        }
+
+        private static T GetNodeEditor(INode node)
+        {
+            var type       = node.GetType();
+            var editorType = GetEditorType(type);
+                
+            var editor = Activator.CreateInstance(editorType) as T;
+            editor.OnEnable();
+
+            return editor;
+        }
+
+        private static T GetCachedEditor(EditorNode target)
+        {
+            if (!(target.Node is K node)) return null;
+
+            var editor = _nodeEditorsCache(node);
+
+            if (editor != null && editor.Node == null) 
+            {
+                editor.Initialize(target, node);
+            }
+
+            return editor;
         }
     }
 }
