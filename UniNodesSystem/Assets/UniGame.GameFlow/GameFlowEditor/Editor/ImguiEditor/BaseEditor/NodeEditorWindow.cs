@@ -7,7 +7,9 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
     using Runtime.Interfaces;
     using UniGreenModules.UniCore.EditorTools.Editor.PrefabTools;
     using UniGreenModules.UniCore.EditorTools.Editor.Utility;
+    using UniGreenModules.UniCore.Runtime.DataFlow;
     using UniGreenModules.UniCore.Runtime.Rx.Extensions;
+    using UniModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.GameFlowEditor.Editor.Tools;
     using UniRx;
     using UnityEditor;
     using UnityEditor.Callbacks;
@@ -26,7 +28,8 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
         private Dictionary<INode, Vector2> _nodeSizes            = new Dictionary<INode, Vector2>();
 
         
-        private IDisposable _disposable;
+        private LifeTimeDefinition _lifeTime = new LifeTimeDefinition();
+        
         private float   _zoom = 1;
         private Vector2 _panOffset;
         private IDisposable graphUpdateDisposable;
@@ -218,35 +221,6 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
             GUI.DragWindow();
         }
 
-        private void OnFocus()
-        {
-            graphEditor = NodeGraphEditor.GetEditor(ActiveGraph);
-            var settings = this.GetSettings();
-
-            if (graphEditor != null && settings.autoSave) {
-                return;
-                AssetDatabase.SaveAssets();
-            }
-        }
-
-        private void OnDisable()
-        {
-            graphUpdateDisposable.Cancel();
-            ActiveWindows.Remove(this);
-            EditorApplication.playModeStateChanged -= OnPlayModeChanged;
-
-            // Cache portConnectionPoints before serialization starts
-            var count = PortConnectionPoints.Count;
-            _references = new NodePortReference[count];
-            _rects      = new Rect[count];
-            var index = 0;
-
-            foreach (var portConnectionPoint in PortConnectionPoints) {
-                _references[index] = new NodePortReference(portConnectionPoint.Key);
-                _rects[index]      = portConnectionPoint.Value;
-                index++;
-            }
-        }
 
         private List<Object> selectionAssets = new List<Object>();
 
@@ -269,11 +243,44 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
             Open(target);
         }
 
+        private void OnFocus()
+        {
+            graphEditor = NodeGraphEditor.GetEditor(ActiveGraph);
+            var settings = this.GetSettings();
+
+            if (graphEditor != null && settings.autoSave) {
+                return;
+                AssetDatabase.SaveAssets();
+            }
+        }
+
+        private void OnDisable()
+        {
+            _lifeTime.Terminate();
+            // Cache portConnectionPoints before serialization starts
+            var count = PortConnectionPoints.Count;
+            _references = new NodePortReference[count];
+            _rects      = new Rect[count];
+            var index = 0;
+
+            foreach (var portConnectionPoint in PortConnectionPoints) {
+                _references[index] = new NodePortReference(portConnectionPoint.Key);
+                _rects[index]      = portConnectionPoint.Value;
+                index++;
+            }
+        }
+        
         private void OnEnable()
         {
-            EditorApplication.playModeStateChanged += OnPlayModeChanged;
+            Observable.FromEvent(
+                ev => EditorApplication.playModeStateChanged += OnPlayModeChanged, 
+                ev => EditorApplication.playModeStateChanged -= OnPlayModeChanged).Subscribe().
+                AddTo(_lifeTime);
 
             ActiveWindows.Add(this);
+            
+            _lifeTime.AddCleanUpAction(() => ActiveWindows.Remove(this));
+            _lifeTime.AddCleanUpAction(() => graphUpdateDisposable.Cancel());
 
             // Reload portConnectionPoints if there are any
             var length = _references.Length;
@@ -286,13 +293,14 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
                 }
             }
             
-            _disposable = NodeGraph.ActiveGraphs.
+            NodeGraph.ActiveGraphs.
                 ObserveCountChanged().
                 Where(x => ActiveGraph == null).
                 Select(x =>  NodeGraph.ActiveGraphs.
                     FirstOrDefault(y => Title == y.name)).
                 Do(x => Open(x as UniGraph)).
-                Subscribe();
+                Subscribe().
+                AddTo(_lifeTime);
 
             graphEditor?.OnEnable();
         }
@@ -301,21 +309,9 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
         {
             switch (modeStateChange) {
                 case PlayModeStateChange.EnteredEditMode:
-                    if (LastEditorGraph) {
-                        Open(LastEditorGraph);
-                    }
-                    ActiveGraph = null;
-                    var activeGraph = NodeGraph.ActiveGraphs.FirstOrDefault(x => x.name == Title);
-                    Open(activeGraph);
-                    break;
                 case PlayModeStateChange.EnteredPlayMode:
-                    ActiveGraph = null;
-                    var target = NodeGraph.ActiveGraphs.FirstOrDefault(x => x.name == Title);
-                    Open(target);
-                    break;
-                case PlayModeStateChange.ExitingPlayMode:
-                    LastEditorGraph = ActiveGraph;
-                    ActiveGraph     = null;
+                    var activeGraph = EditorGraphTools.FindSceneGraph(Title);
+                    Open(activeGraph);
                     break;
             }
         }

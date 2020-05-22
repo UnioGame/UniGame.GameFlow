@@ -135,21 +135,21 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
                                     continue;
                                 }
 
-                                foreach (var output in node.Outputs) {
-                                    if (PortConnectionPoints.TryGetValue(output, out var rect)) {
-                                        rect.position                   += offset;
-                                        PortConnectionPoints[output] =  rect;
-                                    }
-                                }
-
-                                foreach (var input in node.Inputs) {
-                                    if (!PortConnectionPoints.TryGetValue(input, out var rect)) {
-                                        continue;
-                                    }
-
-                                    rect.position                  += offset;
-                                    PortConnectionPoints[input] =  rect;
-                                }
+                                // foreach (var output in node.Outputs) {
+                                //     if (PortConnectionPoints.TryGetValue(output, out var rect)) {
+                                //         rect.position                   += offset;
+                                //         PortConnectionPoints[output] =  rect;
+                                //     }
+                                // }
+                                //
+                                // foreach (var input in node.Inputs) {
+                                //     if (!PortConnectionPoints.TryGetValue(input, out var rect)) {
+                                //         continue;
+                                //     }
+                                //
+                                //     rect.position                  += offset;
+                                //     PortConnectionPoints[input] =  rect;
+                                // }
                             }
 
                             // Move selected reroutes with offset

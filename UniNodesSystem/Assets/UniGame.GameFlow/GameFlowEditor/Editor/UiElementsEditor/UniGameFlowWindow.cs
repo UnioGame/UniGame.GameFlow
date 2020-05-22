@@ -9,6 +9,9 @@ namespace UniGame.GameFlowEditor.Editor
     using UniCore.Runtime.ProfilerTools;
     using UniGreenModules.UniCore.EditorTools.Editor.AssetOperations;
     using UniGreenModules.UniCore.EditorTools.Editor.Utility;
+    using UniGreenModules.UniCore.Runtime.DataFlow;
+    using UniGreenModules.UniCore.Runtime.Rx.Extensions;
+    using UniModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.GameFlowEditor.Editor.Tools;
     using UniNodes.GameFlowEditor.Editor;
     using UniNodes.NodeSystem.Runtime.Core;
     using UniRx;
@@ -80,6 +83,7 @@ namespace UniGame.GameFlowEditor.Editor
         
         #region private fields
 
+        private LifeTimeDefinition _lifeTime =  new LifeTimeDefinition();
         private string _graphName = string.Empty;
         private ReactiveProperty<UniGraph> _targetGraph = new ReactiveProperty<UniGraph>();
         private Vector2 _minimapPosition = new Vector2(50,50);
@@ -109,7 +113,7 @@ namespace UniGame.GameFlowEditor.Editor
         public void Reload()
         {
             _targetGraph.Value = ActiveGraph == null ? 
-                FindActiveGraph(_graphName) :
+                EditorGraphTools.FindSceneGraph(_graphName) :
                 ActiveGraph;
             
             titleContent.text = ActiveGraph == null ? "(null)" : ActiveGraph.name;
@@ -181,25 +185,21 @@ namespace UniGame.GameFlowEditor.Editor
             base.OnEnable();
             
             NodeGraph.ActiveGraphs.
-                ObserveCountChanged().Subscribe(x => {
-                    var target = NodeGraph.ActiveGraphs.
-                        FirstOrDefault(y => _graphName == y.name);
-                    Initialize(target as UniGraph);
-                });
+                ObserveCountChanged().
+                Select(x => EditorGraphTools.FindSceneGraph(_graphName)).
+                Do(x => Initialize(x as UniGraph)).
+                Subscribe().
+                AddTo(_lifeTime);
+
+            _lifeTime.AddCleanUpAction(() =>
+                Windows.Remove(this));
             
             Reload();
         }
-        
+
         protected override void OnDestroy()
         {
-            Windows.Remove(this);
-            
-            //save graph when ctrl + s pressed
-            EditorSceneManager.sceneSaved -= OnSave;
-            //redraw editor if assembly reloaded
-            //AssemblyReloadEvents.afterAssemblyReload  -= OnAssemblyReloaded;
-            AssemblyReloadEvents.beforeAssemblyReload -= OnBeforeAssemblyReload;
-            EditorApplication.playModeStateChanged    -= OnPlayModeChanged;
+            _lifeTime.Release();
             base.OnDestroy();
         }
 
@@ -240,11 +240,25 @@ namespace UniGame.GameFlowEditor.Editor
         private void BindEvents()
         {
             //save graph when ctrl + s pressed
-            EditorSceneManager.sceneSaved += OnSave;
+            Observable.FromEvent(
+                ev => EditorSceneManager.sceneSaved += OnSave,
+                ev => EditorSceneManager.sceneSaved -= OnSave).
+                Subscribe().
+                AddTo(_lifeTime);
+            
             //redraw editor if assembly reloaded
             //AssemblyReloadEvents.afterAssemblyReload += OnAssemblyReloaded;
-            AssemblyReloadEvents.beforeAssemblyReload += OnBeforeAssemblyReload;
-            EditorApplication.playModeStateChanged += OnPlayModeChanged;
+            Observable.FromEvent(
+                    ev => AssemblyReloadEvents.beforeAssemblyReload += OnBeforeAssemblyReload,
+                    ev => AssemblyReloadEvents.beforeAssemblyReload -= OnBeforeAssemblyReload).
+                Subscribe().
+                AddTo(_lifeTime);
+            
+            Observable.FromEvent(
+                    ev => EditorApplication.playModeStateChanged += OnPlayModeChanged,
+                    ev => EditorApplication.playModeStateChanged -= OnPlayModeChanged).
+                Subscribe().
+                AddTo(_lifeTime);
         }
 
         private void OnSave(Scene scene) => Save();
@@ -264,16 +278,6 @@ namespace UniGame.GameFlowEditor.Editor
             }
         }
 
-        private UniGraph FindActiveGraph(string graphName)
-        {
-            var target = NodeGraph.ActiveGraphs.
-                OfType<UniGraph>().
-                FirstOrDefault(x => x.name == graphName);
-            if (target) return target;
-            target = GameObject.FindObjectsOfType<UniGraph>().
-                FirstOrDefault(x => x.name == graphName);
-            return target;
-        }
         
         private void CreateToolbar(BaseGraphView view)
         {
