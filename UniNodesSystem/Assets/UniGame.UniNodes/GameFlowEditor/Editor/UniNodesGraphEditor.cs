@@ -1,8 +1,12 @@
 ﻿namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector
 {
+    using System;
+    using System.Linq;
     using BaseEditor;
     using Runtime.Core;
     using UniGame.GameFlowEditor.Editor;
+    using UniGreenModules.UniCore.Runtime.Rx.Extensions;
+    using UniRx;
     using UnityEditor;
     using UnityEngine;
     using Editor = UnityEditor.Editor;
@@ -11,15 +15,19 @@
     [CustomEditor(typeof(UniGraph))]
     public class UniNodesGraphEditor : Editor
     {
-        public override void OnInspectorGUI()
+        private string _activeGraphName;
+        private UniGraph _graph;
+
+        public void Open(UniGraph graph)
         {
-            base.OnInspectorGUI();
-        
-            var graph = target as UniGraph;
-        
+            if (graph == null)
+                return;
+            
+            _graph = graph;
+            _activeGraphName = _graph.name;
+            
             GUILayout.Space(10);
             GUILayout.BeginHorizontal();
-
             GUILayout.BeginVertical();
         
             if (GUILayout.Button("Show Graph(obsolete)", GUILayout.Height(26)))
@@ -36,6 +44,15 @@
         
             GUILayout.EndHorizontal();
             GUILayout.Space(10);
+        }
+
+        public override void OnInspectorGUI()
+        {
+            base.OnInspectorGUI();
+        
+            var graph = target as UniGraph;
+
+            Open(graph);
         }
     }
 }
