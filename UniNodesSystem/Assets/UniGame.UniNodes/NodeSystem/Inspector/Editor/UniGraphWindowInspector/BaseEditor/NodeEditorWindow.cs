@@ -25,6 +25,8 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
         private Dictionary<INodePort, Rect>     _portConnectionPoints = new Dictionary<INodePort, Rect>();
         private Dictionary<INode, Vector2> _nodeSizes            = new Dictionary<INode, Vector2>();
 
+        
+        private IDisposable _disposable;
         private float   _zoom = 1;
         private Vector2 _panOffset;
         private IDisposable graphUpdateDisposable;
@@ -283,13 +285,15 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
                     }
                 }
             }
-
-            graphUpdateDisposable = NodeGraph.ActiveGraphs.
-                ObserveCountChanged().Subscribe(x => {
-                var target = NodeGraph.ActiveGraphs.FirstOrDefault(y => Title == y.name);
-                Open(target);
-            });
             
+            _disposable = NodeGraph.ActiveGraphs.
+                ObserveCountChanged().
+                Where(x => ActiveGraph == null).
+                Select(x =>  NodeGraph.ActiveGraphs.
+                    FirstOrDefault(y => Title == y.name)).
+                Do(x => Open(x as UniGraph)).
+                Subscribe();
+
             graphEditor?.OnEnable();
         }
 
