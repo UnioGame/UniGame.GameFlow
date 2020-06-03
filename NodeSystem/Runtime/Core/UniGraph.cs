@@ -165,8 +165,6 @@
 
         }
 
-        private void OnDisable() => Dispose();
-
         #endregion
         
         

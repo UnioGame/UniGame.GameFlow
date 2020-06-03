@@ -75,7 +75,7 @@
         /// <summary>
         /// finish node life time
         /// </summary>
-        private void OnDisable() => Exit();
+        protected virtual void OnDisable() => Exit();
 
     }
 }
