@@ -10,20 +10,11 @@
 
         public UniGraph graph;
 
-        private void Awake()
-        {
-            targetGraph = graph ? graph : GetComponent<IUniGraph>();
-        }
+        private void Awake() => targetGraph = graph ? graph : GetComponent<IUniGraph>();
 
-        private void Start()
-        {
-            targetGraph?.Execute();
-        }
+        private void Start() => targetGraph?.Execute();
 
-        private void OnDisable()
-        {
-            targetGraph?.Exit();
-        }
+        private void OnDisable() =>  targetGraph?.Exit();
 
     }
 }

@@ -50,8 +50,6 @@
             Initialize(this);
         }
         
-        public override void Dispose() => Exit();
-
         #region private methods
 
         protected sealed override void OnInitialize()
@@ -137,7 +135,9 @@
                 
 #if UNITY_EDITOR
                 //Editor Only
-                node.UpdatePortByAttributes();
+                if (Application.isPlaying == false) {
+                    node.UpdatePortByAttributes();
+                }
 #endif
                 
                 if (node is IUniNode uniNode) {

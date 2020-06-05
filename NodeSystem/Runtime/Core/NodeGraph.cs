@@ -187,7 +187,7 @@
             return this;
         }
 
-        public virtual void Dispose() {}
+        public void Dispose() => Exit();
         
         public override void Validate()
         {
