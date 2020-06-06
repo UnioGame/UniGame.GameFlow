@@ -42,8 +42,8 @@ namespace UniGame.GameFlowEditor.Editor
             Context = nodeTarget as UniBaseNode;
             var sourceNode = Context?.SourceNode;
 
-            if (!(sourceNode is Object assetNode)) {
-                NodeContainer.Initialize(sourceNode as SerializableNode);
+            if (sourceNode is SerializableNode assetNode) {
+                NodeContainer.Initialize(assetNode);
             }
             
             var container = UiElementFactory.Create(sourceNode);
@@ -53,7 +53,7 @@ namespace UniGame.GameFlowEditor.Editor
             containerStyle.paddingBottom = 4;
             containerStyle.marginLeft = 4;
             containerStyle.marginRight = 4;
-            containerStyle.minWidth = 220;
+            containerStyle.minWidth = 280;
 
             controlsContainer.Add(container);
         }

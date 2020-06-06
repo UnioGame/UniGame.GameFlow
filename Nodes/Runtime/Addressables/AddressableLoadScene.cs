@@ -4,6 +4,7 @@
     using NodeSystem.Runtime.Core;
     using NodeSystem.Runtime.Core.Commands;
     using NodeSystem.Runtime.Interfaces;
+    using Sirenix.OdinInspector;
     using UniGreenModules.UniCore.Runtime.Interfaces;
     using UniGreenModules.UniCore.Runtime.Rx.Extensions;
     using UniGreenModules.UniGame.AddressableTools.Runtime.Attributes;
@@ -18,7 +19,7 @@
     {
         private const string portName = "data";
         
-        [ShowAssetReference]
+        [DrawWithUnity]
         [SerializeField]
         private AssetReference sceneAsset;
 

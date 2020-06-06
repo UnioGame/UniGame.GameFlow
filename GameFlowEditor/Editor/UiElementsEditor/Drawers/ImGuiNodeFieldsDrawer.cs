@@ -35,24 +35,16 @@
             string label = "",
             Action<object> onValueChanged = null)
         {
-            var backgroundColor = new Color(0.5f, 0.5f, 0.5f);
+            var backgroundColor = new Color(0.4f, 0.4f, 0.4f);
             var node = source as INode;
-            var container = new Foldout() {
-                text = string.IsNullOrEmpty(label) ? "content" : label,
-                value = false,
-                style = {
-                    paddingLeft     = 4,
-                    color           = new StyleColor(Color.black),
-                    backgroundColor = new StyleColor(backgroundColor)
-                }
-            };
-            
+
             var view = DrawNode(node,onValueChanged);
             view.style.backgroundColor = new StyleColor(backgroundColor);
+            view.style.paddingTop = 4;
+            view.style.paddingLeft = 4;
+            view.style.marginBottom = 4;
             
-            container?.Add(view);
-            
-            return container;
+            return view;
         }
         
         public EditorNode GetData(INode node)
@@ -68,12 +60,16 @@
         public VisualElement DrawNode(INode node,Action<object> onValueChanged)
         {
             VisualElement element = null;
-            
+            var useOdinDrawer = false;
 #if ODIN_INSPECTOR
-            element = new IMGUIContainer(() => node.DrawOdinPropertyInspector());
-#else
-            element = new VisualElement();
+            useOdinDrawer = true;
 #endif
+            if (useOdinDrawer) {
+                element = new IMGUIContainer(() => node.DrawOdinPropertyInspector());
+                return element;
+            }
+            
+            element = new VisualElement();
             var data = GetData(node);
             var fields = fiedlsContainer.GetFields(data);
             
