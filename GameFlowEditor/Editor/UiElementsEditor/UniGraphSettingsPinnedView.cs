@@ -5,6 +5,7 @@ namespace UniGame.UniNodes.GameFlowEditor.Editor
 {
     using System;
     using UniGame.GameFlowEditor.Editor;
+    using UnityEditor;
     using UnityEngine;
 
     public class UniGraphSettingsPinnedView : PinnedElementView, IUniGraphSettings
