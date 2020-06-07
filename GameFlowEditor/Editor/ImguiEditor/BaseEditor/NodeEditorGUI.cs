@@ -193,7 +193,6 @@
             // If only one node is selected
             if (selection.Count == 1) {
                 var node = selection.FirstOrDefault();
-                contextMenu.AddItem(new GUIContent("Move To Top"), false, () => MoveNodeToTop(node));
                 contextMenu.AddItem(new GUIContent("Rename"), false, RenameSelectedNode);
                 // If only one node is selected
                 AddCustomContextMenuItems(contextMenu, node);

@@ -6,6 +6,7 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
     using Runtime.Core;
     using Runtime.Interfaces;
     using UniGreenModules.UniCore.EditorTools.Editor.Utility;
+    using UniModules.UniGame.Core.Runtime.Extension;
     using UnityEditor;
     using UnityEngine;
 
@@ -485,17 +486,6 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
             if (selection.Count == 1) {
                 var node = selection.FirstOrDefault();
                 NodeEditor.GetEditor(node).InitiateRename();
-            }
-        }
-
-        /// <summary> Draw this node on top of other nodes by placing it last in the graph.nodes list </summary>
-        public void MoveNodeToTop(INode node)
-        {
-            int index;
-            while ((index = ActiveGraph.Nodes.IndexOf(node)) != ActiveGraph.Nodes.Count - 1)
-            {
-                ActiveGraph.Nodes[index] = ActiveGraph.Nodes[index + 1];
-                ActiveGraph.Nodes[index + 1] = node;
             }
         }
 

@@ -41,7 +41,8 @@ namespace UniGame.UniNodes.GameFlowEditor.Editor
             this.graphView = graphView as GameFlowGraphView;
 
             AddButton("ReloadAction","Reload",ReloadGraphView);
-            AddButton("SaveAction","Save",SaveGraphView);
+            //TODO fix 
+            AddButton("SaveAction","Save",ReloadGraphView);
         }
 
         private void ReloadGraphView()
