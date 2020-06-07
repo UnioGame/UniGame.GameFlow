@@ -1,12 +1,10 @@
 ﻿namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector
 {
-    using System;
-    using System.Linq;
+    using System.Diagnostics;
     using BaseEditor;
     using Runtime.Core;
     using UniGame.GameFlowEditor.Editor;
-    using UniGreenModules.UniCore.Runtime.Rx.Extensions;
-    using UniRx;
+    using UniGreenModules.UniGame.Core.EditorTools.Editor.DrawersTools;
     using UnityEditor;
     using UnityEngine;
     using Editor = UnityEditor.Editor;
@@ -47,11 +45,21 @@
 
         public override void OnInspectorGUI()
         {
-            base.OnInspectorGUI();
-        
+            var isOdinSupported = false;
+#if ODIN_INSPECTOR
+            isOdinSupported = true;
+#endif
+            if (isOdinSupported) {
+                target.DrawOdinPropertyInspector();
+            }
+            else {
+                base.OnInspectorGUI();
+            }
+
             var graph = target as UniGraph;
 
             Open(graph);
         }
+
     }
 }

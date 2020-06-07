@@ -124,18 +124,13 @@ namespace UniGame.GameFlowEditor.Editor
             }
 
             GameLog.Log($"GameFlowWindow : Window Reload [{ActiveGraph.name}]",Color.blue);
-            
-            LogGraph();
-            
+ 
             graph = null;
 
             var assetGraph = CreateAssetGraph(ActiveGraph);
 
-            LogGraph();
-            
             InitializeGraph(assetGraph);
             
-            LogGraph();
         }
 
         private void LogGraph()
@@ -157,8 +152,7 @@ namespace UniGame.GameFlowEditor.Editor
         public virtual UniAssetGraph CreateAssetGraph(UniGraph uniGraph)
         {
             if (Application.isPlaying == false) {
-                uniGraph.Initialize();
-                uniGraph.Validate();
+                InitializeGraph(uniGraph);
             }
             
             _graphName = uniGraph == null ? string.Empty : uniGraph.name;
@@ -176,6 +170,16 @@ namespace UniGame.GameFlowEditor.Editor
         }
         
         #endregion
+
+        private void InitializeGraph(UniGraph uniGraph)
+        {
+            if (!AssetEditorTools.IsPureEditorMode) {
+                return;
+            }
+
+            uniGraph.Initialize();
+            uniGraph.Validate();
+        }
 
         protected override void OnEnable()
         {

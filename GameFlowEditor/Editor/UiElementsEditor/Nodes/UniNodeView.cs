@@ -6,6 +6,7 @@ namespace UniGame.GameFlowEditor.Editor
     using Core.EditorTools.Editor.UiElements;
     using Runtime;
     using UniGreenModules.UniCore.EditorTools.Editor.Utility;
+    using UniModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.GameFlowEditor.Editor.Tools;
     using UniNodes.NodeSystem.Inspector.Editor.ContentContextWindow;
     using UniNodes.NodeSystem.Runtime.Core;
     using UniNodes.NodeSystem.Runtime.Core.Nodes;
@@ -17,6 +18,7 @@ namespace UniGame.GameFlowEditor.Editor
     public class UniNodeView : BaseNodeView
     {
         private List<ContextDescription> content = new List<ContextDescription>();
+        private Color _backgroundColor = new Color(0.4f, 0.4f, 0.4f);
         
         private SerializableNodeContainer serializableNode;
         protected SerializableNodeContainer NodeContainer {
@@ -41,19 +43,23 @@ namespace UniGame.GameFlowEditor.Editor
         {
             Context = nodeTarget as UniBaseNode;
             var sourceNode = Context?.SourceNode;
-
             if (sourceNode is SerializableNode assetNode) {
                 NodeContainer.Initialize(assetNode);
             }
-            
-            var container = UiElementFactory.Create(sourceNode);
+
+            var container = sourceNode.DrawNodeUiElements();
             var containerStyle = container.style;
+
+            containerStyle.backgroundColor = new StyleColor(_backgroundColor);
+            containerStyle.paddingTop      = 4;
+            containerStyle.paddingLeft     = 4;
+            containerStyle.marginBottom    = 4;
             
             containerStyle.paddingTop = 4;
             containerStyle.paddingBottom = 4;
             containerStyle.marginLeft = 4;
             containerStyle.marginRight = 4;
-            containerStyle.minWidth = 280;
+            containerStyle.minWidth = 250;
 
             controlsContainer.Add(container);
         }

@@ -41,17 +41,17 @@
         
         #endregion
 
+        private List<INode> _allNodes = new List<INode>();
+        
         [NonSerialized]
         private GraphData _graphMap;
         
         [NonSerialized] 
         private Dictionary<int, INode> nodesCache;
-        
-        private List<INode> allNodes;
 
         #region public properties
 
-        public List<INode> Nodes => GetNodes();
+        public IReadOnlyList<INode> Nodes => GetNodes();
 
         public IReadOnlyList<INode> SerializableNodes => serializableNodes;
         
@@ -75,17 +75,15 @@
 
         public void SetScale(Vector3 scale) => this.graphScale = scale;
         
-        public List<INode> GetNodes()
+        public IReadOnlyList<INode> GetNodes()
         {
-            if (allNodes != null) {
-                return allNodes;
-            }
-
-            allNodes = new List<INode>();
-            allNodes.AddRange(serializableNodes);
-            allNodes.AddRange(nodes);
-
-            return allNodes;
+            _allNodes = _allNodes ?? new List<INode>();
+            if (_allNodes.Count > 0)
+                return _allNodes;
+            
+            _allNodes.AddRange(nodes);
+            _allNodes.AddRange(serializableNodes);
+            return _allNodes;
         }
         
         /// <summary>
@@ -126,9 +124,7 @@
             
             node.SetUpData(this);
             node.SetName(itemName);
-            
-            Nodes.Add(node);
-            
+
             return node;
         }
 
@@ -167,8 +163,7 @@
         public IGraphData RemoveNode(INode node)
         {
             node.ClearConnections();
-            Nodes.Remove(node);
-            
+
             var nodeAsset = node as Node;
             if (nodeAsset == null) {
                 serializableNodes.Remove(node);
@@ -193,6 +188,7 @@
         {
             graph = this;
             nodes.Clear();
+            _allNodes?.Clear();
             
             serializableNodes.RemoveAll(x => x == null);
             nodes.AddRange(GetComponents<Node>());
@@ -213,6 +209,11 @@
         }
 
         #endregion
+
+        protected override void OnInitialize()
+        {
+            _allNodes?.Clear();
+        }
 
         private INode AddAssetNode(Type type)
         {

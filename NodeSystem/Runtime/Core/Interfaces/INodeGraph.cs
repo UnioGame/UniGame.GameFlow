@@ -7,7 +7,7 @@
 
     public interface INodeGraph : IDisposable, IGraphData
     {
-        List<INode> Nodes { get; }
+        IReadOnlyList<INode> Nodes { get; }
 
         IGraphData GraphData { get; }
 
