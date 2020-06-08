@@ -3,6 +3,7 @@
     using System;
     using Interfaces;
     using NodeSystem.Runtime.Attributes;
+    using UniCore.Runtime.ProfilerTools;
     using UniGreenModules.UniCore.Runtime.Attributes;
     using UniGreenModules.UniCore.Runtime.Interfaces;
     using UniGreenModules.UniCore.Runtime.Rx.Extensions;
@@ -14,7 +15,6 @@
     /// <summary>
     /// Base game service binder between Unity world and regular classes
     /// </summary>
-    /// <typeparam name="TService"></typeparam>
     /// <typeparam name="TServiceApi"></typeparam>
     [HideNode]
     public abstract class ServiceNode<TServiceApi> : 
@@ -46,6 +46,7 @@
                     service = await CreateService(x);
                     BindService(x);
                     OnServiceCreated();
+                    GameLog.LogRuntime($"NODE SERVICE {typeof(TServiceApi).Name} CREATED");
                 }).
                 Subscribe().
                 AddTo(LifeTime);
