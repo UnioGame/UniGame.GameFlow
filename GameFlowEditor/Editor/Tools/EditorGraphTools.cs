@@ -27,8 +27,18 @@
             if (node == null || !graph)
                 return;
 
+            if (node is Object assetNode) {
+                assetNode.DrawOdinPropertyInspector();
+                return;
+            } 
+  
+        }
+
+        public static void DrawSerializableNode(INode node, UniGraph graph)
+        {          
             var isSerializable = node is SerializableNode;
-            var index        = isSerializable ?
+            
+            var index = isSerializable ?
                 graph.serializableNodes.IndexOf(node) : 
                 graph.ObjectNodes.IndexOf(node);
             
