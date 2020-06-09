@@ -20,11 +20,9 @@
     public class ContextDataNode : InOutPortNode
     {
         [Header("Context")]
-        [ShowAssetReference]
         public ContextAssetReference contextAsset;
 
         [Header("Data Source")] 
-        [ShowAssetReference]
         public AsyncContextDataSourceAssetReference contextDataSources;
 
         protected override void UpdateCommands(List<ILifeTimeCommand> nodeCommands)
@@ -48,7 +46,7 @@
         protected sealed override void OnExecute()
         {
             //unload all source addressables
-            LifeTime.AddCleanUpAction(() => contextAsset.UnloadReference());
+            LifeTime.AddDispose(contextAsset);
             LifeTime.AddDispose(contextDataSources);
         }
     }

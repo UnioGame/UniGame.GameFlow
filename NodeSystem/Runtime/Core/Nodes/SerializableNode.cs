@@ -161,8 +161,9 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
             ConnectionType connectionType = ConnectionType.Multiple,
             ShowBackingValue showBackingValue = ShowBackingValue.Always)
         {
-            var port = HasPort(fieldName) ? ports[fieldName] :
-                        new NodePort(GraphData.GetId(),this, fieldName, direction, connectionType,showBackingValue,types);
+            var port = HasPort(fieldName) ? 
+                ports[fieldName] :
+                new NodePort(GraphData.GetId(),this, fieldName, direction, connectionType,showBackingValue,types);
             return AddPort(port);
         }
 

@@ -141,11 +141,11 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
             InitializeData(graphData);
 
             isInitialized = true;
-
-            //initialize ports
-            InitializePorts();
+            
             //initialize all node commands
             InitializeCommands();
+            //initialize ports
+            InitializePorts();
             //custom node initialization
             OnInitialize();
             //proxy initialization            

@@ -223,10 +223,7 @@
         /// <summary>
         /// terminate Port lifetime, release resources
         /// </summary>
-        public void Release()
-        {
-            lifeTimeDefinition.Terminate();
-        }
+        public void Release() =>  lifeTimeDefinition.Terminate();
         
         #region comperer api
 
