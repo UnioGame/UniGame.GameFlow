@@ -13,30 +13,29 @@
     using Object = System.Object;
 
     [Serializable]
-    public class RegisterDataSourceCommand : ILifeTimeCommand 
+    public class DataSourceTaskCommand<TData> : ILifeTimeCommand 
     {
-        private readonly UniTask<IContext> contextTask;
-        private readonly AssetReference resource;
+        private readonly UniTask<TData> _source;
+        private readonly UniTask<IContext> _target;
 
-        public Object asset;
         public IAsyncContextDataSource dataSource;
 
-        public RegisterDataSourceCommand(UniTask<IContext> contextTask,AssetReference resource)
+        public DataSourceTaskCommand(UniTask<TData> source,UniTask<IContext> target)
         {
-            this.contextTask = contextTask;
-            this.resource = resource;
+            this._source = source;
+            this._target = target;
         }
 
         public async void Execute(ILifeTime lifeTime)
         {
-            asset = await resource.LoadAssetTaskAsync<ScriptableObject>(lifeTime);
-            dataSource = asset as IAsyncContextDataSource;
-            if (dataSource == null) {
-                GameLog.LogError($"NULL asset loaded from {resource}");
+            var context = await _target;
+            var asset = await _source;
+            if (asset == null) {
+                GameLog.LogError($"NULL asset loaded from {GetType().Name}");
                 return;
             }
             
-            await dataSource.RegisterAsync(await contextTask);
+            context.Publish(asset);
 
         }
     }

@@ -33,17 +33,20 @@
         
         #endregion
         
+        private IDisposable _serviceDisposable;
+
         public bool waitForServiceReady = true;
+
+        public TServiceApi Service { get; private set; }
 
         protected abstract UniTask<TServiceApi> CreateService(IContext context);
 
-        private IDisposable _serviceDisposable;
-        
         protected sealed override void OnExecute()
         {
             Source.Where(x => x != null).
                 Do(async x => {
                     service = await CreateService(x);
+                    Service = service;
                     BindService(x);
                     OnServiceCreated();
                     GameLog.LogRuntime($"NODE SERVICE {typeof(TServiceApi).Name} CREATED");
