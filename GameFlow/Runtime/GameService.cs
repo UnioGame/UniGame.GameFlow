@@ -16,17 +16,10 @@
         protected readonly LifeTimeDefinition lifeTimeDefinition = new LifeTimeDefinition();
 
         protected readonly BoolReactiveProperty isReady = new BoolReactiveProperty(false);
-        
-        /// <summary>
-        /// service local lifetime
-        /// </summary>
-        protected ILifeTime serviceLifeTime;
 
-        public IContext Bind(IContext context, ILifeTime lifeTime = null)
+        public IContext Bind(IContext context)
         {
-            serviceLifeTime = lifeTimeDefinition.LifeTime;
-            lifeTime?.AddDispose(this);
-            return OnBind(context, serviceLifeTime);
+            return OnBind(context, lifeTimeDefinition);
         }
         
         /// <summary>

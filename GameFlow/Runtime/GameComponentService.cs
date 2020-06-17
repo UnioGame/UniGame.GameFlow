@@ -11,25 +11,15 @@
     {
         protected TService Service = new TService();
 
-        public void Dispose()
-        {
-            Service.Dispose();
-        }
+        public void Dispose() => Service.Dispose();
 
         public ILifeTime LifeTime => Service.LifeTime;
 
         public IReadOnlyReactiveProperty<bool> IsReady => Service.IsReady;
-
-
-        public IContext Bind(IContext context, ILifeTime lifeTime = null)
-        {
-            return Service.Bind(context, lifeTime);
-        }
         
-        private void OnDestroy()
-        {
-            Dispose();
-        }
+        public IContext Bind(IContext context) => Service.Bind(context);
+
+        private void OnDestroy() => Dispose();
 
     }
 }

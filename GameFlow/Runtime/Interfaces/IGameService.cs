@@ -17,7 +17,7 @@
         /// <param name="context">data context</param>
         /// <param name="lifeTime">lifetime object</param>
         /// <returns>service context</returns>
-        IContext Bind(IContext context, ILifeTime lifeTime = null);
+        IContext Bind(IContext context);
 
     }
 }
