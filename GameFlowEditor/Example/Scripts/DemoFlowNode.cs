@@ -5,6 +5,7 @@ using UniGame.UniNodes.NodeSystem.Runtime.Core;
 using UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes;
 using UniGame.UniNodes.NodeSystem.Runtime.Interfaces;
 using UniGame.UniNodes.NodeSystem.Runtime.ReactivePorts;
+using UniModules.UniGameFlow.NodeSystem.Runtime.Core.Attributes;
 using UnityEngine;
 
 [Serializable]

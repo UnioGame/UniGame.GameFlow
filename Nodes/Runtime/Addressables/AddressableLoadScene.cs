@@ -9,6 +9,7 @@
     using UniGreenModules.UniCore.Runtime.Rx.Extensions;
     using UniGreenModules.UniGame.AddressableTools.Runtime.Attributes;
     using UniGreenModules.UniGame.AddressableTools.Runtime.Extensions;
+    using UniModules.UniGameFlow.NodeSystem.Runtime.Core.Attributes;
     using UniRx;
     using UnityEngine;
     using UnityEngine.AddressableAssets;

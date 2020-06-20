@@ -4,6 +4,7 @@
     using NodeSystem.Runtime.Core;
     using NodeSystem.Runtime.Extensions;
     using UniGreenModules.UniCore.Runtime.Interfaces;
+    using UniModules.UniGameFlow.NodeSystem.Runtime.Core.Attributes;
 
     [CreateNodeMenu("Examples/MultiPortDemo/MultiPortNode")]
     public class MultiPortDemoNode : UniNode

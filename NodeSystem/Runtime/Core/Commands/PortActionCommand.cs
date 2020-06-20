@@ -5,6 +5,7 @@
     using UniGreenModules.UniCore.Runtime.DataFlow.Interfaces;
     using UniGreenModules.UniCore.Runtime.Interfaces;
     using UniGreenModules.UniCore.Runtime.Rx.Extensions;
+    using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
     using UniRx;
 
     [Serializable]

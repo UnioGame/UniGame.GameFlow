@@ -8,6 +8,7 @@
     using UniGreenModules.UniCore.Runtime.Rx.Extensions;
     using UniGreenModules.UniRoutine.Runtime;
     using UniGreenModules.UniRoutine.Runtime.Extension;
+    using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
     using UniRx;
 
     [Serializable]

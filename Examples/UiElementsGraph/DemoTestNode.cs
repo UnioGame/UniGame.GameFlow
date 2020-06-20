@@ -1,6 +1,7 @@
 ﻿using UniGame.UniNodes.NodeSystem.Runtime.Attributes;
 using UniGame.UniNodes.NodeSystem.Runtime.Core;
 using UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes;
+using UniModules.UniGameFlow.NodeSystem.Runtime.Core.Attributes;
 
 [CreateNodeMenu("Demo/DemoTestNode")]
 public class DemoTestNode : SNode

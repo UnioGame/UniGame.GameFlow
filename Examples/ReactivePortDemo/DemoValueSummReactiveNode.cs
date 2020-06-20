@@ -4,6 +4,7 @@
     using NodeSystem.Runtime.Core;
     using NodeSystem.Runtime.ReactivePorts;
     using UniGreenModules.UniCore.Runtime.Rx.Extensions;
+    using UniModules.UniGameFlow.NodeSystem.Runtime.Core.Attributes;
     using UniRx;
 
     [CreateNodeMenu("Examples/ReactivePortDemo/ReactiveSumm","ReactiveSumm")]

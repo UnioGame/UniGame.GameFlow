@@ -6,6 +6,7 @@ namespace UniGame.UniNodes.Nodes.Runtime.Addressables
     using Commands;
     using UniGreenModules.UniCore.Runtime.Interfaces;
     using UniGreenModules.UniGame.AddressableTools.Runtime.Extensions;
+    using UniModules.UniGameFlow.NodeSystem.Runtime.Core.Attributes;
     using UnityEngine.AddressableAssets;
 
     [CreateNodeMenu("Addressables/AddressableLoadResources","AddressableLoadResources")]

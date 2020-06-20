@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UniGame.UniNodes.Nodes.Runtime.Common;
 using UniGame.UniNodes.NodeSystem.Runtime.Core;
 using UniGreenModules.UniCore.Runtime.Interfaces;
+using UniModules.UniGameFlow.NodeSystem.Runtime.Core.Attributes;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 

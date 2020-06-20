@@ -5,6 +5,7 @@
     using NodeSystem.Runtime.Core;
     using NodeSystem.Runtime.Core.Commands;
     using UniGreenModules.UniCore.Runtime.Interfaces;
+    using UniModules.UniGameFlow.NodeSystem.Runtime.Core.Attributes;
 
     [CreateNodeMenu("Common/DataDelay")]
     public class DataDelayNode : UniNode

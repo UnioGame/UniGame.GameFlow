@@ -8,6 +8,8 @@ using UnityEngine;
 
 namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
 {
+    using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
+
     [Serializable]
     public class SNode : SerializableNode, IProxyNode
     {

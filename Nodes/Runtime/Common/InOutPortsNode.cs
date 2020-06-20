@@ -5,6 +5,7 @@
     using NodeSystem.Runtime.Core.Commands;
     using NodeSystem.Runtime.Core.Interfaces;
     using UniGreenModules.UniCore.Runtime.Interfaces;
+    using UniModules.UniGameFlow.NodeSystem.Runtime.Core.Attributes;
 
     [CreateNodeMenu("Common/InOutPorts")]
     public class InOutPortsNode : UniNode

@@ -4,6 +4,8 @@
     using Interfaces;
     using UniGreenModules.UniCore.Runtime.DataFlow.Interfaces;
     using UniGreenModules.UniCore.Runtime.Interfaces;
+    using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
+    using UniModules.UniGameFlow.GameFlow.Runtime.Interfaces;
 
     public class GameServiceCommand : ILifeTimeCommand
     {

@@ -12,6 +12,7 @@
     using UniGreenModules.UniCore.Runtime.DataFlow.Interfaces;
     using UniGreenModules.UniCore.Runtime.ObjectPool.Runtime;
     using UniGreenModules.UniCore.Runtime.ObjectPool.Runtime.Extensions;
+    using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
     using UnityEngine;
 
     [Serializable]

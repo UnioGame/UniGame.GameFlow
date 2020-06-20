@@ -4,6 +4,7 @@
     using Commands;
     using Runtime.Interfaces;
     using UniGreenModules.UniCore.Runtime.Interfaces;
+    using UniModules.UniGameFlow.NodeSystem.Runtime.Core.Attributes;
 
     [CreateNodeMenu("Common/PortNode","GraphPort")]
     public class UniPortNode : UniNode, IUniPortNode

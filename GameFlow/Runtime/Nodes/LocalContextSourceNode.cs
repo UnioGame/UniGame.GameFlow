@@ -9,6 +9,7 @@ using UnityEngine;
 
 namespace UniModules.UniGameFlow.GameFlow.Runtime.Nodes
 {
+    using NodeSystem.Runtime.Core.Attributes;
     using UniGreenModules.UniContextData.Runtime.Entities;
     using UniGreenModules.UniGame.AddressableTools.Runtime.Extensions;
     using UniGreenModules.UniGame.SerializableContext.Runtime.Abstract;
@@ -25,7 +26,7 @@ namespace UniModules.UniGameFlow.GameFlow.Runtime.Nodes
         private EntityContext _context;
 
         [SerializeField]
-        private ContextContainerAssetReference localContextContainer;
+        private AssetReferenceContextContainer localContextContainer;
         
         [Header("Data Source")] 
         [SerializeField]

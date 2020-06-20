@@ -6,6 +6,7 @@
     using UniGreenModules.UniCore.Runtime.Interfaces;
     using UniGreenModules.UniRoutine.Runtime;
     using UniGreenModules.UniRoutine.Runtime.Extension;
+    using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
 
     public class SimpleSystem3 : GameService
     {

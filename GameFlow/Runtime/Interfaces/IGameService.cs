@@ -1,9 +1,9 @@
-﻿namespace UniGame.UniNodes.GameFlow.Runtime.Interfaces
+﻿namespace UniModules.UniGameFlow.GameFlow.Runtime.Interfaces
 {
     using System;
-    using UniGreenModules.UniCore.Runtime.DataFlow.Interfaces;
+    using global::UniGame.UniNodes.GameFlow.Runtime.Interfaces;
+    using UniGame.Core.Runtime.Interfaces;
     using UniGreenModules.UniCore.Runtime.Interfaces;
-    using UniRx;
 
     public interface IGameService : 
         IDisposable, 

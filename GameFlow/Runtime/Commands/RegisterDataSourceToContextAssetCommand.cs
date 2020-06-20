@@ -7,6 +7,7 @@
     using UniGreenModules.UniCore.Runtime.ProfilerTools;
     using UniGreenModules.UniGame.AddressableTools.Runtime.Extensions;
     using UniGreenModules.UniGame.SerializableContext.Runtime.Addressables;
+    using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
 
     [Serializable]
     public class RegisterDataSourceToContextAssetCommand : ILifeTimeCommand

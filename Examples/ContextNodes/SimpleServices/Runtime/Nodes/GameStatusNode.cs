@@ -8,6 +8,7 @@
     using UniGreenModules.UniCore.Runtime.Interfaces;
     using UniGreenModules.UniCore.Runtime.ProfilerTools;
     using UniGreenModules.UniCore.Runtime.Rx.Extensions;
+    using UniModules.UniGameFlow.NodeSystem.Runtime.Core.Attributes;
     using UniNodes.Nodes.Runtime.Common;
     using UniRx;
     using UnityEngine;

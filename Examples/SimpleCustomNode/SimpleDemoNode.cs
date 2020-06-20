@@ -5,6 +5,7 @@ namespace UniGame.UniNodes.Examples.SimpleCustomNode
     using NodeSystem.Runtime.Attributes;
     using NodeSystem.Runtime.Core;
     using NodeSystem.Runtime.ReactivePorts;
+    using UniModules.UniGameFlow.NodeSystem.Runtime.Core.Attributes;
 
     [CreateNodeMenu("Examples/SimpleCustomNodes/SimpleNode",nodeName = "Simple Node")]
     public class SimpleDemoNode : UniNode

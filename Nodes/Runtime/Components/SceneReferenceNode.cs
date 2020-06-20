@@ -2,6 +2,7 @@
 {
     using global::UniGame.UniNodes.Nodes.Runtime.Common;
     using global::UniGame.UniNodes.NodeSystem.Runtime.Core;
+    using NodeSystem.Runtime.Core.Attributes;
     using UnityEngine;
 
     [CreateNodeMenu("Scene/SceneReference")]

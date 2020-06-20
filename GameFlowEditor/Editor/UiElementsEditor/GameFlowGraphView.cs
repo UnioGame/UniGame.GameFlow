@@ -10,6 +10,7 @@ namespace UniGame.GameFlowEditor.Editor
     using UniGreenModules.UniCore.EditorTools.Editor.Utility;
     using UniGreenModules.UniCore.Runtime.DataFlow;
     using UniGreenModules.UniCore.Runtime.DataFlow.Interfaces;
+    using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
     using UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.BaseEditor;
     using UniNodes.NodeSystem.Runtime.Core;
     using UniNodes.NodeSystem.Runtime.Core.Nodes;

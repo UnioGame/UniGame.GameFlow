@@ -5,6 +5,11 @@
     using UniGreenModules.UniCore.Runtime.DataFlow;
     using UniGreenModules.UniCore.Runtime.DataFlow.Interfaces;
     using UniGreenModules.UniCore.Runtime.Interfaces;
+    using UniGreenModules.UniCore.Runtime.ObjectPool.Runtime;
+    using UniGreenModules.UniCore.Runtime.ObjectPool.Runtime.Extensions;
+    using UniModules.UniGame.Core.Runtime.DataFlow;
+    using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
+    using UniModules.UniGameFlow.GameFlow.Runtime.Interfaces;
     using UniRx;
 
     /// <summary>
@@ -19,24 +24,22 @@
 
         public IContext Bind(IContext context)
         {
-            return OnBind(context, lifeTimeDefinition);
+            var compositeLifetime = this.Spawn<ComposedLifeTime>();
+            compositeLifetime.Bind(context.LifeTime);
+            LifeTime.AddCleanUpAction(() => compositeLifetime.Despawn());
+            
+            return OnBind(context, compositeLifetime);
         }
         
         /// <summary>
         /// complete service awaiter to mark it as ready
         /// </summary>
-        public void Complete()
-        {
-            isReady.Value = true;
-        }
+        public void Complete() => isReady.Value = true;
         
         /// <summary>
         /// terminate service lifeTime to release resources
         /// </summary>
-        public void Dispose()
-        {
-            lifeTimeDefinition.Terminate();
-        }
+        public void Dispose() => lifeTimeDefinition.Terminate();
 
         public bool IsComplete => isReady.Value;
 
