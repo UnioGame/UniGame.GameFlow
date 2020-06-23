@@ -46,7 +46,7 @@
 
         public void Publish<T>(T value)
         {
-            PrintLog($"{message}: GRAPH:{GraphData.ItemName} : {name} \n\t {value.GetType().Name} : {value}", mode);
+            PrintLog($"{message}: GRAPH:{GraphData.ItemName} : {name} \n\t TYPE {typeof(T)} {value?.GetType().Name} : {value}", mode);
         }
         
         private void PrintLog(string messageData, LogMode logMode)
