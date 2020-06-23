@@ -19,7 +19,7 @@
         private readonly IContext sourceContext;
         private readonly IMessagePublisher target;
 
-        private RoutineHandler handler;
+        private RoutineHandle handler;
 
         public PortValuePreTransferCommand(
             Func<IContext,IMessagePublisher,IEnumerator> action,

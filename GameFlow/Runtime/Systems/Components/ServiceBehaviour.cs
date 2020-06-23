@@ -2,12 +2,9 @@
 
 namespace UniModules.UniGameFlow.GameFlow.Runtime.Systems.Components
 {
-    using System;
-    using System.Collections.Generic;
     using UniGame.Core.Runtime.DataFlow.Interfaces;
     using UniGame.Core.Runtime.Interfaces;
     using UniGreenModules.UniCore.Runtime.DataFlow;
-    using UniGreenModules.UniGame.AddressableTools.Runtime.Extensions;
     using UniRx;
     using UniRx.Async;
 
@@ -18,11 +15,12 @@ namespace UniModules.UniGameFlow.GameFlow.Runtime.Systems.Components
         [SerializeField]
         private bool _dontDestroy = false;
         
+#if ODIN_INSPECTOR
+        [Sirenix.OdinInspector.InlineProperty]
+        [Sirenix.OdinInspector.HideLabel]
+#endif
         [SerializeField]
-        private List<AssetReferenceService> _referenceServices = new List<AssetReferenceService>();
-
-        [SerializeField]
-        private List<StateContextService> _services = new List<StateContextService>();
+        public ContextServiceData _serviceData = new ContextServiceData();
 
         #endregion
 
@@ -41,16 +39,7 @@ namespace UniModules.UniGameFlow.GameFlow.Runtime.Systems.Components
         
         private async UniTask<Unit> ExecuteServices()
         {
-            foreach (var service in _services) {
-                var disposable = await service.Execute();
-                _lifeTime.AddDispose(disposable);
-            }
-            
-            foreach (var serviceReference in _referenceServices) {
-                var service    = await serviceReference.LoadAssetTaskAsync(_lifeTime);
-                var disposable = await service.Execute();
-                _lifeTime.AddDispose(disposable);
-            }
+            _serviceData.Execute(LifeTime);
             
             return Unit.Default;
         }

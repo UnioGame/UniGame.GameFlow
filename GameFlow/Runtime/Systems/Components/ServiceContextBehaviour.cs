@@ -8,6 +8,8 @@ namespace UniModules.UniGameFlow.GameFlow.Runtime.Systems.Components
     using UniGame.Core.Runtime.Interfaces;
     using UniGreenModules.UniCore.Runtime.DataFlow;
     using UniGreenModules.UniCore.Runtime.Interfaces;
+    using UniGreenModules.UniCore.Runtime.ObjectPool.Runtime;
+    using UniGreenModules.UniCore.Runtime.ObjectPool.Runtime.Extensions;
     using UniGreenModules.UniGame.AddressableTools.Runtime.Extensions;
     using UniGreenModules.UniGame.SerializableContext.Runtime.Addressables;
     using UniGreenModules.UniGame.SerializableContext.Runtime.AssetTypes;
@@ -20,7 +22,6 @@ namespace UniModules.UniGameFlow.GameFlow.Runtime.Systems.Components
         
         [SerializeField]
         private bool _dontDestroy = false;
-
         [SerializeField]
         private AssetReferenceContextContainer contextReference;
         [SerializeField]
@@ -28,11 +29,12 @@ namespace UniModules.UniGameFlow.GameFlow.Runtime.Systems.Components
         [SerializeField]
         private ContextAsset contextAsset;
         
+#if ODIN_INSPECTOR
+        [Sirenix.OdinInspector.InlineProperty]
+        [Sirenix.OdinInspector.HideLabel]
+#endif
         [SerializeField]
-        private List<AssetReferenceContextService> _referenceServices = new List<AssetReferenceContextService>();
-
-        [SerializeField]
-        private List<ContextService> _services = new List<ContextService>();
+        public ContextServiceData serviceData = new ContextServiceData();
 
         #endregion
 
@@ -52,17 +54,8 @@ namespace UniModules.UniGameFlow.GameFlow.Runtime.Systems.Components
         private async UniTask<Unit> ExecuteServices()
         {
             var context = await LoadContext();
-            
-            foreach (var service in _services) {
-                var disposable = await service.Execute(context);
-                _lifeTime.AddDispose(disposable);
-            }
-            
-            foreach (var serviceReference in _referenceServices) {
-                var service    = await serviceReference.LoadAssetTaskAsync(_lifeTime);
-                var disposable = await service.Execute(context);
-                _lifeTime.AddDispose(disposable);
-            }
+
+            serviceData.ExecuteServices(context, LifeTime);
             
             return Unit.Default;
         }
