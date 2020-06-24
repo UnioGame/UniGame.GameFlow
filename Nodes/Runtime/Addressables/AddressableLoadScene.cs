@@ -55,6 +55,7 @@
         {
             input.PortValueChanged.
                 Where(x => input.HasValue).
+                First().
                 Do(async x => await sceneAsset.LoadSceneTaskAsync(LifeTime)).
                 Subscribe().
                 AddTo(LifeTime);
