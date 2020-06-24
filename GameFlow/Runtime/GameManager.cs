@@ -1,6 +1,5 @@
 ﻿namespace Taktika.GameRuntime
 {
-    using System;
     using System.Collections.Generic;
     using Abstract;
     using UniGame.UniNodes.NodeSystem.Runtime.Core;
@@ -13,16 +12,11 @@
     using UniRx;
     using UniRx.Async;
     using UnityEngine;
-    using UnityEngine.AddressableAssets;
-    using UnityEngine.ResourceManagement.ResourceProviders;
-    using UnityEngine.SceneManagement;
 
     public class GameManager : MonoBehaviour, IGameManager, ILifeTimeContext
     {
         #region inspector
 
-        [SerializeField] private AssetReference entryPoint;
-        
         [SerializeField]
         private List<UniGraph> executionItems = new List<UniGraph>();
 
@@ -50,12 +44,11 @@
         
         #region public methods
         
-        public async void Initialize(IContext context)
+        public void Initialize(IContext context)
         {
             gameContext = context;
             ExecuteGraphs();
             ExecuteServices();
-            await LoadEntryPoint();
         }
 
         #endregion
@@ -82,16 +75,6 @@
                 LifeTime.AddDispose(disposable);
             }
             
-            return Unit.Default;
-        }
-
-        private async UniTask<Unit> LoadEntryPoint()
-        {
-            if(entryPoint.RuntimeKeyIsValid() == false)
-                return Unit.Default;
-#if !UNITY_EDITOR
-            await entryPoint.LoadSceneTaskAsync(LifeTime, LoadSceneMode.Single);
-#endif
             return Unit.Default;
         }
 
