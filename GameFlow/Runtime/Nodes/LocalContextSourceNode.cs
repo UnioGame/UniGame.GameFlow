@@ -10,6 +10,7 @@ using UnityEngine;
 namespace UniModules.UniGameFlow.GameFlow.Runtime.Nodes
 {
     using NodeSystem.Runtime.Core.Attributes;
+    using UniGame.SerializableContext.Runtime.Addressables;
     using UniGreenModules.UniContextData.Runtime.Entities;
     using UniGreenModules.UniGame.AddressableTools.Runtime.Extensions;
     using UniGreenModules.UniGame.SerializableContext.Runtime.Abstract;
