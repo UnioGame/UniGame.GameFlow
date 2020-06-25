@@ -52,7 +52,7 @@ MonoBehaviour:
     - input
     values:
     - id: 2
-      nodeId: 104
+      nodeId: 137
       fieldName: input
       direction: 0
       connectionType: 0
@@ -65,7 +65,7 @@ MonoBehaviour:
         broadcastersCount: 0
       connections: []
       instancePortList: 0
-  uniqueId: 120
+  uniqueId: 137
   nodes: []
   serializableNodes:
   - id: 0
@@ -75,7 +75,7 @@ MonoBehaviour:
   - id: 4
   - id: 5
   nodeGroups: []
-  graphScale: {x: 1.15, y: 1.15, z: 1}
+  graphScale: {x: 0.7561437, y: 0.7561437, z: 1}
   references:
     version: 1
     00000000:
@@ -84,10 +84,26 @@ MonoBehaviour:
         id: 115
         width: 220
         nodeName: Demo Test Node
-        position: {x: 812, y: 224}
+        position: {x: 628, y: -103}
         ports:
-          keys: []
-          values: []
+          keys:
+          - inFloat
+          values:
+          - id: 122
+            nodeId: 115
+            fieldName: inFloat
+            direction: 0
+            connectionType: 0
+            showBackingValue: 2
+            isDynamic: 1
+            isInstancePortList: 0
+            portValue:
+              name: inFloat
+              serializedValueTypes:
+              - System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+              broadcastersCount: 0
+            connections: []
+            instancePortList: 0
         inFloat: 0
     00000001:
       type: {class: DemoTestNode, ns: , asm: unigame.nodesystem.examples}
@@ -95,10 +111,26 @@ MonoBehaviour:
         id: 116
         width: 220
         nodeName: Demo Test Node
-        position: {x: 664, y: 72}
+        position: {x: 843, y: 47}
         ports:
-          keys: []
-          values: []
+          keys:
+          - inFloat
+          values:
+          - id: 123
+            nodeId: 116
+            fieldName: inFloat
+            direction: 0
+            connectionType: 0
+            showBackingValue: 2
+            isDynamic: 1
+            isInstancePortList: 0
+            portValue:
+              name: inFloat
+              serializedValueTypes:
+              - System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+              broadcastersCount: 0
+            connections: []
+            instancePortList: 0
         inFloat: 0
     00000002:
       type: {class: DemoTestNode, ns: , asm: unigame.nodesystem.examples}
@@ -106,10 +138,26 @@ MonoBehaviour:
         id: 117
         width: 220
         nodeName: Demo Test Node
-        position: {x: 419, y: 260}
+        position: {x: 301, y: 354}
         ports:
-          keys: []
-          values: []
+          keys:
+          - inFloat
+          values:
+          - id: 124
+            nodeId: 117
+            fieldName: inFloat
+            direction: 0
+            connectionType: 0
+            showBackingValue: 2
+            isDynamic: 1
+            isInstancePortList: 0
+            portValue:
+              name: inFloat
+              serializedValueTypes:
+              - System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+              broadcastersCount: 0
+            connections: []
+            instancePortList: 0
         inFloat: 0
     00000003:
       type: {class: DemoTestNode, ns: , asm: unigame.nodesystem.examples}
@@ -119,8 +167,24 @@ MonoBehaviour:
         nodeName: Demo Test Node
         position: {x: 673, y: 381}
         ports:
-          keys: []
-          values: []
+          keys:
+          - inFloat
+          values:
+          - id: 125
+            nodeId: 118
+            fieldName: inFloat
+            direction: 0
+            connectionType: 0
+            showBackingValue: 2
+            isDynamic: 1
+            isInstancePortList: 0
+            portValue:
+              name: inFloat
+              serializedValueTypes:
+              - System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+              broadcastersCount: 0
+            connections: []
+            instancePortList: 0
         inFloat: 0
     00000004:
       type: {class: DemoTestNode, ns: , asm: unigame.nodesystem.examples}
@@ -128,10 +192,26 @@ MonoBehaviour:
         id: 119
         width: 220
         nodeName: Demo Test Node
-        position: {x: 383, y: 119}
+        position: {x: 315, y: 32}
         ports:
-          keys: []
-          values: []
+          keys:
+          - inFloat
+          values:
+          - id: 126
+            nodeId: 119
+            fieldName: inFloat
+            direction: 0
+            connectionType: 0
+            showBackingValue: 2
+            isDynamic: 1
+            isInstancePortList: 0
+            portValue:
+              name: inFloat
+              serializedValueTypes:
+              - System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+              broadcastersCount: 0
+            connections: []
+            instancePortList: 0
         inFloat: 0
     00000005:
       type: {class: DemoTestNode, ns: , asm: unigame.nodesystem.examples}
@@ -139,8 +219,24 @@ MonoBehaviour:
         id: 120
         width: 220
         nodeName: Demo Test Node
-        position: {x: 536, y: 222}
+        position: {x: 321, y: 182}
         ports:
-          keys: []
-          values: []
+          keys:
+          - inFloat
+          values:
+          - id: 127
+            nodeId: 120
+            fieldName: inFloat
+            direction: 0
+            connectionType: 0
+            showBackingValue: 2
+            isDynamic: 1
+            isInstancePortList: 0
+            portValue:
+              name: inFloat
+              serializedValueTypes:
+              - System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+              broadcastersCount: 0
+            connections: []
+            instancePortList: 0
         inFloat: 0
