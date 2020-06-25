@@ -88,7 +88,7 @@ namespace UniGame.GameFlowEditor.Editor
         private ReactiveProperty<UniGraph> _targetGraph = new ReactiveProperty<UniGraph>();
         private Vector2 _minimapPosition = new Vector2(50,50);
         private Vector2 _settingsPinnedPosition = new Vector2(50,250);
-        
+
         private GameFlowGraphView _uniGraphView;
         private UniGraphSettingsPinnedView _settingsPinnedView;
         private UniGraphToolbarView _graphToolbarView;
@@ -154,10 +154,17 @@ namespace UniGame.GameFlowEditor.Editor
             if (Application.isPlaying == false) {
                 InitializeGraph(uniGraph);
             }
-            
+
+            var graphAsset = ScriptableObject.CreateInstance<UniAssetGraph>();
+
+            if (AssetGraph && uniGraph.name == _graphName) {
+                graphAsset.position = AssetGraph.position;
+                graphAsset.scale = AssetGraph.scale;
+            }
+
             _graphName = uniGraph == null ? string.Empty : uniGraph.name;
-            
-            AssetGraph = ScriptableObject.CreateInstance<UniAssetGraph>();
+            graphAsset.name = _graphName;
+            AssetGraph = graphAsset;
             AssetGraph.Activate(uniGraph);
             return AssetGraph;
         }
