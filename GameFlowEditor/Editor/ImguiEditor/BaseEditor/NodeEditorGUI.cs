@@ -11,6 +11,7 @@
     using Runtime.Interfaces;
     using Sirenix.Utilities;
     using UniGreenModules.UniCore.EditorTools.Editor.Utility;
+    using UniModules.UniGameFlow.GameFlowEditor.Editor.Tools;
     using UniRx;
     using UnityEditor;
     using UnityEngine;
@@ -516,7 +517,7 @@
                 asset.AddToEditorSelection(add);
             }
             else {
-                Container.Initialize(node as SerializableNode);
+                Container.Initialize(node as SerializableNode,node.GraphData as NodeGraph);
                 Container.AddToEditorSelection(add);
             }
         }

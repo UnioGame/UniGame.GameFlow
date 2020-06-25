@@ -3,8 +3,11 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Runtime.Extensions;
     using Runtime.Interfaces;
+    using UniGreenModules.UniContextData.Runtime.Entities;
     using UniGreenModules.UniCore.Runtime.Attributes;
+    using UniGreenModules.UniCore.Runtime.Interfaces;
     using UniGreenModules.UniCore.Runtime.ObjectPool.Runtime;
     using UniGreenModules.UniCore.Runtime.ObjectPool.Runtime.Extensions;
     using UniRx;
@@ -34,23 +37,23 @@
         [SerializeReference]
         public List<INode> serializableNodes = new List<INode>();
 
+        [HideInInspector]
         [SerializeReference]
         public List<INodesGroup> nodeGroups = new List<INodesGroup>();
 
-        public Vector3 graphScale = Vector3.one;
-        
         #endregion
 
-        private List<INode> _allNodes = new List<INode>();
+        private EntityContext _graphContext = new EntityContext();
         
-        [NonSerialized]
-        private GraphData _graphMap;
+        private List<INode> _allNodes = new List<INode>();
         
         [NonSerialized] 
         private Dictionary<int, INode> nodesCache;
 
         #region public properties
 
+        public IContext Context => _graphContext;
+        
         public IReadOnlyList<INode> Nodes => GetNodes();
 
         public IReadOnlyList<INode> SerializableNodes => serializableNodes;
@@ -59,11 +62,13 @@
 
         public sealed override IGraphData GraphData => this;
 
-        public Vector3 Scale => graphScale;
-        
         #endregion
 
+        public void Dispose() => Exit();
+
         #region graph operations
+
+        protected override void OnExecute() => LifeTime.AddCleanUpAction(() => _graphContext.Release());
 
         /// <summary>
         /// get unique Id in graph scope
@@ -73,8 +78,6 @@
 
         public int UpdateId(int oldId) => GetId();
 
-        public void SetScale(Vector3 scale) => this.graphScale = scale;
-        
         public IReadOnlyList<INode> GetNodes()
         {
             _allNodes = _allNodes ?? new List<INode>();
@@ -123,8 +126,10 @@
             if (node == null) return null;
             
             node.SetUpData(this);
+            node.Initialize(this);
             node.SetName(itemName);
-
+            node.UpdatePortByAttributes();
+            
             return node;
         }
 
@@ -182,8 +187,6 @@
             return this;
         }
 
-        public void Dispose() => Exit();
-        
         public override void Validate()
         {
             graph = this;
@@ -209,11 +212,10 @@
         }
 
         #endregion
+        
+        #region private methods
 
-        protected override void OnInitialize()
-        {
-            _allNodes?.Clear();
-        }
+        protected override void OnInitialize() => _allNodes?.Clear();
 
         private INode AddAssetNode(Type type)
         {
@@ -240,6 +242,8 @@
             }
             return node;
         }
+        
+        #endregion
 
     }
 }

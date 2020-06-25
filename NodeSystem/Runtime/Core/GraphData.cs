@@ -4,25 +4,30 @@
     using System.Collections.Generic;
     using Interfaces;
     using Runtime.Interfaces;
+    using UniGreenModules.UniCore.Runtime.Interfaces;
 
     [Serializable]
     public class GraphData : IGraphData, IUniqueIdProvider
     {
         private readonly string _name;
         private readonly int _id;
+        private readonly IContext _context;
         private readonly INodeGraph _graph;
         
         private Dictionary<int,IGraphItem> _graphItems = new Dictionary<int, IGraphItem>(16);
 
         #region constructor
 
-        public GraphData(string name,int id)
+        public GraphData(string name,int id, IContext context)
         {
             _name = name;
             _id = id;
+            _context = context;
         }
         
         #endregion
+
+        public IContext Context => _context;
 
         public string ItemName => _name;
 

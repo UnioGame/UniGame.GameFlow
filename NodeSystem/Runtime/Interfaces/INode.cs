@@ -12,7 +12,6 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
 
         void SetName(string nodeName);
         
-        
         /// <summary> Remove an instance port from the node </summary>
         void RemovePort(string fieldName);
 

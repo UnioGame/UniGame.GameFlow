@@ -11,6 +11,7 @@ namespace UniGame.GameFlowEditor.Editor
     using UniGreenModules.UniCore.Runtime.DataFlow;
     using UniGreenModules.UniCore.Runtime.DataFlow.Interfaces;
     using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
+    using UniModules.UniGameFlow.GameFlowEditor.Editor.Tools;
     using UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.BaseEditor;
     using UniNodes.NodeSystem.Runtime.Core;
     using UniNodes.NodeSystem.Runtime.Core.Nodes;
@@ -62,7 +63,7 @@ namespace UniGame.GameFlowEditor.Editor
         {
             var selection = node is Object asset ? 
                 asset : 
-                SelectionContainer.Initialize(node as SerializableNode);
+                SelectionContainer.Initialize(node as SerializableNode, node.GraphData as NodeGraph);
             selection.AddToEditorSelection(false);
         }
 
@@ -71,7 +72,6 @@ namespace UniGame.GameFlowEditor.Editor
             var graphData = SourceGraph.UniGraph;
 
             graphData.SetPosition(graph.position);
-            graphData.SetScale(graph.scale);
             
             SaveGroupInfo(graphData);
             SaveStackNodeInfo(graphData);

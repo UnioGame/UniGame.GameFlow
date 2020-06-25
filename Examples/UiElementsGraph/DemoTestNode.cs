@@ -8,4 +8,8 @@ public class DemoTestNode : SNode
 {
     [Port(PortIO.Input)]
     public float inFloat;
+    
+    [Port(PortIO.Output)]
+    public float outFloat;
+
 }

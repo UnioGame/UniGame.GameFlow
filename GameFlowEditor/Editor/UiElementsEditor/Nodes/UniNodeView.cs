@@ -6,7 +6,7 @@ namespace UniGame.GameFlowEditor.Editor
     using Core.EditorTools.Editor.UiElements;
     using Runtime;
     using UniGreenModules.UniCore.EditorTools.Editor.Utility;
-    using UniModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.GameFlowEditor.Editor.Tools;
+    using UniModules.UniGameFlow.GameFlowEditor.Editor.Tools;
     using UniNodes.NodeSystem.Inspector.Editor.ContentContextWindow;
     using UniNodes.NodeSystem.Runtime.Core;
     using UniNodes.NodeSystem.Runtime.Core.Nodes;
@@ -44,7 +44,7 @@ namespace UniGame.GameFlowEditor.Editor
             Context = nodeTarget as UniBaseNode;
             var sourceNode = Context?.SourceNode;
             if (sourceNode is SerializableNode assetNode) {
-                NodeContainer.Initialize(assetNode);
+                NodeContainer.Initialize(assetNode,sourceNode.GraphData as NodeGraph);
             }
 
             var container = sourceNode.DrawNodeUiElements();

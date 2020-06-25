@@ -14,8 +14,6 @@
 
         IGraphData RemoveNode(INode node);
 
-//        IGraphData AddItem(IGraphItem item);
-//
-//        IGraphItem Get(int id);
+        IContext Context { get; }
     }
 }

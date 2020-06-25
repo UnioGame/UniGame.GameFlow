@@ -1,6 +1,5 @@
 ﻿namespace UniGame.UniNodes.NodeSystem.Runtime.Core
 {
-    using System;
     using System.Collections.Generic;
     using System.Runtime.CompilerServices;
     using Attributes;
@@ -8,12 +7,24 @@
     using Runtime.Interfaces;
     using Sirenix.Utilities;
     using UniGreenModules.UniCore.Runtime.Rx.Extensions;
+    using UniGreenModules.UniGame.AddressableTools.Runtime.Extensions;
+    using UniGreenModules.UniGame.SerializableContext.Runtime.Addressables;
+    using UniModules.UniGame.Context.Runtime.Abstract;
     using UniRx;
     using UnityEngine;
 
     [HideNode]
     public class UniGraph : NodeGraph, IUniGraph
     {
+        #region inspector properties
+        
+        [SerializeField]
+        private List<AsyncContextDataSourceAssetReference> _assetReferenceSources = new List<AsyncContextDataSourceAssetReference>();
+        
+        [SerializeField]
+        private List<AsyncContextDataSource> _dataSources = new List<AsyncContextDataSource>();
+        
+        #endregion
         
         #region private properties
 
@@ -54,7 +65,9 @@
 
         protected sealed override void OnInitialize()
         {
+
             base.OnInitialize();
+            
             InitializeGraphNodes();
                
 #if UNITY_EDITOR
@@ -64,10 +77,33 @@
 #endif
         }
 
-        protected override void OnExecute()
+        protected sealed override void OnExecute()
         {
+            base.OnExecute();
+            
             LifeTime.AddCleanUpAction(() => ActiveGraphs.Remove(this));
 
+            ExecuteNodes();
+            
+            LoadDataSources();
+            
+            ActiveGraphs.Add(this);
+        }
+
+        private async void LoadDataSources()
+        {
+            foreach (var dataSource in _dataSources) {
+                dataSource.RegisterAsync(Context);
+            }
+            
+            foreach (var referenceSource in _assetReferenceSources) {
+                var source = await referenceSource.LoadAssetTaskAsync(LifeTime);
+                source.RegisterAsync(Context);
+            }
+        }
+
+        private void ExecuteNodes()
+        {
             for (var i = 0; i < cancellationNodes.Count; i++) {
                 var x = cancellationNodes[i];
                 x.PortValue.PortValueChanged.
@@ -85,8 +121,6 @@
             }
             
             uniNodes.ForEach( x => x.Execute());
-
-            ActiveGraphs.Add(this);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

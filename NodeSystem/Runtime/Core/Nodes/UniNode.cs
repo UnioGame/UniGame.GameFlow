@@ -71,8 +71,7 @@
         /// add all supported node commands here
         /// </summary>
         protected virtual void UpdateCommands(List<ILifeTimeCommand> nodeCommands){}
-
-
+        
         /// <summary>
         /// finish node life time
         /// </summary>

@@ -2,11 +2,13 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
 {
     using System.Collections.Generic;
     using Core.Interfaces;
+    using UniGreenModules.UniCore.Runtime.Interfaces;
     using IGraphData = Core.IGraphData;
     using Vector2 = UnityEngine.Vector2;
 
     public interface IImmutableNode : IGraphItem
     {
+        IContext Context { get; }
 
         IGraphData GraphData { get; }
 

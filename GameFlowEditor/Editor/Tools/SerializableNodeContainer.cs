@@ -1,10 +1,9 @@
-﻿using UnityEngine;
-
-namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
+﻿namespace UniModules.UniGameFlow.GameFlowEditor.Editor.Tools
 {
+    using global::UniGame.UniNodes.NodeSystem.Runtime.Core;
     using UniGreenModules.UniCore.EditorTools.Editor.AssetOperations;
-    using UniModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.GameFlowEditor.Editor.Tools;
     using UnityEditor;
+    using UnityEngine;
 
     public class SerializableNodeContainer : ScriptableObject
     {
@@ -21,10 +20,13 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
 #endif
         [SerializeReference]
         public SerializableNode node;
-
-        public SerializableNodeContainer Initialize(SerializableNode target)
+        
+        public NodeGraph graph;
+        
+        public SerializableNodeContainer Initialize(SerializableNode target, NodeGraph graphData)
         {
             node = target;
+            graph = graphData;
             var nodeType = node?.GetType();
             type = node?.GetType().Name;
             script = AssetEditorTools.GetScriptAsset(nodeType);
@@ -34,9 +36,9 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
 
 #if ODIN_INSPECTOR
 
-        public SerializableNode DrawNode(SerializableNode node, GUIContent label)
+        public SerializableNode DrawNode(SerializableNode target, GUIContent label)
         {
-            node.DrawNodeImGui();
+            target.DrawSerializableNode(graph);
             return node;
         }
         

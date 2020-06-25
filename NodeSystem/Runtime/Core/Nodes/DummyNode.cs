@@ -6,6 +6,8 @@
     using UniGame.UniNodes.NodeSystem.Runtime.Core;
     using UniGame.UniNodes.NodeSystem.Runtime.Core.Interfaces;
     using UniGame.UniNodes.NodeSystem.Runtime.Interfaces;
+    using UniGreenModules.UniContextData.Runtime.Entities;
+    using UniGreenModules.UniCore.Runtime.Interfaces;
     using UnityEngine;
 
     [HideNode]
@@ -15,6 +17,7 @@
         public int    Id       { get; private set; }
         public string ItemName { get; private set;  }
 
+        public IContext Context { get; }
         public IGraphData              GraphData { get; }
         public IEnumerable<INodePort> Ports     { get; }
         public IEnumerable<INodePort>   Outputs   { get; }

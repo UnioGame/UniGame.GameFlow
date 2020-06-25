@@ -10,6 +10,7 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
     using Runtime.Interfaces;
     using UniCore.Runtime.ProfilerTools;
     using UniGreenModules.UniCore.Runtime.Attributes;
+    using UniGreenModules.UniCore.Runtime.Interfaces;
     using UniGreenModules.UniCore.Runtime.ObjectPool.Runtime;
     using UniGreenModules.UniCore.Runtime.ObjectPool.Runtime.Extensions;
     using UniGreenModules.UniGame.Core.Runtime.Attributes.FieldTypeDrawer;
@@ -71,6 +72,8 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
 
         public HashSet<INodePort> RuntimePorts => portValues = 
             portValues ?? (portValues = new HashSet<INodePort>());
+
+        public IContext Context => GraphData.Context;
         
         /// <summary>
         /// unique node id

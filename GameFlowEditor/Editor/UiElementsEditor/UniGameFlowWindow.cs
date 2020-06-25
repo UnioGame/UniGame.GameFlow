@@ -11,7 +11,7 @@ namespace UniGame.GameFlowEditor.Editor
     using UniGreenModules.UniCore.EditorTools.Editor.Utility;
     using UniGreenModules.UniCore.Runtime.DataFlow;
     using UniGreenModules.UniCore.Runtime.Rx.Extensions;
-    using UniModules.UniGameFlow.UniNodesSystem.Assets.UniGame.UniNodes.GameFlowEditor.Editor.Tools;
+    using UniModules.UniGameFlow.GameFlowEditor.Editor.Tools;
     using UniNodes.GameFlowEditor.Editor;
     using UniNodes.NodeSystem.Runtime.Core;
     using UniRx;
@@ -259,6 +259,12 @@ namespace UniGame.GameFlowEditor.Editor
             
             //redraw editor if assembly reloaded
             //AssemblyReloadEvents.afterAssemblyReload += OnAssemblyReloaded;
+            Observable.FromEvent(
+                    ev => AssemblyReloadEvents.afterAssemblyReload += OnAssemblyReloaded,
+                    ev => AssemblyReloadEvents.afterAssemblyReload -= OnAssemblyReloaded).
+                Subscribe().
+                AddTo(_lifeTime);
+            
             Observable.FromEvent(
                     ev => AssemblyReloadEvents.beforeAssemblyReload += OnBeforeAssemblyReload,
                     ev => AssemblyReloadEvents.beforeAssemblyReload -= OnBeforeAssemblyReload).

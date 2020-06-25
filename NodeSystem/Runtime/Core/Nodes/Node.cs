@@ -8,6 +8,7 @@
     using Runtime.Interfaces;
     using UniCore.Runtime.ProfilerTools;
     using UniGreenModules.UniCore.Runtime.Attributes;
+    using UniGreenModules.UniCore.Runtime.Interfaces;
     using UniGreenModules.UniGame.Core.Runtime.Attributes.FieldTypeDrawer;
     using UnityEngine;
 
@@ -41,7 +42,7 @@
         [HideInInspector]
         [HideNodeInspector] 
         public NodePortDictionary ports = new NodePortDictionary();
-      
+
         #endregion
         
         private IProxyNode serializableNode;
@@ -49,6 +50,8 @@
         protected IGraphData graph;
 
         #region public properties
+
+        public IContext Context => GraphData.Context;
         
         /// <summary>
         /// regular source node
