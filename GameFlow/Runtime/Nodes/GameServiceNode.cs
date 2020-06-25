@@ -1,6 +1,5 @@
 ﻿namespace UniGame.UniNodes.GameFlow.Runtime.Nodes
 {
-    using Interfaces;
     using NodeSystem.Runtime.Attributes;
     using UniGreenModules.UniCore.Runtime.Interfaces;
     using UniModules.UniGameFlow.GameFlow.Runtime.Interfaces;
@@ -22,7 +21,7 @@
         where TService : class, TServiceApi, new()
     {
  
-        protected override async UniTask<TServiceApi> CreateService(IContext context) => service ?? new TService();
+        protected override async UniTask<TServiceApi> CreateService(IContext context) => Service ?? new TService();
         
     }
 }

@@ -1,7 +1,6 @@
 ﻿namespace UniGame.UniNodes.GameFlow.Runtime.Nodes
 {
     using System;
-    using Interfaces;
     using NodeSystem.Runtime.Attributes;
     using UniCore.Runtime.ProfilerTools;
     using UniGreenModules.UniCore.Runtime.Attributes;
@@ -23,14 +22,14 @@
         where TServiceApi : IGameService
     {
         [SerializeField]
-        protected TServiceApi service;
+        private TServiceApi _service;
 
         #region inspector
 
         [Header("Service Status")]
         [ReadOnlyValue]
         [SerializeField]
-        private bool isReady;
+        private bool _isReady;
         
         #endregion
         
@@ -38,7 +37,7 @@
 
         public bool waitForServiceReady = true;
 
-        public TServiceApi Service { get; private set; }
+        public TServiceApi Service => _service;
 
         protected abstract UniTask<TServiceApi> CreateService(IContext context);
 
@@ -50,32 +49,31 @@
                 AddTo(LifeTime);
         }
 
-        protected virtual void OnServiceCreated()
+        protected virtual void OnServiceCreated(IContext context)
         {
         }
 
         private async UniTask<IContext> OnContextAvailable(IContext context)
         {
-            service = await CreateService(context);
+            _service = await CreateService(context);
             
-            LifeTime.AddDispose(service);
+            LifeTime.AddDispose(_service);
             
-            Service = service;
             await BindService(context);
-            OnServiceCreated();
+            OnServiceCreated(context);
             GameLog.LogRuntime($"NODE SERVICE {typeof(TServiceApi).Name} CREATED");
             return context;
         }
         
         private async UniTask<IContext> BindService(IContext context)
         {
-            service.Bind(context);
+            _service.Bind(context);
             
             _serviceDisposable?.Dispose();
 
-            _serviceDisposable = service.IsReady.
+            _serviceDisposable = _service.IsReady.
                 Where(x => x || !waitForServiceReady).
-                Do(_ => context.Publish<TServiceApi>(service)).
+                Do(_ => context.Publish<TServiceApi>(_service)).
                 Do(_ => Complete()).
                 Subscribe().
                 AddTo(LifeTime);
