@@ -6,6 +6,7 @@
     using Runtime.Extensions;
     using Runtime.Interfaces;
     using Sirenix.Utilities;
+    using UniGreenModules.UniContextData.Runtime.Interfaces;
     using UniGreenModules.UniCore.Runtime.Rx.Extensions;
     using UniGreenModules.UniGame.AddressableTools.Runtime.Extensions;
     using UniGreenModules.UniGame.SerializableContext.Runtime.Addressables;
@@ -19,7 +20,7 @@
         #region inspector properties
         
         [SerializeField]
-        private List<AsyncContextDataSourceAssetReference> _assetReferenceSources = new List<AsyncContextDataSourceAssetReference>();
+        private List<AssetReferenceDataSource> _assetReferenceSources = new List<AssetReferenceDataSource>();
         
         [SerializeField]
         private List<AsyncContextDataSource> _dataSources = new List<AsyncContextDataSource>();
@@ -65,7 +66,6 @@
 
         protected sealed override void OnInitialize()
         {
-
             base.OnInitialize();
             
             InitializeGraphNodes();
@@ -75,6 +75,9 @@
                 Validate();
             }
 #endif
+            if (Application.isPlaying) {
+                LifeTime.AddCleanUpAction(StopAllNodes);
+            }
         }
 
         protected sealed override void OnExecute()
@@ -84,12 +87,11 @@
             LifeTime.AddCleanUpAction(() => ActiveGraphs.Remove(this));
 
             ExecuteNodes();
-            
             LoadDataSources();
             
             ActiveGraphs.Add(this);
         }
-
+        
         private async void LoadDataSources()
         {
             foreach (var dataSource in _dataSources) {
@@ -101,6 +103,8 @@
                 source.RegisterAsync(Context);
             }
         }
+
+        private void StopAllNodes() => uniNodes.ForEach( x => x.Exit());
 
         private void ExecuteNodes()
         {

@@ -31,7 +31,7 @@ namespace UniModules.UniGameFlow.GameFlow.Runtime.Nodes
         
         [Header("Data Source")] 
         [SerializeField]
-        private AsyncContextDataSourceAssetReference dataSources;
+        private AssetReferenceDataSource dataSources;
 
         protected override void UpdateCommands(List<ILifeTimeCommand> nodeCommands)
         {

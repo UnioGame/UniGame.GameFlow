@@ -15,7 +15,7 @@
     public class ContextRegisterValuesNode : ContextNode
     {
         
-        public List<AsyncContextDataSourceAssetReference> sources;
+        public List<AssetReferenceDataSource> sources;
 
         protected override async void OnContextActivate(IContext context)
         {

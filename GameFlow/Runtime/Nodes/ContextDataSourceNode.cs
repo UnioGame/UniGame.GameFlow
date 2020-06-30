@@ -13,7 +13,7 @@
     [CreateNodeMenu("GameSystem/Data Source")]
     public class ContextDataSourceNode : InOutPortNode
     {
-        public AsyncContextDataSourceAssetReference contextDataSource;
+        public AssetReferenceDataSource contextDataSource;
 
         protected override void UpdateCommands(List<ILifeTimeCommand> nodeCommands)
         {

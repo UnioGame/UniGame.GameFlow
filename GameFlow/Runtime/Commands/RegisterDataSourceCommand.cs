@@ -18,10 +18,7 @@
     {
         private readonly UniTask<IContext> contextTask;
         private readonly AssetReference resource;
-
-        public Object asset;
-        public IAsyncContextDataSource dataSource;
-
+        
         public RegisterDataSourceCommand(UniTask<IContext> contextTask,AssetReference resource)
         {
             this.contextTask = contextTask;
@@ -30,8 +27,8 @@
 
         public async void Execute(ILifeTime lifeTime)
         {
-            asset = await resource.LoadAssetTaskAsync<ScriptableObject>(lifeTime);
-            dataSource = asset as IAsyncContextDataSource;
+            var asset = await resource.LoadAssetTaskAsync<ScriptableObject>(lifeTime);
+            var dataSource = asset as IAsyncContextDataSource;
             if (dataSource == null) {
                 GameLog.LogError($"NULL asset loaded from {resource}");
                 return;

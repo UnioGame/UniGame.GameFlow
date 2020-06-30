@@ -17,7 +17,7 @@
         #if ODIN_INSPECTOR
         [Sirenix.OdinInspector.DrawWithUnity] 
         #endif
-        public List<AsyncContextDataSourceAssetReference> sources;
+        public List<AssetReferenceDataSource> sources;
 
         protected override void UpdateCommands(List<ILifeTimeCommand> nodeCommands)
         {
@@ -26,7 +26,7 @@
             //create sync result for task
             var outputContextTask = UniTask.FromResult<IContext>(PortPair.OutputPort);
             //create node commands
-            var sourceOutputPortCommand = new RegisterDataSourcesCommand<AsyncContextDataSourceAssetReference>(outputContextTask,sources);
+            var sourceOutputPortCommand = new RegisterDataSourcesCommand<AssetReferenceDataSource>(outputContextTask,sources);
             nodeCommands.Add(sourceOutputPortCommand);
         }
 

@@ -23,7 +23,7 @@
         public ContextAssetReference contextAsset;
 
         [Header("Data Source")] 
-        public AsyncContextDataSourceAssetReference contextDataSources;
+        public AssetReferenceDataSource contextDataSources;
 
         protected override void UpdateCommands(List<ILifeTimeCommand> nodeCommands)
         {
