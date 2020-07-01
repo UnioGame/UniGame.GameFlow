@@ -3,6 +3,7 @@
     using System;
     using System.Threading;
     using Interfaces;
+    using UniGreenModules.UniContextData.Runtime.Interfaces;
     using UniGreenModules.UniCore.Runtime.Interfaces;
     using UniGreenModules.UniCore.Runtime.Rx.Extensions;
     using UniRx;
@@ -14,7 +15,8 @@
     }
     
     public abstract class ContextService<TApi> : 
-        BaseServiceAsset<IObservable<IContext>>
+        BaseServiceAsset<IObservable<IContext>>, 
+        IAsyncContextDataSource
         where TApi : class, IGameService
     {
         #region inspector
@@ -27,6 +29,14 @@
         private static SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1,1);
 
         #region public methods
+        
+
+        public async UniTask<IContext> RegisterAsync(IContext context)
+        {
+            var service = await CreateServiceAsync(context);
+            context.Publish(service);
+            return context;
+        }
         
         /// <summary>
         /// service factory
@@ -50,7 +60,7 @@
                 semaphoreSlim.Release();
             }
             var service = isSharedSystem ? _sharedService : 
-                (await CreateServiceInternalAsync(context)).AddTo(LifeTime);
+                (await CreateServiceInternalAsync(context)).AddTo(context.LifeTime);
             
             service.Bind(context);
             return service;
@@ -68,6 +78,5 @@
 
         protected abstract UniTask<TApi> CreateServiceInternalAsync(IContext context);
 
-  
     }
 }

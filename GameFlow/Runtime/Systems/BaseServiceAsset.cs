@@ -4,7 +4,6 @@ namespace UniModules.UniGameFlow.GameFlow.Runtime.Systems
 {
     using System;
     using Sirenix.OdinInspector;
-    using UniGreenModules.UniCore.Runtime.Rx.Extensions;
     using UniGreenModules.UniStateMachine.Runtime.Interfaces;
     using UniRx;
     using UniRx.Async;
@@ -29,6 +28,10 @@ namespace UniModules.UniGameFlow.GameFlow.Runtime.Systems
 
         public async UniTask<IDisposable> Execute(TData source)
         {
+            if (Application.isPlaying == false) {
+                return Disposable.Empty;
+            }
+            
             if(_isActive) return this;
 
             Reset();
