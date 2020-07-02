@@ -5,7 +5,7 @@
     using UnityEngine.AddressableAssets;
 
     [Serializable]
-    public class AssetReferenceContextService : AssetReferenceT<ContextService<IGameService>>
+    public class AssetReferenceContextService : AssetReferenceT<ContextServiceAsset<IGameService>>
     {
         public AssetReferenceContextService(string guid) : base(guid)
         {

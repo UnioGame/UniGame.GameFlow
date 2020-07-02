@@ -18,7 +18,7 @@ namespace UniModules.UniGameFlow.GameFlow.Runtime.Nodes
         private List<AssetReferenceContextService> _referenceServices = new List<AssetReferenceContextService>();
 
         [SerializeField]
-        private List<ContextService> _services = new List<ContextService>();
+        private List<ContextServiceAsset> _services = new List<ContextServiceAsset>();
         
         protected override async void OnContextActivate(IContext context)
         {
