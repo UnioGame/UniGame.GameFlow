@@ -66,7 +66,7 @@
         public INodePort GetPort()
         {
             //if (port != null) return port;
-            var targetNode = _data.GetNode(nodeId);
+            var targetNode = _data?.GetNode(nodeId);
             if (targetNode == null)
                 return null;
             
