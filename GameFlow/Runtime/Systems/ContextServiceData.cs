@@ -29,7 +29,7 @@
 
         public List<AssetReferenceContextService> referenceServices = new List<AssetReferenceContextService>();
 
-        public List<ContextService<IGameService>> services = new List<ContextService<IGameService>>();
+        public List<ContextServiceAsset<IGameService>> services = new List<ContextServiceAsset<IGameService>>();
 
 
         public async UniTask<IObservable<IContext>> Execute(ILifeTime lifeTime)
@@ -57,7 +57,7 @@
         public async UniTask<Unit> ExecuteServices(IObservable<IContext> source,ILifeTime lifeTime)
         {
             var loadedServices = await referenceServices.
-                    LoadScriptableAssetsTaskAsync<ContextService<IGameService>>(lifeTime);
+                    LoadScriptableAssetsTaskAsync<ContextServiceAsset<IGameService>>(lifeTime);
             loadedServices.AddRange(services);
 
             await UniTask.WhenAll(

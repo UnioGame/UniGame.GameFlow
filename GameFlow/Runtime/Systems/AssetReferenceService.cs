@@ -8,7 +8,7 @@
 
     [Serializable]
     public class AssetReferenceService<TService>: 
-        AssetReferenceScriptableObject<ScriptableObject, ContextService<TService>>
+        AssetReferenceScriptableObject<ScriptableObject, ContextServiceAsset<TService>>
         where TService : class, IGameService
     {
         public AssetReferenceService(string guid) : base(guid)
