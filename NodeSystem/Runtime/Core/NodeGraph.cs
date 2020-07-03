@@ -187,6 +187,7 @@
             return this;
         }
 
+        [ContextMenu("Validate")]
         public override void Validate()
         {
             graph = this;
@@ -208,7 +209,6 @@
             }
             
             nodeItems.Despawn();
-
         }
 
         #endregion
