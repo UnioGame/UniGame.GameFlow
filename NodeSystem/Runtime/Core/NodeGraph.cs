@@ -194,7 +194,8 @@
             nodes.Clear();
             _allNodes?.Clear();
             
-            serializableNodes.RemoveAll(x => x == null);
+            serializableNodes.RemoveAll(x => x == null || x is Object);
+            
             nodes.AddRange(GetComponents<Node>());
             nodes.RemoveAll(x => !x);
             nodes.Remove(this);
