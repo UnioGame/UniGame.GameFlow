@@ -45,7 +45,7 @@ namespace UniModules.UniGameFlow.GameFlow.Runtime.Systems
             LifeTime.AddCleanUpAction(() => _observableSource = null);
             LifeTime.AddCleanUpAction(() => _isActive = false);
 
-            OnInitialize(source);
+            await OnInitialize(source);
             
             return this;
         }

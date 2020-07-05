@@ -3,6 +3,7 @@
     using System;
     using System.Threading;
     using Interfaces;
+    using UniGame.Core.Runtime.ScriptableObjects;
     using UniGreenModules.UniContextData.Runtime.Interfaces;
     using UniGreenModules.UniCore.Runtime.Interfaces;
     using UniGreenModules.UniCore.Runtime.Rx.Extensions;
@@ -15,7 +16,7 @@
     }
     
     public abstract class ContextService<TApi> : 
-        BaseServiceAsset<IObservable<IContext>>, 
+        DisposableScriptableObject, 
         IAsyncContextDataSource
         where TApi : class, IGameService
     {
@@ -50,7 +51,8 @@
             {
                 if (isSharedSystem && _sharedService == null) {
                     _sharedService = await CreateServiceInternalAsync(context);
-                    _sharedService.AddTo(LifeTime);
+                    LifeTime.AddDispose(_sharedService);
+                    LifeTime.AddCleanUpAction(() => _sharedService = null);
                 }
             }
             finally
@@ -68,13 +70,7 @@
         
         #endregion
 
-        protected sealed override async UniTask<Unit> OnInitialize(IObservable<IContext> source)
-        {
-            source?.DistinctUntilChanged().
-                Subscribe(async x => await CreateServiceAsync(x)).
-                AddTo(LifeTime);
-            return Unit.Default;
-        }
+        protected override void OnDispose() => _lifeTimeDefinition.Release();
 
         protected abstract UniTask<TApi> CreateServiceInternalAsync(IContext context);
 

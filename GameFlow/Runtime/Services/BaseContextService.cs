@@ -8,7 +8,7 @@
     using UniRx.Async;
     using UnityEngine;
 
-    public abstract class StateContextService : 
+    public abstract class BaseContextService : 
         BaseServiceAsset<IObservable<IContext>>,
         IAsyncState<IDisposable>
     {
