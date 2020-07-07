@@ -24,7 +24,7 @@
         private List<AssetReferenceStateService> _referenceServices = new List<AssetReferenceStateService>();
 
         [SerializeField]
-        private List<StateContextService> _services = new List<StateContextService>();
+        private List<BaseContextService> _services = new List<BaseContextService>();
         
         #endregion
         

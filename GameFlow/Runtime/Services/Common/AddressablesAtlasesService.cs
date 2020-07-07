@@ -1,36 +1,36 @@
 ﻿namespace UniModules.UniGameFlow.GameFlow.Runtime.Services.Common
 {
-    using System;
     using global::UniGame.UniNodes.GameFlow.Runtime;
-    using Interfaces;
-    using UniCore.Runtime.ProfilerTools;
+    using UniGame.AddressableTools.Runtime.SpriteAtlases;
     using UniGreenModules.UniCore.Runtime.Rx.Extensions;
     using UniRx;
-    using UnityEngine;
-    using UnityEngine.AddressableAssets;
-    using UnityEngine.U2D;
+    using UnityEngine.SceneManagement;
 
     public class AddressablesAtlasesService : GameService
     {
-
-        public AddressablesAtlasesService()
+        private IAddressableSpriteAtlasHandler _addressableSpriteAtlasHandler;
+        
+        public AddressablesAtlasesService(IAddressableSpriteAtlasHandler spriteAtlasManager)
         {
-            Observable.FromEvent(
-                x => SpriteAtlasManager.atlasRequested += OnSpriteAtlasRequested,
-                x => SpriteAtlasManager.atlasRequested -= OnSpriteAtlasRequested).Subscribe().
+            _addressableSpriteAtlasHandler = spriteAtlasManager;
+            _addressableSpriteAtlasHandler.
+                Execute().
                 AddTo(LifeTime);
+
+            Observable.FromEvent(
+                x => SceneManager.activeSceneChanged += OnSceneChanged,
+                x => SceneManager.activeSceneChanged -= OnSceneChanged).
+                Subscribe().
+                AddTo(LifeTime);
+
         }
 
 
-        private async void OnSpriteAtlasRequested(string tag, Action<SpriteAtlas> atlasAction)
+        private void OnSceneChanged(Scene fromScene, Scene toScene)
         {
-            GameLog.LogRuntime($"OnSpriteAtlasRequested : TAG {tag}", Color.blue);
-            var result = await Addressables.LoadAssetAsync<SpriteAtlas>(tag).Task;
-            if (result == null) {
-                GameLog.LogRuntime("Null Atlas Result");
+            if (fromScene.path == toScene.path)
                 return;
-            }
-            atlasAction(result);
+            _addressableSpriteAtlasHandler?.Unload();
         }
         
     }
