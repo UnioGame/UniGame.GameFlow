@@ -11,11 +11,12 @@ namespace UniModules.UniGameFlow.GameFlow.Runtime.Services.Common
     [CreateAssetMenu(menuName = "UniGame/GameSystem/Services/AddressablesAtlasesService",fileName = nameof(AddressablesAtlasesService))]
     public class AddressablesAtlasesServiceAsset : ContextService<AddressablesAtlasesService>
     {
-        public AssetReferenceAtlasHandler atlasHandler;
+        [SerializeField]
+        private AssetReferenceAtlasConfiguration _configuration;
         
         protected override async UniTask<AddressablesAtlasesService> CreateServiceInternalAsync(IContext context)
         {
-            var handler = await atlasHandler.LoadAssetTaskAsync(context.LifeTime);
+            var handler = await _configuration.LoadAssetTaskAsync(context.LifeTime);
             var service = new AddressablesAtlasesService(handler);
             return service;
         }
