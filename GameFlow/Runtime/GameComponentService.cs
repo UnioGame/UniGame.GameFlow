@@ -1,7 +1,5 @@
 ﻿namespace UniGame.UniNodes.GameFlow.Runtime
 {
-    using Interfaces;
-    using UniGreenModules.UniCore.Runtime.DataFlow.Interfaces;
     using UniGreenModules.UniCore.Runtime.Interfaces;
     using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
     using UniModules.UniGameFlow.GameFlow.Runtime.Interfaces;
@@ -20,8 +18,10 @@
         public IReadOnlyReactiveProperty<bool> IsReady => Service.IsReady;
         
         public IContext Bind(IContext context) => Service.Bind(context);
+        public void Complete()
+        {
+        }
 
         private void OnDestroy() => Dispose();
-
     }
 }
