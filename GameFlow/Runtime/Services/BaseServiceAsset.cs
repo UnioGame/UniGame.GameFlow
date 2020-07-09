@@ -3,7 +3,7 @@
 namespace UniModules.UniGameFlow.GameFlow.Runtime.Systems
 {
     using System;
-    using Sirenix.OdinInspector;
+    using UniGreenModules.UniCore.Runtime.Attributes;
     using UniGreenModules.UniStateMachine.Runtime.Interfaces;
     using UniRx;
     using UniRx.Async;
@@ -16,7 +16,7 @@ namespace UniModules.UniGameFlow.GameFlow.Runtime.Systems
     {
         #region inspector
 
-        [ReadOnly]
+        [ReadOnlyValue]
         [SerializeField] 
         private bool _isActive;
 
