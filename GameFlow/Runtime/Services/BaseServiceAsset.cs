@@ -3,6 +3,7 @@
 namespace UniModules.UniGameFlow.GameFlow.Runtime.Systems
 {
     using System;
+    using Sirenix.OdinInspector;
     using UniGreenModules.UniCore.Runtime.Attributes;
     using UniGreenModules.UniStateMachine.Runtime.Interfaces;
     using UniRx;
@@ -20,6 +21,10 @@ namespace UniModules.UniGameFlow.GameFlow.Runtime.Systems
         [SerializeField] 
         private bool _isActive;
 
+        [HideInInspector]
+        [SerializeField]
+        private bool _isPlaying = false;
+        
         #endregion
 
         private TData _observableSource;
@@ -34,8 +39,6 @@ namespace UniModules.UniGameFlow.GameFlow.Runtime.Systems
             
             if(_isActive) return this;
 
-            Reset();
-            
             if (source == null)
                 return this;
             
@@ -61,6 +64,8 @@ namespace UniModules.UniGameFlow.GameFlow.Runtime.Systems
         #if UNITY_EDITOR
 
 #if ODIN_INSPECTOR
+        [Sirenix.OdinInspector.ShowIf("_isPlaying")]
+        [Sirenix.OdinInspector.HideIf("_isActive")]
         [Sirenix.OdinInspector.Button]
 #endif
         private async void Start()
@@ -69,10 +74,16 @@ namespace UniModules.UniGameFlow.GameFlow.Runtime.Systems
         }
         
 #if ODIN_INSPECTOR
+        [Sirenix.OdinInspector.ShowIf("_isActive")]
         [Sirenix.OdinInspector.Button]
 #endif
         private void Stop() => Exit();
 #endif
+
+        protected override void OnActivate()
+        {
+            _isPlaying = Application.isPlaying;
+        }
 
         #endregion
     }

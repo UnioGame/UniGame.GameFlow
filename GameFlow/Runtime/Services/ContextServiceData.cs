@@ -41,17 +41,19 @@
 
         public async UniTask<IObservable<IContext>> LoadDataSource(ILifeTime lifeTime)
         {
-            var contextAssets = ClassPool.Spawn<List<ContextContainerAsset>>();
-            
+
             if (contextSources?.Count <= 0) {
                 GameLog.LogRuntime($"EMPTY context system sources");
                 return Observable.Empty<IContext>();
             }
             
+            var contextAssets = new List<ContextContainerAsset>();
+
             //load all context sources
-            await contextSources.LoadAssetsTaskAsync(contextAssets, lifeTime);
+            var sources = await contextSources.LoadAssetsTaskAsync(contextAssets, lifeTime);
+            
             //merge all source to single observable
-            return contextAssets.Merge();
+            return sources.Merge();
         }
         
         public async UniTask<Unit> ExecuteServices(IObservable<IContext> source,ILifeTime lifeTime)

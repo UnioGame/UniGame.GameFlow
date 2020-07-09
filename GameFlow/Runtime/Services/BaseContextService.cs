@@ -1,6 +1,8 @@
-﻿namespace UniModules.UniGameFlow.GameFlow.Runtime.Systems
+﻿namespace UniModules.UniGameFlow.GameFlow.Runtime.Services
 {
     using System;
+    using Systems;
+    using UniCore.Runtime.ProfilerTools;
     using UniGreenModules.UniCore.Runtime.Interfaces;
     using UniGreenModules.UniCore.Runtime.Rx.Extensions;
     using UniGreenModules.UniStateMachine.Runtime.Interfaces;
@@ -25,8 +27,8 @@
 
         public async UniTask<IDisposable> Execute()
         {
-            serviceData.Execute(LifeTime);
-            return this;
+            var contextObservable = await serviceData.LoadDataSource(LifeTime);
+            return await Execute(contextObservable);
         }
 
         public void Release() => Exit();
@@ -37,15 +39,13 @@
                 Subscribe(UpdateContext).
                 AddTo(LifeTime);
 
-            serviceData.ExecuteServices(source,LifeTime);
-
-            return Unit.Default;
+            return await serviceData.ExecuteServices(source,LifeTime);
         }
 
         
         protected virtual void UpdateContext(IContext context)
         {
-            
+            GameLog.Log($"ContextService {name} UpdateContext");
         }
     }
 }
