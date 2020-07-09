@@ -36,6 +36,7 @@
         protected sealed override async UniTask<Unit> OnInitialize(IObservable<IContext> source)
         {
             source.
+                Where(x => x!=null).
                 Subscribe(UpdateContext).
                 AddTo(LifeTime);
 
