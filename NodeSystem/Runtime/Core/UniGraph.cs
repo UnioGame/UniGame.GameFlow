@@ -140,7 +140,7 @@
             for (var i = 0; i < connections.Count; i++) {
                 var connection = connections[i];
                 var port       = connection.Port;
-                if(port.Direction == PortIO.Input || port.NodeId == Id)
+                if(port == null || port.Direction == PortIO.Input || port.NodeId == Id)
                     continue;
                 
                 var value = port.Value;

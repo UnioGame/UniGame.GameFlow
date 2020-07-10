@@ -20,7 +20,6 @@
         #region inspector
 
         [HideNodeInspector] 
-        [HideInInspector]
         [ReadOnlyValue] 
         [SerializeField] public int id;
 
@@ -39,7 +38,6 @@
 
         /// <summary> It is recommended not to modify these at hand. Instead, see <see cref="NodeInputAttribute"/> and <see cref="NodeOutputAttribute"/> </summary>
         [SerializeField] 
-        [HideInInspector]
         [HideNodeInspector] 
         public NodePortDictionary ports = new NodePortDictionary();
 

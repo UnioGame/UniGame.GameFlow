@@ -328,10 +328,7 @@
             return connection.Port;
         }
 
-        public void Validate()
-        {
-            VerifyConnections();
-        }
+        public void Validate() => VerifyConnections();
 
         /// <summary> Get index of the connection connecting this and specified ports </summary>
         public int GetConnectionIndex(INodePort port)

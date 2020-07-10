@@ -265,6 +265,7 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
         public virtual void Validate()
         {
             var removedPorts = ClassPool.Spawn<List<NodePort>>();
+            
             foreach (var portPair in ports) {
                 var port = portPair.Value;
                 if (port == null || string.IsNullOrEmpty(port.fieldName)) {
@@ -276,7 +277,9 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
                                                             x.Direction == port.Direction);
                 if (value == null || string.IsNullOrEmpty(value.ItemName)) {
                     removedPorts.Add(port);
+                    continue;
                 }
+                port.Validate();
             }
 
             removedPorts.ForEach(RemovePort);
