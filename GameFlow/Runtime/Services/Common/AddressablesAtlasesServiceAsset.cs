@@ -12,12 +12,11 @@ namespace UniModules.UniGameFlow.GameFlow.Runtime.Services.Common
     public class AddressablesAtlasesServiceAsset : ContextService<AddressablesAtlasesService>
     {
         [SerializeField]
-        private AssetReferenceAtlasConfiguration _configuration;
+        private AddressableSpriteAtlasConfiguration _configuration;
         
         protected override async UniTask<AddressablesAtlasesService> CreateServiceInternalAsync(IContext context)
         {
-            var handler = await _configuration.LoadAssetTaskAsync(context.LifeTime);
-            var service = new AddressablesAtlasesService(handler);
+            var service = new AddressablesAtlasesService(_configuration);
             return service;
         }
     }
