@@ -11,6 +11,9 @@ namespace UniModules.UniGameFlow.GameFlow.Runtime.Services.Common
     [CreateAssetMenu(menuName = "UniGame/GameSystem/Services/AddressablesAtlasesService",fileName = nameof(AddressablesAtlasesService))]
     public class AddressablesAtlasesServiceAsset : ContextService<AddressablesAtlasesService>
     {
+#if ODIN_INSPECTOR
+        [Sirenix.OdinInspector.InlineEditor()]
+#endif
         [SerializeField]
         private AddressableSpriteAtlasConfiguration _configuration;
         
