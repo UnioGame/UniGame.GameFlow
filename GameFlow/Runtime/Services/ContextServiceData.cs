@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Cysharp.Threading.Tasks;
     using Interfaces;
     using UniCore.Runtime.ProfilerTools;
     using UniGame.Core.Runtime.DataFlow.Interfaces;
@@ -13,7 +14,7 @@
     using UniGreenModules.UniGame.AddressableTools.Runtime.Extensions;
     using UniGreenModules.UniGame.SerializableContext.Runtime.Addressables;
     using UniRx;
-    using UniRx.Async;
+    
     using UnityEngine.AddressableAssets;
 
     [Serializable]

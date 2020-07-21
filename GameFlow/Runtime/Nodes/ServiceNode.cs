@@ -1,6 +1,7 @@
 ﻿namespace UniGame.UniNodes.GameFlow.Runtime.Nodes
 {
     using System;
+    using Cysharp.Threading.Tasks;
     using NodeSystem.Runtime.Attributes;
     using UniCore.Runtime.ProfilerTools;
     using UniGreenModules.UniCore.Runtime.Attributes;
@@ -9,7 +10,7 @@
     using UniModules.UniGameFlow.GameFlow.Runtime.Interfaces;
     using UniNodes.Nodes.Runtime.Common;
     using UniRx;
-    using UniRx.Async;
+    
     using UnityEngine;
 
     /// <summary>

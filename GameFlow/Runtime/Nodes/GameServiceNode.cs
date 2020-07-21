@@ -1,9 +1,10 @@
 ﻿namespace UniGame.UniNodes.GameFlow.Runtime.Nodes
 {
+    using Cysharp.Threading.Tasks;
     using NodeSystem.Runtime.Attributes;
     using UniGreenModules.UniCore.Runtime.Interfaces;
     using UniModules.UniGameFlow.GameFlow.Runtime.Interfaces;
-    using UniRx.Async;
+    
 
     [HideNode]
     public abstract class GameServiceNode<TService> :

@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using Abstract;
+    using Cysharp.Threading.Tasks;
     using UniGame.UniNodes.NodeSystem.Runtime.Core;
     using UniGreenModules.UniCore.Runtime.DataFlow;
     using UniGreenModules.UniCore.Runtime.Interfaces;
@@ -11,7 +12,7 @@
     using UniModules.UniGameFlow.GameFlow.Runtime.Services;
     using UniModules.UniGameFlow.GameFlow.Runtime.Systems;
     using UniRx;
-    using UniRx.Async;
+    
     using UnityEngine;
 
     public class GameManager : MonoBehaviour, IGameManager, ILifeTimeContext

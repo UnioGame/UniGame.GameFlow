@@ -4,11 +4,12 @@ using UniGame.UniNodes.Nodes.Runtime.Common;
 using UniGame.UniNodes.NodeSystem.Runtime.Core;
 using UniGreenModules.UniCore.Runtime.Interfaces;
 using UniGreenModules.UniGame.SerializableContext.Runtime.Addressables;
-using UniRx.Async;
+
 using UnityEngine;
 
 namespace UniModules.UniGameFlow.GameFlow.Runtime.Nodes
 {
+    using Cysharp.Threading.Tasks;
     using NodeSystem.Runtime.Core.Attributes;
     using UniGame.SerializableContext.Runtime.Addressables;
     using UniGreenModules.UniContextData.Runtime.Entities;
