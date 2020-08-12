@@ -45,7 +45,6 @@
 
         public IReadOnlyReactiveProperty<bool> IsReady => isReady;
 
-        [Obsolete("This method will be removed!")]
         protected virtual IContext OnBind(IContext context, ILifeTime lifeTime)
         {
             return context;
