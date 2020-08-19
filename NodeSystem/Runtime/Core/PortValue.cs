@@ -7,6 +7,7 @@
     using System.Runtime.CompilerServices;
     using Connections;
     using Runtime.Interfaces;
+    using UniGreenModules.UniContextData.Runtime.Entities;
     using UniGreenModules.UniCore.Runtime.Attributes;
     using UniGreenModules.UniCore.Runtime.Common;
     using UniGreenModules.UniCore.Runtime.DataFlow;
@@ -39,9 +40,7 @@
 
         #region private property
 
-        private TypeData data;
-
-        private TypeDataBrodcaster broadcaster;
+        private EntityContext data;
 
         private ReactiveCommand portValueChanged = new ReactiveCommand();
 
@@ -124,11 +123,10 @@
             }
 
             data.Publish(value);
-            broadcaster.Publish(value);
             portValueChanged.Execute(Unit.Default);
         }
 
-        public void RemoveAllConnections() => broadcaster.Release();
+        public void RemoveAllConnections() => data.Release();
 
         public TData Get<TData>() => data.Get<TData>();
 
@@ -143,8 +141,8 @@
 
         public IDisposable Bind(IMessagePublisher contextData)
         {
-            var disposable = broadcaster.Bind(contextData);
-            broadcastersCount = broadcaster.ConnectionsCount;
+            var disposable = data.Bind(contextData);
+            broadcastersCount = data.ConnectionsCount;
             return disposable;
         }
 
@@ -158,8 +156,7 @@
             lifeTime               = lifeTimeDefeDefinition.LifeTime;
             lifeTimeDefeDefinition.Release();
 
-            data        = data ?? new TypeData();
-            broadcaster = broadcaster ?? new TypeDataBrodcaster();
+            data        = data ?? new EntityContext();
 
             lifeTime.AddCleanUpAction(data.Release);
             lifeTime.AddCleanUpAction(RemoveAllConnections);
@@ -183,8 +180,6 @@
                 if (type != null)
                     valueTypeFilter.Add(type);
             }
-
-            ;
         }
 
         [Conditional("UNITY_EDITOR")]
@@ -205,5 +200,6 @@
 #endif
 
         #endregion
+
     }
 }
