@@ -1,10 +1,10 @@
 {
   "name": "com.unigame.nodessystem",
   "author": "Mefodei (https://github.com/Mefodei)",
-  "displayName": "UniGame Nodes System Package",
-  "description": "Nodes System for Unity. Include base nodes realisation",
+  "displayName": "UniGame GameFlow",
+  "description": "GameFlow System for Unity. Include base nodes realisation",
   "unity": "2019.2",
-  "version": "2020.0.3",
+  "version": "2020.0.4",
   "homepage": "https://github.com/Mefodei/UniGameFlow#readme",
   "keywords": [
     "nodes",
@@ -14,8 +14,8 @@
   ],
   "dependencies": {
     "com.unigame.neuecc.unirx": "7.1.1",
-    "com.cysharp.unitask": "2.0.26",
-    "com.alelievr.node-graph-processor": "https://github.com/alelievr/NodeGraphProcessor.git?path=/Assets/com.alelievr.NodeGraphProcessor",
+    "com.unigame.neuecc.unitask": "2.0.31",
+    "com.alelievr.node-graph-processor": "https://github.com/UniGameTeam/NodeGraphProcessor.git?path=/Assets/com.alelievr.NodeGraphProcessor",
     "com.unigame.uielements": "2020.0.3",
     "com.unigame.unicore": "2020.0.2",
     "com.unigame.addressablestools": "2020.0.2",
