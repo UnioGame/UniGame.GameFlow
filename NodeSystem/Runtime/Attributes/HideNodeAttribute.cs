@@ -5,5 +5,6 @@
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true,Inherited = false)]
     public class HideNodeAttribute : Attribute
     {
+        
     }
 }
