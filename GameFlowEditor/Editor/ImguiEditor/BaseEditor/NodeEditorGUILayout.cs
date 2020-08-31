@@ -14,6 +14,7 @@
     using UniGreenModules.UniCore.Runtime.ObjectPool.Runtime.Extensions;
     using UniGreenModules.UniCore.Runtime.ReflectionUtils;
     using UniGreenModules.UniGame.Core.Runtime.Attributes.FieldTypeDrawer;
+    using UniModules.UniGameFlow.NodeSystem.Runtime.Extensions;
     using UnityEditor;
     using UnityEditorInternal;
     using UnityEngine;
@@ -128,7 +129,7 @@
         }
 
         public static void ShowBackingValueField(
-            NodeFieldData data,
+            PortField data,
             SerializedProperty property,
             bool isConnected,
             bool includeChildren,

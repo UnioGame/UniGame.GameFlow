@@ -8,22 +8,29 @@
     using Runtime.Core.Interfaces;
     using Runtime.Interfaces;
     using UniGreenModules.UniCore.Runtime.ReflectionUtils;
+    using UniModules.UniGameFlow.NodeSystem.Runtime.Extensions;
 
     public static class PortNodeExtensions 
     {
-        public static NodeFieldData GetPortData(this INode node, Type type, string fieldName)
+        public static PortField GetPortData(this INode node, Type type, string fieldName)
         {
             var field = type.GetFieldInfoCached(fieldName);
             return node.GetPortData(field, fieldName);
         }
 
-        public static NodeFieldData GetPortData(this INode node,FieldInfo info,string portName = "")
+        public static PortField GetPortData(this INode node,FieldInfo info,string portName = "")
         {
-            var field      = info.FieldType;
-            var attributes = info.GetCustomAttributes(false).ToList();
-        
-            var portData = attributes.FirstOrDefault(x => x is IPortData) as IPortData;
-            if (portData == null) return new NodeFieldData();
+            portName = string.IsNullOrEmpty(portName) ? info.Name : portName;
+            
+            var field    = info.FieldType;
+            
+            var portData = info.GetCustomAttributes(false).
+                OfType<IPortData>().
+                FirstOrDefault();
+            
+            if (portData == null) return new PortField() {
+                FieldInfo = info
+            };
 
             var name          = string.IsNullOrEmpty(portData.ItemName) ? portName : portData.ItemName;
             var direction     = portData.Direction;
@@ -44,7 +51,7 @@
                 types.Add(reactiveSource.ValueType);
             }
             
-            var result = new NodePortData() {
+            var result = new PortData() {
                 direction        = direction,
                 connectionType   = connection,
                 fieldName        = name,
@@ -54,7 +61,7 @@
                 showBackingValue = showBackValue,
             };
             
-            return new NodeFieldData() {
+            return new PortField() {
                 Value = value,
                 FieldInfo = info,
                 PortData = result,

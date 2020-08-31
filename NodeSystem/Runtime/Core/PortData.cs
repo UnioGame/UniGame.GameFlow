@@ -8,7 +8,7 @@
     using UnityEngine;
 
     [Serializable]
-    public class NodePortData : IPortData , IPoolable , ISerializationCallbackReceiver
+    public class PortData : IPortData , IPoolable , ISerializationCallbackReceiver
     {
         public List<string> typesValues = new List<string>();
         public string fieldName;
@@ -33,9 +33,9 @@
 
         public IReadOnlyList<Type> ValueTypes => valueTypes;
 
-        public NodePortData() { }
+        public PortData() { }
 
-        public NodePortData(IPortData portData)
+        public PortData(IPortData portData)
         {
             fieldName = portData.ItemName;
             direction = portData.Direction;

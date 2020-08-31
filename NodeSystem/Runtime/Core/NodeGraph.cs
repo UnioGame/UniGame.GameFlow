@@ -128,7 +128,7 @@
             node.SetUpData(this);
             node.Initialize(this);
             node.SetName(itemName);
-            node.UpdatePortByAttributes();
+            node.UpdateNodePorts();
             
             return node;
         }

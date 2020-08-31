@@ -8,6 +8,7 @@ namespace UniGame.GameFlowEditor.Runtime
     using UniNodes.NodeSystem.Runtime.Core;
     using UniNodes.NodeSystem.Runtime.Interfaces;
     using UnityEngine;
+    using PortData = GraphProcessor.PortData;
 
     [HideNode]
     [Serializable]
@@ -23,7 +24,7 @@ namespace UniGame.GameFlowEditor.Runtime
         
         #endregion
         
-        private Dictionary<INodePort,PortData> portDatas = new Dictionary<INodePort, PortData>(8);
+        private Dictionary<INodePort,PortData> portData = new Dictionary<INodePort, PortData>(8);
         
         #region public properties
         
@@ -57,7 +58,7 @@ namespace UniGame.GameFlowEditor.Runtime
 
         public PortData GetPortData(INodePort port)
         {
-            if (portDatas.TryGetValue(port, out var portData))
+            if (this.portData.TryGetValue(port, out var portData))
                 return portData;
             var targetType = port.ValueType;
             targetType = targetType == null ? typeof(object) : targetType;
@@ -69,7 +70,7 @@ namespace UniGame.GameFlowEditor.Runtime
                 identifier          = port.ItemName,
             };
             
-            portDatas[port] = portData;
+            this.portData[port] = portData;
             return portData;
         }
 
@@ -78,16 +79,10 @@ namespace UniGame.GameFlowEditor.Runtime
         #region custom port definition
         
         [CustomPortBehavior(nameof(inputs))]
-        public IEnumerable< PortData > GetPortsForInputs(List< SerializableEdge > edges)
-        {
-            return GetPorts(PortIO.Input);
-        }
+        public IEnumerable< PortData > GetPortsForInputs(List< SerializableEdge > edges) => GetPorts(PortIO.Input);
         
         [CustomPortBehavior(nameof(outputs))]
-        public IEnumerable< PortData > GetPortsForOutputs(List< SerializableEdge > edges)
-        {
-            return GetPorts(PortIO.Output);
-        }
+        public IEnumerable< PortData > GetPortsForOutputs(List< SerializableEdge > edges) => GetPorts(PortIO.Output);
 
         #endregion
         
@@ -98,11 +93,11 @@ namespace UniGame.GameFlowEditor.Runtime
         private void UpdatePorts()
         {
             foreach (var port in SourceNode.Ports) {
-                var portData = GetPortData(port);
+                var data = GetPortData(port);
                 var fieldName = port.IsInput ? 
                     nameof(inputs) : 
                     nameof(outputs);
-                AddPort(port.IsInput,fieldName,portData);
+                AddPort(port.IsInput,fieldName,data);
             }
         }
         
