@@ -23,15 +23,8 @@
         }
         
         public static NodeProcessor NodeProcessor => GetNodeProcessor();
-        
-        public static NodeProcessor GetNodeProcessor()
-        {
-            if (nodeProcessor) return nodeProcessor;
-            nodeProcessor = AssetEditorTools.GetAsset<NodeProcessor>(defaultProcessorPath) ??
-                            ScriptableObject.CreateInstance<NodeProcessor>();
-            nodeProcessor.SaveAsset(nameof(nodeProcessor), defaultProcessorPath);
-            return nodeProcessor;
-        }
+
+        public static NodeProcessor GetNodeProcessor() => (nodeProcessor = nodeProcessor.LoadOrCreate(defaultProcessorPath));
 
         public static void UpdatePorts(this INode node)
         {
