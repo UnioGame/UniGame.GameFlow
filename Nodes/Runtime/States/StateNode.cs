@@ -5,10 +5,10 @@ namespace UniModules.UniGameFlow.Nodes.Runtime.States
     using System;
     using global::UniGame.UniNodes.NodeSystem.Runtime.Attributes;
     using global::UniGame.UniNodes.NodeSystem.Runtime.Core;
-    using global::UniGame.UniNodes.NodeSystem.Runtime.Interfaces;
     using UniGame.Core.Runtime.DataFlow.Interfaces;
     using UniGame.Core.Runtime.Interfaces;
     using UniGreenModules.UniCore.Runtime.DataFlow;
+    using UniGreenModules.UniCore.Runtime.Rx.Extensions;
     using UniRx;
     using UnityEngine;
 
@@ -29,8 +29,10 @@ namespace UniModules.UniGameFlow.Nodes.Runtime.States
 
         public bool TakeOwnership(StateNode state)
         {
-            _lifeTime.Release();
-            
+            if (state.IsSingleState) {
+                _lifeTime.Release(); 
+            }
+            return true;
         }
 
         public void Dispose() => _lifeTime.Terminate();
@@ -54,8 +56,8 @@ namespace UniModules.UniGameFlow.Nodes.Runtime.States
         public ReactiveStateToken input = new ReactiveStateToken();
 
         #region public properties
-        
-        
+
+        public bool IsSingleState => isSingleOwner;
         
         #endregion
 
@@ -69,10 +71,11 @@ namespace UniModules.UniGameFlow.Nodes.Runtime.States
 
         protected override void OnExecute()
         {
-            
+            input.Subscribe(ExecuteState).
+                AddTo(LifeTime);
         }
 
-        protected virtual void ExecuteState(ILifeTime stateLifeTime,StateToken token)
+        protected void ExecuteState(StateToken token)
         {
             
         }
