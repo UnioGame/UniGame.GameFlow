@@ -9,6 +9,7 @@ namespace UniModules.UniGameFlow.Nodes.Runtime.States
     using UniGame.Core.Runtime.Interfaces;
     using UniGreenModules.UniCore.Runtime.DataFlow;
     using UniGreenModules.UniCore.Runtime.Rx.Extensions;
+    using UniGreenModules.UniGame.Core.Runtime.Rx;
     using UniRx;
     using UnityEngine;
 
@@ -21,9 +22,12 @@ namespace UniModules.UniGameFlow.Nodes.Runtime.States
     public class StateToken : ILifeTimeContext, IDisposable
     {
         private LifeTimeDefinition _lifeTime = new LifeTimeDefinition();
+        
         public  int                Id => _lifeTime.Id;
 
         public StateNode PreviousState { get; protected set; }
+
+        public StateNode ActiveState { get; protected set; }
 
         public ILifeTime LifeTime => _lifeTime;
 
@@ -32,6 +36,9 @@ namespace UniModules.UniGameFlow.Nodes.Runtime.States
             if (state.IsSingleState) {
                 _lifeTime.Release(); 
             }
+
+            PreviousState = ActiveState;
+            ActiveState   = state;
             return true;
         }
 
@@ -47,37 +54,36 @@ namespace UniModules.UniGameFlow.Nodes.Runtime.States
         [SerializeField]
         private bool isSingleOwner = true;
         
+        [SerializeField]
+        private BoolRecycleReactiveProperty _isActive = new BoolRecycleReactiveProperty();
+
         #endregion
         
-        private LifeTimeDefinition _stateLifetime;
-        
-
         [Port]
         public ReactiveStateToken input = new ReactiveStateToken();
 
         #region public properties
 
-        public bool IsSingleState => isSingleOwner;
+        public IReadOnlyReactiveProperty<bool> IsStateActive => _isActive;
         
+        public bool IsSingleState => isSingleOwner;
+
         #endregion
 
         protected sealed override void OnInitialize()
         {
-            _stateLifetime = _stateLifetime ?? new LifeTimeDefinition();
-            _stateLifetime.Release();
-            
             input.Initialize(this);
         }
 
-        protected override void OnExecute()
+        protected sealed override void OnExecute()
         {
-            input.Subscribe(ExecuteState).
+            input.Where(x => x.TakeOwnership(this) && _isActive.Value == false).
+                Do(x => _isActive.Value = true).
+                Do(x => x.LifeTime.AddCleanUpAction(() => _isActive.Value = false)).
+                Subscribe(ExecuteState).
                 AddTo(LifeTime);
         }
 
-        protected void ExecuteState(StateToken token)
-        {
-            
-        }
+        protected abstract void ExecuteState(StateToken token);
     }
 }
