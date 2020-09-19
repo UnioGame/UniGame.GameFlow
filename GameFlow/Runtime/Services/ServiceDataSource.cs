@@ -9,7 +9,12 @@
     using UniGreenModules.UniCore.Runtime.Rx.Extensions;
     using UniRx;
 
-    public abstract class ServiceDataSourceAsset : ServiceDataSourceAsset<IGameService>
+    public interface IEmptyGameService : IGameService
+    {
+        
+    }
+
+    public abstract class ServiceDataSourceAsset : ServiceDataSourceAsset<IEmptyGameService>
     {
     }
 
