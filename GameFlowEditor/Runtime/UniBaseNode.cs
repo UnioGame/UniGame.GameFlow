@@ -58,20 +58,20 @@ namespace UniGame.GameFlowEditor.Runtime
 
         public PortData GetPortData(INodePort port)
         {
-            if (this.portData.TryGetValue(port, out var portData))
-                return portData;
+            if (this.portData.TryGetValue(port, out var data))
+                return data;
             var targetType = port.ValueType;
             targetType = targetType == null ? typeof(object) : targetType;
             
-            portData = new PortData() {
+            data = new PortData() {
                 acceptMultipleEdges = port.ConnectionType == ConnectionType.Multiple,
                 displayName         = port.ItemName,
                 displayType         = targetType,
                 identifier          = port.ItemName,
             };
             
-            this.portData[port] = portData;
-            return portData;
+            this.portData[port] = data;
+            return data;
         }
 
         #endregion

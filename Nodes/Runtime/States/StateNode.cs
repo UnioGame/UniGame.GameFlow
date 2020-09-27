@@ -13,6 +13,9 @@ namespace UniModules.UniGameFlow.Nodes.Runtime.States
     using UniRx;
     using UnityEngine;
 
+#if ODIN_INSPECTOR
+    [Sirenix.OdinInspector.DrawWithUnity]
+#endif
     [Serializable]
     public class ReactiveStateToken : ReactivePortValue<StateToken>
     {
