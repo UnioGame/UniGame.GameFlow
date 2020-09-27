@@ -10,7 +10,6 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
         IConnector<IMessagePublisher>,
         INamedItem
     {
-
         IReadOnlyList<Type> ValueTypes { get; }
         
         IObservable<Unit> PortValueChanged { get; }

@@ -13,7 +13,6 @@ namespace UniGame.GameFlowEditor.Editor
     using UnityEngine;
     using UnityEngine.UIElements;
 
-
     [NodeCustomEditor(typeof(UniBaseNode))]
     public class UniNodeView : BaseNodeView
     {
@@ -63,7 +62,7 @@ namespace UniGame.GameFlowEditor.Editor
 
             controlsContainer.Add(container);
         }
-
+        
         
         public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
         {

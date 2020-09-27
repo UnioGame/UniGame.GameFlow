@@ -26,19 +26,18 @@ namespace UniGame.GameFlowEditor.Editor
     {
         #region static data
 
-        protected static bool isInitialized;
+        protected static bool                       isInitialized;
         protected static HashSet<UniGameFlowWindow> Windows = new HashSet<UniGameFlowWindow>();
 
         #endregion
-        
+
         #region static methods
- 
+
         public static UniGameFlowWindow Open(UniGraph graph)
         {
             InitializeGlobalEvents();
-            
+
             var window = CreateWindow(graph);
-            Windows.Add(window);
             window.Show();
             return window;
         }
@@ -49,9 +48,14 @@ namespace UniGame.GameFlowEditor.Editor
             if (window != null && window.ActiveGraph) {
                 window.Save();
             }
+
+            window = window != null ? 
+                window : 
+                Windows.FirstOrDefault(x => x.ActiveGraph == null);
+            window = window != null ? 
+                window : 
+                CreateInstance<UniGameFlowWindow>();
             
-            window = window != null ? window : Windows.FirstOrDefault(x => x.ActiveGraph == null);
-            window = window != null ? window : CreateInstance<UniGameFlowWindow>();
             window.Initialize(graph);
 
             return window;
@@ -64,36 +68,36 @@ namespace UniGame.GameFlowEditor.Editor
             isInitialized = true;
             //Selection.selectionChanged += OnSelectionChange;
         }
-        
-        
+
+
         private static void OnSelectionChange()
         {
             var selections = Selection.objects.
                 Concat(Selection.gameObjects).
                 OfType<GameObject>();
-            
+
             foreach (var item in selections) {
                 var graphData = item.GetComponent<UniGraph>();
-                if(!graphData) continue;
+                if (!graphData) continue;
                 Open(graphData);
             }
         }
 
         #endregion
-        
+
         #region private fields
 
-        private LifeTimeDefinition _lifeTime =  new LifeTimeDefinition();
-        private string _graphName = string.Empty;
-        private ReactiveProperty<UniGraph> _targetGraph = new ReactiveProperty<UniGraph>();
-        private Vector2 _minimapPosition = new Vector2(50,50);
-        private Vector2 _settingsPinnedPosition = new Vector2(50,250);
+        private LifeTimeDefinition         _lifeTime               = new LifeTimeDefinition();
+        private string                     _graphName              = string.Empty;
+        private ReactiveProperty<UniGraph> _targetGraph            = new ReactiveProperty<UniGraph>();
+        private Vector2                    _minimapPosition        = new Vector2(50, 50);
+        private Vector2                    _settingsPinnedPosition = new Vector2(50, 250);
 
-        private GameFlowGraphView _uniGraphView;
+        private GameFlowGraphView          _uniGraphView;
         private UniGraphSettingsPinnedView _settingsPinnedView;
-        private UniGraphToolbarView _graphToolbarView;
-        private MiniMapView _miniMapView;
-        
+        private UniGraphToolbarView        _graphToolbarView;
+        private MiniMapView                _miniMapView;
+
         #endregion
 
         public UniGraph ActiveGraph => _targetGraph.Value;
@@ -112,35 +116,48 @@ namespace UniGame.GameFlowEditor.Editor
 
         public void Reload()
         {
-            _targetGraph.Value = ActiveGraph == null ? 
-                EditorGraphTools.FindSceneGraph(_graphName) :
-                ActiveGraph;
-            
+            _targetGraph.Value = GetActiveGraph();
+
             titleContent.text = ActiveGraph == null ? "(null)" : ActiveGraph.name;
 
             if (!ActiveGraph) {
-                GameLog.LogWarning($"{nameof(UniGameFlowWindow)} : Null Source UniGraph data",this);
+                GameLog.LogWarning($"{nameof(UniGameFlowWindow)} : Null Source UniGraph data", this);
                 return;
             }
 
-            GameLog.Log($"GameFlowWindow : Window Reload [{ActiveGraph.name}]",Color.blue);
- 
+            GameLog.Log($"GameFlowWindow : Window Reload [{ActiveGraph.name}]", Color.blue);
+
             graph = null;
 
             var assetGraph = CreateAssetGraph(ActiveGraph);
 
             InitializeGraph(assetGraph);
+        }
+
+        private UniGraph GetActiveGraph()
+        {
+            var graphName = string.IsNullOrEmpty(_graphName) ? 
+                titleContent.text : _graphName;
+
+            var currentGraph = !ActiveGraph ? 
+                EditorGraphTools.FindSceneGraph(graphName) : 
+                ActiveGraph;
             
+            if (!currentGraph) {
+                currentGraph = NodeGraph.ActiveGraphs.
+                    OfType<UniGraph>().
+                    FirstOrDefault(x => x.ItemName == graphName);
+            }
+
+            return currentGraph;
         }
 
         private void LogGraph()
         {
-                        
             var nodes = ActiveGraph.Nodes;
             foreach (var node in nodes) {
-
                 var debug = $"{node.ItemName} : ";
-                 
+
                 foreach (var port in node.Ports) {
                     debug += $"{port.ItemName} ";
                 }
@@ -148,7 +165,7 @@ namespace UniGame.GameFlowEditor.Editor
                 GameLog.Log(debug);
             }
         }
-        
+
         public virtual UniAssetGraph CreateAssetGraph(UniGraph uniGraph)
         {
             if (Application.isPlaying == false) {
@@ -159,12 +176,12 @@ namespace UniGame.GameFlowEditor.Editor
 
             if (AssetGraph && uniGraph.name == _graphName) {
                 graphAsset.position = AssetGraph.position;
-                graphAsset.scale = AssetGraph.scale;
+                graphAsset.scale    = AssetGraph.scale;
             }
 
-            _graphName = uniGraph == null ? string.Empty : uniGraph.name;
+            _graphName      = uniGraph == null ? string.Empty : uniGraph.name;
             graphAsset.name = _graphName;
-            AssetGraph = graphAsset;
+            AssetGraph      = graphAsset;
             AssetGraph.Activate(uniGraph);
             return AssetGraph;
         }
@@ -175,7 +192,7 @@ namespace UniGame.GameFlowEditor.Editor
                 _uniGraphView.Save();
             }
         }
-        
+
         #endregion
 
         private void InitializeGraph(UniGraph uniGraph)
@@ -190,20 +207,24 @@ namespace UniGame.GameFlowEditor.Editor
 
         protected override void OnEnable()
         {
+            _lifeTime?.Release();
+            
             GameLog.Log("GameFlowWindow : OnEnable");
             graph = null;
-            
+
             base.OnEnable();
-            
+
             NodeGraph.ActiveGraphs.
                 ObserveCountChanged().
-                Select(x => EditorGraphTools.FindSceneGraph(_graphName)).
-                Do(x => Initialize(x as UniGraph)).
+                Where(x => !ActiveGraph).
+                Do(x => Reload()).
                 Subscribe().
                 AddTo(_lifeTime);
 
             _lifeTime.AddCleanUpAction(() =>
                 Windows.Remove(this));
+            
+            Windows.Add(this);
             
             Reload();
         }
@@ -213,35 +234,38 @@ namespace UniGame.GameFlowEditor.Editor
             _lifeTime.Release();
             base.OnDestroy();
         }
-
+        
         private void OnAssemblyReloaded()
         {
             if (AssetEditorTools.IsPureEditorMode == false)
                 return;
             Reload();
         }
-        
+
         private void OnBeforeAssemblyReload()
         {
             if (AssetEditorTools.IsPureEditorMode == false)
                 return;
-            
+
             graph = null;
-            
+
             Save();
         }
-        
+
         protected override void InitializeWindow(BaseGraph inputGraph)
         {
-            titleContent = new GUIContent(ActiveGraph.name);
+            if (!ActiveGraph)
+                return;
+
+            titleContent  = new GUIContent(ActiveGraph.name);
             _uniGraphView = new GameFlowGraphView(this);
-            
+
             rootView.Add(_uniGraphView);
-            
+
             CreateToolbar(_uniGraphView);
             BindEvents();
         }
-        
+
         protected override void InitializeGraphView(BaseGraphView view)
         {
             CreateMinimap(view);
@@ -256,30 +280,28 @@ namespace UniGame.GameFlowEditor.Editor
                 ev => EditorSceneManager.sceneSaved -= OnSave).
                 Subscribe().
                 AddTo(_lifeTime);
-            
+
             //redraw editor if assembly reloaded
-            //AssemblyReloadEvents.afterAssemblyReload += OnAssemblyReloaded;
+            AssemblyReloadEvents.afterAssemblyReload += OnAssemblyReloaded;
+             Observable.FromEvent(
+                 ev => AssemblyReloadEvents.afterAssemblyReload += OnAssemblyReloaded,
+                 ev => AssemblyReloadEvents.afterAssemblyReload -= OnAssemblyReloaded).
+                 Subscribe().
+                 AddTo(_lifeTime);
+
             Observable.FromEvent(
-                    ev => AssemblyReloadEvents.afterAssemblyReload += OnAssemblyReloaded,
-                    ev => AssemblyReloadEvents.afterAssemblyReload -= OnAssemblyReloaded).
+                ev => AssemblyReloadEvents.beforeAssemblyReload += OnBeforeAssemblyReload,
+                ev => AssemblyReloadEvents.beforeAssemblyReload -= OnBeforeAssemblyReload).
                 Subscribe().
                 AddTo(_lifeTime);
-            
-            Observable.FromEvent(
-                    ev => AssemblyReloadEvents.beforeAssemblyReload += OnBeforeAssemblyReload,
-                    ev => AssemblyReloadEvents.beforeAssemblyReload -= OnBeforeAssemblyReload).
-                Subscribe().
-                AddTo(_lifeTime);
-            
+
             Observable.FromEvent(
                     ev => EditorApplication.playModeStateChanged += OnPlayModeChanged,
                     ev => EditorApplication.playModeStateChanged -= OnPlayModeChanged).
                 Subscribe().
                 AddTo(_lifeTime);
         }
-
-        private void OnSave(Scene scene) => Save();
-
+        
         private void OnPlayModeChanged(PlayModeStateChange state)
         {
             GameLog.Log($"PlayMode Changed To: {state}",Color.blue);
@@ -295,7 +317,8 @@ namespace UniGame.GameFlowEditor.Editor
             }
         }
 
-        
+        private void OnSave(Scene scene) => Save();
+
         private void CreateToolbar(BaseGraphView view)
         {
             _graphToolbarView = new UniGraphToolbarView(view);
@@ -305,30 +328,29 @@ namespace UniGame.GameFlowEditor.Editor
         private void CreatePinned(BaseGraphView view)
         {
             _settingsPinnedView = CreateGraphView(() => {
-                view.OpenPinned< UniGraphSettingsPinnedView >();
+                view.OpenPinned<UniGraphSettingsPinnedView>();
                 return view.Q<UniGraphSettingsPinnedView>();
-            },_settingsPinnedView);
+            }, _settingsPinnedView);
 
             AddSettingsCommands(_settingsPinnedView);
-            
-            _settingsPinnedView.SetPosition(new Rect(_settingsPinnedPosition,_settingsPinnedView.GetPosition().size));
 
+            _settingsPinnedView.SetPosition(new Rect(_settingsPinnedPosition, _settingsPinnedView.GetPosition().size));
         }
 
         protected virtual void AddSettingsCommands(IUniGraphSettings settingsView)
         {
             var graphButton = new Button(() => _targetGraph.Value.PingInEditor()) {
-                name =  "GraphPingAction",
+                name = "GraphPingAction",
                 text = "Ping",
             };
             settingsView.AddElement(graphButton);
         }
-        
+
         private void CreateMinimap(BaseGraphView view)
         {
-            _miniMapView = CreateGraphView(() => new MiniMapView(view),_miniMapView);
-            _miniMapView.SetPosition(new Rect(_minimapPosition,_miniMapView.GetPosition().size));
-            
+            _miniMapView = CreateGraphView(() => new MiniMapView(view), _miniMapView);
+            _miniMapView.SetPosition(new Rect(_minimapPosition, _miniMapView.GetPosition().size));
+
             view.Add(_miniMapView);
         }
 
@@ -337,20 +359,19 @@ namespace UniGame.GameFlowEditor.Editor
         {
             var hasPosition      = false;
             var settingsPosition = new Rect();
-            
+
             if (view != null) {
                 hasPosition      = true;
                 settingsPosition = view.GetPosition();
             }
 
             var factoryView = factory();
-            
+
             if (hasPosition) {
                 factoryView.SetPosition(settingsPosition);
             }
 
             return factoryView;
         }
-
     }
 }
