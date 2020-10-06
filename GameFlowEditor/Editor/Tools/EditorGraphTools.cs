@@ -1,5 +1,6 @@
 ﻿namespace UniModules.UniGameFlow.GameFlowEditor.Editor.Tools
 {
+    using System.Diagnostics;
     using System.Linq;
     using global::UniGame.UniNodes.NodeSystem.Runtime.Core;
     using global::UniGame.UniNodes.NodeSystem.Runtime.Interfaces;
@@ -36,6 +37,7 @@
   
         }
 
+        [Conditional("ODIN_INSPECTOR")]
         public static void DrawSerializableNode(this INode node, INodeGraph graph)
         {
             var graphAsset = graph as NodeGraph;
