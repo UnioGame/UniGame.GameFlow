@@ -36,8 +36,7 @@
             }
   
         }
-
-        [Conditional("ODIN_INSPECTOR")]
+        
         public static void DrawSerializableNode(this INode node, INodeGraph graph)
         {
             var graphAsset = graph as NodeGraph;
@@ -64,31 +63,20 @@
             var nodeType = isSerializable ? 
                 graphAsset.serializableNodes.GetType() :
                 graphAsset.nodes.GetType();
-            
-            var propertyTree = graphAsset.GetPropertyTree();
-            
-            for (var i = 0; i < propertyTree.RootPropertyCount; i++) {
-                var p = propertyTree.GetRootProperty(i);
-                if(p.Info.TypeOfValue != nodeType)
-                    continue;
-                var children = p.Children;
-                if (children.Count <= index)
-                    return;
-                
-                var snode = children[index];
-                var items = snode.Children;
-                for (var j = 0; j < items.Count; j++) {
-                    var property = items[j];
-                    property.Draw();
-                }
-            }
-            
+
+            graphAsset.DrawAssetChildWithOdin(nodeType, index);
+
         }
 
         public static VisualElement DrawNodeUiElements(this INode node)
         {
             var view = new IMGUIContainer(() => DrawNodeImGui(node));
             return view;
+        }
+
+        private static void DrawWithOdin()
+        {
+            
         }
     }
 }
