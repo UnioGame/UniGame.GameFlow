@@ -8,9 +8,9 @@
     using Runtime.Core.Extensions;
     using Runtime.Core.Nodes;
     using Runtime.Interfaces;
-    using Sirenix.Utilities;
     using UniGreenModules.UniCore.EditorTools.Editor.Utility;
     using UniModules.UniGame.Context.Editor.ContextEditorWindow;
+    using UniModules.UniGame.Core.Runtime.Extension;
     using UniModules.UniGameFlow.GameFlowEditor.Editor.Tools;
     using UniRx;
     using UnityEditor;
@@ -464,7 +464,8 @@
             selectedNodes.Clear();
 
             if (activeEvent.type != EventType.Layout && currentActivity == NodeActivity.DragGrid)
-                selection.Where(x => preSelection.Contains(x.Id)).ForEach(x => x.AddToEditorSelection(true));
+                selection.Where(x => preSelection.Contains(x.Id)).
+                    ForEach(x => x.AddToEditorSelection(true));
         }
 
         private void UpdateNodes(SerializedProperty property, IReadOnlyList<INode> nodes)
