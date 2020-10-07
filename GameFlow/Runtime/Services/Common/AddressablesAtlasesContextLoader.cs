@@ -7,7 +7,7 @@ namespace UniModules.UniGameFlow.GameFlow.Runtime.Services.Common
     using UniGame.AddressableTools.Runtime.AssetReferencies;
     using UniGame.AddressableTools.Runtime.SpriteAtlases.Abstract;
     using UniGame.Context.Runtime.Abstract;
-    using UniGreenModules.UniCore.Runtime.Interfaces;
+    using UniModules.UniCore.Runtime.Interfaces;
     using UniRx;
 
     [CreateAssetMenu(menuName = "UniGame/GameSystem/Services/AddressablesAtlasesContextLoader",fileName = nameof(AddressablesAtlasesContextLoader))]

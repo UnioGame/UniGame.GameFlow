@@ -5,8 +5,8 @@
     using System.Linq;
     using BaseEditor;
     using Runtime.Interfaces;
-    using UniGreenModules.UniCore.Runtime.ReflectionUtils;
-    using UniGreenModules.UniGame.Core.Runtime.Attributes.FieldTypeDrawer;
+    using UniModules.UniCore.Runtime.ReflectionUtils;
+    using UniModules.UniGame.Core.Runtime.Attributes.FieldTypeDrawer;
     using UnityEditor;
     using UnityEngine;
 

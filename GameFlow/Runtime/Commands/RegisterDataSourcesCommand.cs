@@ -4,10 +4,10 @@
     using System.Collections.Generic;
     using Cysharp.Threading.Tasks;
     using UniCore.Runtime.ProfilerTools;
-    using UniGreenModules.UniContextData.Runtime.Interfaces;
-    using UniGreenModules.UniCore.Runtime.DataFlow.Interfaces;
-    using UniGreenModules.UniCore.Runtime.Interfaces;
-    using UniGreenModules.UniCore.Runtime.ProfilerTools;
+    using UniModules.UniContextData.Runtime.Interfaces;
+    using UniModules.UniCore.Runtime.DataFlow.Interfaces;
+    using UniModules.UniCore.Runtime.Interfaces;
+    using UniModules.UniCore.Runtime.ProfilerTools;
     using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
     
     using UnityEngine;

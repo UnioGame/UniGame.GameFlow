@@ -3,7 +3,7 @@
     using System;
     using Core.Interfaces;
     using Interfaces;
-    using UniGreenModules.UniCore.Runtime.Interfaces;
+    using UniModules.UniCore.Runtime.Interfaces;
 
     [Serializable]
     public class SerializedNodeCommand : ILifeTimeCommandSource, IValidator

@@ -6,7 +6,7 @@
     using NodeSystem.Runtime.Core.Commands;
     using NodeSystem.Runtime.Core.Interfaces;
     using NodeSystem.Runtime.Interfaces;
-    using UniGreenModules.UniCore.Runtime.Interfaces;
+    using UniModules.UniCore.Runtime.Interfaces;
     using UnityEngine;
 
     [HideNode]

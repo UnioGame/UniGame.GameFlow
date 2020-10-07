@@ -5,9 +5,9 @@
     using Cysharp.Threading.Tasks;
     using Interfaces;
     using UniGame.Core.Runtime.ScriptableObjects;
-    using UniGreenModules.UniContextData.Runtime.Interfaces;
-    using UniGreenModules.UniCore.Runtime.Interfaces;
-    using UniGreenModules.UniCore.Runtime.Rx.Extensions;
+    using UniModules.UniContextData.Runtime.Interfaces;
+    using UniModules.UniCore.Runtime.Interfaces;
+    using UniModules.UniCore.Runtime.Rx.Extensions;
     using UniRx;
     
 

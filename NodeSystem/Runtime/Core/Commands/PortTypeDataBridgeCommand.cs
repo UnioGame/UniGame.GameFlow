@@ -3,8 +3,8 @@
     using System;
     using Interfaces;
     using Runtime.Interfaces;
-    using UniGreenModules.UniCore.Runtime.DataFlow.Interfaces;
-    using UniGreenModules.UniCore.Runtime.Rx.Extensions;
+    using UniModules.UniCore.Runtime.DataFlow.Interfaces;
+    using UniModules.UniCore.Runtime.Rx.Extensions;
     using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
     using UniRx;
 

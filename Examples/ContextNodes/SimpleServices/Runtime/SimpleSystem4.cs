@@ -1,9 +1,9 @@
 ﻿namespace UniGame.UniNodes.Examples.ContextNodes.SimpleServices.Runtime
 {
     using GameFlow.Runtime;
-    using UniGreenModules.UniCore.Runtime.DataFlow.Interfaces;
-    using UniGreenModules.UniCore.Runtime.Interfaces;
-    using UniGreenModules.UniCore.Runtime.Rx.Extensions;
+    using UniModules.UniCore.Runtime.DataFlow.Interfaces;
+    using UniModules.UniCore.Runtime.Interfaces;
+    using UniModules.UniCore.Runtime.Rx.Extensions;
     using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
     using UniRx;
 

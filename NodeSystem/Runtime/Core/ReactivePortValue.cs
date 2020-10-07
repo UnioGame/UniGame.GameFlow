@@ -5,8 +5,8 @@
     using Interfaces;
     using Runtime.Interfaces;
     using UniCore.Runtime.ProfilerTools;
-    using UniGreenModules.UniCore.Runtime.Attributes;
-    using UniGreenModules.UniCore.Runtime.ProfilerTools;
+    using UniModules.UniCore.Runtime.Attributes;
+    using UniModules.UniCore.Runtime.ProfilerTools;
     using UniRx;
     using UnityEngine;
 

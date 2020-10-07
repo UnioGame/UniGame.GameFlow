@@ -7,7 +7,7 @@
     using Runtime.Core;
     using Runtime.Core.Interfaces;
     using Runtime.Interfaces;
-    using UniGreenModules.UniCore.Runtime.ReflectionUtils;
+    using UniModules.UniCore.Runtime.ReflectionUtils;
     using UniModules.UniGameFlow.NodeSystem.Runtime.Extensions;
 
     public static class PortNodeExtensions 

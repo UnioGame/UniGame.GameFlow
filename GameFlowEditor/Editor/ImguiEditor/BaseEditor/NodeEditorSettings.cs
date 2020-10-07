@@ -1,7 +1,7 @@
 namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.BaseEditor
 {
     using System;
-    using UniGreenModules.UniGame.Core.Runtime.DataStructure;
+    using UniModules.UniGame.Core.Runtime.DataStructure;
     using UnityEngine;
 
     public class StringColorMap : SerializableDictionary<string, Color>

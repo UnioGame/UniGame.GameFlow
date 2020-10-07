@@ -7,9 +7,9 @@
     using NodeSystem.Runtime.Core.Commands;
     using NodeSystem.Runtime.Core.Nodes;
     using NodeSystem.Runtime.Interfaces;
-    using UniGreenModules.UniCore.Runtime.Attributes;
-    using UniGreenModules.UniCore.Runtime.Interfaces;
-    using UniGreenModules.UniCore.Runtime.Interfaces.Rx;
+    using UniModules.UniCore.Runtime.Attributes;
+    using UniModules.UniCore.Runtime.Interfaces;
+    using UniModules.UniCore.Runtime.Interfaces.Rx;
     using UniRx;
     using UnityEngine;
 

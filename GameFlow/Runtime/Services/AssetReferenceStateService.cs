@@ -2,7 +2,7 @@
 {
     using System;
     using Services;
-    using UniGreenModules.UniGame.SerializableContext.Runtime.Addressables;
+    using UniModules.UniGame.SerializableContext.Runtime.Addressables;
 
     [Serializable]
     public class AssetReferenceStateService : AssetReferenceScriptableObject<BaseContextService>

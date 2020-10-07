@@ -1,7 +1,7 @@
 ﻿namespace Taktika.GameResources.Addressables
 {
     using System;
-    using UniGreenModules.UniGame.SerializableContext.Runtime.Addressables;
+    using UniModules.UniGame.SerializableContext.Runtime.Addressables;
     using UniModules.UniGameFlow.GameFlow.Runtime.Interfaces;
     using UniModules.UniGameFlow.GameFlow.Runtime.Systems;
     using UnityEngine;

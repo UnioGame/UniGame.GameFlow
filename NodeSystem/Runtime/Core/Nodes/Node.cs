@@ -7,9 +7,9 @@
     using Nodes;
     using Runtime.Interfaces;
     using UniCore.Runtime.ProfilerTools;
-    using UniGreenModules.UniCore.Runtime.Attributes;
-    using UniGreenModules.UniCore.Runtime.Interfaces;
-    using UniGreenModules.UniGame.Core.Runtime.Attributes.FieldTypeDrawer;
+    using UniModules.UniCore.Runtime.Attributes;
+    using UniModules.UniCore.Runtime.Interfaces;
+    using UniModules.UniGame.Core.Runtime.Attributes.FieldTypeDrawer;
     using UnityEngine;
 
     [Serializable]

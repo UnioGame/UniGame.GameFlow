@@ -4,8 +4,8 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
     using System.Collections.Generic;
     using Core;
     using Core.Interfaces;
-    using UniGreenModules.UniCore.Runtime.Interfaces;
-    using UniGreenModules.UniCore.Runtime.ObjectPool.Runtime.Interfaces;
+    using UniModules.UniCore.Runtime.Interfaces;
+    using UniModules.UniCore.Runtime.ObjectPool.Runtime.Interfaces;
     using UnityEngine;
 
     public interface INodePort : INamedItem, IPoolable
