@@ -1,4 +1,4 @@
-﻿namespace UniGreenModules.UniCore.EditorTools.Editor.Interfaces
+﻿namespace UniModules.UniCore.EditorTools.Editor.Interfaces
 {
     using System.Collections.Generic;
     using global::UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.BaseEditor.Interfaces;

@@ -1,6 +1,6 @@
 namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
 {
-    using UniGreenModules.UniStateMachine.Runtime.Interfaces;
+    using UniModules.UniStateMachine.Runtime.Interfaces;
 
     public interface IUniNode : 
         INode,

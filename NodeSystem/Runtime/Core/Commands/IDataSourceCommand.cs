@@ -1,6 +1,6 @@
 ﻿namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Commands
 {
-    using UniGreenModules.UniGame.Core.Runtime.Interfaces;
+    using UniModules.UniGame.Core.Runtime.Interfaces;
     using UniRx;
 
     public interface IDataSourceCommand<TData> : ILifeTimeCompletionCommand

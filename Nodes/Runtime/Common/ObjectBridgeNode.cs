@@ -1,7 +1,7 @@
 ﻿namespace UniGame.UniNodes.Nodes.Runtime.Common
 {
     using NodeSystem.Runtime.Attributes;
-    using UniGreenModules.UniGame.Core.Runtime.Attributes.FieldTypeDrawer;
+    using UniModules.UniGame.Core.Runtime.Attributes.FieldTypeDrawer;
 
     [HideNode]
     public class ObjectBridgeNode<T> : TypeBridgeNode<T>

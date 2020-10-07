@@ -5,7 +5,7 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
     using System.Linq;
     using Runtime.Core;
     using Runtime.Interfaces;
-    using UniGreenModules.UniCore.EditorTools.Editor.Utility;
+    using UniModules.UniCore.EditorTools.Editor.Utility;
     using UniModules.UniGame.Core.Runtime.Extension;
     using UnityEditor;
     using UnityEngine;

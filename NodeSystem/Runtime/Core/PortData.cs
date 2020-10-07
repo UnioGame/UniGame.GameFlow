@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using Interfaces;
-    using UniGreenModules.UniCore.Runtime.ObjectPool.Runtime.Interfaces;
+    using UniModules.UniCore.Runtime.ObjectPool.Runtime.Interfaces;
     using UnityEngine;
 
     [Serializable]

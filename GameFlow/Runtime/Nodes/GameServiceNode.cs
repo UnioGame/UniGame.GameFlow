@@ -2,7 +2,7 @@
 {
     using Cysharp.Threading.Tasks;
     using NodeSystem.Runtime.Attributes;
-    using UniGreenModules.UniCore.Runtime.Interfaces;
+    using UniModules.UniCore.Runtime.Interfaces;
     using UniModules.UniGameFlow.GameFlow.Runtime.Interfaces;
     
 

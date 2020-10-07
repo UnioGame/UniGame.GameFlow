@@ -7,11 +7,11 @@
     using Interfaces;
     using Runtime.Interfaces;
     using UniCore.Runtime.ProfilerTools;
-    using UniGreenModules.UniCore.Runtime.Attributes;
-    using UniGreenModules.UniCore.Runtime.DataFlow;
-    using UniGreenModules.UniCore.Runtime.DataFlow.Interfaces;
-    using UniGreenModules.UniCore.Runtime.ObjectPool.Runtime;
-    using UniGreenModules.UniCore.Runtime.ObjectPool.Runtime.Extensions;
+    using UniModules.UniCore.Runtime.Attributes;
+    using UniModules.UniCore.Runtime.DataFlow;
+    using UniModules.UniCore.Runtime.DataFlow.Interfaces;
+    using UniModules.UniCore.Runtime.ObjectPool.Runtime;
+    using UniModules.UniCore.Runtime.ObjectPool.Runtime.Extensions;
     using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
     using UnityEngine;
 

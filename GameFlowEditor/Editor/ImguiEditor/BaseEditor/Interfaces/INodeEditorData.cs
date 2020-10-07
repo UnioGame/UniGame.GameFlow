@@ -3,7 +3,7 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
     using System.Collections.Generic;
     using Runtime.Core;
     using Runtime.Interfaces;
-    using UniGreenModules.UniCore.EditorTools.Editor.Interfaces;
+    using UniModules.UniCore.EditorTools.Editor.Interfaces;
     using UnityEditor;
     using UnityEngine;
 

@@ -2,7 +2,7 @@
 {
     using Nodes.Runtime.Common;
     using NodeSystem.Runtime.Core;
-    using UniGreenModules.UniCore.Runtime.Rx.Extensions;
+    using UniModules.UniCore.Runtime.Rx.Extensions;
     using UniModules.UniGameFlow.NodeSystem.Runtime.Core.Attributes;
     using UniRx;
 

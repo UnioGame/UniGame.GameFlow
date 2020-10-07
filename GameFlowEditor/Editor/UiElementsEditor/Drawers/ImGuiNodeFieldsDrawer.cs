@@ -10,7 +10,7 @@
     using NodeSystem.Inspector.Editor.UniGraphWindowInspector.Drawers;
     using NodeSystem.Runtime.Core;
     using NodeSystem.Runtime.Interfaces;
-    using UniGreenModules.UniGame.Core.EditorTools.Editor.DrawersTools;
+    using UniModules.UniGame.Core.EditorTools.Editor.DrawersTools;
     using UnityEditor;
     using UnityEngine;
     using UnityEngine.UIElements;

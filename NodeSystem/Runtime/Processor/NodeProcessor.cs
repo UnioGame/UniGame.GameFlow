@@ -6,7 +6,7 @@
     using global::UniGame.UniNodes.NodeSystem.Runtime.Extensions;
     using global::UniGame.UniNodes.NodeSystem.Runtime.Interfaces;
     using NodeSystem.Runtime.Extensions;
-    using UniGreenModules.UniCore.Runtime.ReflectionUtils;
+    using UniModules.UniCore.Runtime.ReflectionUtils;
     using UnityEngine;
 
     [CreateAssetMenu(menuName = "UniGame/GameFlow/NodesEditorHandler",fileName = nameof(NodeProcessor))]

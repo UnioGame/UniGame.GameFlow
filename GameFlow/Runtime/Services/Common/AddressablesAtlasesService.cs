@@ -4,7 +4,7 @@
     using global::UniGame.UniNodes.GameFlow.Runtime;
     using UniGame.AddressableTools.Runtime.SpriteAtlases;
     using UniGame.AddressableTools.Runtime.SpriteAtlases.Abstract;
-    using UniGreenModules.UniCore.Runtime.Rx.Extensions;
+    using UniModules.UniCore.Runtime.Rx.Extensions;
     using UniRx;
     using UnityEngine.SceneManagement;
 
