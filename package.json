@@ -1,11 +1,11 @@
 {
   "name": "com.unigame.nodessystem",
-  "author": "Mefodei (https://github.com/Mefodei)",
-  "displayName": "UniGame Nodes System Package",
-  "description": "Nodes System for Unity. Include base nodes realisation",
+  "author": "UniGameTeam",
+  "displayName": "UniGame GameFlow",
+  "description": "GameFlow System for Unity. Include base nodes realisation",
   "unity": "2019.2",
-  "version": "2020.0.2",
-  "homepage": "https://github.com/Mefodei/UniGameFlow#readme",
+  "version": "2020.1.2",
+  "homepage": "https://github.com/UniGameTeam/UniGameFlow#readme",
   "keywords": [
     "nodes",
     "graph",
@@ -14,18 +14,17 @@
   ],
   "dependencies": {
     "com.unigame.neuecc.unirx": "7.1.1",
-    "com.cysharp.unitask": "2.0.26",
-    "com.alelievr.node-graph-processor": "0.6.0",
-    "com.unigame.uielements": "2020.0.2",
-    "com.unigame.unicore": "2020.0.1",
-    "com.unigame.addressablestools": "2020.0.1",
-    "com.unigame.contextdata": "1.3.15",
-    "com.unigame.uniroutine": "1.5.32",
-    "com.unity.addressables": "1.12.0",
-    "com.unigame.serializablecontext": "1.2.20"
+    "com.unigame.neuecc.unitask": "2.0.32",
+    "com.unigame.uielements": "2020.0.25",
+    "com.unigame.unicore": "2020.0.15",
+    "com.unigame.addressablestools": "2020.0.19",
+    "com.unigame.contextdata": "2020.0.4",
+    "com.unigame.uniroutine": "2020.0.2",
+    "com.unity.addressables": "1.14.2",
+    "com.unigame.alelievr.node-graph-processor": "0.9.1"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Mefodei/UniGameFlow.git"
+    "url": "https://github.com/UniGameTeam/UniGameFlow.git"
   }
 }

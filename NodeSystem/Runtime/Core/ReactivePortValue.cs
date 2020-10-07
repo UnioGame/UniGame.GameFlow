@@ -11,8 +11,7 @@
     using UnityEngine;
 
     [Serializable]
-    public class ReactivePortValue<TValue> : 
-        IReactivePortValue<TValue>
+    public class ReactivePortValue<TValue> : IReactivePortValue<TValue>
     {
         #region inspector
         

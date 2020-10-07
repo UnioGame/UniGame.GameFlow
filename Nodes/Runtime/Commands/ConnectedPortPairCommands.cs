@@ -20,7 +20,8 @@
         
         public void Initialize(IUniNode node,
             string input, 
-            string output, bool connect = true)
+            string output, 
+            bool connect = true)
         {
             var ports = node.CreatePortPair(input, output,connect);
             inputPort = ports.inputValue;

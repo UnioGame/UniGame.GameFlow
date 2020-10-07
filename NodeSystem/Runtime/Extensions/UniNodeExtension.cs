@@ -3,23 +3,22 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
-    using System.Linq;
-    using System.Reflection;
     using Core;
     using Core.Interfaces;
-    using Inspector.Editor.UniGraphWindowInspector.BaseEditor.Extensions;
     using Interfaces;
     using UniGreenModules.UniCore.Runtime.ObjectPool.Runtime;
     using UniGreenModules.UniCore.Runtime.ObjectPool.Runtime.Extensions;
     using UniGreenModules.UniCore.Runtime.Rx.Extensions;
     using UniGreenModules.UniCore.Runtime.Utils;
+    using UniModules.UniGameFlow.NodeSystem.Runtime.Extensions;
     using UniRx;
     using UnityEngine;
 
+    
     public static class UniNodeExtension
     {
-        private const int InputNameIndex = 0;
-        private const int OutputNameIndex = 1;
+        public const int InputNameIndex  = 0;
+        public const  int OutputNameIndex = 1;
 
         public const string InputPattern = @"(\[?[\w\num ]*\])";
         
@@ -27,7 +26,7 @@
         public const string OutputTriggerPrefix = "[out]";       
         
         public static Func<string, string[]> portNameCache = MemorizeTool.Create((string x) => new string[2]);
-   
+
 #region port names
 
         [Conditional("UNITY_EDITOR")]
@@ -39,35 +38,19 @@
             
             portList.AddRange(node.Ports);
 
-            node.UpdatePortByAttributes();
+            node.UpdateNodePorts();
 
             portList.Despawn();
         }
         
+
         [Conditional("UNITY_EDITOR")]
-        public static void UpdatePortByAttributes(this INode node)
+        public static void UpdateNodePorts(this INode node)
         {
             if (Application.isPlaying)
                 return;
             
-            var type = node.GetType();
-            
-            var fields = type.GetFields(
-                BindingFlags.Public | 
-                BindingFlags.Instance | 
-                BindingFlags.NonPublic);
-
-            foreach (var portField in fields) {
-                var data = node.GetPortData(portField, portField.Name);
-                if(data.PortData == null)
-                    continue;
-                        
-                var port  = node.UpdatePortValue(data.PortData);
-                var value = portField.GetValue(node);
-
-                UpdateSerializedCommands(node, port, value);
-            }
-
+            UniGraphEvent.NodeUpdateStream.OnNext(node);
         }
         
         public static void UpdateSerializedCommands(INode node,IPortValue port, object value)
@@ -162,8 +145,15 @@
                 AddTo(node.LifeTime);     //stop all subscriptions when node deactivated
         }
 
-        
-        
+        public static INodePort UpdatePort(this INode node, IPortData portData)
+        {
+            var portValue = UpdatePortValue(node, portData);
+            if (portValue == null)
+                return null;
+            var port = node.GetPort(portValue.ItemName);
+            return port;
+        }
+
         public static IPortValue UpdatePortValue(this INode node , IPortData portData)
         {
             if (portData == null)

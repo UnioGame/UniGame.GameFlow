@@ -6,13 +6,12 @@ namespace UniGame.GameFlowEditor.Editor
     using Core.EditorTools.Editor.UiElements;
     using Runtime;
     using UniGreenModules.UniCore.EditorTools.Editor.Utility;
+    using UniModules.UniGame.Context.Editor.ContextEditorWindow;
     using UniModules.UniGameFlow.GameFlowEditor.Editor.Tools;
-    using UniNodes.NodeSystem.Inspector.Editor.ContentContextWindow;
     using UniNodes.NodeSystem.Runtime.Core;
     using UniNodes.NodeSystem.Runtime.Core.Nodes;
     using UnityEngine;
     using UnityEngine.UIElements;
-
 
     [NodeCustomEditor(typeof(UniBaseNode))]
     public class UniNodeView : BaseNodeView
@@ -63,7 +62,7 @@ namespace UniGame.GameFlowEditor.Editor
 
             controlsContainer.Add(container);
         }
-
+        
         
         public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
         {

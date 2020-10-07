@@ -21,7 +21,7 @@
         protected readonly BoolReactiveProperty isReady = new BoolReactiveProperty(false);
 
         public IContext Bind(IContext context)
-        {
+        {    
             var compositeLifetime = this.Spawn<ComposedLifeTime>();
             compositeLifetime.Bind(context.LifeTime);
             LifeTime.AddCleanUpAction(() => compositeLifetime.Despawn());

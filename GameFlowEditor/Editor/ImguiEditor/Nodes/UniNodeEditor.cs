@@ -41,7 +41,7 @@
                                 EditorApplication.isUpdating == false;
 
             if (idEditingMode) {
-                node.UpdatePortByAttributes();
+                node.UpdateNodePorts();
                 node.Validate();
             }
             

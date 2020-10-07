@@ -5,12 +5,13 @@
     using Attributes;
     using Runtime.Extensions;
     using Runtime.Interfaces;
-    using Sirenix.Utilities;
     using UniGreenModules.UniContextData.Runtime.Interfaces;
     using UniGreenModules.UniCore.Runtime.Rx.Extensions;
     using UniGreenModules.UniGame.AddressableTools.Runtime.Extensions;
     using UniGreenModules.UniGame.SerializableContext.Runtime.Addressables;
     using UniModules.UniGame.Context.Runtime.Abstract;
+    using UniModules.UniGame.Core.Runtime.Extension;
+    using UniModules.UniGameFlow.NodeSystem.Runtime.Extensions;
     using UniRx;
     using UnityEngine;
 
@@ -171,12 +172,8 @@
                 //initialize node
                 node.Initialize(this);
                 
-#if UNITY_EDITOR
-                //Editor Only
-                if (Application.isPlaying == false) {
-                    node.UpdatePortByAttributes();
-                }
-#endif
+                //update ports by attributes & another triggers
+                node.UpdateNodePorts();
                 
                 if (node is IUniNode uniNode) {
                     LifeTime.AddCleanUpAction(uniNode.Exit);

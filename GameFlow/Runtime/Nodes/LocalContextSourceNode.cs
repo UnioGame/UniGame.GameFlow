@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using UniGame.UniNodes.GameFlow.Runtime.Commands;
 using UniGame.UniNodes.Nodes.Runtime.Common;
-using UniGame.UniNodes.NodeSystem.Runtime.Core;
 using UniGreenModules.UniCore.Runtime.Interfaces;
 using UniGreenModules.UniGame.SerializableContext.Runtime.Addressables;
 
@@ -10,11 +9,11 @@ using UnityEngine;
 namespace UniModules.UniGameFlow.GameFlow.Runtime.Nodes
 {
     using Cysharp.Threading.Tasks;
+    using global::UniGame.UniNodes.Nodes.Runtime.Commands;
     using NodeSystem.Runtime.Core.Attributes;
     using UniGame.SerializableContext.Runtime.Addressables;
     using UniGreenModules.UniContextData.Runtime.Entities;
     using UniGreenModules.UniGame.AddressableTools.Runtime.Extensions;
-    using UniGreenModules.UniGame.SerializableContext.Runtime.Abstract;
 
     /// <summary>
     /// 1. Create new Local Context on Init
@@ -43,16 +42,15 @@ namespace UniModules.UniGameFlow.GameFlow.Runtime.Nodes
             
             var port = UniTask.FromResult<IContext>(PortPair.OutputPort);
             var contextSource = UniTask.FromResult<IContext>(_context);
-            
+
+            var bindContextToOutput = new MessageBroadcastCommand(_context, PortPair.OutputPort);
             //register all Context Sources Data into target context asset
             var registerDataSourceIntoContext = new RegisterDataSourceCommand(contextSource,dataSources);
-            //Register All Sources data into Output port
-            var sourceOutputPortCommand = new RegisterDataSourceCommand(port,dataSources);
             //Register context to output port
             var contextToOutputPortCommand = new DataSourceTaskCommand<IContext>(contextSource,port);
         
+            nodeCommands.Add(bindContextToOutput);
             nodeCommands.Add(registerDataSourceIntoContext);
-            nodeCommands.Add(sourceOutputPortCommand);
             nodeCommands.Add(contextToOutputPortCommand);
         }
 
