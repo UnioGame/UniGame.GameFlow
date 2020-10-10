@@ -4,7 +4,7 @@
   "displayName": "UniGame GameFlow",
   "description": "GameFlow System for Unity. Include base nodes realisation",
   "unity": "2019.2",
-  "version": "2020.1.11",
+  "version": "2020.1.13",
   "homepage": "https://github.com/UniGameTeam/UniGameFlow#readme",
   "keywords": [
     "nodes",
@@ -15,11 +15,11 @@
   "dependencies": {
     "com.unigame.neuecc.unirx": "7.1.1",
     "com.unigame.neuecc.unitask": "2.0.33",
-    "com.unigame.uielements": "2020.0.33",
-    "com.unigame.unicore": "2020.0.19",
-    "com.unigame.addressablestools": "2020.0.25",
-    "com.unigame.contextdata": "2020.0.12",
-    "com.unigame.uniroutine": "2020.0.7",
+    "com.unigame.uielements": "2020.0.35",
+    "com.unigame.unicore": "2020.0.20",
+    "com.unigame.addressablestools": "2020.0.27",
+    "com.unigame.contextdata": "2020.0.14",
+    "com.unigame.uniroutine": "2020.0.9",
     "com.unity.addressables": "1.14.2",
     "com.unigame.alelievr.node-graph-processor": "0.9.1"
   },
