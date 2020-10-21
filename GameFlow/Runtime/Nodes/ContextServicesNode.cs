@@ -6,7 +6,7 @@ namespace UniModules.UniGameFlow.GameFlow.Runtime.Nodes
     using Systems;
     using Cysharp.Threading.Tasks;
     using NodeSystem.Runtime.Core.Attributes;
-    using UniModules.UniCore.Runtime.Interfaces;
+    using UniGame.Core.Runtime.Interfaces;
     using UniModules.UniGame.AddressableTools.Runtime.Extensions;
     using UniRx;
     

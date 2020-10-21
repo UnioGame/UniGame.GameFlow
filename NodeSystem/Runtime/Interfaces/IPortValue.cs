@@ -2,7 +2,7 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
 {
     using System;
     using System.Collections.Generic;
-    using UniModules.UniCore.Runtime.Interfaces;
+    using UniModules.UniGame.Core.Runtime.Interfaces;
     using UniRx;
 
     public interface IPortValue : 

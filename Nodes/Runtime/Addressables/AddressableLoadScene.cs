@@ -4,9 +4,9 @@
     using NodeSystem.Runtime.Core;
     using NodeSystem.Runtime.Core.Commands;
     using NodeSystem.Runtime.Interfaces;
-    using UniModules.UniCore.Runtime.Interfaces;
     using UniModules.UniCore.Runtime.Rx.Extensions;
     using UniModules.UniGame.AddressableTools.Runtime.Extensions;
+    using UniModules.UniGame.Core.Runtime.Interfaces;
     using UniModules.UniGameFlow.NodeSystem.Runtime.Core.Attributes;
     using UniRx;
     using UnityEngine;

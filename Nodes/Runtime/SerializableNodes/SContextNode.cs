@@ -5,8 +5,8 @@
     using NodeSystem.Runtime.Attributes;
     using NodeSystem.Runtime.Core;
     using UniCore.Runtime.ProfilerTools;
-    using UniModules.UniCore.Runtime.Interfaces;
     using UniModules.UniCore.Runtime.Rx.Extensions;
+    using UniModules.UniGame.Core.Runtime.Interfaces;
     using UniRx;
 
     [Serializable]

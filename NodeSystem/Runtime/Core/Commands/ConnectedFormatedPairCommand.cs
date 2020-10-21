@@ -6,8 +6,8 @@
     using Runtime.Extensions;
     using Runtime.Interfaces;
     using UniModules.UniCore.Runtime.DataFlow.Interfaces;
-    using UniModules.UniCore.Runtime.Interfaces;
     using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
+    using UniModules.UniGame.Core.Runtime.Interfaces;
 
     [Serializable]
     public class ConnectedFormatedPairCommand : ILifeTimeCommand, IPortPair

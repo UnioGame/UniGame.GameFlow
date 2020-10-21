@@ -7,7 +7,7 @@
     using UniGame.UniNodes.NodeSystem.Runtime.Core.Interfaces;
     using UniGame.UniNodes.NodeSystem.Runtime.Interfaces;
     using UniModules.UniContextData.Runtime.Entities;
-    using UniModules.UniCore.Runtime.Interfaces;
+    using UniModules.UniGame.Core.Runtime.Interfaces;
     using UnityEngine;
 
     [HideNode]

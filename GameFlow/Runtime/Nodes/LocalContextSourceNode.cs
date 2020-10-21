@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using UniGame.UniNodes.GameFlow.Runtime.Commands;
 using UniGame.UniNodes.Nodes.Runtime.Common;
-using UniModules.UniCore.Runtime.Interfaces;
 using UniModules.UniGame.SerializableContext.Runtime.Addressables;
 
 using UnityEngine;
@@ -11,6 +10,7 @@ namespace UniModules.UniGameFlow.GameFlow.Runtime.Nodes
     using Cysharp.Threading.Tasks;
     using global::UniGame.UniNodes.Nodes.Runtime.Commands;
     using NodeSystem.Runtime.Core.Attributes;
+    using UniGame.Core.Runtime.Interfaces;
     using UniGame.SerializableContext.Runtime.Addressables;
     using UniModules.UniContextData.Runtime.Entities;
     using UniModules.UniGame.AddressableTools.Runtime.Extensions;

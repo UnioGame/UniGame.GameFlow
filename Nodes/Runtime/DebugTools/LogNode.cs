@@ -6,16 +6,16 @@
     using NodeSystem.Runtime.Core;
     using NodeSystem.Runtime.Extensions;
     using NodeSystem.Runtime.Interfaces;
-    using NodeSystem.Runtime.ReactivePorts;
     using UniCore.Runtime.ProfilerTools;
-    using UniModules.UniCore.Runtime.Interfaces;
     using UniModules.UniCore.Runtime.ProfilerTools;
     using UniModules.UniCore.Runtime.Rx.Extensions;
+    using UniModules.UniGame.Core.Runtime.Interfaces;
     using UniModules.UniGameFlow.NodeSystem.Runtime.Core.Attributes;
     using UniRx;
 
     [Serializable]
     [CreateNodeMenu("Debug/Log","Log")]
+    [NodeInfo("Logging Node","Profiling","Logging all data from input port")]
     public class LogNode : UniNode , IMessagePublisher
     {
         private const string logPortName = "log";

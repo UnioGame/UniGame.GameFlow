@@ -3,8 +3,8 @@
     using System;
     using Interfaces;
     using UniModules.UniCore.Runtime.DataFlow.Interfaces;
-    using UniModules.UniCore.Runtime.Interfaces;
     using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
+    using UniModules.UniGame.Core.Runtime.Interfaces;
     using UniModules.UniGameFlow.GameFlow.Runtime.Interfaces;
 
     public class GameServiceCommand : ILifeTimeCommand

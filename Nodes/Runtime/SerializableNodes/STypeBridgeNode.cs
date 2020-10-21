@@ -8,8 +8,8 @@
     using NodeSystem.Runtime.Core.Nodes;
     using NodeSystem.Runtime.Interfaces;
     using UniModules.UniCore.Runtime.Attributes;
-    using UniModules.UniCore.Runtime.Interfaces;
-    using UniModules.UniCore.Runtime.Interfaces.Rx;
+    using UniModules.UniGame.Core.Runtime.Interfaces;
+    using UniModules.UniGame.Core.Runtime.Interfaces.Rx;
     using UniRx;
     using UnityEngine;
 

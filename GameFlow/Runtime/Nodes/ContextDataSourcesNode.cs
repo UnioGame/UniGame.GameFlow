@@ -4,7 +4,7 @@
     using Commands;
     using Cysharp.Threading.Tasks;
     using NodeSystem.Runtime.Core;
-    using UniModules.UniCore.Runtime.Interfaces;
+    using UniModules.UniGame.Core.Runtime.Interfaces;
     using UniModules.UniGame.SerializableContext.Runtime.Addressables;
     using UniModules.UniGameFlow.NodeSystem.Runtime.Core.Attributes;
     using UniNodes.Nodes.Runtime.Common;

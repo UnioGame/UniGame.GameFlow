@@ -6,7 +6,7 @@ namespace UniModules.UniGameFlow.Nodes.Runtime.Addressables
     using System.Collections.Generic;
     using global::UniGame.UniNodes.Nodes.Runtime.Common;
     using global::UniGame.UniNodes.NodeSystem.Runtime.Attributes;
-    using UniModules.UniCore.Runtime.Interfaces;
+    using UniGame.Core.Runtime.Interfaces;
     using UniModules.UniCore.Runtime.Rx.Extensions;
     using UniModules.UniGame.AddressableTools.Runtime.Extensions;
     using UniRx;

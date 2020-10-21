@@ -4,7 +4,7 @@
     using System.Threading;
     using Cysharp.Threading.Tasks;
     using Interfaces;
-    using UniModules.UniCore.Runtime.Interfaces;
+    using UniGame.Core.Runtime.Interfaces;
     using UniModules.UniCore.Runtime.Rx.Extensions;
     using UniRx;
     

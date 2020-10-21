@@ -4,8 +4,8 @@ namespace UniGame.UniNodes.Nodes.Runtime.Addressables
 {
     using System.Collections.Generic;
     using Commands;
-    using UniModules.UniCore.Runtime.Interfaces;
     using UniModules.UniGame.AddressableTools.Runtime.Extensions;
+    using UniModules.UniGame.Core.Runtime.Interfaces;
     using UniModules.UniGameFlow.NodeSystem.Runtime.Core.Attributes;
     using UnityEngine.AddressableAssets;
 

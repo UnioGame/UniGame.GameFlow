@@ -5,9 +5,9 @@
     using NodeSystem.Runtime.Core;
     using UniCore.Runtime.ProfilerTools;
     using UniModules.UniCore.Runtime.Attributes;
-    using UniModules.UniCore.Runtime.Interfaces;
     using UniModules.UniCore.Runtime.ProfilerTools;
     using UniModules.UniCore.Runtime.Rx.Extensions;
+    using UniModules.UniGame.Core.Runtime.Interfaces;
     using UniModules.UniGameFlow.NodeSystem.Runtime.Core.Attributes;
     using UniNodes.Nodes.Runtime.Common;
     using UniRx;

@@ -4,8 +4,8 @@ namespace UniModules.UniGameFlow.GameFlow.Runtime.Systems
 {
     using System;
     using Cysharp.Threading.Tasks;
+    using UniGame.Core.Runtime.Interfaces;
     using UniModules.UniCore.Runtime.Attributes;
-    using UniModules.UniStateMachine.Runtime.Interfaces;
     using UniRx;
     
     using UnityEngine;
@@ -53,7 +53,7 @@ namespace UniModules.UniGameFlow.GameFlow.Runtime.Systems
             return this;
         }
 
-        public void Exit() => Dispose();
+        public async UniTask Exit() => Dispose();
 
         #region private methods
 

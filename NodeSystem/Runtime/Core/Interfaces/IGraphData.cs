@@ -2,7 +2,7 @@
 {
     using Interfaces;
     using Runtime.Interfaces;
-    using UniModules.UniCore.Runtime.Interfaces;
+    using UniModules.UniGame.Core.Runtime.Interfaces;
 
     public interface IGraphData : INamedItem, IUnique
     {

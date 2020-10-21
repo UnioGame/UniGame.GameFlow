@@ -2,12 +2,12 @@
 {
     using System.Collections.Generic;
     using NodeSystem.Runtime.Core;
-    using UniModules.UniCore.Runtime.Interfaces;
     using UniModules.UniCore.Runtime.ObjectPool.Runtime;
     using UniModules.UniCore.Runtime.ObjectPool.Runtime.Extensions;
     using UniModules.UniGame.AddressableTools.Runtime.Extensions;
     using UniModules.UniGame.SerializableContext.Runtime.Addressables;
     using UniModules.UniGame.Context.Runtime.Abstract;
+    using UniModules.UniGame.Core.Runtime.Interfaces;
     using UniModules.UniGameFlow.NodeSystem.Runtime.Core.Attributes;
     using UniNodes.Nodes.Runtime.Common;
 

@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
     using Core;
-    using UniModules.UniCore.Runtime.Interfaces;
+    using UniModules.UniGame.Core.Runtime.Interfaces;
 
     public interface IProxyNode : IUniNode
     {

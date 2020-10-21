@@ -5,9 +5,9 @@
     using NodeSystem.Runtime.Attributes;
     using NodeSystem.Runtime.Core;
     using NodeSystem.Runtime.Interfaces;
-    using UniModules.UniCore.Runtime.Interfaces;
-    using UniModules.UniCore.Runtime.Interfaces.Rx;
     using UniModules.UniCore.Runtime.Rx.Extensions;
+    using UniModules.UniGame.Core.Runtime.Interfaces;
+    using UniModules.UniGame.Core.Runtime.Interfaces.Rx;
     using UniRx;
 
     [Serializable]

@@ -1,8 +1,8 @@
 ﻿namespace UniGame.UniNodes.NodeSystem.Runtime.Commands
 {
     using UniModules.UniCore.Runtime.DataFlow.Interfaces;
-    using UniModules.UniCore.Runtime.Interfaces;
     using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
+    using UniModules.UniGame.Core.Runtime.Interfaces;
 
     public class DummyPortsCommand : ILifeTimeCommand
     {

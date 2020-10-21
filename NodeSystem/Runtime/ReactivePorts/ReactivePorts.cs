@@ -2,7 +2,7 @@
 {
     using System;
     using Core;
-    using UniModules.UniCore.Runtime.Interfaces;
+    using UniModules.UniGame.Core.Runtime.Interfaces;
 
 #if ODIN_INSPECTOR
     [Sirenix.OdinInspector.InlineProperty]

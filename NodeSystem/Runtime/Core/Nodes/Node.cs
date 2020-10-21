@@ -8,8 +8,8 @@
     using Runtime.Interfaces;
     using UniCore.Runtime.ProfilerTools;
     using UniModules.UniCore.Runtime.Attributes;
-    using UniModules.UniCore.Runtime.Interfaces;
     using UniModules.UniGame.Core.Runtime.Attributes.FieldTypeDrawer;
+    using UniModules.UniGame.Core.Runtime.Interfaces;
     using UnityEngine;
 
     [Serializable]

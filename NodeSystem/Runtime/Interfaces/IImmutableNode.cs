@@ -2,7 +2,7 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
 {
     using System.Collections.Generic;
     using Core.Interfaces;
-    using UniModules.UniCore.Runtime.Interfaces;
+    using UniModules.UniGame.Core.Runtime.Interfaces;
     using IGraphData = Core.IGraphData;
     using Vector2 = UnityEngine.Vector2;
 

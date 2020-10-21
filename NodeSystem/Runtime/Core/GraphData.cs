@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using Interfaces;
     using Runtime.Interfaces;
-    using UniModules.UniCore.Runtime.Interfaces;
+    using UniModules.UniGame.Core.Runtime.Interfaces;
 
     [Serializable]
     public class GraphData : IGraphData, IUniqueIdProvider

@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UniGame.UniNodes.NodeSystem.Runtime.Interfaces;
 using UniModules.UniCore.Runtime.DataFlow;
 using UniModules.UniCore.Runtime.DataFlow.Interfaces;
-using UniModules.UniCore.Runtime.Interfaces;
 using UnityEngine;
 
 namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
 {
     using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
+    using UniModules.UniGame.Core.Runtime.Interfaces;
 
     [Serializable]
     public class SNode : SerializableNode, IProxyNode

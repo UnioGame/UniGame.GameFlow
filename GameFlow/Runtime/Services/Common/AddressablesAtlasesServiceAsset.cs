@@ -6,7 +6,7 @@ namespace UniModules.UniGameFlow.GameFlow.Runtime.Services.Common
     using Cysharp.Threading.Tasks;
     using UniGame.AddressableTools.Runtime.SpriteAtlases;
     using UniGame.AddressableTools.Runtime.SpriteAtlases.Abstract;
-    using UniModules.UniCore.Runtime.Interfaces;
+    using UniGame.Core.Runtime.Interfaces;
 
 
     [CreateAssetMenu(menuName = "UniGame/GameSystem/Services/AddressablesAtlasesService",fileName = nameof(AddressablesAtlasesService))]

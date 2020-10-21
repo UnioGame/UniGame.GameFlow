@@ -3,7 +3,7 @@
     using System;
     using System.Diagnostics;
     using Interfaces;
-    using UniModules.UniCore.Runtime.Interfaces;
+    using UniModules.UniGame.Core.Runtime.Interfaces;
 
     [Serializable]
     public class UpdatePortCommand : SerializedNodeCommand

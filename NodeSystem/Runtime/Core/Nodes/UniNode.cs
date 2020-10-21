@@ -5,8 +5,8 @@
     using Attributes;
     using Runtime.Interfaces;
     using UniModules.UniCore.Runtime.DataFlow.Interfaces;
-    using UniModules.UniCore.Runtime.Interfaces;
     using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
+    using UniModules.UniGame.Core.Runtime.Interfaces;
 
     [HideNode]
     [Serializable]

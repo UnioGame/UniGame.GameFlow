@@ -5,8 +5,8 @@
     using NodeSystem.Runtime.Extensions;
     using NodeSystem.Runtime.Interfaces;
     using UniModules.UniCore.Runtime.DataFlow.Interfaces;
-    using UniModules.UniCore.Runtime.Interfaces;
     using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
+    using UniModules.UniGame.Core.Runtime.Interfaces;
 
     [Serializable]
     public class ConnectedPortPairCommands : ILifeTimeCommand , IPortPair

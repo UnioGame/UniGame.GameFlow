@@ -1,6 +1,6 @@
 ﻿namespace Taktika.GameRuntime.Abstract
 {
-    using UniModules.UniCore.Runtime.Interfaces;
+    using UniModules.UniGame.Core.Runtime.Interfaces;
 
     public interface IGameManager
     {
