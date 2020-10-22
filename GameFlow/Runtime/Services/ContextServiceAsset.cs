@@ -25,7 +25,7 @@
         #endregion
 
         private TApi _sharedService;
-        private SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1,1);
+        private SemaphoreSlim _semaphoreSlim;
 
         #region public methods
         
@@ -36,7 +36,7 @@
         /// <returns></returns>
         public async UniTask<TApi> CreateServiceAsync(IContext context)
         {
-            await semaphoreSlim.WaitAsync();
+            await _semaphoreSlim.WaitAsync();
             try
             {
                 if (isSharedSystem && _sharedService == null) {
@@ -48,7 +48,7 @@
             {
                 //When the task is ready, release the semaphore. It is vital to ALWAYS release the semaphore when we are ready, or else we will end up with a Semaphore that is forever locked.
                 //This is why it is important to do the Release within a try...finally clause; program execution may crash or take a different path, this way you are guaranteed execution
-                semaphoreSlim.Release();
+                _semaphoreSlim.Release();
             }
             var service = isSharedSystem ? _sharedService : 
                 (await CreateServiceInternalAsync(context)).AddTo(LifeTime);
@@ -69,6 +69,13 @@
 
         protected abstract UniTask<TApi> CreateServiceInternalAsync(IContext context);
 
-  
+
+        protected sealed override void OnActivate()
+        {
+            base.OnActivate();
+            _semaphoreSlim?.Dispose();
+            _semaphoreSlim = new SemaphoreSlim(1,1);
+            _semaphoreSlim.AddTo(LifeTime);
+        }
     }
 }
