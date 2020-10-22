@@ -25,7 +25,7 @@
         #endregion
 
         private TApi _sharedService;
-        private static SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1,1);
+        private SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1,1);
 
         #region public methods
         
