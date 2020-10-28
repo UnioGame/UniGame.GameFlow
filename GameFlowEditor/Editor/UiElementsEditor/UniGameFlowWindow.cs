@@ -1,25 +1,22 @@
-﻿using GraphProcessor;
-
-namespace UniGame.GameFlowEditor.Editor
+﻿namespace UniModules.UniGame.GameFlow.GameFlowEditor.Editor.UiElementsEditor
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Runtime;
-    using UniCore.Runtime.ProfilerTools;
-    using UniModules.UniCore.EditorTools.Editor.Utility;
-    using UniModules.UniCore.Runtime.DataFlow;
-    using UniModules.UniCore.Runtime.Rx.Extensions;
-    using UniModules.UniGame.Core.EditorTools.Editor.AssetOperations;
-    using UniModules.UniGameFlow.GameFlowEditor.Editor.Tools;
-    using UniNodes.GameFlowEditor.Editor;
-    using UniNodes.NodeSystem.Runtime.Core;
+    using Core.EditorTools.Editor.AssetOperations;
+    using global::UniCore.Runtime.ProfilerTools;
+    using global::UniGame.GameFlowEditor.Editor;
+    using global::UniGame.GameFlowEditor.Runtime;
+    using global::UniGame.UniNodes.GameFlowEditor.Editor;
+    using global::UniGame.UniNodes.NodeSystem.Runtime.Core;
+    using GraphProcessor;
+    using UniCore.EditorTools.Editor.Utility;
+    using UniCore.Runtime.DataFlow;
+    using UniCore.Runtime.Rx.Extensions;
+    using UniGameFlow.GameFlowEditor.Editor.Tools;
     using UniRx;
-    using UnityEditor;
     using UnityEditor.Experimental.GraphView;
-    using UnityEditor.SceneManagement;
     using UnityEngine;
-    using UnityEngine.SceneManagement;
     using UnityEngine.UIElements;
 
     public class UniGameFlowWindow : BaseGraphWindow
@@ -27,10 +24,15 @@ namespace UniGame.GameFlowEditor.Editor
         #region static data
 
         protected static bool                       isInitialized;
-        protected static HashSet<UniGameFlowWindow> Windows = new HashSet<UniGameFlowWindow>();
-
+        protected static HashSet<UniGameFlowWindow> windows   = new HashSet<UniGameFlowWindow>();
+        protected static UniGameFlowWindow          focusedWindow;
+        
         #endregion
 
+        public static IEnumerable<UniGameFlowWindow> Windows => windows;
+
+        public static UniGameFlowWindow FocusedWindow => focusedWindow;
+        
         #region static methods
 
         public static UniGameFlowWindow Open(UniGraph graph)
@@ -42,21 +44,25 @@ namespace UniGame.GameFlowEditor.Editor
             return window;
         }
 
-        public static UniGameFlowWindow CreateWindow(UniGraph graph)
+        public static UniGameFlowWindow CreateWindow(UniGraph graph) {
+            var window = SelectWindow(graph);
+            window.Initialize(graph);
+            return window;
+        }
+
+        public static UniGameFlowWindow SelectWindow(UniGraph graph) 
         {
-            var window = Windows.FirstOrDefault(x => x.titleContent.text == graph.name);
+            var window = windows.FirstOrDefault(x => x.titleContent.text == graph.name);
             if (window != null && window.ActiveGraph) {
                 window.Save();
             }
 
             window = window != null ? 
                 window : 
-                Windows.FirstOrDefault(x => x.ActiveGraph == null);
+                windows.FirstOrDefault(x => x.IsEmpty);
             window = window != null ? 
                 window : 
                 CreateInstance<UniGameFlowWindow>();
-            
-            window.Initialize(graph);
 
             return window;
         }
@@ -66,21 +72,6 @@ namespace UniGame.GameFlowEditor.Editor
             if (isInitialized)
                 return;
             isInitialized = true;
-            //Selection.selectionChanged += OnSelectionChange;
-        }
-
-
-        private static void OnSelectionChange()
-        {
-            var selections = Selection.objects.
-                Concat(Selection.gameObjects).
-                OfType<GameObject>();
-
-            foreach (var item in selections) {
-                var graphData = item.GetComponent<UniGraph>();
-                if (!graphData) continue;
-                Open(graphData);
-            }
         }
 
         #endregion
@@ -100,7 +91,11 @@ namespace UniGame.GameFlowEditor.Editor
 
         #endregion
 
+        public bool IsEmpty => !ActiveGraph;
+        
         public UniGraph ActiveGraph => _targetGraph.Value;
+
+        public bool IsFocused => FocusedWindow == this;
 
         public IReadOnlyReactiveProperty<UniGraph> TargetGraph => _targetGraph;
 
@@ -152,20 +147,6 @@ namespace UniGame.GameFlowEditor.Editor
             return currentGraph;
         }
 
-        private void LogGraph()
-        {
-            var nodes = ActiveGraph.Nodes;
-            foreach (var node in nodes) {
-                var debug = $"{node.ItemName} : ";
-
-                foreach (var port in node.Ports) {
-                    debug += $"{port.ItemName} ";
-                }
-
-                GameLog.Log(debug);
-            }
-        }
-
         public virtual UniAssetGraph CreateAssetGraph(UniGraph uniGraph)
         {
             if (Application.isPlaying == false) {
@@ -195,6 +176,10 @@ namespace UniGame.GameFlowEditor.Editor
 
         #endregion
 
+        private void OnFocus() {
+            focusedWindow = this;
+        }
+        
         private void InitializeGraph(UniGraph uniGraph)
         {
             if (!AssetEditorTools.IsPureEditorMode) {
@@ -222,9 +207,9 @@ namespace UniGame.GameFlowEditor.Editor
                 AddTo(_lifeTime);
 
             _lifeTime.AddCleanUpAction(() =>
-                Windows.Remove(this));
+                windows.Remove(this));
             
-            Windows.Add(this);
+            windows.Add(this);
             
             Reload();
         }
@@ -233,23 +218,6 @@ namespace UniGame.GameFlowEditor.Editor
         {
             _lifeTime.Release();
             base.OnDestroy();
-        }
-        
-        private void OnAssemblyReloaded()
-        {
-            if (AssetEditorTools.IsPureEditorMode == false)
-                return;
-            Reload();
-        }
-
-        private void OnBeforeAssemblyReload()
-        {
-            if (AssetEditorTools.IsPureEditorMode == false)
-                return;
-
-            graph = null;
-
-            Save();
         }
 
         protected override void InitializeWindow(BaseGraph inputGraph)
@@ -263,7 +231,6 @@ namespace UniGame.GameFlowEditor.Editor
             rootView.Add(_uniGraphView);
 
             CreateToolbar(_uniGraphView);
-            BindEvents();
         }
 
         protected override void InitializeGraphView(BaseGraphView view)
@@ -271,53 +238,6 @@ namespace UniGame.GameFlowEditor.Editor
             CreateMinimap(view);
             CreatePinned(view);
         }
-
-        private void BindEvents()
-        {
-            //save graph when ctrl + s pressed
-            Observable.FromEvent(
-                ev => EditorSceneManager.sceneSaved += OnSave,
-                ev => EditorSceneManager.sceneSaved -= OnSave).
-                Subscribe().
-                AddTo(_lifeTime);
-
-            //redraw editor if assembly reloaded
-            AssemblyReloadEvents.afterAssemblyReload += OnAssemblyReloaded;
-             Observable.FromEvent(
-                 ev => AssemblyReloadEvents.afterAssemblyReload += OnAssemblyReloaded,
-                 ev => AssemblyReloadEvents.afterAssemblyReload -= OnAssemblyReloaded).
-                 Subscribe().
-                 AddTo(_lifeTime);
-
-            Observable.FromEvent(
-                ev => AssemblyReloadEvents.beforeAssemblyReload += OnBeforeAssemblyReload,
-                ev => AssemblyReloadEvents.beforeAssemblyReload -= OnBeforeAssemblyReload).
-                Subscribe().
-                AddTo(_lifeTime);
-
-            Observable.FromEvent(
-                    ev => EditorApplication.playModeStateChanged += OnPlayModeChanged,
-                    ev => EditorApplication.playModeStateChanged -= OnPlayModeChanged).
-                Subscribe().
-                AddTo(_lifeTime);
-        }
-        
-        private void OnPlayModeChanged(PlayModeStateChange state)
-        {
-            GameLog.Log($"PlayMode Changed To: {state}",Color.blue);
-            switch (state) {
-                case PlayModeStateChange.ExitingEditMode:
-                    break;
-                case PlayModeStateChange.EnteredEditMode:
-                case PlayModeStateChange.EnteredPlayMode:
-                    Reload();
-                    break;
-                case PlayModeStateChange.ExitingPlayMode:
-                    break;
-            }
-        }
-
-        private void OnSave(Scene scene) => Save();
 
         private void CreateToolbar(BaseGraphView view)
         {

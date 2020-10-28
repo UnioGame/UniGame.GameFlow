@@ -9,10 +9,20 @@ namespace UniModules.UniGame.GameFlow.GameFlowEditor.Editor.NodesSelectorWindow.
     using UniCore.Runtime.ReflectionUtils;
     using UniCore.Runtime.Utils;
     using System;
+    using global::UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.BaseEditor;
     using UnityEngine;
 
+    public enum NodeSortingType {
+        Name,
+        MenuName,
+        Category
+    }
+    
     [Serializable]
     public class NodesViewerEditor {
+        
+        #region static data
+        
         private static Type nodeBaseType = typeof(INode);
         private static MemorizeItem<Type, List<Type>> nodeTypes = MemorizeTool.Memorize<Type, List<Type>>(x => {
             var items = nodeBaseType.GetAssignableTypes().
@@ -20,7 +30,11 @@ namespace UniModules.UniGame.GameFlow.GameFlowEditor.Editor.NodesSelectorWindow.
                 ToList();
             return items;
         });
+        
+        #endregion
 
+        public NodeSortingType sortBy = NodeSortingType.MenuName;
+        
 #if ODIN_INSPECTOR
         [Sirenix.OdinInspector.Searchable(FilterOptions = Sirenix.OdinInspector.SearchFilterOptions.ISearchFilterableInterface)]
         [Sirenix.OdinInspector.InlineProperty]
@@ -29,6 +43,7 @@ namespace UniModules.UniGame.GameFlow.GameFlowEditor.Editor.NodesSelectorWindow.
             HideAddButton               = true,
             HideRemoveButton            = true,
             Expanded                    = true,
+            OnEndListElementGUI = nameof(EndOfListItemGui),
             CustomRemoveElementFunction = nameof(OnSelectionAction),
             CustomRemoveIndexFunction   = nameof(OnSelectionIndexAction))]
 #endif
@@ -41,15 +56,10 @@ namespace UniModules.UniGame.GameFlow.GameFlowEditor.Editor.NodesSelectorWindow.
         #region inspector
 
         private List<NodeInfoData> RefreshNodeList() {
-            var nodeData  = new List<NodeInfoData>();
-            var nodeItems = nodeTypes[nodeBaseType];
+            var nodeDatas = CreateNodesInfo();
+            nodeDatas = FilterNodeInfo(nodeDatas);
             
-
-            foreach (var item in nodeItems) {
-                nodeData.Add(CreateInfo(item));
-            }
-
-            return nodeData;
+            return nodeDatas;
         }
 
         private void OnSelectionAction(NodeInfoData data) {
@@ -58,6 +68,42 @@ namespace UniModules.UniGame.GameFlow.GameFlowEditor.Editor.NodesSelectorWindow.
 
         private void OnSelectionIndexAction(int index) {
             
+        }
+
+        private List<NodeInfoData> CreateNodesInfo() {
+            var nodeDatas = new List<NodeInfoData>();
+            var nodeItems = nodeTypes[nodeBaseType];
+            
+
+            foreach (var item in nodeItems) {
+                nodeDatas.Add(CreateInfo(item));
+            }
+
+            return nodeDatas;
+        }
+        
+        private List<NodeInfoData> FilterNodeInfo(List<NodeInfoData> nodesInfo) {
+
+            switch (sortBy) {
+                case NodeSortingType.Name:
+                    nodesInfo = nodesInfo.OrderBy(x => x.Name).ToList();
+                    break;
+                case NodeSortingType.MenuName:
+                    nodesInfo = nodesInfo.OrderBy(x => x.MenuName).ToList();
+                    break;
+                case NodeSortingType.Category:
+                    nodesInfo = nodesInfo.OrderBy(x => x.Category).ToList();
+                    break;
+            }
+            
+            return nodesInfo;
+        }
+        
+        private void EndOfListItemGui(int item)
+        {
+            if (GUILayout.Button("add to graph")) {
+                
+            }
         }
         
         private NodeInfoData CreateInfo(Type nodeType) {
@@ -69,6 +115,7 @@ namespace UniModules.UniGame.GameFlow.GameFlowEditor.Editor.NodesSelectorWindow.
                 Description = string.Empty,
                 Category = string.Empty,
                 Name        = nodeType.Name,
+                MenuName = nodeType.GetNodeMenuName()
             };
 
             itemInfo.Description = nodeInfo == null || string.IsNullOrEmpty(nodeInfo.Description)

@@ -4,6 +4,7 @@ namespace UniModules.UniGameFlow.GameFlowEditor.Editor.NodesSelectorWindow
 {
     using Sirenix.OdinInspector;
     using Sirenix.OdinInspector.Editor;
+    using UniGame.Core.EditorTools.Editor.AssetOperations;
     using UniGame.GameFlow.GameFlowEditor.Editor.NodesSelectorWindow.OdinWindow;
     using UnityEditor;
 
@@ -17,7 +18,7 @@ namespace UniModules.UniGameFlow.GameFlowEditor.Editor.NodesSelectorWindow
         [MenuItem("UniGame/GameFlow/Nodes Search Window")]
         public static void OpenWindow() => ShowWindow();
         
-        public static OdinNodesViewerWindow ShowWindow()
+        public static OdinNodesViewerWindow ShowWindow() 
         {
             var window = GetWindow<OdinNodesViewerWindow>();
             window.InitializeWindow();

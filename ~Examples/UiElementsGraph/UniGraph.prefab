@@ -52,7 +52,7 @@ MonoBehaviour:
     - input
     values:
     - id: 2
-      nodeId: 167
+      nodeId: 189
       fieldName: input
       direction: 0
       connectionType: 0
@@ -65,7 +65,7 @@ MonoBehaviour:
         broadcastersCount: 0
       connections: []
       instancePortList: 0
-  uniqueId: 170
+  uniqueId: 189
   nodes: []
   serializableNodes:
   - id: 0
@@ -76,98 +76,56 @@ MonoBehaviour:
   references:
     version: 1
     00000000:
-      type: {class: DemoTestNode, ns: , asm: unigame.nodesystem.examples}
+      type: {class: SLogNode, ns: UniGame.UniNodes.Nodes.Runtime.SerializableNodes, asm: unigame.nodesystem.commonnodes}
       data:
-        id: 139
+        id: 174
         width: 220
-        nodeName: Demo Test Node
-        position: {x: 587, y: 99}
+        nodeName: 
+        position: {x: 0, y: 0}
         ports:
           keys:
-          - inFloat
-          - outFloat
+          - log
           values:
-          - id: 140
-            nodeId: 139
-            fieldName: inFloat
+          - id: 173
+            nodeId: 174
+            fieldName: log
             direction: 0
             connectionType: 0
             showBackingValue: 2
             isDynamic: 1
             isInstancePortList: 0
             portValue:
-              name: inFloat
-              serializedValueTypes:
-              - System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+              name: log
+              serializedValueTypes: []
               broadcastersCount: 0
             connections: []
             instancePortList: 0
-          - id: 162
-            nodeId: 139
-            fieldName: outFloat
-            direction: 1
-            connectionType: 0
-            showBackingValue: 2
-            isDynamic: 1
-            isInstancePortList: 0
-            portValue:
-              name: outFloat
-              serializedValueTypes:
-              - System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-              broadcastersCount: 0
-            connections:
-            - fieldName: inFloat
-              nodeId: 168
-              reroutePoints: []
-              portId: 0
-            instancePortList: 0
-        inFloat: 0
-        outFloat: 0
+        mode: 1
+        message: LogNode
     00000001:
-      type: {class: DemoTestNode, ns: , asm: unigame.nodesystem.examples}
+      type: {class: SLogNode, ns: UniGame.UniNodes.Nodes.Runtime.SerializableNodes, asm: unigame.nodesystem.commonnodes}
       data:
-        id: 168
+        id: 176
         width: 220
-        nodeName: Demo Test Node
-        position: {x: 891, y: 276}
+        nodeName: 
+        position: {x: 0, y: 0}
         ports:
           keys:
-          - inFloat
-          - outFloat
+          - log
           values:
-          - id: 169
-            nodeId: 168
-            fieldName: inFloat
+          - id: 175
+            nodeId: 176
+            fieldName: log
             direction: 0
             connectionType: 0
             showBackingValue: 2
             isDynamic: 1
             isInstancePortList: 0
             portValue:
-              name: inFloat
-              serializedValueTypes:
-              - System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-              broadcastersCount: 0
-            connections:
-            - fieldName: outFloat
-              nodeId: 139
-              reroutePoints: []
-              portId: 0
-            instancePortList: 0
-          - id: 170
-            nodeId: 168
-            fieldName: outFloat
-            direction: 1
-            connectionType: 0
-            showBackingValue: 2
-            isDynamic: 1
-            isInstancePortList: 0
-            portValue:
-              name: outFloat
-              serializedValueTypes:
-              - System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+              name: log
+              serializedValueTypes: []
               broadcastersCount: 0
             connections: []
             instancePortList: 0
-        inFloat: 0
-        outFloat: 0
+        mode: 1
+        message: LogNode
