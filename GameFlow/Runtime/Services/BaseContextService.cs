@@ -13,8 +13,7 @@ namespace UniModules.UniGameFlow.GameFlow.Runtime.Services
     using UnityEngine;
 
     public abstract class BaseContextService : 
-        BaseServiceAsset<IObservable<IContext>>,
-        IAsyncState<IDisposable>
+        BaseServiceAsset<IObservable<IContext>>
     {
         #region inspector
 
@@ -33,7 +32,7 @@ namespace UniModules.UniGameFlow.GameFlow.Runtime.Services
             return await Execute(contextObservable);
         }
 
-        public void Release() => Exit();
+        public async UniTask Release() => await Exit();
 
         protected sealed override async UniTask<Unit> OnInitialize(IObservable<IContext> source)
         {

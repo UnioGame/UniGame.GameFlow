@@ -12,7 +12,7 @@ namespace UniModules.UniGameFlow.GameFlow.Runtime.Systems
 
     public abstract class BaseServiceAsset<TData> : 
         DisposableScriptableObject, 
-        IAsyncState<IDisposable,TData>
+        IAsyncState<TData,IDisposable>
         where TData : class
     {
         #region inspector
