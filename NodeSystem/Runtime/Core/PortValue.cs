@@ -82,6 +82,24 @@
 
         #endregion
 
+        
+        #region connection api
+
+        public int ConnectionsCount => data.ConnectionsCount;
+
+        public void Disconnect(IMessagePublisher connection) {
+            data.Disconnect(connection);
+        }
+
+        public IDisposable Bind(IMessagePublisher contextData)
+        {
+            var disposable = data.Bind(contextData);
+            broadcastersCount = data.ConnectionsCount;
+            return disposable;
+        }
+
+        #endregion
+        
         public void Initialize(string portName)
         {
             name = portName;
@@ -134,17 +152,6 @@
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public IObservable<TValue> Receive<TValue>() => data.Receive<TValue>();
-
-        #endregion
-
-        #region connector
-
-        public IDisposable Bind(IMessagePublisher contextData)
-        {
-            var disposable = data.Bind(contextData);
-            broadcastersCount = data.ConnectionsCount;
-            return disposable;
-        }
 
         #endregion
 
