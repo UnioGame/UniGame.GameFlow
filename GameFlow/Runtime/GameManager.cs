@@ -1,95 +1,97 @@
-﻿namespace Taktika.GameRuntime
+﻿namespace UniModules.UniGame.GameFlow.GameFlow.Runtime
 {
     using System.Collections.Generic;
-    using Abstract;
+    using AddressableTools.Runtime.Extensions;
+    using Core.Runtime.DataFlow.Interfaces;
+    using Core.Runtime.Interfaces;
     using Cysharp.Threading.Tasks;
-    using UniGame.UniNodes.NodeSystem.Runtime.Core;
-    using UniModules.UniCore.Runtime.DataFlow;
-    using UniModules.UniGame.AddressableTools.Runtime.Extensions;
-    using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
-    using UniModules.UniGame.Core.Runtime.Interfaces;
-    using UniModules.UniGameFlow.GameFlow.Runtime.Services;
-    using UniModules.UniGameFlow.GameFlow.Runtime.Systems;
-    using UniRx;
-    
+    using global::UniGame.UniNodes.NodeSystem.Runtime.Core;
+    using SerializableContext.Runtime.Addressables;
+    using Taktika.GameRuntime.Abstract;
+    using UniContextData.Runtime.Entities;
+    using UniContextData.Runtime.Interfaces;
     using UnityEngine;
 
-    public class GameManager : MonoBehaviour, IGameManager, ILifeTimeContext
+    public class GameManager : MonoBehaviour, IGameManager
     {
         #region inspector
 
         [SerializeField]
+        private AssetReferenceContextContainer _contextContainer;
+        
+        [SerializeField]
         private List<UniGraph> executionItems = new List<UniGraph>();
 
         [SerializeField]
-        private List<AssetReferenceStateService> _referenceServices = new List<AssetReferenceStateService>();
+        private List<AssetReferenceDataSource> _assetSources = new List<AssetReferenceDataSource>();
 
-        [SerializeField]
-        private List<BaseContextService> _services = new List<BaseContextService>();
+        [SerializeReference]
+        private List<IAsyncContextDataSource> _sources = new List<IAsyncContextDataSource>();
         
         #endregion
-        
-        private LifeTimeDefinition _lifeTimeDefinition = new LifeTimeDefinition();
 
-        private IContext gameContext;
+        private EntityContext _gameContext = new EntityContext();
         
         #region public properties
 
         public static IGameManager Instance { get; protected set; }
 
-        public IContext GameContext => gameContext;
+        public IContext GameContext => _gameContext;
 
-        public ILifeTime LifeTime => _lifeTimeDefinition;
+        public ILifeTime LifeTime => _gameContext.LifeTime;
         
         #endregion
         
         #region public methods
         
-        public void Initialize(IContext context)
+        public async UniTask Execute()
         {
-            gameContext = context;
-            ExecuteGraphs();
-            ExecuteServices();
+            if (_contextContainer.RuntimeKeyIsValid()) {
+                var contextContainer = await _contextContainer.LoadAssetTaskAsync(LifeTime);
+                contextContainer.SetValue(_gameContext);
+            }
+
+            await ExecuteSources(GameContext);
+            await ExecuteGraphs();
         }
 
         #endregion
         
         #region private methods
 
-        private void ExecuteGraphs()
+        private async UniTask ExecuteGraphs()
         {
-            foreach (var graph in executionItems) {
+            foreach (var graph in this.executionItems) {
                 graph.Execute(); 
             }
         }
-
-        private async UniTask<Unit> ExecuteServices()
+        
+        private async UniTask ExecuteSources(IContext context)
         {
-            foreach (var service in _services) {
-                var disposable = await service.Execute();
-                LifeTime.AddDispose(disposable);
+            foreach (var source in _sources) {
+                source.RegisterAsync(context);
             }
-            
-            foreach (var serviceReference in _referenceServices) {
-                var service = await serviceReference.LoadAssetTaskAsync(LifeTime);
-                var disposable = await service.Execute();
-                LifeTime.AddDispose(disposable);
+
+            foreach (var sourceReference in _assetSources) {
+                RegisterSource(sourceReference, context);
             }
-            
-            return Unit.Default;
         }
 
+        private async UniTask RegisterSource(AssetReferenceDataSource dataSource,IContext context) {
+            var sourceAsset = await dataSource.LoadAssetTaskAsync(LifeTime);
+            await sourceAsset.RegisterAsync(context);
+        }
+        
         private void Awake()
         {
             if (Instance != null) {
-                Destroy(gameObject);
+                Destroy(this.gameObject);
                 return;
             }
             
             Instance = this;
+            this.AddDisposable(_gameContext);
         }
-
-        private void OnDestroy() => _lifeTimeDefinition.Terminate();
 
         #endregion
 
