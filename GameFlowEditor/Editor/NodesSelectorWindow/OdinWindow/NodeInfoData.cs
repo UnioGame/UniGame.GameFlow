@@ -7,7 +7,11 @@ namespace UniModules.UniGame.GameFlow.GameFlowEditor.Editor.NodesSelectorWindow.
     using UnityEngine;
 
     [Serializable]
-    public class NodeInfoData : Sirenix.OdinInspector.ISearchFilterable
+    public class NodeInfoData
+#if ODIN_INSPECTOR_3
+            : Sirenix.OdinInspector.ISearchFilterable
+#endif
+            
     {
         private const int labelWidth = 100;
 

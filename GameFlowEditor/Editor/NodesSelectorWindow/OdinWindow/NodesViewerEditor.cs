@@ -36,7 +36,9 @@ namespace UniModules.UniGame.GameFlow.GameFlowEditor.Editor.NodesSelectorWindow.
         public NodeSortingType sortBy = NodeSortingType.MenuName;
         
 #if ODIN_INSPECTOR
+#if ODIN_INSPECTOR_3
         [Sirenix.OdinInspector.Searchable(FilterOptions = Sirenix.OdinInspector.SearchFilterOptions.ISearchFilterableInterface)]
+#endif
         [Sirenix.OdinInspector.InlineProperty]
         [Sirenix.OdinInspector.HideLabel]
         [Sirenix.OdinInspector.ListDrawerSettings(
