@@ -15,9 +15,9 @@
     public class PortValuePreTransferCommand : ILifeTimeCommand,IContextWriter
     {
         private readonly Func<IContext,IMessagePublisher,IEnumerator> action;
-        private readonly IConnector<IMessagePublisher> connector;
-        private readonly IContext sourceContext;
-        private readonly IMessagePublisher target;
+        private readonly IConnector<IMessagePublisher>                connector;
+        private readonly IContext                                     sourceContext;
+        private readonly IMessagePublisher                            target;
 
         private RoutineHandle handler;
 

@@ -8,7 +8,9 @@
     using UniModules.UniGame.Core.Runtime.Interfaces;
 
     [Serializable]
-    public class NodeDataActionCommand : ILifeTimeCommand, IContextWriter
+    public class NodeDataActionCommand : 
+        ILifeTimeCommand, 
+        IContextWriter
     {
         private readonly IPortValue port;
         private readonly Action onAddData;
