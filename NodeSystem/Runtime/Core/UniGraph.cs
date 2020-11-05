@@ -11,6 +11,7 @@
     using UniModules.UniGame.SerializableContext.Runtime.Addressables;
     using UniModules.UniGame.Context.Runtime.Abstract;
     using UniModules.UniGame.Core.Runtime.Extension;
+    using UniModules.UniGame.Core.Runtime.Interfaces;
     using UniModules.UniGameFlow.NodeSystem.Runtime.Extensions;
     using UniRx;
     using UnityEngine;
@@ -129,7 +130,7 @@
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void BindConnections(IUniNode node,INodePort sourcePort,IMessagePublisher publisher)
+        private void BindConnections(IUniNode node,INodePort sourcePort,IContext publisher)
         {
             //data source connections allowed only for input ports
             if (sourcePort.Direction != PortIO.Input) {
@@ -145,8 +146,7 @@
                     continue;
                 
                 var value = port.Value;
-                value.Bind(publisher).
-                    AddTo(LifeTime);
+                value.Bind(publisher).AddTo(LifeTime);
             }
         }
 
