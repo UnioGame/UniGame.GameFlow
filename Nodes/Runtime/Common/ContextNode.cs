@@ -40,11 +40,10 @@
             return contextNode;
         }
         
-        protected override void UpdateCommands(List<ILifeTimeCommand> nodeCommands)
+        protected override void OnExecute()
         {
-            base.UpdateCommands(nodeCommands);
-                        
-            Source.Where(x => x!=null).
+            base.OnExecute();
+            Source.Where(x => x != null).
                 Do(OnContextActivate).
                 Subscribe().
                 AddTo(LifeTime);
