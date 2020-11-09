@@ -17,6 +17,7 @@
         /// <param name="lifeTime">lifetime object</param>
         /// <returns>service context</returns>
         IContext Bind(IContext context);
+        
         void Complete();
     }
 }
