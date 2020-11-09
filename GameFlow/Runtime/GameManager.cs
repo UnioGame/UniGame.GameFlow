@@ -52,7 +52,7 @@
                 contextContainer.SetValue(_gameContext);
             }
 
-            await ExecuteSources(GameContext);
+            await ExecuteSources(_gameContext);
             await ExecuteGraphs();
         }
 
