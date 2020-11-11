@@ -20,7 +20,7 @@
     [HideNode]
     public abstract class ServiceNode<TServiceApi> : 
         ContextNode
-        where TServiceApi : IGameService
+        where TServiceApi :  IGameService
     {
         [SerializeField]
         private TServiceApi _service;
@@ -56,10 +56,11 @@
 
         private async UniTask<IContext> OnContextAvailable(IContext context)
         {
+            var serviceLifeTime = context.LifeTime.Compose(LifeTime);
+            
             _service = await CreateService(context);
-            
-            LifeTime.AddDispose(_service);
-            
+            _service.AddTo<IDisposable>(serviceLifeTime);
+
             await BindService(context);
             OnServiceCreated(context);
             GameLog.LogRuntime($"NODE SERVICE {typeof(TServiceApi).Name} CREATED");
@@ -68,10 +69,6 @@
         
         private async UniTask<IContext> BindService(IContext context)
         {
-            _service.Bind(context);
-            
-            _serviceDisposable?.Dispose();
-
             _serviceDisposable = _service.IsReady.
                 Where(x => x || !waitForServiceReady).
                 Do(_ => context.Publish<TServiceApi>(_service)).

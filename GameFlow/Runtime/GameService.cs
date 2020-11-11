@@ -9,6 +9,7 @@
     using UniModules.UniGame.Core.Runtime.Interfaces;
     using UniModules.UniGameFlow.GameFlow.Runtime.Interfaces;
     using UniRx;
+    using UnityEngine;
 
     /// <summary>
     /// base game service class for binding Context source data to service logic
@@ -16,19 +17,15 @@
     [Serializable]
     public abstract class GameService : IGameService, ICompletionSource
     {
-        protected readonly LifeTimeDefinition lifeTimeDefinition = new LifeTimeDefinition();
-
-        protected readonly BoolReactiveProperty isReady = new BoolReactiveProperty(false);
-
-        public IContext Bind(IContext context)
-        {    
-            var compositeLifetime = this.Spawn<ComposedLifeTime>();
-            compositeLifetime.Bind(context.LifeTime);
-            LifeTime.AddCleanUpAction(() => compositeLifetime.Despawn());
-            
-            return OnBind(context, compositeLifetime);
-        }
+        [SerializeField]
+        protected readonly LifeTimeDefinition   lifeTimeDefinition = new LifeTimeDefinition();
         
+        /// <summary>
+        /// ready by default
+        /// </summary>
+        [SerializeField]
+        protected readonly BoolReactiveProperty isReady            = new BoolReactiveProperty(false);
+
         /// <summary>
         /// complete service awaiter to mark it as ready
         /// </summary>
@@ -45,10 +42,5 @@
 
         public IReadOnlyReactiveProperty<bool> IsReady => isReady;
 
-        [Obsolete("This method will be removed!")]
-        protected virtual IContext OnBind(IContext context, ILifeTime lifeTime)
-        {
-            return context;
-        }
     }
 }

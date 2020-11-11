@@ -16,9 +16,7 @@
         public ILifeTime LifeTime => Service.LifeTime;
 
         public IReadOnlyReactiveProperty<bool> IsReady => Service.IsReady;
-        
-        public IContext Bind(IContext context) => Service.Bind(context);
-        
+
         public void Complete()
         {
         }

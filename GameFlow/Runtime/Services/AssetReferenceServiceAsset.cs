@@ -2,12 +2,13 @@
 {
     using System;
     using Interfaces;
+    using Services;
     using UnityEngine.AddressableAssets;
 
     [Serializable]
-    public class AssetReferenceContextService : AssetReferenceT<ContextServiceAsset<IGameService>>
+    public class AssetReferenceServiceAsset : AssetReferenceT<ServiceDataSourceAsset<IGameService>>
     {
-        public AssetReferenceContextService(string guid) : base(guid)
+        public AssetReferenceServiceAsset(string guid) : base(guid)
         {
         }
     }
