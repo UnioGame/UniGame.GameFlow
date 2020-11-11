@@ -6,6 +6,7 @@
     using UniCore.Runtime.ProfilerTools;
     using UniModules.UniCore.Runtime.Attributes;
     using UniModules.UniCore.Runtime.Rx.Extensions;
+    using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
     using UniModules.UniGame.Core.Runtime.Interfaces;
     using UniModules.UniGameFlow.GameFlow.Runtime.Interfaces;
     using UniNodes.Nodes.Runtime.Common;
@@ -62,7 +63,9 @@
             _service.AddTo<IDisposable>(serviceLifeTime);
 
             await BindService(context);
+            
             OnServiceCreated(context);
+            
             GameLog.LogRuntime($"NODE SERVICE {typeof(TServiceApi).Name} CREATED");
             return context;
         }
