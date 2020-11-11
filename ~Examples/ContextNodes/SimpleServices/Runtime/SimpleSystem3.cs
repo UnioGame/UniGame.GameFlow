@@ -10,13 +10,6 @@
 
     public class SimpleSystem3 : GameService
     {
-        
-        protected override IContext OnBind(IContext context, ILifeTime lifeTime = null)
-        {
-            context.Publish(this);
-            ReadyDelay(3).Execute();
-            return context;
-        }
 
         private IEnumerator ReadyDelay(float delay)
         {

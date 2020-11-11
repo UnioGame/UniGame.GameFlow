@@ -30,7 +30,7 @@
         #endregion
 
         private        TApi          _sharedService;
-        private static SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(1, 1);
+        private        SemaphoreSlim _semaphoreSlim;
 
         #region public methods
     
@@ -67,13 +67,19 @@
             }
 
             var service = isSharedSystem ? _sharedService : (await CreateServiceInternalAsync(context)).AddTo(LifeTime);
-
-            service.Bind(context);
             return service;
         }
 
         #endregion
 
         protected abstract UniTask<TApi> CreateServiceInternalAsync(IContext context);
+
+        protected override void OnActivate()
+        {
+            _semaphoreSlim?.Dispose();
+            _semaphoreSlim = new SemaphoreSlim(1,1).
+                AddTo(LifeTime);
+            base.OnActivate();
+        }
     }
 }
