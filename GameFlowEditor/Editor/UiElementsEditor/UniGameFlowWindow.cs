@@ -109,6 +109,11 @@
             Reload();
         }
 
+        public void AddNode(Type type, string itemName)
+        {
+            AddNode(type, itemName, _uniGraphView.LastMenuPosition);
+        }
+        
         public void AddNode(Type type, string itemName, Vector2 nodePosition)
         {
             if (IsEmpty) return;

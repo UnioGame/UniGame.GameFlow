@@ -12,6 +12,7 @@ namespace UniGame.GameFlowEditor.Editor
     using UniModules.UniCore.Runtime.DataFlow.Interfaces;
     using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
     using UniModules.UniGame.GameFlow.GameFlowEditor.Editor.UiElementsEditor;
+    using UniModules.UniGameFlow.GameFlowEditor.Editor.NodesSelectorWindow;
     using UniModules.UniGameFlow.GameFlowEditor.Editor.Tools;
     using UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.BaseEditor;
     using UniNodes.NodeSystem.Runtime.Core;
@@ -25,9 +26,11 @@ namespace UniGame.GameFlowEditor.Editor
     public class GameFlowGraphView : 
         BaseGraphView, IGameFlowGraphView
     {
-        private readonly LifeTimeDefinition lifeTimeDefinition = new LifeTimeDefinition();
-        private readonly Dictionary<BaseNode,UniNodeView> registeredNodes = new Dictionary<BaseNode,UniNodeView>(16);
-        private bool selectionUpdated = false;
+        private const    string                           NodesMenu      = "UniNodes";
+        private const    string                           NodesInfoWindowMenu      = "Nodes Window";
+        private readonly LifeTimeDefinition               lifeTimeDefinition = new LifeTimeDefinition();
+        private readonly Dictionary<BaseNode,UniNodeView> registeredNodes    = new Dictionary<BaseNode,UniNodeView>(16);
+        private          bool                             selectionUpdated   = false;
         
         private SerializableNodeContainer selectedNode;
         protected SerializableNodeContainer SelectionContainer {
@@ -57,7 +60,9 @@ namespace UniGame.GameFlowEditor.Editor
         public UniAssetGraph SourceGraph { get; protected set; }
 
         public ILifeTime LifeTime => lifeTimeDefinition;
-        
+
+        public Vector2 LastMenuPosition { get; protected set; }
+
         #endregion
 
         public void Focus(INode node)
@@ -103,8 +108,27 @@ namespace UniGame.GameFlowEditor.Editor
                 ChangeCoordinatesTo(contentViewContainer, evt.localMousePosition);
             var nodePosition = mousePos;
             
-            foreach (var nodeType in NodeEditorUtilities.NodeTypes) {
-                var menuName = nodeType.GetNodeMenuName();
+            LastMenuPosition = nodePosition;
+
+            AddNodesMenus(evt, nodePosition);
+            AddNodesWindowMenu(evt);
+            
+            evt.menu.AppendSeparator();
+            
+            base.BuildContextualMenu(evt);
+        }
+
+        
+        
+        #endregion
+
+        #region private methods
+
+        private void AddNodesMenus(ContextualMenuPopulateEvent evt,Vector3 nodePosition)
+        {
+            foreach (var nodeType in NodeEditorUtilities.NodeTypes)
+            {
+                var menuName = $"{NodesMenu}/{nodeType.GetNodeMenuName()}";
                 evt.menu.AppendAction(menuName,
                     (e) => {
                         var node = SourceGraph.CreateNode(nodeType, nodePosition);
@@ -112,16 +136,15 @@ namespace UniGame.GameFlowEditor.Editor
                     DropdownMenuAction.AlwaysEnabled
                 );
             }
-            
-            evt.menu.AppendSeparator();
-            
-            base.BuildContextualMenu(evt);
         }
 
-        #endregion
-
-        #region private methods
-
+        private void AddNodesWindowMenu(ContextualMenuPopulateEvent evt)
+        {
+            evt.menu.AppendAction(NodesInfoWindowMenu,
+                (e) => NodesInfoWindow.ShowWindow(),
+                DropdownMenuAction.AlwaysEnabled
+            );
+        }
         
         protected override void InitializeView()
         {

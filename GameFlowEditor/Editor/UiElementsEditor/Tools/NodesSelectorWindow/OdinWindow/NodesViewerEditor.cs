@@ -131,7 +131,7 @@ namespace UniModules.UniGame.GameFlow.GameFlowEditor.Editor.NodesSelectorWindow.
                 if (!GUILayout.Button($"add to graph [{graphName}]"))
                     return;
                 
-                focused.AddNode(nodeItem.NodeType,nodeItem.Name,Vector2.zero);
+                focused.AddNode(nodeItem.NodeType,nodeItem.Name);
                 focused.Focus();
                 
             },isDisabled);
