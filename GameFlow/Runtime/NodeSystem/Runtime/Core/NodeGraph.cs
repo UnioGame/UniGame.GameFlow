@@ -28,7 +28,11 @@
         #endregion
         
         #region inspector data
-        
+
+        public bool exitOnDisable = true;
+
+        public bool activateOnEnable = false;
+
         [ReadOnlyValue] 
         [SerializeField] private int uniqueId;
 
@@ -244,8 +248,30 @@
             }
             return node;
         }
-        
+
+        /// <summary>
+        /// finish node life time
+        /// </summary>
+        private void OnDisable()
+        {
+            if(exitOnDisable)
+                Exit();
+        }
+
+        private void OnDestroy()
+        {
+            Exit();
+        }
+
+        private void OnEnable()
+        {
+            if(activateOnEnable && Application.isPlaying)
+                Execute();
+        }
+
         #endregion
+        
+
 
     }
 }

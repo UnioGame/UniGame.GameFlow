@@ -12,11 +12,9 @@
         IGraphData GraphData { get; }
 
         /// <summary> Add a node to the graph by type </summary>
-        T AddNode<T>() 
-            where T : class, INode;
+        T AddNode<T>() where T : class, INode;
 
-        T AddNode<T>(string name) 
-            where T : class, INode;
+        T AddNode<T>(string name) where T : class, INode;
 
         INode AddNode(Type type, string itemName, Vector2 nodePosition);
         
@@ -25,8 +23,5 @@
         /// <summary> Add a node to the graph by type </summary>
         INode AddNode(Type type);
 
-        /// <summary> Safely remove a node and all its connections </summary>
-        /// <param name="node"> The node to remove </param>
-        IGraphData RemoveNode(INode node);
     }
 }

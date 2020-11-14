@@ -6,6 +6,8 @@ namespace UniGame.UniNodes.GameFlowEditor.Editor
 
     public class UniGraphToolbarView : ToolbarView
     {
+        private const string ActionMenu = "Show Actions";
+        
         public UniGraphToolbarView(BaseGraphView graphView) : 
             base(graphView)
         {
@@ -14,10 +16,12 @@ namespace UniGame.UniNodes.GameFlowEditor.Editor
         
         protected override void AddButtons()
         {
-            var conditionalProcessorVisible = graphView.GetPinnedElementStatus< UniGraphSettingsPinnedView >() != 
+            var isVisible = graphView.GetPinnedElementStatus< UniGraphSettingsPinnedView >() != 
                                                DropdownMenuAction.Status.Hidden;
             
-            AddToggle("Show Actions", conditionalProcessorVisible, 
+            AddToggle(
+                ActionMenu, 
+                isVisible,
                 (v) => graphView.ToggleView< UniGraphSettingsPinnedView>());
             
         }

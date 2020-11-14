@@ -59,12 +59,7 @@
         /// <summary>
         /// unique node id
         /// </summary>
-        public int Id {
-            get {
-                if (id != 0) return id;
-                return SetId(graph.GetId());
-            }
-        }
+        public int Id => id != 0 ? id : SetId(graph.GetId());
 
         /// <summary>
         /// Node name

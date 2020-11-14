@@ -9,7 +9,7 @@ namespace UniModules.UniGameFlow.GameFlowEditor.Editor.NodesSelectorWindow
     using UnityEditor;
 
     
-    public class OdinNodesViewerWindow : OdinEditorWindow {
+    public class NodesInfoWindow : OdinEditorWindow {
         
         private const string MainButtonsGroup = "maincommands";
         
@@ -18,14 +18,28 @@ namespace UniModules.UniGameFlow.GameFlowEditor.Editor.NodesSelectorWindow
         [MenuItem("UniGame/GameFlow/Nodes Search Window")]
         public static void OpenWindow() => ShowWindow();
         
-        public static OdinNodesViewerWindow ShowWindow() 
+        public static NodesInfoWindow ShowWindow() 
         {
-            var window = GetWindow<OdinNodesViewerWindow>();
+            if (window)
+            {
+                window.Focus();
+                return window;
+            }
+            
+            window = GetWindow<NodesInfoWindow>();
             window.InitializeWindow();
             window.Show();
+            
             return window;
         }
-        
+
+        [InitializeOnLoadMethod]
+        public static void AutoReloadNodes() => window?.Reload();
+
+        private static NodesInfoWindow window;
+
+        public static NodesInfoWindow NodesWindow => window ? window : ShowWindow();
+
         #endregion
 
         #region inspector

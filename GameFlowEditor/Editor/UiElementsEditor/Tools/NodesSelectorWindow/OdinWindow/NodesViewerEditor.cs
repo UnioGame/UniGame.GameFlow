@@ -10,6 +10,9 @@ namespace UniModules.UniGame.GameFlow.GameFlowEditor.Editor.NodesSelectorWindow.
     using UniCore.Runtime.Utils;
     using System;
     using global::UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.BaseEditor;
+    using UiElementsEditor;
+    using UniCore.EditorTools.Editor.Utility;
+    using UnityEditor;
     using UnityEngine;
 
     public enum NodeSortingType {
@@ -33,14 +36,24 @@ namespace UniModules.UniGame.GameFlow.GameFlowEditor.Editor.NodesSelectorWindow.
         
         #endregion
 
+#if ODIN_INSPECTOR
+        [Sirenix.OdinInspector.OnValueChanged(nameof(OnSearchFilterChanged))]
+#endif
+        public string search = string.Empty;
+
+#if ODIN_INSPECTOR
+        [Sirenix.OdinInspector.OnValueChanged(nameof(OnSearchFilterChanged))]
+#endif
         public NodeSortingType sortBy = NodeSortingType.MenuName;
         
+        [HideInInspector]
+        public List<NodeInfoData> sourceNodes = new List<NodeInfoData>();
+        
 #if ODIN_INSPECTOR
-#if ODIN_INSPECTOR_3
-        [Sirenix.OdinInspector.Searchable(FilterOptions = Sirenix.OdinInspector.SearchFilterOptions.ISearchFilterableInterface)]
-#endif
+// #if ODIN_INSPECTOR_3
+//         [Sirenix.OdinInspector.Searchable(FilterOptions = Sirenix.OdinInspector.SearchFilterOptions.ISearchFilterableInterface)]
+// #endif
         [Sirenix.OdinInspector.InlineProperty]
-        [Sirenix.OdinInspector.HideLabel]
         [Sirenix.OdinInspector.ListDrawerSettings(
             HideAddButton               = true,
             HideRemoveButton            = true,
@@ -52,16 +65,23 @@ namespace UniModules.UniGame.GameFlow.GameFlowEditor.Editor.NodesSelectorWindow.
         public List<NodeInfoData> nodes = new List<NodeInfoData>();
 
         public void Reload() {
-            nodes = RefreshNodeList();
+            sourceNodes = RefreshNodeList();
+            OnSearchFilterChanged();
         }
 
         #region inspector
 
         private List<NodeInfoData> RefreshNodeList() {
             var nodeDatas = CreateNodesInfo();
-            nodeDatas = FilterNodeInfo(nodeDatas);
-            
             return nodeDatas;
+        }
+
+        private void OnSearchFilterChanged()
+        {
+            var nodeDatas = FilterNodeInfo(sourceNodes);
+            nodeDatas = nodeDatas.Where(x => x.IsMatch(search));
+            nodes.Clear();
+            nodes.AddRange(nodeDatas);
         }
 
         private void OnSelectionAction(NodeInfoData data) {
@@ -84,28 +104,37 @@ namespace UniModules.UniGame.GameFlow.GameFlowEditor.Editor.NodesSelectorWindow.
             return nodeDatas;
         }
         
-        private List<NodeInfoData> FilterNodeInfo(List<NodeInfoData> nodesInfo) {
+        private IEnumerable<NodeInfoData> FilterNodeInfo(List<NodeInfoData> nodesInfo) {
 
             switch (sortBy) {
                 case NodeSortingType.Name:
-                    nodesInfo = nodesInfo.OrderBy(x => x.Name).ToList();
-                    break;
+                    return nodesInfo.OrderBy(x => x.Name);
                 case NodeSortingType.MenuName:
-                    nodesInfo = nodesInfo.OrderBy(x => x.MenuName).ToList();
-                    break;
+                    return nodesInfo.OrderBy(x => x.MenuName);
                 case NodeSortingType.Category:
-                    nodesInfo = nodesInfo.OrderBy(x => x.Category).ToList();
-                    break;
+                    return nodesInfo.OrderBy(x => x.Category);
             }
             
-            return nodesInfo;
+            return Enumerable.Empty<NodeInfoData>();
         }
-        
+
         private void EndOfListItemGui(int item)
         {
-            if (GUILayout.Button("add to graph")) {
+            var focused    = UniGameFlowWindow.FocusedWindow;
+            var nodeItem   = nodes[item];
+            
+            var isDisabled = !focused || focused.IsEmpty || !focused.IsVisible;
+            
+            EditorDrawerUtils.DrawDisabled(() =>
+            {
+                var graphName = isDisabled ? "none" : focused.GraphName;
+                if (!GUILayout.Button($"add to graph [{graphName}]"))
+                    return;
                 
-            }
+                focused.AddNode(nodeItem.NodeType,nodeItem.Name,Vector2.zero);
+                focused.Focus();
+                
+            },isDisabled);
         }
         
         private NodeInfoData CreateInfo(Type nodeType) {
@@ -117,6 +146,7 @@ namespace UniModules.UniGame.GameFlow.GameFlowEditor.Editor.NodesSelectorWindow.
                 Description = string.Empty,
                 Category = string.Empty,
                 Name        = nodeType.Name,
+                NodeType =  nodeType,
                 MenuName = nodeType.GetNodeMenuName()
             };
 

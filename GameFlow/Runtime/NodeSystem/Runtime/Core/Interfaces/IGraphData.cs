@@ -12,6 +12,8 @@
         
         INode GetNode(int nodeId);
 
+        /// <summary> Safely remove a node and all its connections </summary>
+        /// <param name="node"> The node to remove </param>
         IGraphData RemoveNode(INode node);
 
         IContext Context { get; }

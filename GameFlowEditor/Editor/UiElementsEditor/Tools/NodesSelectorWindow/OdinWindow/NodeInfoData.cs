@@ -3,6 +3,7 @@
 namespace UniModules.UniGame.GameFlow.GameFlowEditor.Editor.NodesSelectorWindow.OdinWindow
 {
     using System;
+    using Core.Runtime.SerializableType;
     using UnityEditor;
     using UnityEngine;
 
@@ -11,7 +12,7 @@ namespace UniModules.UniGame.GameFlow.GameFlowEditor.Editor.NodesSelectorWindow.
 #if ODIN_INSPECTOR_3
             : Sirenix.OdinInspector.ISearchFilterable
 #endif
-            
+
     {
         private const int labelWidth = 100;
 
@@ -36,10 +37,12 @@ namespace UniModules.UniGame.GameFlow.GameFlowEditor.Editor.NodesSelectorWindow.
 #endif
         public string MenuName;
 
+        public SType NodeType;
+        
         [Space]
 #if ODIN_INSPECTOR
         [Sirenix.OdinInspector.LabelWidth(labelWidth)]
-        [Sirenix.OdinInspector.MultiLineProperty(5)]       
+        [Sirenix.OdinInspector.MultiLineProperty(5)]
         [Sirenix.OdinInspector.ReadOnly]
         [Sirenix.OdinInspector.HideIf("@this.Description == string.Empty")]
 #endif
@@ -47,6 +50,8 @@ namespace UniModules.UniGame.GameFlow.GameFlowEditor.Editor.NodesSelectorWindow.
 
         public bool IsMatch(string searchString)
         {
+            if (string.IsNullOrEmpty(searchString))
+                return true;
             var scriptName = Script ? Script.name : string.Empty;
             var scriptType = Script ? Script.GetClass().Name : string.Empty;
 

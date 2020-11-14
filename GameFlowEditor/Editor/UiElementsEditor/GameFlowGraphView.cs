@@ -320,7 +320,7 @@ namespace UniGame.GameFlowEditor.Editor
         private void UpdateNodePositions()
         {
             foreach (var nodeView in nodeViews.OfType<UniNodeView>()) {
-                nodeView.Context.SourceNode.Position = nodeView.GetPosition().position;
+                nodeView.NodeData.SourceNode.Position = nodeView.GetPosition().position;
             }
         }
         

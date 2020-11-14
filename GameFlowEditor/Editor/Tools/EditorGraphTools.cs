@@ -1,5 +1,6 @@
 ﻿namespace UniModules.UniGameFlow.GameFlowEditor.Editor.Tools
 {
+    using System.Collections.Generic;
     using System.Linq;
     using global::UniGame.UniNodes.NodeSystem.Runtime.Core;
     using global::UniGame.UniNodes.NodeSystem.Runtime.Interfaces;
@@ -18,6 +19,14 @@
             target = Object.FindObjectsOfType<UniGraph>().
                 FirstOrDefault(x => x.name == graphName);
             return target;
+        }
+
+        public static IEnumerable<UniGraph> GetActiveGraphs()
+        {
+            return NodeGraph.ActiveGraphs.OfType<UniGraph>().
+                   Concat(Object.FindObjectsOfType<UniGraph>()).
+                   Where(x => x).
+                   Distinct();
         }
 
         public static void DrawNodeImGui(this INode node)

@@ -1,9 +1,9 @@
 ﻿namespace UniModules.UniGame.GameFlow.GameFlowEditor.Editor.UiElementsEditor
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using Core.EditorTools.Editor.AssetOperations;
+    using Core.EditorTools.Editor.EditorResources;
     using global::UniCore.Runtime.ProfilerTools;
     using global::UniGame.GameFlowEditor.Editor;
     using global::UniGame.GameFlowEditor.Runtime;
@@ -12,8 +12,6 @@
     using GraphProcessor;
     using UniCore.EditorTools.Editor.Utility;
     using UniCore.Runtime.DataFlow;
-    using UniCore.Runtime.Rx.Extensions;
-    using UniGameFlow.GameFlowEditor.Editor.Tools;
     using UniRx;
     using UnityEditor.Experimental.GraphView;
     using UnityEngine;
@@ -23,22 +21,23 @@
     {
         #region static data
 
-        protected static bool                       isInitialized;
-        protected static HashSet<UniGameFlowWindow> windows   = new HashSet<UniGameFlowWindow>();
-        protected static UniGameFlowWindow          focusedWindow;
+        private static   string                                defaultTitle = "(null)";
+        protected static bool                                  isInitialized;
+        protected static ReactiveCollection<UniGameFlowWindow> windows = new ReactiveCollection<UniGameFlowWindow>();
+        protected static UniGameFlowWindow                     focusedWindow;
         
         #endregion
 
-        public static IEnumerable<UniGameFlowWindow> Windows => windows;
+        public static IReadOnlyReactiveCollection<UniGameFlowWindow> Windows => windows;
 
         public static UniGameFlowWindow FocusedWindow => focusedWindow;
-        
+
+        public static string DefaultTitle => defaultTitle;
+
         #region static methods
 
         public static UniGameFlowWindow Open(UniGraph graph)
         {
-            InitializeGlobalEvents();
-
             var window = CreateWindow(graph);
             window.Show();
             return window;
@@ -52,26 +51,11 @@
 
         public static UniGameFlowWindow SelectWindow(UniGraph graph) 
         {
-            var window = windows.FirstOrDefault(x => x.titleContent.text == graph.name);
-            if (window != null && window.ActiveGraph) {
-                window.Save();
-            }
-
-            window = window != null ? 
-                window : 
-                windows.FirstOrDefault(x => x.IsEmpty);
-            window = window != null ? 
-                window : 
-                CreateInstance<UniGameFlowWindow>();
+            var window = windows.FirstOrDefault(x => x.titleContent.text == graph.name && x.IsEmpty);
+            window = window ?? windows.FirstOrDefault(x => x.IsEmpty);
+            window = window ?? CreateInstance<UniGameFlowWindow>();
 
             return window;
-        }
-
-        public static void InitializeGlobalEvents()
-        {
-            if (isInitialized)
-                return;
-            isInitialized = true;
         }
 
         #endregion
@@ -88,17 +72,29 @@
         private UniGraphSettingsPinnedView _settingsPinnedView;
         private UniGraphToolbarView        _graphToolbarView;
         private MiniMapView                _miniMapView;
+        private EditorResource             _graphResource;
+        private int                        _graphId;
 
         #endregion
 
+        public bool IsVisible => rootView.visible;
+        
+        public int Id => _graphId;
+        
+        public string GraphName => _graphName;
+        
         public bool IsEmpty => !ActiveGraph;
         
         public UniGraph ActiveGraph => _targetGraph.Value;
 
+        public bool IsActiveGraph => ActiveGraph && ActiveGraph.IsActive;
+        
         public bool IsFocused => FocusedWindow == this;
 
         public IReadOnlyReactiveProperty<UniGraph> TargetGraph => _targetGraph;
 
+        public EditorResource Resource => _graphResource;
+        
         public UniAssetGraph AssetGraph { get; protected set; }
 
         #region public methods
@@ -106,15 +102,22 @@
         public void Initialize(UniGraph uniGraph)
         {
             _targetGraph.Value = uniGraph;
+            _graphId           = uniGraph.id;
+            
+            titleContent.text  = uniGraph.ItemName;
+            
             Reload();
         }
 
+        public void AddNode(Type type, string itemName, Vector2 nodePosition)
+        {
+            if (IsEmpty) return;
+            ActiveGraph.AddNode(type, itemName, nodePosition);
+            Reload();
+        }
+        
         public void Reload()
         {
-            _targetGraph.Value = GetActiveGraph();
-
-            titleContent.text = ActiveGraph == null ? "(null)" : ActiveGraph.name;
-
             if (!ActiveGraph) {
                 GameLog.LogWarning($"{nameof(UniGameFlowWindow)} : Null Source UniGraph data", this);
                 return;
@@ -127,24 +130,6 @@
             var assetGraph = CreateAssetGraph(ActiveGraph);
 
             InitializeGraph(assetGraph);
-        }
-
-        private UniGraph GetActiveGraph()
-        {
-            var graphName = string.IsNullOrEmpty(_graphName) ? 
-                titleContent.text : _graphName;
-
-            var currentGraph = !ActiveGraph ? 
-                EditorGraphTools.FindSceneGraph(graphName) : 
-                ActiveGraph;
-            
-            if (!currentGraph) {
-                currentGraph = NodeGraph.ActiveGraphs.
-                    OfType<UniGraph>().
-                    FirstOrDefault(x => x.ItemName == graphName);
-            }
-
-            return currentGraph;
         }
 
         public virtual UniAssetGraph CreateAssetGraph(UniGraph uniGraph)
@@ -199,17 +184,9 @@
 
             base.OnEnable();
 
-            NodeGraph.ActiveGraphs.
-                ObserveCountChanged().
-                Where(x => !ActiveGraph).
-                Do(x => Reload()).
-                Subscribe().
-                AddTo(_lifeTime);
-
-            _lifeTime.AddCleanUpAction(() =>
-                windows.Remove(this));
-            
-            windows.Add(this);
+            _lifeTime.AddCleanUpAction(() => windows.Remove(this));
+            if(!windows.Contains(this))
+                windows.Add(this);
             
             Reload();
         }

@@ -5,6 +5,8 @@
     using Core.Runtime.Extension;
     using global::UniCore.Runtime.ProfilerTools;
     using global::UniGame.UniNodes.NodeSystem.Runtime.Core;
+    using Processor;
+    using UniGameFlow.GameFlowEditor.Editor.Tools;
     using UniRx;
     using UnityEditor;
     using UnityEditor.SceneManagement;
@@ -12,7 +14,7 @@
     using UnityEngine.SceneManagement;
 
     public static class UniGameFlowEditorTriggers {
-
+        
         [InitializeOnLoadMethod]
         public static void Initialize() {
             
@@ -39,6 +41,16 @@
                     ev => EditorApplication.playModeStateChanged += OnPlayModeChanged,
                     ev => EditorApplication.playModeStateChanged -= OnPlayModeChanged).
                 Subscribe();
+
+            GameFlowWindows.
+                ObserveAdd().
+                Subscribe(x => AddWindow(x.Value));
+            
+            GameFlowWindows.
+                ObserveRemove().
+                Subscribe(x => GameFlowProcessor.Asset.Remove(x.Value));
+
+            GameFlowWindows.ForEach(AddWindow);
         }
 
         public static void Reload() 
@@ -46,11 +58,20 @@
             GetActiveWindows.ForEach(x => x.Reload());
         }
 
+        public static void AddWindow(UniGameFlowWindow window)
+        {
+            GameFlowProcessor.Asset.Add(window);
+        }
+
         public static void Save() {
             GetActiveWindows.ForEach(x => x.Save());
         }
 
-        public static IEnumerable<UniGameFlowWindow> GetActiveWindows = UniGameFlowWindow.Windows.Where(x => x.IsEmpty == false);
+        public static IEnumerable<UniGameFlowWindow> GetActiveWindows => UniGameFlowWindow.Windows.Where(x => x.IsEmpty == false);
+
+        public static IReadOnlyReactiveCollection<UniGameFlowWindow> GameFlowWindows => UniGameFlowWindow.Windows;
+
+        public static IEnumerable<UniGraph> ActiveGraphs => NodeGraph.ActiveGraphs.OfType<UniGraph>();
         
         public static void SelectionChangedAction() {
             foreach (var graph in SelectGraphAssets()) {
@@ -96,9 +117,46 @@
             GameLog.Log($"PlayMode Changed To: {state}",Color.blue);
             switch (state) {
                 case PlayModeStateChange.EnteredEditMode:
-                    Reload();
+                case PlayModeStateChange.EnteredPlayMode:
+                    ReloadOnPlayModeChanges();
                     break;
             }
+        }
+
+
+        private static void ReloadOnPlayModeChanges()
+        {
+            foreach (var window in GameFlowWindows)
+            {
+                if (window.IsEmpty == false)
+                {
+                    window.Reload();
+                    continue;
+                }
+
+                var graph = GetActiveGraph(window);
+                window.Initialize(graph);
+            }
+        }
+        
+        private static UniGraph GetActiveGraph(UniGameFlowWindow window)
+        {
+            var titleContent = window.titleContent;
+            var graphName    = window.GraphName;
+            graphName = string.IsNullOrEmpty(window.GraphName) ? 
+                titleContent.text : graphName;
+
+            var currentGraph = window.IsEmpty ? 
+                EditorGraphTools.FindSceneGraph(graphName) : 
+                window.ActiveGraph;
+            
+            if (!currentGraph) {
+                currentGraph = ActiveGraphs.
+                    FirstOrDefault(x => x.ItemName == graphName);
+            }
+            currentGraph = currentGraph ?? ActiveGraphs.FirstOrDefault();
+
+            return currentGraph;
         }
 
         private static void OnBeforeAssemblyReload()
