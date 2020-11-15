@@ -5,14 +5,9 @@
     using System.Diagnostics;
     using System.Linq;
     using System.Runtime.CompilerServices;
-    using Connections;
     using Runtime.Interfaces;
-    using UniModules.UniContextData.Runtime.Entities;
     using UniModules.UniCore.Runtime.Attributes;
-    using UniModules.UniCore.Runtime.Common;
     using UniModules.UniCore.Runtime.DataFlow;
-    using UniModules.UniCore.Runtime.DataFlow.Interfaces;
-    using UniModules.UniCore.Runtime.ProfilerTools;
     using UniModules.UniGame.Context.Runtime.Context;
     using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
     using UniModules.UniGame.Core.Runtime.Interfaces;
@@ -82,7 +77,6 @@
         }
 
         #endregion
-
         
         #region connection api
 
@@ -203,7 +197,7 @@
 
 #if UNITY_EDITOR
 
-        public IReadOnlyDictionary<Type, IValueContainerStatus> EditorValues => data.EditorValues;
+        public IReadOnlyDictionary<Type, IValueContainerStatus> Values => data.EditorValues;
 
 #endif
 

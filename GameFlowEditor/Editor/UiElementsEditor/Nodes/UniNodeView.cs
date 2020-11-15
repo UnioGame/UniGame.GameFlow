@@ -7,6 +7,7 @@ namespace UniGame.GameFlowEditor.Editor
     using UniModules.UniCore.EditorTools.Editor.Utility;
     using UniModules.UniGame.Context.Editor.ContextEditorWindow;
     using UniModules.UniGame.GameFlow.GameFlowEditor.Editor.UiElementsEditor.Processor;
+    using UniModules.UniGame.GameFlow.GameFlowEditor.Editor.UiElementsEditor.Tools.PortData;
     using UniModules.UniGameFlow.GameFlowEditor.Editor.Tools;
     using UniNodes.NodeSystem.Runtime.Core;
     using UnityEngine;
@@ -15,8 +16,12 @@ namespace UniGame.GameFlowEditor.Editor
     [NodeCustomEditor(typeof(UniBaseNode))]
     public class UniNodeView : BaseNodeView
     {
-        private List<ContextDescription> content          = new List<ContextDescription>();
-        private Color                    _backgroundColor = new Color(0.4f, 0.4f, 0.4f);
+        private const string                   PortsInfoMenu    = "Ports Info";
+        private const string                   OpenScriptMenu    = "Open UniNode Script";
+        private const string                   ShowNodePortsMenu    = "Show UniNode Ports Data";
+        
+        private       List<ContextDescription> content          = new List<ContextDescription>();
+        private       Color                    _backgroundColor = new Color(0.4f, 0.4f, 0.4f);
 
         private SerializableNodeContainer serializableNode;
 
@@ -72,8 +77,9 @@ namespace UniGame.GameFlowEditor.Editor
 
         public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
         {
-            evt.menu.AppendAction("Open UniNode Script", (e) => OpenUniNodeSourceCode());
-            evt.menu.AppendAction("Show UniNode Ports Data", (e) => ShowPortsData());
+            evt.menu.AppendAction(OpenScriptMenu, (e) => OpenUniNodeSourceCode());
+            evt.menu.AppendAction(ShowNodePortsMenu, (e) => ShowPortsData());
+            evt.menu.AppendAction(PortsInfoMenu, (e) => ShowPortsValues());
             base.BuildContextualMenu(evt);
         }
 
@@ -89,7 +95,13 @@ namespace UniGame.GameFlowEditor.Editor
                 });
             }
 
-            ContextContentWindow.Open(content);
+            ContextContentWindow.Open(content).Focus();
+        }
+        
+        
+        private void ShowPortsValues()
+        {
+            PortDataWindow.Open(NodeData.SourceNode).Focus();
         }
 
         private void OpenUniNodeSourceCode()
