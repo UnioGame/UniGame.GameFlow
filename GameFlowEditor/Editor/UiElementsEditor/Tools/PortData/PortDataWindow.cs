@@ -1,10 +1,16 @@
 ﻿namespace UniModules.UniGame.GameFlow.GameFlowEditor.Editor.UiElementsEditor.Tools.PortData
 {
     using global::UniGame.UniNodes.NodeSystem.Runtime.Interfaces;
-    using Sirenix.OdinInspector.Editor;
+    using UnityEditor;
     using UnityEngine;
 
-    public class PortDataWindow : OdinEditorWindow
+    public class PortDataWindow :
+#if ODIN_INSPECTOR
+        Sirenix.OdinInspector.Editor.OdinEditorWindow
+#else
+        EditorWindow
+#endif
+        
     {
         #region static data
 
