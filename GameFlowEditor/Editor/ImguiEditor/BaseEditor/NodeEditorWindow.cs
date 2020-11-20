@@ -297,15 +297,6 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
             //         }
             //     }
             // }
-            
-            NodeGraph.ActiveGraphs.
-                ObserveCountChanged().
-                Where(x => ActiveGraph == null).
-                Select(x =>  NodeGraph.ActiveGraphs.
-                    FirstOrDefault(y => Title == y.name)).
-                Do(x => Open(x as UniGraph)).
-                Subscribe().
-                AddTo(_lifeTime);
 
             graphEditor?.OnEnable();
         }

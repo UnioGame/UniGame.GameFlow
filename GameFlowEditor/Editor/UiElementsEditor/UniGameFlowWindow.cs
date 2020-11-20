@@ -25,7 +25,7 @@
         protected static bool                                  isInitialized;
         protected static ReactiveCollection<UniGameFlowWindow> windows = new ReactiveCollection<UniGameFlowWindow>();
         protected static UniGameFlowWindow                     focusedWindow;
-        
+
         #endregion
 
         public static IReadOnlyReactiveCollection<UniGameFlowWindow> Windows => windows;
@@ -43,13 +43,14 @@
             return window;
         }
 
-        public static UniGameFlowWindow CreateWindow(UniGraph graph) {
+        public static UniGameFlowWindow CreateWindow(UniGraph graph)
+        {
             var window = SelectWindow(graph);
             window.Initialize(graph);
             return window;
         }
 
-        public static UniGameFlowWindow SelectWindow(UniGraph graph) 
+        public static UniGameFlowWindow SelectWindow(UniGraph graph)
         {
             var window = windows.FirstOrDefault(x => x.titleContent.text == graph.name && x.IsEmpty);
             window = window ?? windows.FirstOrDefault(x => x.IsEmpty);
@@ -62,11 +63,12 @@
 
         #region private fields
 
-        private LifeTimeDefinition         _lifeTime               = new LifeTimeDefinition();
-        private string                     _graphName              = string.Empty;
-        private ReactiveProperty<UniGraph> _targetGraph            = new ReactiveProperty<UniGraph>();
-        private Vector2                    _minimapPosition        = new Vector2(50, 50);
-        private Vector2                    _settingsPinnedPosition = new Vector2(50, 250);
+        private string             _guid      = string.Empty;
+        private LifeTimeDefinition _lifeTime  = new LifeTimeDefinition();
+        private string             _graphName = string.Empty;
+        private UniGraph           _targetGraph;
+        private Vector2            _minimapPosition        = new Vector2(50, 50);
+        private Vector2            _settingsPinnedPosition = new Vector2(50, 250);
 
         private GameFlowGraphView          _uniGraphView;
         private UniGraphSettingsPinnedView _settingsPinnedView;
@@ -78,34 +80,33 @@
         #endregion
 
         public bool IsVisible => rootView.visible;
-        
+
+        public string Guid => _guid;
+
         public int Id => _graphId;
-        
+
         public string GraphName => _graphName;
-        
+
         public bool IsEmpty => !ActiveGraph;
-        
-        public UniGraph ActiveGraph => _targetGraph.Value;
+
+        public UniGraph ActiveGraph => _targetGraph;
 
         public bool IsActiveGraph => ActiveGraph && ActiveGraph.IsActive;
-        
+
         public bool IsFocused => FocusedWindow == this;
 
-        public IReadOnlyReactiveProperty<UniGraph> TargetGraph => _targetGraph;
-
         public EditorResource Resource => _graphResource;
-        
+
         public UniAssetGraph AssetGraph { get; protected set; }
 
         #region public methods
 
         public void Initialize(UniGraph uniGraph)
         {
-            _targetGraph.Value = uniGraph;
-            _graphId           = uniGraph.id;
-            
-            titleContent.text  = uniGraph.ItemName;
-            
+            _targetGraph = uniGraph;
+            _graphId     = uniGraph.id;
+            _guid        = uniGraph.Guid;
+
             Reload();
         }
 
@@ -113,17 +114,18 @@
         {
             AddNode(type, itemName, _uniGraphView.LastMenuPosition);
         }
-        
+
         public void AddNode(Type type, string itemName, Vector2 nodePosition)
         {
             if (IsEmpty) return;
             ActiveGraph.AddNode(type, itemName, nodePosition);
             Reload();
         }
-        
+
         public void Reload()
         {
-            if (!ActiveGraph) {
+            if (!ActiveGraph)
+            {
                 GameLog.LogWarning($"{nameof(UniGameFlowWindow)} : Null Source UniGraph data", this);
                 return;
             }
@@ -139,13 +141,15 @@
 
         public virtual UniAssetGraph CreateAssetGraph(UniGraph uniGraph)
         {
-            if (Application.isPlaying == false) {
+            if (Application.isPlaying == false)
+            {
                 InitializeGraph(uniGraph);
             }
 
             var graphAsset = ScriptableObject.CreateInstance<UniAssetGraph>();
 
-            if (AssetGraph && uniGraph.name == _graphName) {
+            if (AssetGraph && uniGraph.name == _graphName)
+            {
                 graphAsset.position = AssetGraph.position;
                 graphAsset.scale    = AssetGraph.scale;
             }
@@ -159,20 +163,23 @@
 
         public void Save()
         {
-            if (AssetEditorTools.IsPureEditorMode) {
+            if (AssetEditorTools.IsPureEditorMode)
+            {
                 _uniGraphView.Save();
             }
         }
 
         #endregion
 
-        private void OnFocus() {
+        private void OnFocus()
+        {
             focusedWindow = this;
         }
-        
+
         private void InitializeGraph(UniGraph uniGraph)
         {
-            if (!AssetEditorTools.IsPureEditorMode) {
+            if (!AssetEditorTools.IsPureEditorMode)
+            {
                 return;
             }
 
@@ -183,16 +190,16 @@
         protected override void OnEnable()
         {
             _lifeTime?.Release();
-            
+
             GameLog.Log("GameFlowWindow : OnEnable");
             graph = null;
 
             base.OnEnable();
 
             _lifeTime.AddCleanUpAction(() => windows.Remove(this));
-            if(!windows.Contains(this))
+            if (!windows.Contains(this))
                 windows.Add(this);
-            
+
             Reload();
         }
 
@@ -229,7 +236,8 @@
 
         private void CreatePinned(BaseGraphView view)
         {
-            _settingsPinnedView = CreateGraphView(() => {
+            _settingsPinnedView = CreateGraphView(() =>
+            {
                 view.OpenPinned<UniGraphSettingsPinnedView>();
                 return view.Q<UniGraphSettingsPinnedView>();
             }, _settingsPinnedView);
@@ -241,7 +249,8 @@
 
         protected virtual void AddSettingsCommands(IUniGraphSettings settingsView)
         {
-            var graphButton = new Button(() => _targetGraph.Value.PingInEditor()) {
+            var graphButton = new Button(() => _targetGraph.PingInEditor())
+            {
                 name = "GraphPingAction",
                 text = "Ping",
             };
@@ -262,14 +271,16 @@
             var hasPosition      = false;
             var settingsPosition = new Rect();
 
-            if (view != null) {
+            if (view != null)
+            {
                 hasPosition      = true;
                 settingsPosition = view.GetPosition();
             }
 
             var factoryView = factory();
 
-            if (hasPosition) {
+            if (hasPosition)
+            {
                 factoryView.SetPosition(settingsPosition);
             }
 

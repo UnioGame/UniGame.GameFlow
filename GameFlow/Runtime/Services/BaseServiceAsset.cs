@@ -31,7 +31,7 @@ namespace UniModules.UniGameFlow.GameFlow.Runtime.Systems
         
         public bool IsActive => !_lifeTimeDefinition.IsTerminated;
 
-        public async UniTask<IDisposable> Execute(TData source)
+        public async UniTask<IDisposable> ExecuteAsync(TData source)
         {
             if (Application.isPlaying == false) {
                 return Disposable.Empty;
@@ -53,7 +53,7 @@ namespace UniModules.UniGameFlow.GameFlow.Runtime.Systems
             return this;
         }
 
-        public async UniTask Exit() => Dispose();
+        public async UniTask ExitAsync() => Dispose();
 
         #region private methods
 
@@ -70,14 +70,14 @@ namespace UniModules.UniGameFlow.GameFlow.Runtime.Systems
 #endif
         private async void Start()
         {
-            await Execute(_observableSource);
+            await ExecuteAsync(_observableSource);
         }
         
 #if ODIN_INSPECTOR
         [Sirenix.OdinInspector.ShowIf("_isActive")]
         [Sirenix.OdinInspector.Button]
 #endif
-        private void Stop() => Exit();
+        private void Stop() => ExitAsync();
 #endif
 
         protected override void OnActivate()

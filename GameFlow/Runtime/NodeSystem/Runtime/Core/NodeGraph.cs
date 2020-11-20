@@ -12,6 +12,7 @@
     using UniModules.UniGame.Context.Runtime.Context;
     using UniModules.UniGame.Core.Runtime.Interfaces;
     using UniRx;
+    using UnityEditor;
     using UnityEngine;
     using Object = UnityEngine.Object;
 
@@ -20,8 +21,6 @@
     public abstract class NodeGraph : UniNode, INodeGraph
     {
         #region static data
-
-        public static ReactiveCollection<NodeGraph> ActiveGraphs { get; } = new ReactiveCollection<NodeGraph>();
 
         public static Type objectType = typeof(Object);
         
@@ -33,6 +32,8 @@
 
         public bool activateOnEnable = false;
 
+        public string guid = System.Guid.NewGuid().ToString();
+        
         [ReadOnlyValue] 
         [SerializeField] private int uniqueId;
 
@@ -67,6 +68,8 @@
 
         public sealed override IGraphData GraphData => this;
 
+        public string Guid => guid;
+        
         #endregion
 
         public void Dispose() => Exit();
@@ -196,6 +199,10 @@
         public override void Validate()
         {
             graph = this;
+
+            if (string.IsNullOrEmpty(guid))
+                guid = System.Guid.NewGuid().ToString();
+            
             nodes.Clear();
             _allNodes?.Clear();
             

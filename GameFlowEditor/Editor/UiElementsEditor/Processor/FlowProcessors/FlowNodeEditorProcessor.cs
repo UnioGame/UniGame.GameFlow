@@ -24,6 +24,7 @@
             {
                 var root = window.rootVisualElement;
                 root.Query<UniNodeView>().
+                    Where(x => x.NodeData.SourceNode is IUniNode).
                     Build().
                     ForEach(UpdateNodeView);
             }
@@ -31,22 +32,21 @@
 
         public void UpdateNodeView(UniNodeView view)
         {
+            var node = view.NodeData.SourceNode as IUniNode;
             view.AddStyleSheet(styleSheet);
             
-            UpdateActiveAction(view);
-            UpdateActivePorts(view);
+            UpdateActiveAction(view, node);
+            UpdateActivePorts(view, node);
         }
 
-        private void UpdateActiveAction(UniNodeView view)
+        private void UpdateActiveAction(UniNodeView view,IUniNode node)
         {
-            var node     = view.NodeData.SourceNode;
-            var isActive = node.Inputs.Any(x => x.Value.HasValue);
+            var isActive = node.Ports.Any(x => x.Value.HasValue);
             view.EnableInClassList(GameFlowStyleConstants.nodeActive,isActive);
         }
 
-        private void UpdateActivePorts(UniNodeView view)
+        private void UpdateActivePorts(UniNodeView view, IUniNode node)
         {
-            var node = view.NodeData.SourceNode;
             UpdatePortView(node, view.inputPortViews, GameFlowStyleConstants.inputPortActive);
             UpdatePortView(node, view.outputPortViews, GameFlowStyleConstants.outputPortActive);
         }

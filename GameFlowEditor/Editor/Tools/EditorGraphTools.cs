@@ -10,23 +10,13 @@
 
     public static class EditorGraphTools
     {
-        public static UniGraph FindSceneGraph(string graphName)
+        public static UniGraph FindSceneGraph(string guid)
         {
-            var target = NodeGraph.ActiveGraphs.
-                OfType<UniGraph>().
-                FirstOrDefault(x => x.name == graphName);
-            if (target) return target;
-            target = Object.FindObjectsOfType<UniGraph>().
-                FirstOrDefault(x => x.name == graphName);
+            var isEmptyGuid = string.IsNullOrEmpty(guid);
+            var target = Object.FindObjectsOfType<UniGraph>().
+                Where(x => x).
+                FirstOrDefault(x =>isEmptyGuid || x.Guid == guid);
             return target;
-        }
-
-        public static IEnumerable<UniGraph> GetActiveGraphs()
-        {
-            return NodeGraph.ActiveGraphs.OfType<UniGraph>().
-                   Concat(Object.FindObjectsOfType<UniGraph>()).
-                   Where(x => x).
-                   Distinct();
         }
 
         public static void DrawNodeImGui(this INode node)

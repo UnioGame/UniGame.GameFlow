@@ -21,9 +21,7 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
         public static INode DummyNode = new DummyNode();
         
         #region inspector
-
-        [HideInInspector]
-        [HideNodeInspector] 
+        
         [ReadOnlyValue] 
         [SerializeField] public int id;
 
@@ -43,8 +41,8 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
         /// It is recommended not to modify these at hand. Instead,
         /// see <see cref="NodeInputAttribute"/> and <see cref="NodeOutputAttribute"/>
         /// </summary>
-        [HideInInspector]
-        [SerializeField] public NodePortDictionary ports = new NodePortDictionary();
+        [SerializeField] 
+        public NodePortDictionary ports = new NodePortDictionary();
       
         #endregion
         

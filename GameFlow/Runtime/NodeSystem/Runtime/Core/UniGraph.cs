@@ -85,13 +85,9 @@
         protected sealed override void OnExecute()
         {
             base.OnExecute();
-            
-            LifeTime.AddCleanUpAction(() => ActiveGraphs.Remove(this));
 
             ExecuteNodes();
             LoadDataSources();
-            
-            ActiveGraphs.Add(this);
         }
         
         private async void LoadDataSources()

@@ -71,8 +71,6 @@
 
         public static IReadOnlyReactiveCollection<UniGameFlowWindow> GameFlowWindows => UniGameFlowWindow.Windows;
 
-        public static IEnumerable<UniGraph> ActiveGraphs => NodeGraph.ActiveGraphs.OfType<UniGraph>();
-        
         public static void SelectionChangedAction() {
             foreach (var graph in SelectGraphAssets()) {
                 Select(graph);
@@ -141,20 +139,11 @@
         
         private static UniGraph GetActiveGraph(UniGameFlowWindow window)
         {
-            var titleContent = window.titleContent;
-            var graphName    = window.GraphName;
-            graphName = string.IsNullOrEmpty(window.GraphName) ? 
-                titleContent.text : graphName;
+            var guid    = window.Guid;
 
             var currentGraph = window.IsEmpty ? 
-                EditorGraphTools.FindSceneGraph(graphName) : 
+                EditorGraphTools.FindSceneGraph(guid) : 
                 window.ActiveGraph;
-            
-            if (!currentGraph) {
-                currentGraph = ActiveGraphs.
-                    FirstOrDefault(x => x.ItemName == graphName);
-            }
-            currentGraph = currentGraph ?? ActiveGraphs.FirstOrDefault();
 
             return currentGraph;
         }
