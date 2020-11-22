@@ -14,6 +14,5 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
         IObservable<Unit> PortValueChanged { get; }
 
         bool IsValidPortValueType(Type type);
-
     }
 }

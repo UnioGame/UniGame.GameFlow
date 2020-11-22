@@ -12,9 +12,10 @@
     [Serializable]
     public class FlowAsyncStateToken : IAsyncStateToken
     {
-        private EntityContext            _context;
-        private LifeTimeDefinition       _lifeTime;
-        private List<IAsyncContextState> _states;
+      
+        private readonly EntityContext            _context;
+        private readonly LifeTimeDefinition       _lifeTime;
+        private readonly List<IAsyncContextState> _states;
 
         #region constructor
 
@@ -51,28 +52,34 @@
         public void Dispose()
         {
             StopAt(0);
+            
             _context.Release();
             _lifeTime.Release();
+            _states.Clear();
         }
 
         public async UniTask<bool> StopSince(IAsyncContextState asyncState)
         {
             return await StopAt(_states.IndexOf(asyncState));
         }
-        
+
         public async UniTask<bool> StopAt(int index)
         {
             if (index < 0 || index >= _states.Count)
                 return false;
-            
+
             for (var i = index; i < _states.Count; i++)
             {
                 var state = _states[i];
                 await state.ExitAsync();
             }
-    
-            _states.RemoveAt(index);
+
+            _states.RemoveRange(index,_states.Count - index);
             return true;
         }
+
+
+        public sealed override bool Equals(object obj) => false;
+
     }
 }

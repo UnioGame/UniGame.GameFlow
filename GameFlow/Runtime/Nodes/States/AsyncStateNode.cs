@@ -52,7 +52,9 @@ namespace UniModules.UniGameFlow.Nodes.Runtime.States
 
         public bool IsStateActive => _isStateActive;
 
-
+        public IAsyncStateToken Token => _token;
+        
+        
         #region public methods
 
         public async UniTask<AsyncStatus> ExecuteAsync(IContext value) => await _asyncStateProxy.ExecuteAsync(value);
@@ -60,6 +62,7 @@ namespace UniModules.UniGameFlow.Nodes.Runtime.States
         public async UniTask ExitAsync()
         {
             _isStateActive = false;
+            _token         = null;
             await _asyncStateProxy.ExitAsync();
         }
 
