@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using Attributes;
     using Runtime.Interfaces;
-    using UniModules.UniCore.Runtime.DataFlow.Interfaces;
     using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
     using UniModules.UniGame.Core.Runtime.Interfaces;
 
@@ -49,7 +48,7 @@
         /// <summary>
         /// stop node execution
         /// </summary>
-        public void Release() => Exit();
+        public void Release() => SNode.Release();
 
         public override void Validate() => SNode.Validate();
         

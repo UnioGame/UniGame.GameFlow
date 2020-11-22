@@ -6,9 +6,13 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
     using Core.Interfaces;
     using UniModules.UniCore.Runtime.ObjectPool.Runtime.Interfaces;
     using UniModules.UniGame.Core.Runtime.Interfaces;
+    using UniRx;
     using UnityEngine;
 
-    public interface INodePort : INamedItem, IPoolable
+    public interface INodePort : 
+        INamedItem, 
+        IConnector<IMessagePublisher>,
+        IPoolable
     {
         Type ValueType { get; }
 

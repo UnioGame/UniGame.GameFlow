@@ -11,6 +11,7 @@
     using UniModules.UniGame.Core.Runtime.Attributes.FieldTypeDrawer;
     using UniModules.UniGame.Core.Runtime.Interfaces;
     using UnityEngine;
+    using Debug = UnityEngine.Debug;
 
     [Serializable]
     public abstract class Node : MonoBehaviour, INode
@@ -32,8 +33,8 @@
         [SerializeField] public string nodeName;
         
         /// <summary> Position on the <see cref="NodeGraph"/> </summary>
-        [HideInInspector]
-        [HideNodeInspector] 
+        // [HideInInspector]
+        // [HideNodeInspector] 
         [SerializeField] public Vector2 position;
 
         /// <summary> It is recommended not to modify these at hand. Instead, see <see cref="NodeInputAttribute"/> and <see cref="NodeOutputAttribute"/> </summary>
@@ -43,13 +44,11 @@
 
         #endregion
         
-        private IProxyNode serializableNode;
+        private IProxyNode _serializableNode;
 
-        protected IGraphData graph;
+        private IGraphData _graph;
 
         #region public properties
-
-        public IContext Context => GraphData.Context;
         
         /// <summary>
         /// regular source node
@@ -59,12 +58,12 @@
         /// <summary>
         /// unique node id
         /// </summary>
-        public int Id => id != 0 ? id : SetId(graph.GetId());
+        public int Id => id != 0 ? id : SetId(_graph.GetId());
 
         /// <summary>
         /// Node name
         /// </summary>
-        public string ItemName => nodeName;
+        public virtual string ItemName => nodeName;
 
         /// <summary>
         /// Iterate over all ports on this node.
@@ -106,7 +105,7 @@
         /// <summary>
         /// base context graph data
         /// </summary>
-        public virtual IGraphData GraphData => graph;
+        public virtual IGraphData GraphData => _graph;
 
         #endregion
 
@@ -115,7 +114,7 @@
 
         public virtual void Initialize(IGraphData data)
         {
-            graph = data;
+            _graph = data;
             if (id != 0) SNode.SetId(id);
         }
 
@@ -132,9 +131,9 @@
 
         public void SetUpData(IGraphData parent)
         {
-            if (graph == parent)
+            if (_graph == parent)
                 return;
-            graph = parent;
+            _graph = parent;
             SNode.SetUpData(parent);
         }
         
@@ -211,10 +210,10 @@
         /// <returns></returns>
         private IProxyNode GetSourceNode()
         {
-            if (serializableNode != null)
-                return serializableNode;
-            serializableNode = CreateInnerNode();
-            return serializableNode;
+            if (_serializableNode != null)
+                return _serializableNode;
+            _serializableNode = CreateInnerNode();
+            return _serializableNode;
         }
         
         /// <summary>

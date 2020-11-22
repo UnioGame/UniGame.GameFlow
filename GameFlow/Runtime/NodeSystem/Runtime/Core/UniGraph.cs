@@ -5,14 +5,13 @@
     using Attributes;
     using Runtime.Extensions;
     using Runtime.Interfaces;
-    using UniModules.UniContextData.Runtime.Interfaces;
+    using UniCore.Runtime.ProfilerTools;
     using UniModules.UniCore.Runtime.Rx.Extensions;
     using UniModules.UniGame.AddressableTools.Runtime.Extensions;
     using UniModules.UniGame.SerializableContext.Runtime.Addressables;
     using UniModules.UniGame.Context.Runtime.Abstract;
     using UniModules.UniGame.Core.Runtime.Extension;
     using UniModules.UniGame.Core.Runtime.Interfaces;
-    using UniModules.UniGameFlow.NodeSystem.Runtime.Extensions;
     using UniRx;
     using UnityEngine;
 
@@ -61,6 +60,11 @@
 
         public void Initialize()
         {
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.playModeStateChanged -= OnPlayingModeChanged;
+            UnityEditor.EditorApplication.playModeStateChanged += OnPlayingModeChanged;
+#endif
+
             Initialize(this);
         }
         
@@ -117,7 +121,7 @@
             outputs.ForEach(x => BindConnections(this,GetPort(x.ItemName),x.PortValue));
 
             //bind all ports and only after that start execution
-            for (int i = 0; i < uniNodes.Count; i++) {
+            for (var i = 0; i < uniNodes.Count; i++) {
                 var node = uniNodes[i];
                 node.Ports.ForEach(x => BindConnections(node, x, x.Value));
             }
@@ -141,9 +145,12 @@
                 if(port == null || port.Direction == PortIO.Input || port.NodeId == Id)
                     continue;
                 
-                var value = port.Value;
-                value.Bind(publisher).AddTo(LifeTime);
+                var disposable = port.Bind(publisher).
+                    AddTo(LifeTime);
+                
+                LifeTime.AddDispose(disposable);
             }
+            
         }
 
         private void InitializeGraphNodes()
@@ -170,13 +177,15 @@
                 
                 //update ports by attributes & another triggers
                 node.UpdateNodePorts();
-                
-                if (node is IUniNode uniNode) {
-                    LifeTime.AddCleanUpAction(uniNode.Exit);
-                    uniNodes.Add(uniNode);
-                }
+
+                if (!(node is IUniNode uniNode))
+                    continue;
+
+                LifeTime.AddCleanUpAction(uniNode.Exit);
+                uniNodes.Add(uniNode);
 
             }
+            
         }
         
         private void UpdatePortNode(INode uniNode)
@@ -197,7 +206,28 @@
         }
 
         #endregion
-        
-        
+
+        private void ReleaseNodes()
+        {
+            if (!this) return;
+            
+            Release();
+            uniNodes.ForEach(x => x.Release());
+            
+        }
+
+        #region editor api
+
+#if UNITY_EDITOR
+
+        private void OnPlayingModeChanged(UnityEditor.PlayModeStateChange mode)
+        {
+            UnityEditor.EditorApplication.playModeStateChanged -= OnPlayingModeChanged;
+            ReleaseNodes();
+        }
+
+#endif
+
+        #endregion
     }
 }

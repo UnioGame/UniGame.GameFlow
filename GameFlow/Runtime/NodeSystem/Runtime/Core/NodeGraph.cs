@@ -5,14 +5,11 @@
     using System.Linq;
     using Runtime.Extensions;
     using Runtime.Interfaces;
-    using UniModules.UniContextData.Runtime.Entities;
     using UniModules.UniCore.Runtime.Attributes;
     using UniModules.UniCore.Runtime.ObjectPool.Runtime;
     using UniModules.UniCore.Runtime.ObjectPool.Runtime.Extensions;
     using UniModules.UniGame.Context.Runtime.Context;
     using UniModules.UniGame.Core.Runtime.Interfaces;
-    using UniRx;
-    using UnityEditor;
     using UnityEngine;
     using Object = UnityEngine.Object;
 
@@ -37,9 +34,15 @@
         [ReadOnlyValue] 
         [SerializeField] private int uniqueId;
 
+#if ODIN_INSPECTOR
+        [Sirenix.OdinInspector.InlineEditor(Expanded = false)]
+#endif
         [SerializeField]
         public List<Node> nodes = new List<Node>();
   
+#if ODIN_INSPECTOR
+        [Sirenix.OdinInspector.InlineProperty]
+#endif
         [SerializeReference]
         public List<INode> serializableNodes = new List<INode>();
 
@@ -54,9 +57,11 @@
         private List<INode> _allNodes = new List<INode>();
         
         [NonSerialized] 
-        private Dictionary<int, INode> nodesCache;
+        private Dictionary<int, INode> _nodesCache;
 
         #region public properties
+
+        public override string ItemName => name;
 
         public IContext Context => _graphContext;
         
@@ -105,20 +110,20 @@
         /// <summary>
         /// Add a node to the graph by type
         /// </summary>
-        public T AddNode<T>(string name) where T : class, INode => AddNode(name, typeof(T)) as T;
+        public T AddNode<T>(string newNodeName) where T : class, INode => AddNode(newNodeName, typeof(T)) as T;
 
         /// <summary>
         /// return node by it ID
         /// </summary>
         public INode GetNode(int nodeId)
         {
-            nodesCache = nodesCache ?? new Dictionary<int, INode>();
-            if (nodesCache.Count != nodes.Count) {
-                nodesCache.Clear();
-                nodesCache = Nodes.ToDictionary(x => x.Id);
+            _nodesCache = _nodesCache ?? new Dictionary<int, INode>();
+            if (_nodesCache.Count != nodes.Count) {
+                _nodesCache.Clear();
+                _nodesCache = Nodes.ToDictionary(x => x.Id);
             }
 
-            nodesCache.TryGetValue(nodeId, out var node);
+            _nodesCache.TryGetValue(nodeId, out var node);
             return node;
         }
 
@@ -198,13 +203,12 @@
         [ContextMenu("Validate")]
         public override void Validate()
         {
-            graph = this;
-
             if (string.IsNullOrEmpty(guid))
                 guid = System.Guid.NewGuid().ToString();
             
-            nodes.Clear();
             _allNodes?.Clear();
+            nodes.Clear();
+            
             
             serializableNodes.RemoveAll(x => x == null || x is Object);
             

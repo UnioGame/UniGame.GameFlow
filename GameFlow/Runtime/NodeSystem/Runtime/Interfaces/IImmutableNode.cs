@@ -8,8 +8,6 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
 
     public interface IImmutableNode : IGraphItem
     {
-        IContext Context { get; }
-
         IGraphData GraphData { get; }
 
         IEnumerable<INodePort> Ports { get; }

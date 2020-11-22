@@ -9,10 +9,10 @@
     using UniCore.Runtime.ProfilerTools;
     using UniModules.UniCore.Runtime.Attributes;
     using UniModules.UniCore.Runtime.DataFlow;
-    using UniModules.UniCore.Runtime.DataFlow.Interfaces;
     using UniModules.UniCore.Runtime.ObjectPool.Runtime;
     using UniModules.UniCore.Runtime.ObjectPool.Runtime.Extensions;
     using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
+    using UniRx;
     using UnityEngine;
 
     [Serializable]
@@ -183,22 +183,11 @@
         public ShowBackingValue ShowBackingValue => showBackingValue;
         public Type             ValueType        => portValue.ValueTypes.FirstOrDefault();
 
+        public INode Node => node;
+
         public ILifeTime LifeTime => lifeTime;
 
         public int NodeId => nodeId;
-
-        #endregion
-
-        #region port value methods
-
-        public void SetPortData(IPortData portData)
-        {
-            fieldName        = portData.ItemName;
-            direction        = portData.Direction;
-            connectionType   = portData.ConnectionType;
-            showBackingValue = portData.ShowBackingValue;
-            portValue.SetValueTypeFilter(portData.ValueTypes);
-        }
 
         #endregion
 
@@ -221,11 +210,31 @@
             lifeTime.AddDispose(portValue);
         }
 
+        #region port value methods
+
+        public void SetPortData(IPortData portData)
+        {
+            fieldName        = portData.ItemName;
+            direction        = portData.Direction;
+            connectionType   = portData.ConnectionType;
+            showBackingValue = portData.ShowBackingValue;
+            portValue.SetValueTypeFilter(portData.ValueTypes);
+        }
+
+        #endregion
+
         /// <summary>
         /// terminate Port lifetime, release resources
         /// </summary>
         public void Release() =>  lifeTimeDefinition.Terminate();
-        
+
+        /// <summary>
+        /// connect current port to publishers
+        /// </summary>
+        /// <param name="connection"></param>
+        /// <returns></returns>
+        public IDisposable Bind(IMessagePublisher connection) => Value.Bind(connection);
+
         #region comperer api
 
         public bool Equals(INodePort x, INodePort y)
@@ -251,12 +260,11 @@
         {
             return GetHashCode(this);
         }
+        
 
         #endregion
         
         #region node methods
-
-        public INode Node => node;
 
         /// <summary> Checks all connections for invalid references, and removes them. </summary>
         public void VerifyConnections()

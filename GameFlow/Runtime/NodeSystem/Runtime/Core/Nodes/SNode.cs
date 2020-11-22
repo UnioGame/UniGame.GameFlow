@@ -2,42 +2,44 @@
 using System.Collections.Generic;
 using UniGame.UniNodes.NodeSystem.Runtime.Interfaces;
 using UniModules.UniCore.Runtime.DataFlow;
-using UniModules.UniCore.Runtime.DataFlow.Interfaces;
 using UnityEngine;
 
 namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
 {
+    using UniCore.Runtime.ProfilerTools;
     using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
     using UniModules.UniGame.Core.Runtime.Interfaces;
 
     [Serializable]
-    public class SNode : SerializableNode, IProxyNode
+    public class SNode : SerializableNode,
+        IProxyNode
     {
         #region private fields
-        
+
         private Action                         onInitialize;
         private Action<List<ILifeTimeCommand>> onCommandsInitialize;
         private Action                         onExecute;
 
-        [NonSerialized] private bool isInitialized = false;
-
-        private LifeTimeDefinition lifeTimeDefinition = new LifeTimeDefinition();
-
-        private bool isActive = false;
-
-        private List<ILifeTimeCommand> commands;
+        [NonSerialized] private bool                   _isInitialized = false;
+        private                 bool                   _isActive      = false;
+        private                 LifeTimeDefinition     _lifeTime      = new LifeTimeDefinition();
+        private                 List<ILifeTimeCommand> _commands;
 
         #endregion
 
 
         #region constructor
 
-        public SNode(){}
+        public SNode()
+        {
+        }
 
         public SNode(
             int id,
             string name,
-            NodePortDictionary ports) : base(id, name, ports){}
+            NodePortDictionary ports) : base(id, name, ports)
+        {
+        }
 
         #endregion
 
@@ -46,9 +48,9 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
         /// <summary>
         /// Is node currently active
         /// </summary>
-        public bool IsActive => isActive;
+        public bool IsActive => _isActive;
 
-        public ILifeTime LifeTime => lifeTimeDefinition.LifeTime;
+        public ILifeTime LifeTime => _lifeTime.LifeTime;
 
         #endregion
 
@@ -59,13 +61,17 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
             Action initializeAction,
             Action<List<ILifeTimeCommand>> initializeCommands = null,
             Action executeAction = null) => InnerInitialize(graphData, initializeAction, initializeCommands, executeAction);
-        
+
         public sealed override void Initialize(IGraphData graphData) => InnerInitialize(graphData);
 
         /// <summary>
         /// stop execution
         /// </summary>
-        public void Exit() => lifeTimeDefinition.Terminate();
+        public void Exit()
+        {
+            _lifeTime.Terminate();
+            _isActive = false;
+        }
 
         /// <summary>
         /// start node execution
@@ -73,16 +79,17 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
         public void Execute()
         {
             //node already active
-            if (isActive) {
+            if (_isActive)
+            {
                 return;
             }
 
             //initialize
-            Initialize(graph);
+            Initialize(GraphData);
             //mark as active
-            isActive = true;
+            _isActive = true;
             //execute all node commands
-            commands.ForEach(x => x.Execute(LifeTime));
+            _commands.ForEach(x => x.Execute(LifeTime));
             //user defined logic
             OnExecute();
             //proxy outer execution
@@ -92,8 +99,14 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
         /// <summary>
         /// stop node execution
         /// </summary>
-        public void Release() => Exit();
-        
+        public void Release()
+        {
+            Exit();
+            _isInitialized = false;
+            _isActive      = false;
+            _commands.Clear();
+        }
+
         #endregion
 
         /// <summary>
@@ -120,29 +133,32 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
 
         #region private methods
 
-        private void InnerInitialize(IGraphData graphData,
+        private void InnerInitialize(
+            IGraphData graphData,
             Action initializeAction = null,
             Action<List<ILifeTimeCommand>> initializeCommands = null,
             Action executeAction = null)
         {
-            if (Application.isEditor && Application.isPlaying == false) {
-                lifeTimeDefinition?.Release();
+
+            if (Application.isEditor && Application.isPlaying == false)
+            {
+                _lifeTime?.Release();
             }
-                        
-            if (Application.isPlaying && isInitialized)
+
+            if (Application.isPlaying && _isInitialized)
                 return;
-            
+
             this.onInitialize         = initializeAction;
             this.onCommandsInitialize = initializeCommands;
             this.onExecute            = executeAction;
 
-            lifeTimeDefinition?.Release();
+            _lifeTime?.Release();
 
             base.Initialize(graphData);
-            
+
             InitializeData(graphData);
 
-            isInitialized = true;
+            _isInitialized = Application.isPlaying;
             
             //initialize all node commands
             InitializeCommands();
@@ -153,25 +169,23 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
             //proxy initialization            
             onInitialize?.Invoke();
 
-            LifeTime.AddCleanUpAction(() => {
-                isActive = false;
-            });
-
+            LifeTime.AddCleanUpAction(() => { _isActive = false; });
         }
-        
+
+
         /// <summary>
         /// Initialize all node commands
         /// create port and bind them
         /// </summary>
         private void InitializeCommands()
         {
-            commands.Clear();
+            _commands.Clear();
 
             //register node commands
-            UpdateCommands(commands);
-            
+            UpdateCommands(_commands);
+
             //outer node commands
-            onCommandsInitialize?.Invoke(commands);
+            onCommandsInitialize?.Invoke(_commands);
         }
 
         /// <summary>
@@ -180,9 +194,11 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
         private void InitializePorts()
         {
             //initialize ports
-            foreach (var port in Ports) {
+            foreach (var port in Ports)
+            {
                 port.Initialize(this);
-                if (Application.isPlaying) {
+                if (Application.isPlaying)
+                {
                     LifeTime.AddCleanUpAction(port.Release);
                     AddPortValue(port);
                 }
@@ -191,12 +207,12 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
 
         private void InitializeData(IGraphData graphData)
         {
-            graph = graphData;
+            GraphData = graphData;
             //restart lifetime
-            lifeTimeDefinition = lifeTimeDefinition ?? new LifeTimeDefinition();
-            commands           = commands ?? new List<ILifeTimeCommand>();
+            _lifeTime = _lifeTime ?? new LifeTimeDefinition();
+            _commands = _commands ?? new List<ILifeTimeCommand>();
         }
-        
+
         #endregion
 
     }

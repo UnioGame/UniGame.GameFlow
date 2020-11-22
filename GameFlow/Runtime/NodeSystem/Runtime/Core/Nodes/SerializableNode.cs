@@ -19,41 +19,45 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
     public class SerializableNode : INode
     {
         public static INode DummyNode = new DummyNode();
-        
+
         #region inspector
-        
-        [ReadOnlyValue] 
-        [SerializeField] public int id;
+
+        [ReadOnlyValue] [SerializeField] public int id;
 
         [HideInInspector]
         [HideNodeInspector]
-        [SerializeField] public int width = 220;
+        [SerializeField]
+        public int width = 220;
 
         [HideInInspector]
         [HideNodeInspector]
-        [SerializeField] public string nodeName;
-        
+        [SerializeField]
+        public string nodeName;
+
         /// <summary> Position on the <see cref="NodeGraph"/> </summary>
-        [HideInInspector]
-        [SerializeField] public Vector2 position;
+        //[HideInInspector]
+        [SerializeField]
+        public Vector2 position;
 
         /// <summary>
         /// It is recommended not to modify these at hand. Instead,
         /// see <see cref="NodeInputAttribute"/> and <see cref="NodeOutputAttribute"/>
         /// </summary>
-        [SerializeField] 
+        [SerializeField]
         public NodePortDictionary ports = new NodePortDictionary();
-      
+
         #endregion
-        
-        protected IGraphData graph;
-        
-        private HashSet<INodePort> portValues;
-        
+
+        private IGraphData _graph;
+
+        private HashSet<INodePort> _portValues;
+
         #region constructor
 
-        public SerializableNode(){}
-        
+        public SerializableNode()
+        {
+        }
+
         public SerializableNode(
             int id,
             string name,
@@ -63,16 +67,16 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
             this.nodeName = name;
             this.ports    = ports;
         }
-        
+
         #endregion
-        
+
         #region public properties
 
-        public HashSet<INodePort> RuntimePorts => portValues = 
-            portValues ?? (portValues = new HashSet<INodePort>());
+        public HashSet<INodePort> RuntimePorts => _portValues =
+            _portValues ?? (_portValues = new HashSet<INodePort>());
 
         public IContext Context => GraphData.Context;
-        
+
         /// <summary>
         /// unique node id
         /// </summary>
@@ -91,15 +95,17 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
         /// <summary>
         /// node width
         /// </summary>
-        public int Width {
+        public int Width
+        {
             get => width;
             set => width = value;
         }
-        
+
         /// <summary>
         /// position of node 
         /// </summary>
-        public Vector2 Position {
+        public Vector2 Position
+        {
             get => position;
             set => position = value;
         }
@@ -113,14 +119,18 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
         /// Iterate over all inputs on this node.
         /// </summary>
         public IEnumerable<INodePort> Inputs => GetPorts(PortIO.Input);
-        
+
         /// <summary>
         /// base context graph data
         /// </summary>
-        public virtual IGraphData GraphData => graph;
+        public virtual IGraphData GraphData
+        {
+            get => _graph;
+            protected set => _graph = value;
+        }
 
         #endregion
-        
+
         #region abstract methods
 
         public int SetId(int itemId)
@@ -131,12 +141,12 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
 
         public virtual void Initialize(IGraphData data)
         {
-            graph = data;
+            _graph = data;
             RuntimePorts.Clear();
         }
 
         #endregion
-        
+
         #region public methods
 
         public int UpdateId()
@@ -149,12 +159,12 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
 
         public void SetUpData(IGraphData parent)
         {
-            if (graph == parent)
+            if (_graph == parent)
                 return;
-            graph = parent;
-            UpdateId();       
+            _graph = parent;
+            UpdateId();
         }
-        
+
         /// <summary> Add a serialized port to this node. </summary>
         public NodePort AddPort(
             string fieldName,
@@ -162,9 +172,7 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
             ConnectionType connectionType = ConnectionType.Multiple,
             ShowBackingValue showBackingValue = ShowBackingValue.Always)
         {
-            var port = HasPort(fieldName) ? 
-                ports[fieldName] :
-                new NodePort(GraphData.GetId(),this, fieldName, direction, connectionType,showBackingValue,types);
+            var port = HasPort(fieldName) ? ports[fieldName] : new NodePort(GraphData.GetId(), this, fieldName, direction, connectionType, showBackingValue, types);
             return AddPort(port);
         }
 
@@ -173,14 +181,14 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
             var portName = port.ItemName;
 
             AddPortValue(port);
-            
+
             if (!HasPort(portName))
             {
-                ports.Add(portName,port);
-            }    
-            
+                ports.Add(portName, port);
+            }
+
             port.Initialize(this);
-            
+
             return port;
         }
 
@@ -232,7 +240,7 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
             var port = GetPort(portName);
             return port?.Value;
         }
-        
+
         /// <summary>
         /// Returns port which matches fieldName
         /// </summary>
@@ -259,24 +267,28 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
         {
             nodeName = itemName;
         }
-        
+
         public virtual void Validate()
         {
             var removedPorts = ClassPool.Spawn<List<NodePort>>();
-            
-            foreach (var portPair in ports) {
+
+            foreach (var portPair in ports)
+            {
                 var port = portPair.Value;
-                if (port == null || string.IsNullOrEmpty(port.fieldName)) {
+                if (port == null || string.IsNullOrEmpty(port.fieldName))
+                {
                     removedPorts.Add(port);
                     continue;
                 }
 
                 var value = RuntimePorts.FirstOrDefault(x => x.ItemName == port.ItemName &&
-                                                            x.Direction == port.Direction);
-                if (value == null || string.IsNullOrEmpty(value.ItemName)) {
+                                                             x.Direction == port.Direction);
+                if (value == null || string.IsNullOrEmpty(value.ItemName))
+                {
                     removedPorts.Add(port);
                     continue;
                 }
+
                 port.Validate();
             }
 
@@ -288,26 +300,28 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
 
         protected bool AddPortValue(INodePort runtimePort)
         {
-            portValues = portValues ?? new HashSet<INodePort>();  
-            
-            if (runtimePort == null) {
+            _portValues = _portValues ?? new HashSet<INodePort>();
+
+            if (runtimePort == null)
+            {
                 GameLog.LogErrorFormat("Try add NULL port value to {0}", this);
                 return false;
             }
 
-            portValues.Add(runtimePort);
+            _portValues.Add(runtimePort);
 
             return true;
         }
 
         protected IEnumerable<INodePort> GetPorts(PortIO direction)
         {
-            foreach (var port in Ports) {
+            foreach (var port in Ports)
+            {
                 if (port.Direction == direction)
                     yield return port;
             }
         }
-        
+
         [Conditional("UNITY_EDITOR")]
         protected void LogMessage(string message)
         {

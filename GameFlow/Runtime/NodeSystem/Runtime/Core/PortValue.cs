@@ -6,17 +6,26 @@
     using System.Linq;
     using System.Runtime.CompilerServices;
     using Runtime.Interfaces;
+    using UniCore.Runtime.ProfilerTools;
     using UniModules.UniCore.Runtime.Attributes;
     using UniModules.UniCore.Runtime.DataFlow;
     using UniModules.UniGame.Context.Runtime.Context;
     using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
     using UniModules.UniGame.Core.Runtime.Interfaces;
+    using UniModules.UniGame.Core.Runtime.SerializableType;
     using UniRx;
     using UnityEngine;
+    using Debug = UnityEngine.Debug;
 
     [Serializable]
     public class PortValue : IPortValue, ISerializationCallbackReceiver
     {
+        #region static data
+        
+        private static List<Type> ignoreFilterTypes = new List<Type>(){typeof(object)};
+        
+        #endregion
+        
         #region serialized data
 
         /// <summary>
@@ -28,23 +37,24 @@
         /// allowed port value types
         /// </summary>
         [SerializeField]
-        protected List<string> serializedValueTypes;
+        protected List<SType> serializedValueTypes = new List<SType>();
 
-        [SerializeField] [ReadOnlyValue] protected int broadcastersCount;
+        [SerializeField] 
+        [ReadOnlyValue] protected int broadcastersCount;
 
         #endregion
 
         #region private property
 
-        private EntityContext data;
+        private EntityContext _data;
 
-        private ReactiveCommand portValueChanged = new ReactiveCommand();
+        private ReactiveCommand _portValueChanged = new ReactiveCommand();
 
-        private ILifeTime lifeTime;
+        private ILifeTime _lifeTime;
 
-        private LifeTimeDefinition lifeTimeDefeDefinition = new LifeTimeDefinition();
+        private LifeTimeDefinition _lifeTimeDefeDefinition = new LifeTimeDefinition();
 
-        private List<Type> valueTypeFilter;
+        private List<Type> _valueTypeFilter;
 
         #endregion
 
@@ -59,37 +69,39 @@
 
         #region public properties
 
-        public IReadOnlyList<Type> ValueTypes => valueTypeFilter = valueTypeFilter ?? new List<Type>();
+        public IReadOnlyList<Type> ValueTypes => _valueTypeFilter = _valueTypeFilter ?? new List<Type>();
 
-        public ILifeTime LifeTime => lifeTimeDefeDefinition.LifeTime;
+        public ILifeTime LifeTime => _lifeTimeDefeDefinition.LifeTime;
 
         public string ItemName => name;
 
-        public bool HasValue => data.HasValue;
+        public int RuntimeId => _data.Id;
 
-        public IObservable<Unit> PortValueChanged => portValueChanged;
+        public bool HasValue => _data.HasValue;
+
+        public IObservable<Unit> PortValueChanged => _portValueChanged;
 
         public bool IsValidPortValueType(Type type)
         {
-            if (valueTypeFilter == null || valueTypeFilter.Count == 0)
+            if (_valueTypeFilter == null || _valueTypeFilter.Count == 0)
                 return true;
-            return valueTypeFilter.Contains(type);
+            return _valueTypeFilter.Contains(type);
         }
 
         #endregion
         
         #region connection api
 
-        public int ConnectionsCount => data.ConnectionsCount;
+        public int ConnectionsCount => _data.ConnectionsCount;
 
         public void Disconnect(IMessagePublisher connection) {
-            data.Disconnect(connection);
+            _data.Disconnect(connection);
         }
 
         public IDisposable Bind(IMessagePublisher contextData)
         {
-            var disposable = data.Bind(contextData);
-            broadcastersCount = data.ConnectionsCount;
+            var disposable = _data.Bind(contextData);
+            broadcastersCount = _data.ConnectionsCount;
             return disposable;
         }
 
@@ -104,24 +116,24 @@
 
         public void SetValueTypeFilter(IReadOnlyList<Type> types)
         {
-            valueTypeFilter = valueTypeFilter ?? new List<Type>();
-            valueTypeFilter.Clear();
-            valueTypeFilter.AddRange(types);
+            _valueTypeFilter = _valueTypeFilter ?? new List<Type>();
+            _valueTypeFilter.Clear();
+            _valueTypeFilter.AddRange(types);
 
-            UpdateSerializedFilter(valueTypeFilter);
+            UpdateSerializedFilter(_valueTypeFilter);
         }
 
         public void Dispose() => Release();
 
-        public void Release() => lifeTimeDefeDefinition.Terminate();
+        public void Release() => _lifeTimeDefeDefinition.Terminate();
 
         #region type data container
 
         public bool Remove<TData>()
         {
-            var result = data.Remove<TData>();
+            var result = _data.Remove<TData>();
             if (result) {
-                portValueChanged.Execute(Unit.Default);
+                _portValueChanged.Execute(Unit.Default);
             }
 
             return result;
@@ -129,24 +141,27 @@
 
         public void Publish<TData>(TData value)
         {
-            if (valueTypeFilter != null &&
-                valueTypeFilter.Count != 0 &&
-                !valueTypeFilter.Contains(typeof(TData))) {
+            if (_valueTypeFilter != null &&
+                _valueTypeFilter.Count != 0 &&
+                !_valueTypeFilter.Contains(typeof(TData))) {
                 return;
             }
 
-            data.Publish(value);
-            portValueChanged.Execute(Unit.Default);
+            _data.Publish(value);
+            _portValueChanged.Execute(Unit.Default);
         }
 
-        public void RemoveAllConnections() => data.Release();
+        public void RemoveAllConnections()
+        {
+            _data.Release();
+        }
 
-        public TData Get<TData>() => data.Get<TData>();
+        public TData Get<TData>() => _data.Get<TData>();
 
-        public bool Contains<TData>() => data.Contains<TData>();
+        public bool Contains<TData>() => _data.Contains<TData>();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public IObservable<TValue> Receive<TValue>() => data.Receive<TValue>();
+        public IObservable<TValue> Receive<TValue>() => _data.Receive<TValue>();
 
         #endregion
 
@@ -154,40 +169,48 @@
 
         private void Initialize()
         {
-            lifeTimeDefeDefinition = lifeTimeDefeDefinition ?? new LifeTimeDefinition();
-            lifeTime               = lifeTimeDefeDefinition.LifeTime;
-            lifeTimeDefeDefinition.Release();
+            _lifeTimeDefeDefinition = _lifeTimeDefeDefinition ?? new LifeTimeDefinition();
+            _lifeTime               = _lifeTimeDefeDefinition.LifeTime;
+            _lifeTimeDefeDefinition.Release();
 
-            data        = data ?? new EntityContext();
+            _data        = _data ?? new EntityContext();
 
-            lifeTime.AddCleanUpAction(data.Release);
-            lifeTime.AddCleanUpAction(RemoveAllConnections);
+            _lifeTime.AddCleanUpAction(_data.Release);
+            _lifeTime.AddCleanUpAction(RemoveAllConnections);
         }
 
         #region serialization rules
 
         public void OnBeforeSerialize()
         {
-            UpdateSerializedFilter(valueTypeFilter);
+            UpdateSerializedFilter(_valueTypeFilter);
         }
 
         public void OnAfterDeserialize()
         {
-            valueTypeFilter = valueTypeFilter ?? new List<Type>();
-            valueTypeFilter.Clear();
+            _valueTypeFilter = _valueTypeFilter ?? new List<Type>();
+            _valueTypeFilter.Clear();
 
             for (var i = 0; i < serializedValueTypes.Count; i++) {
                 var typeFilter = serializedValueTypes[i];
-                var type       = Type.GetType(typeFilter, false, true);
-                if (type != null)
-                    valueTypeFilter.Add(type);
+                if (typeFilter != null)
+                    _valueTypeFilter.Add(typeFilter);
             }
         }
 
         [Conditional("UNITY_EDITOR")]
         private void UpdateSerializedFilter(IReadOnlyList<Type> filter)
         {
-            serializedValueTypes = filter == null ? new List<string>() : filter.Select(x => x.AssemblyQualifiedName).ToList();
+            serializedValueTypes.Clear();
+            if (filter == null) return;
+
+            foreach (var type in filter)
+            {
+                if(ignoreFilterTypes.Contains(type))
+                    continue;
+                serializedValueTypes.Add(type);
+            }
+
         }
 
         #endregion
@@ -197,7 +220,7 @@
 
 #if UNITY_EDITOR
 
-        public IReadOnlyDictionary<Type, IValueContainerStatus> Values => data.EditorValues;
+        public IReadOnlyDictionary<Type, IValueContainerStatus> Values => _data.EditorValues;
 
 #endif
 

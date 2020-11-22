@@ -6,19 +6,21 @@
 	using UnityEditor;
 	using UnityEngine;
 
-	public class UniGraphOperations 
+	public class UniGraphOperations
 	{
+		private const string DefaultGraphName     = "UniGraph";
+		private const string DefaultInputNodeName = "input";
 		
 		[MenuItem("Assets/UniGraph/Create UniGraph")]
 		public static void CreateGraph()
 		{
 			
 			var graph = new GameObject().AddComponent<UniGraph>();
-			graph.nodeName = graph.name;
+			graph.SetName(graph.name);
 			
 			//add main root node
-			var root = graph.AddNode<UniPortNode>("input");
-			root.name = "input";
+			var root = graph.AddNode<UniPortNode>(DefaultInputNodeName);
+			root.name      = DefaultInputNodeName;
 			root.direction = PortIO.Input;
 			
 			var activePath = AssetDatabase.GetAssetPath(Selection.activeObject);
@@ -26,7 +28,7 @@
 			var assetFolder = Directory.Exists(activePath) ? activePath :
 				Path.GetDirectoryName(activePath);
 			
-			AssetEditorTools.SaveAsset(graph.gameObject, "UniGraph", assetFolder);
+			AssetEditorTools.SaveAsset(graph.gameObject, DefaultGraphName, assetFolder);
 		}
 	
 	}

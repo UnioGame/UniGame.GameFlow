@@ -27,12 +27,14 @@ namespace UniModules.UniGameFlow.Nodes.Runtime.States
     {
         #region inspector
 
-        [ReadOnlyValue] [SerializeField] 
+        [ReadOnlyValue] 
+        [SerializeField] 
         protected bool _isStateActive;
 
         #endregion
 
-        [Port] public object input;
+        [Port] 
+        public object input;
 
         #region public properties
 
@@ -45,6 +47,7 @@ namespace UniModules.UniGameFlow.Nodes.Runtime.States
         
 
         private IAsyncStateToken _token;
+        private IPortValue       _inputPort;
 
         #endregion
 
@@ -74,19 +77,22 @@ namespace UniModules.UniGameFlow.Nodes.Runtime.States
             }
             port.Value.Publish(_token);
         }
-        
+
         protected sealed override void OnExecute()
         {
             if (!Application.isPlaying)
                 return;
             
-            _isStateActive = false;
+            _asyncStateProxy = _asyncStateProxy ?? new AsyncContextStateProxy(this, this, this, this);
+            _isStateActive   = false;
+            _inputPort       = GetPortValue(nameof(input));
             
+            LifeTime.AddCleanUpAction(() => _asyncStateProxy.ExitAsync());
+
             LogNodeExecutionState();
             
             //get all actual stat tokens and try to run state
-            var tokenPort = GetPortValue(nameof(input));
-            tokenPort.Receive<IAsyncStateToken>().
+            _inputPort.Receive<IAsyncStateToken>().
                 Where( x => _isStateActive == false).
                 Select(async x =>  await OwnToken(x)).
                 Subscribe().
@@ -101,20 +107,13 @@ namespace UniModules.UniGameFlow.Nodes.Runtime.States
                 Subscribe().
                 AddTo(LifeTime);
         }
-        
-        protected sealed override void OnInitialize()
-        {
-            _asyncStateProxy = _asyncStateProxy ?? new AsyncContextStateProxy(this, this, this, this);
-            _isStateActive   = false;
-            
-            LifeTime.AddCleanUpAction(() => _asyncStateProxy.ExitAsync());
-        }
 
         private async UniTask OwnToken(IAsyncStateToken token)
         {
             var result = await token.TakeOwnership(_asyncStateProxy);
             _token         = result ? token : null;
             _isStateActive = result;
+            
         }
 
     }
