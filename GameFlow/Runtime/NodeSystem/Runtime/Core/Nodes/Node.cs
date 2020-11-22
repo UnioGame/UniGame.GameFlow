@@ -33,8 +33,8 @@
         [SerializeField] public string nodeName;
         
         /// <summary> Position on the <see cref="NodeGraph"/> </summary>
-        // [HideInInspector]
-        // [HideNodeInspector] 
+        [HideInInspector]
+        [HideNodeInspector] 
         [SerializeField] public Vector2 position;
 
         /// <summary> It is recommended not to modify these at hand. Instead, see <see cref="NodeInputAttribute"/> and <see cref="NodeOutputAttribute"/> </summary>

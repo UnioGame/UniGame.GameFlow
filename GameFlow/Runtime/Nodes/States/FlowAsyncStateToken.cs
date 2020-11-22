@@ -62,7 +62,7 @@
         
         public async UniTask<bool> StopAt(int index)
         {
-            if (index <= 0 || index >= _states.Count)
+            if (index < 0 || index >= _states.Count)
                 return false;
             
             for (var i = index; i < _states.Count; i++)

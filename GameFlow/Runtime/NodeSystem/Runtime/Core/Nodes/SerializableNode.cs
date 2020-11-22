@@ -35,7 +35,7 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
         public string nodeName;
 
         /// <summary> Position on the <see cref="NodeGraph"/> </summary>
-        //[HideInInspector]
+        [HideInInspector]
         [SerializeField]
         public Vector2 position;
 
