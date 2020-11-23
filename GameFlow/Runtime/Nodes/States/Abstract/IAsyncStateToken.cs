@@ -11,10 +11,20 @@
     {
         IContext      Context { get; }
         int           Id      { get; }
+        
+        /// <summary>
+        /// Try to launch target state for this execution token
+        /// </summary>
         UniTask<bool> TakeOwnership(IAsyncContextState state);
 
-        UniTask<bool> StopAfter(IAsyncContextState node);
+        /// <summary>
+        /// stop all state "after"(exclude) target state
+        /// </summary>
+        UniTask<bool> StopAfter(IAsyncContextState state);
         
-        UniTask<bool> StopSince(IAsyncContextState node);
+        /// <summary>
+        /// stop all state "since"(include) target state
+        /// </summary>
+        UniTask<bool> StopSince(IAsyncContextState state);
     }
 }
