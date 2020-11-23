@@ -40,7 +40,7 @@ Open window Package Manager in Unity and install UniGame Nodes System Package
 
 After that you already can view Graph Editor by clicking "Show Graph" button on prefab
 
-![](https://i.gyazo.com/a3bc4692e2efdd61b73933d21524aa98.png)
+![](https://github.com/UniGameTeam/UniGame.GameFlow/blob/master/GitAssets/open_graph.png)
 
 ## Node API
 
