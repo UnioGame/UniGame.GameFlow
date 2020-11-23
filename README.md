@@ -242,6 +242,18 @@ public class DemoComponentNode : SNode
 
 ### Nodes Info Window
 
+For each node you can define information with attribute: **NodeInfo**
+
+```csharp
+    [CreateNodeMenu("Debug/Log","Log")]
+    [NodeInfo("Logging Node","Profiling","Logging all data from input port")]
+    public class LogNode : UniNode 
+```
+
+All list of available node can be found with **"Show Nodes"** button
+
+![](https://github.com/UniGameTeam/UniGame.GameFlow/blob/master/GitAssets/show_nodes_btn.png)
+
 ### Async States
 
 ### View Port Values
