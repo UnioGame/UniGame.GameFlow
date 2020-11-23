@@ -343,18 +343,93 @@ here is default implementation
 ```csharp
 #region custom execution handlers
 
+/// <summary>
+/// Regular Execution logic behaviour
+/// </summary>
 public virtual UniTask<AsyncStatus> ExecuteStateAsync(IContext value) => UniTask.FromResult(AsyncStatus.Succeeded);
 
+/// <summary>
+/// state completion handler
+/// </summary>
 public virtual UniTask CompleteAsync(AsyncStatus value, IContext data, ILifeTime lifeTime) => UniTask.FromResult(UniTask.CompletedTask);
 
+/// <summary>
+/// Exiting from state handler
+/// </summary>
 public virtual UniTask ExitAsync(IContext data) => UniTask.FromResult(UniTask.CompletedTask);
 
+/// <summary>
+/// Execution Failure result handler
+/// </summary>
 public virtual UniTask Rollback(IContext source) => UniTask.FromResult(UniTask.CompletedTask);
 
 #endregion
 ```
 
+#### AsyncStatus
 
+This is status of async operation:
+
+```csharp
+public enum AsyncStatus {
+  /// <summary>The operation has not yet completed.</summary>
+  Pending = 0,
+  /// <summary>The operation completed successfully.</summary>
+  Succeeded = 1,
+  /// <summary>The operation completed with an error.</summary>
+  Faulted = 2,
+  /// <summary>The operation completed due to cancellation.</summary>
+  Canceled = 3
+}
+```
+
+#### DataContext
+
+You may ask **What about data transfering between AsyncStates?**
+
+So, you have several options here:
+
+- Send data through Ports
+  
+```csharp
+public override async UniTask<AsyncStatus> ExecuteStateAsync(IContext value)
+{
+    var stringPortValue = GetPortValue(nameof(stringInput));
+    
+    var message         = await stringPortValue.Receive<string>().First();
+    Debug.Log($"GOT MESSAGE : {message}");
+    
+    return AsyncStatus.Succeeded;
+}
+```
+
+![](https://github.com/UniGameTeam/UniGame.GameFlow/blob/master/GitAssets/port_data_flow.gif)
+
+- Send or Receive data directly through shared states context
+
+```csharp
+public override async UniTask<AsyncStatus> ExecuteStateAsync(IContext value)
+{
+    await UniTask.Delay(TimeSpan.FromSeconds(2));
+
+    value.Publish($"DELAY FINISHED {nodeName}");
+
+    return AsyncStatus.Succeeded;
+}
+```
+
+```csharp
+public override async UniTask<AsyncStatus> ExecuteStateAsync(IContext value)
+{
+    var message = await value.Receive<string>().First();
+
+    Debug.Log($"GOT MESSAGE : {message}");
+    
+    return AsyncStatus.Succeeded;
+}
+```
+
+#### AsyncStates Flow
 
 ![](https://github.com/UniGameTeam/UniGame.GameFlow/blob/master/GitAssets/async_states_nodes.gif)
 
