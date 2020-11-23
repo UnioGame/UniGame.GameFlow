@@ -216,7 +216,7 @@ namespace UniGame.GameFlowEditor.Editor
             graphData.nodeGroups.Clear();
 
             foreach (var groupView in groupViews) {
-                var groupData = groupView.groupData;
+                var groupData = groupView.group;
                 var groupInfo = new NodesGroup() {
                     color    = groupData.color,
                     position = groupData.position,
