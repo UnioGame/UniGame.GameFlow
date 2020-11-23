@@ -146,6 +146,19 @@ public int intTypePort;
 public ISomeApi someApiTypePort;
 ```
 
+Besides of attribute usage you can define new port with declaration from the code
+
+```csharp
+[Serializable]
+public class DemoComponentNode : SNode
+{
+    protected override void UpdateCommands(List<ILifeTimeCommand> nodeCommands)
+    {
+        var newPort  = this.UpdatePortValue("newPost1",PortIO.Output);
+        var newPort2 = AddPort("newPort2", Enumerable.Empty<Type>(), PortIO.Output);
+    }
+}
+```
 
 ### Nodes Info Window
 
