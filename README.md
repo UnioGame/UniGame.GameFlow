@@ -383,7 +383,7 @@ public enum AsyncStatus {
 }
 ```
 
-#### DataContext
+#### Data Context
 
 You may ask **What about data transfering between AsyncStates?**
 
@@ -433,6 +433,38 @@ public override async UniTask<AsyncStatus> ExecuteStateAsync(IContext value)
 
 ![](https://github.com/UniGameTeam/UniGame.GameFlow/blob/master/GitAssets/async_states_nodes.gif)
 
+
+AsyncState execution controlling by **IAsyncStateToken**
+
+```csharp
+public interface IAsyncStateToken :
+        ILifeTimeContext,
+        IDisposable
+{
+    IContext      Context { get; }
+    int           Id      { get; }
+    
+    /// <summary>
+    /// Try to launch target state for this execution token
+    /// </summary>
+    UniTask<bool> TakeOwnership(IAsyncContextState state);
+
+    /// <summary>
+    /// stop all state "after"(exclude) target state
+    /// </summary>
+    UniTask<bool> StopAfter(IAsyncContextState state);
+    
+    /// <summary>
+    /// stop all state "since"(include) target state
+    /// </summary>
+    UniTask<bool> StopSince(IAsyncContextState state);
+}
+```
+
+Out of the box exists two implementation:
+
+- **SingleAsyncStateToken** - "state mechine" like execution behaviour. Each new token owner stop previous one when receive token premitions
+- **FlowAsyncStateToken** - flow execition. Any new state added into end of execution queue. When one state execution stoped, all added later stprocesses stoped too 
 
 ### Nodes Info Window
 
