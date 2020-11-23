@@ -71,4 +71,15 @@
         }
 
     }
+
+    public class DemoComponentNode : UniNode
+    {
+        [Port(PortIO.Input)]
+        public object inPort;
+
+        [Port(PortIO.Output)]
+        public object outPort;
+        
+    }
+    
 }

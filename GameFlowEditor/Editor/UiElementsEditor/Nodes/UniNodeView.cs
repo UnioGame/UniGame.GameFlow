@@ -16,9 +16,8 @@ namespace UniGame.GameFlowEditor.Editor
     [NodeCustomEditor(typeof(UniBaseNode))]
     public class UniNodeView : BaseNodeView
     {
-        private const string                   PortsInfoMenu    = "Ports Info";
+        private const string                   PortsInfoMenu    = "Ports Data Info";
         private const string                   OpenScriptMenu    = "Open UniNode Script";
-        private const string                   ShowNodePortsMenu    = "Show UniNode Ports Data";
         
         private       List<ContextDescription> content          = new List<ContextDescription>();
         private       Color                    _backgroundColor = new Color(0.4f, 0.4f, 0.4f);
@@ -78,7 +77,6 @@ namespace UniGame.GameFlowEditor.Editor
         public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
         {
             evt.menu.AppendAction(OpenScriptMenu, (e) => OpenUniNodeSourceCode());
-            evt.menu.AppendAction(ShowNodePortsMenu, (e) => ShowPortsData());
             evt.menu.AppendAction(PortsInfoMenu, (e) => ShowPortsValues());
             base.BuildContextualMenu(evt);
         }
