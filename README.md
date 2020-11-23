@@ -103,6 +103,8 @@ protected virtual void UpdateCommands(List<ILifeTimeCommand> nodeCommands){}
 
 ### Node Ports
 
+#### Define Ports
+
 After that your can define your own node ports
 
 ```csharp
@@ -157,6 +159,29 @@ public class DemoComponentNode : SNode
         var newPort  = this.UpdatePortValue("newPost1",PortIO.Output);
         var newPort2 = AddPort("newPort2", Enumerable.Empty<Type>(), PortIO.Output);
     }
+}
+```
+
+#### Receive/Publish port data
+
+When you retrive runtime port handle, you can subscribe for it input data stream
+
+```csharp
+[Serializable]
+public class DemoComponentNode : SNode
+{
+    [Port(PortIO.Input)]
+    public int intPort;
+    
+    protected override void OnExecute()
+    {
+        var intPortHandle = GetPort(nameof(intPort));
+        var portValue     = intPortHandle.Value;
+        portValue.Receive<int>().
+            Subscribe(x => Debug.Log($"RECEIVE INT VALUE {x}")).
+            AddTo(LifeTime);
+    }
+    
 }
 ```
 
