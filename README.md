@@ -40,7 +40,7 @@ Open window Package Manager in Unity and install UniGame Nodes System Package
 
 After that you already can view Graph Editor by clicking "Show Graph" button on prefab
 
-![](https://i.gyazo.com/a3bc4692e2efdd61b73933d21524aa98.png)
+![](https://github.com/UniGameTeam/UniGame.GameFlow/blob/master/GitAssets/open_graph.png)
 
 ## Node API
 
@@ -103,6 +103,8 @@ protected virtual void UpdateCommands(List<ILifeTimeCommand> nodeCommands){}
 
 ### Node Ports
 
+#### Define Ports
+
 After that your can define your own node ports
 
 ```csharp
@@ -116,6 +118,72 @@ public class DemoComponentNode : UniNode
 }
 ```
 
+Any defined port can be requested by it name
+
+```csharp
+[Serializable]
+    public class DemoComponentNode : SNode
+    {
+        [Port(PortIO.Input)]
+        public object inPort;
+
+
+        protected override void OnExecute()
+        {
+            var port = GetPort(nameof(inPort));
+        }
+    }
+```
+
+Type of port field that's defined with attributes uses as type filter. Except of  **System.Object** type. Port with **System.Object** type interpret as port of any type.
+
+```csharp
+[Port(PortIO.Input)]
+public object anyTypePort;
+
+[Port(PortIO.Input)]
+public int intTypePort;
+
+[Port(PortIO.Input)]
+public ISomeApi someApiTypePort;
+```
+
+Besides of attribute usage you can define new port with declaration from the code
+
+```csharp
+[Serializable]
+public class DemoComponentNode : SNode
+{
+    protected override void UpdateCommands(List<ILifeTimeCommand> nodeCommands)
+    {
+        var newPort  = this.UpdatePortValue("newPost1",PortIO.Output);
+        var newPort2 = AddPort("newPort2", Enumerable.Empty<Type>(), PortIO.Output);
+    }
+}
+```
+
+#### Receive/Publish port data
+
+When you retrive runtime port handle, you can subscribe for it input data stream
+
+```csharp
+[Serializable]
+public class DemoComponentNode : SNode
+{
+    [Port(PortIO.Input)]
+    public int intPort;
+    
+    protected override void OnExecute()
+    {
+        var intPortHandle = GetPort(nameof(intPort));
+        var portValue     = intPortHandle.Value;
+        portValue.Receive<int>().
+            Subscribe(x => Debug.Log($"RECEIVE INT VALUE {x}")).
+            AddTo(LifeTime);
+    }
+    
+}
+```
 
 ### Nodes Info Window
 
