@@ -162,7 +162,9 @@ public class DemoComponentNode : SNode
 }
 ```
 
-#### Receive/Publish port data
+#### Receive & Publish port data
+
+**Receive port data**
 
 When you retrive runtime port handle, you can subscribe for it input data stream
 
@@ -185,7 +187,74 @@ public class DemoComponentNode : SNode
 }
 ```
 
+**Receive<TValue>()** - Allow you to create strong typed data stream. With that you can handle any new incomming port data of that type.
+
+*see UniRx for more information about reactive streams (https://github.com/neuecc/UniRx)*
+
+Instead of call **GetPort(nameof(intPort))** you can call **GetPortValue(%PORT_NAME%)** method
+
+```csharp
+[Serializable]
+public class DemoComponentNode : SNode
+{
+    [Port(PortIO.Input)]
+    public int intPort;
+    
+    protected override void OnExecute()
+    {
+        var portValue = GetPortValue(nameof(intPort));
+        portValue.Receive<int>().
+            Subscribe(x => Debug.Log($"RECEIVE INT VALUE {x}")).
+            AddTo(LifeTime);
+    }
+    
+}
+```
+
+**Publish port data**
+
+```csharp
+[Serializable]
+public class DemoComponentNode : SNode
+{
+    [Port(PortIO.Output)]
+    public int outPort1;
+
+    [Port(PortIO.Output)]
+    public int outPort2;
+
+    //inspector value
+    public int outputValue = 333;
+    
+    protected override void OnExecute()
+    {
+        var outPortHandle = GetPort(nameof(outPort1));
+        var portValue1     = outPortHandle.Value;
+
+        var portValue2 = GetPortValue(nameof(outPort2))
+
+        portValue1.Publish<int>(outputValue);
+        portValue2.Publish(outputValue * outputValue);
+    }
+    
+}
+```
+
 ### Nodes Info Window
+
+For each node you can define information with attribute: **NodeInfo**
+
+```csharp
+    [CreateNodeMenu("Debug/Log","Log")]
+    [NodeInfo("Logging Node","Profiling","Logging all data from input port")]
+    public class LogNode : UniNode 
+```
+
+All list of available node can be found with **"Show Nodes"** button
+
+![](https://github.com/UniGameTeam/UniGame.GameFlow/blob/master/GitAssets/show_nodes_btn.png)
+
+![](https://github.com/UniGameTeam/UniGame.GameFlow/blob/master/GitAssets/nodes_window.png)
 
 ### Async States
 
