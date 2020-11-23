@@ -116,6 +116,36 @@ public class DemoComponentNode : UniNode
 }
 ```
 
+Any defined port can be requested by it name
+
+```csharp
+[Serializable]
+    public class DemoComponentNode : SNode
+    {
+        [Port(PortIO.Input)]
+        public object inPort;
+
+
+        protected override void OnExecute()
+        {
+            var port = GetPort(nameof(inPort));
+        }
+    }
+```
+
+Type of port field that's defined with attributes uses as type filter. Except of  **System.Object** type. Port with **System.Object** type interpret as port of any type.
+
+```csharp
+[Port(PortIO.Input)]
+public object anyTypePort;
+
+[Port(PortIO.Input)]
+public int intTypePort;
+
+[Port(PortIO.Input)]
+public ISomeApi someApiTypePort;
+```
+
 
 ### Nodes Info Window
 
