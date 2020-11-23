@@ -240,6 +240,200 @@ public class DemoComponentNode : SNode
 }
 ```
 
+In some cases your want to establish connection between ports for transferring all data from one to another. To easily achieve this use following:
+
+```csharp
+public class DemoNode : UniNode
+{
+    [Port(PortIO.Input)]
+    public object input1;
+    [Port(PortIO.Input)]
+    public object input2;
+    
+    [Port(PortIO.Output)]
+    public object output;
+
+    protected override void OnExecute()
+    {
+        var inputValue1 = GetPortValue(nameof(input1));
+        var inputValue2 = GetPortValue(nameof(input2));
+
+        var outputValue = GetPortValue(nameof(output));
+        
+        //Bind Output Port With input data
+        //Now All Data from inputs will be transferred to output
+        inputValue1.Bind(outputValue).AddTo(LifeTime);
+        inputValue2.Bind(outputValue).AddTo(LifeTime);
+    }
+}
+```
+
+### Async States
+
+What is AsyncState? This is special type of node that allow you define custom async execution operations:
+
+- Async Await execution syntax support
+- Flow tree execution or state machine logic
+- Custom execution contoller override
+- Rollback logic support
+- Data transfer between states
+
+#### AsyncState API
+
+All AsyncState based on API
+
+- Command execution interface
+  
+```csharp
+public interface IAsyncCommand<TValue,T>
+{
+    UniTask<T> ExecuteAsync(TValue value);
+}
+```
+
+- Async end point interface:
+
+```csharp
+public interface IAsyncEndPoint
+{
+    UniTask ExitAsync();
+}
+```
+
+- Async Rollback interface
+  
+```csharp
+public interface IAsyncRollback<TSource>
+{
+    UniTask Rollback(TSource source);
+}
+```
+
+- Async operation completion handler
+
+```csharp
+public interface IAsyncCompletion<TResult,TData>
+{
+    UniTask CompleteAsync(TResult value, TData data, ILifeTime lifeTime);
+}
+```
+
+#### AsyncState base nodes
+
+All of theese API grouped into two base graph node:
+
+- Regular serializable class node **AsyncStateNode**
+
+```csharp
+[Serializable]
+public abstract class AsyncStateNode : SNode
+```
+
+- Component based node **AsyncStateUniNode**
+
+```csharp
+public abstract class AsyncStateUniNode : UniNode
+```
+
+Each of these node allow you to override execution flow methods for custom behaviour logic
+
+here is default implementation
+
+
+```csharp
+#region custom execution handlers
+
+/// <summary>
+/// Regular Execution logic behaviour
+/// </summary>
+public virtual UniTask<AsyncStatus> ExecuteStateAsync(IContext value) => UniTask.FromResult(AsyncStatus.Succeeded);
+
+/// <summary>
+/// state completion handler
+/// </summary>
+public virtual UniTask CompleteAsync(AsyncStatus value, IContext data, ILifeTime lifeTime) => UniTask.FromResult(UniTask.CompletedTask);
+
+/// <summary>
+/// Exiting from state handler
+/// </summary>
+public virtual UniTask ExitAsync(IContext data) => UniTask.FromResult(UniTask.CompletedTask);
+
+/// <summary>
+/// Execution Failure result handler
+/// </summary>
+public virtual UniTask Rollback(IContext source) => UniTask.FromResult(UniTask.CompletedTask);
+
+#endregion
+```
+
+#### AsyncStatus
+
+This is status of async operation:
+
+```csharp
+public enum AsyncStatus {
+  /// <summary>The operation has not yet completed.</summary>
+  Pending = 0,
+  /// <summary>The operation completed successfully.</summary>
+  Succeeded = 1,
+  /// <summary>The operation completed with an error.</summary>
+  Faulted = 2,
+  /// <summary>The operation completed due to cancellation.</summary>
+  Canceled = 3
+}
+```
+
+#### DataContext
+
+You may ask **What about data transfering between AsyncStates?**
+
+So, you have several options here:
+
+- Send data through Ports
+  
+```csharp
+public override async UniTask<AsyncStatus> ExecuteStateAsync(IContext value)
+{
+    var stringPortValue = GetPortValue(nameof(stringInput));
+    
+    var message         = await stringPortValue.Receive<string>().First();
+    Debug.Log($"GOT MESSAGE : {message}");
+    
+    return AsyncStatus.Succeeded;
+}
+```
+
+![](https://github.com/UniGameTeam/UniGame.GameFlow/blob/master/GitAssets/port_data_flow.gif)
+
+- Send or Receive data directly through shared states context
+
+```csharp
+public override async UniTask<AsyncStatus> ExecuteStateAsync(IContext value)
+{
+    await UniTask.Delay(TimeSpan.FromSeconds(2));
+
+    value.Publish($"DELAY FINISHED {nodeName}");
+
+    return AsyncStatus.Succeeded;
+}
+```
+
+```csharp
+public override async UniTask<AsyncStatus> ExecuteStateAsync(IContext value)
+{
+    var message = await value.Receive<string>().First();
+
+    Debug.Log($"GOT MESSAGE : {message}");
+    
+    return AsyncStatus.Succeeded;
+}
+```
+
+#### AsyncStates Flow
+
+![](https://github.com/UniGameTeam/UniGame.GameFlow/blob/master/GitAssets/async_states_nodes.gif)
+
+
 ### Nodes Info Window
 
 For each node you can define information with attribute: **NodeInfo**
@@ -256,7 +450,7 @@ All list of available node can be found with **"Show Nodes"** button
 
 ![](https://github.com/UniGameTeam/UniGame.GameFlow/blob/master/GitAssets/nodes_window.png)
 
-### Async States
+
 
 ### View Port Values
 
