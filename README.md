@@ -50,7 +50,5 @@ After that you already can view Graph Editor by clicking "Show Graph" button on 
 
 At Any moment of Graph execution you can check - What kind of data that port contains?
 
-![](https://i.gyazo.com/c86a20973398e57b70e6ee92a9772bf8.png)
-
-![](https://i.gyazo.com/ec2cb313a0a6a8640cbca9122ba6c8b3.png)
+![](https://github.com/UniGameTeam/UniGame.GameFlow/blob/master/GitAssets/port_info.png)
 
