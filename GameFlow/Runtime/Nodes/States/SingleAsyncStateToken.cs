@@ -54,6 +54,13 @@
             _state = null;
         }
 
+        /// <summary>
+        /// always unequals
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj) => false;
+
         private async UniTask<bool> StopCurrent()
         {
             if (_state == null) return false;
