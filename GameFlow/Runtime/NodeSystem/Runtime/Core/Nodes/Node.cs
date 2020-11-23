@@ -184,6 +184,8 @@
         /// </summary>
         public INodePort GetPort(string portName) => SNode.GetPort(portName);
 
+        public IPortValue GetPortValue(string portName) => SNode.GetPort(portName)?.Value;
+
         public bool HasPort(string fieldName)
         {
             return SNode.HasPort(fieldName);

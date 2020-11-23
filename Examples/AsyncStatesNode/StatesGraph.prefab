@@ -1,0 +1,318 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7250291176878655827
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4921882603054938766}
+  - component: {fileID: 6945672342119869372}
+  - component: {fileID: 5704820702322957396}
+  m_Layer: 0
+  m_Name: StatesGraph
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4921882603054938766
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7250291176878655827}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6945672342119869372
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7250291176878655827}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 782945db79ce44748b3f294e0edf364e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 0
+  width: 250
+  nodeName: New Game Object
+  position: {x: 0, y: 0}
+  ports:
+    keys:
+    - input
+    values:
+    - id: 4
+      nodeId: 226
+      fieldName: input
+      direction: 0
+      connectionType: 0
+      showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      portValue:
+        name: input
+        serializedValueTypes: []
+        broadcastersCount: 0
+      connections: []
+      instancePortList: 0
+  exitOnDisable: 1
+  activateOnEnable: 1
+  guid: c0e4bceee78f1bd4cab830a4693cd524
+  uniqueId: 226
+  nodes:
+  - {fileID: 5704820702322957396}
+  serializableNodes:
+  - id: 0
+  - id: 1
+  - id: 2
+  - id: 3
+  nodeGroups: []
+  _assetReferenceSources: []
+  _dataSources: []
+  references:
+    version: 1
+    00000000:
+      type: {class: DemoStateButtonNode, ns: HunterLands.Tests.Experiments.GraphExamples.States,
+        asm: Assembly-CSharp}
+      data:
+        id: 24
+        width: 220
+        nodeName: Demo State Button Node
+        position: {x: 304, y: 262}
+        ports:
+          keys:
+          - outputToken
+          - input
+          values:
+          - id: 25
+            nodeId: 24
+            fieldName: outputToken
+            direction: 1
+            connectionType: 0
+            showBackingValue: 2
+            isDynamic: 1
+            isInstancePortList: 0
+            portValue:
+              name: outputToken
+              serializedValueTypes: []
+              broadcastersCount: 0
+            connections:
+            - fieldName: input
+              nodeId: 30
+              reroutePoints: []
+              portId: 0
+            instancePortList: 0
+          - id: 26
+            nodeId: 24
+            fieldName: input
+            direction: 0
+            connectionType: 0
+            showBackingValue: 2
+            isDynamic: 1
+            isInstancePortList: 0
+            portValue:
+              name: input
+              serializedValueTypes: []
+              broadcastersCount: 0
+            connections:
+            - fieldName: tokenPort
+              nodeId: 29
+              reroutePoints: []
+              portId: 0
+            instancePortList: 0
+        _isStateActive: 0
+    00000001:
+      type: {class: DemoStateButtonNode, ns: HunterLands.Tests.Experiments.GraphExamples.States,
+        asm: Assembly-CSharp}
+      data:
+        id: 30
+        width: 220
+        nodeName: Demo State Button Node
+        position: {x: 650, y: 153}
+        ports:
+          keys:
+          - outputToken
+          - input
+          values:
+          - id: 31
+            nodeId: 30
+            fieldName: outputToken
+            direction: 1
+            connectionType: 0
+            showBackingValue: 2
+            isDynamic: 1
+            isInstancePortList: 0
+            portValue:
+              name: outputToken
+              serializedValueTypes: []
+              broadcastersCount: 0
+            connections:
+            - fieldName: input
+              nodeId: 186
+              reroutePoints: []
+              portId: 0
+            instancePortList: 0
+          - id: 32
+            nodeId: 30
+            fieldName: input
+            direction: 0
+            connectionType: 0
+            showBackingValue: 2
+            isDynamic: 1
+            isInstancePortList: 0
+            portValue:
+              name: input
+              serializedValueTypes: []
+              broadcastersCount: 0
+            connections:
+            - fieldName: outputToken
+              nodeId: 24
+              reroutePoints: []
+              portId: 0
+            instancePortList: 0
+        _isStateActive: 0
+    00000002:
+      type: {class: DemoStateButtonNode, ns: HunterLands.Tests.Experiments.GraphExamples.States,
+        asm: Assembly-CSharp}
+      data:
+        id: 186
+        width: 220
+        nodeName: Demo State Button Node
+        position: {x: 1008, y: 81}
+        ports:
+          keys:
+          - outputToken
+          - input
+          values:
+          - id: 187
+            nodeId: 186
+            fieldName: outputToken
+            direction: 1
+            connectionType: 0
+            showBackingValue: 2
+            isDynamic: 1
+            isInstancePortList: 0
+            portValue:
+              name: outputToken
+              serializedValueTypes: []
+              broadcastersCount: 0
+            connections:
+            - fieldName: input
+              nodeId: 189
+              reroutePoints: []
+              portId: 0
+            instancePortList: 0
+          - id: 188
+            nodeId: 186
+            fieldName: input
+            direction: 0
+            connectionType: 0
+            showBackingValue: 2
+            isDynamic: 1
+            isInstancePortList: 0
+            portValue:
+              name: input
+              serializedValueTypes: []
+              broadcastersCount: 0
+            connections:
+            - fieldName: outputToken
+              nodeId: 30
+              reroutePoints: []
+              portId: 0
+            instancePortList: 0
+        _isStateActive: 0
+    00000003:
+      type: {class: DemoStateButtonNode, ns: HunterLands.Tests.Experiments.GraphExamples.States,
+        asm: Assembly-CSharp}
+      data:
+        id: 189
+        width: 220
+        nodeName: Demo State Button Node
+        position: {x: 1362, y: -4}
+        ports:
+          keys:
+          - outputToken
+          - input
+          values:
+          - id: 190
+            nodeId: 189
+            fieldName: outputToken
+            direction: 1
+            connectionType: 0
+            showBackingValue: 2
+            isDynamic: 1
+            isInstancePortList: 0
+            portValue:
+              name: outputToken
+              serializedValueTypes: []
+              broadcastersCount: 0
+            connections: []
+            instancePortList: 0
+          - id: 191
+            nodeId: 189
+            fieldName: input
+            direction: 0
+            connectionType: 0
+            showBackingValue: 2
+            isDynamic: 1
+            isInstancePortList: 0
+            portValue:
+              name: input
+              serializedValueTypes: []
+              broadcastersCount: 0
+            connections:
+            - fieldName: outputToken
+              nodeId: 186
+              reroutePoints: []
+              portId: 0
+            instancePortList: 0
+        _isStateActive: 0
+--- !u!114 &5704820702322957396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7250291176878655827}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84b27d335a03c784cb64d21c4807c950, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 29
+  width: 250
+  nodeName: Flow Token Demo Source Node
+  position: {x: -75, y: 367}
+  ports:
+    keys:
+    - tokenPort
+    values:
+    - id: 133
+      nodeId: 29
+      fieldName: tokenPort
+      direction: 1
+      connectionType: 0
+      showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      portValue:
+        name: tokenPort
+        serializedValueTypes: []
+        broadcastersCount: 0
+      connections:
+      - fieldName: input
+        nodeId: 24
+        reroutePoints: []
+        portId: 0
+      instancePortList: 0

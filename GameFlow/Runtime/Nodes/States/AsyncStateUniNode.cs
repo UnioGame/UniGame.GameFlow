@@ -7,6 +7,7 @@ namespace UniModules.UniGameFlow.Nodes.Runtime.States
     using Cysharp.Threading.Tasks;
     using global::UniCore.Runtime.ProfilerTools;
     using global::UniGame.UniNodes.NodeSystem.Runtime.Attributes;
+    using global::UniGame.UniNodes.NodeSystem.Runtime.Core;
     using global::UniGame.UniNodes.NodeSystem.Runtime.Interfaces;
     using UniCore.Runtime.Attributes;
     using UniGame.Context.SerializableContext.Runtime.Abstract;
@@ -19,7 +20,7 @@ namespace UniModules.UniGameFlow.Nodes.Runtime.States
 
     [HideNode]
     [Serializable]
-    public abstract class AsyncStateNode : SNode,
+    public abstract class AsyncStateUniNode : UniNode,
         IAsyncContextState,
         IAsyncStateCommand<IContext, AsyncStatus>,
         IAsyncCompletion<AsyncStatus, IContext>,
@@ -69,24 +70,12 @@ namespace UniModules.UniGameFlow.Nodes.Runtime.States
         
         #region custom execution handlers
         
-        /// <summary>
-        /// Regular Execution logic behaviour
-        /// </summary>
         public virtual UniTask<AsyncStatus> ExecuteStateAsync(IContext value) => UniTask.FromResult(AsyncStatus.Succeeded);
 
-        /// <summary>
-        /// state completion handler
-        /// </summary>
         public virtual UniTask CompleteAsync(AsyncStatus value, IContext data, ILifeTime lifeTime) => UniTask.FromResult(UniTask.CompletedTask);
 
-        /// <summary>
-        /// Exiting from state handler
-        /// </summary>
         public virtual UniTask ExitAsync(IContext data) => UniTask.FromResult(UniTask.CompletedTask);
 
-        /// <summary>
-        /// Execution Failure result handler
-        /// </summary>
         public virtual UniTask Rollback(IContext source) => UniTask.FromResult(UniTask.CompletedTask);
 
         #endregion

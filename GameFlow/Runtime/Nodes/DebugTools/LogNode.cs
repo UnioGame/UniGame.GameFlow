@@ -15,8 +15,7 @@
     using UniModules.UniGameFlow.NodeSystem.Runtime.Core.Attributes;
     using UniRx;
     using UnityEngine;
-
-    [Serializable]
+    
     [CreateNodeMenu("Debug/Log","Log")]
     [NodeInfo("Logging Node","Profiling","Logging all data from input port")]
     public class LogNode : UniNode , IMessagePublisher

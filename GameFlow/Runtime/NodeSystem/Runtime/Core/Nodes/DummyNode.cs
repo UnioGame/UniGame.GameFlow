@@ -7,6 +7,7 @@
     using UniGame.UniNodes.NodeSystem.Runtime.Core.Interfaces;
     using UniGame.UniNodes.NodeSystem.Runtime.Interfaces;
     using UniModules.UniContextData.Runtime.Entities;
+    using UniModules.UniCore.Runtime.Rx.Extensions;
     using UniModules.UniGame.Core.Runtime.Interfaces;
     using UnityEngine;
 
@@ -70,4 +71,30 @@
             ShowBackingValue showBackingValue = ShowBackingValue.Always) => null;
 
     }
+
+
+    public class DemoNode : UniNode
+    {
+        [Port(PortIO.Input)]
+        public object input1;
+        [Port(PortIO.Input)]
+        public object input2;
+        
+        [Port(PortIO.Output)]
+        public object output;
+
+        protected override void OnExecute()
+        {
+            var inputValue1 = GetPortValue(nameof(input1));
+            var inputValue2 = GetPortValue(nameof(input2));
+
+            var outputValue = GetPortValue(nameof(output));
+            
+            //Bind Output Port With input data
+            //Now All Data from inputs will be transferred to output
+            inputValue1.Bind(outputValue).AddTo(LifeTime);
+            inputValue2.Bind(outputValue).AddTo(LifeTime);
+        }
+    }
+    
 }
