@@ -64,7 +64,8 @@
         public void SetWidth(int nodeWidth) {}
 
         public NodePort AddPort(string fieldName,
-            IReadOnlyList<Type> types, PortIO direction,
+            IEnumerable<Type> types, 
+            PortIO direction,
             ConnectionType connectionType = ConnectionType.Multiple,
             ShowBackingValue showBackingValue = ShowBackingValue.Always) => null;
 

@@ -124,7 +124,7 @@
             PortIO direction = PortIO.Input,
             ConnectionType connectionType = ConnectionType.Multiple,
             ShowBackingValue showBackingValue = ShowBackingValue.Always,
-            IReadOnlyList<Type> types = null)
+            IEnumerable<Type> types = null)
         {
             this.id = id;
             this.node   = node;

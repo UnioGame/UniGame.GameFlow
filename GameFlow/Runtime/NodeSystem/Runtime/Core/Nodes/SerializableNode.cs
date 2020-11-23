@@ -168,11 +168,13 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
         /// <summary> Add a serialized port to this node. </summary>
         public NodePort AddPort(
             string fieldName,
-            IReadOnlyList<Type> types, PortIO direction,
+            IEnumerable<Type> types, 
+            PortIO direction,
             ConnectionType connectionType = ConnectionType.Multiple,
             ShowBackingValue showBackingValue = ShowBackingValue.Always)
         {
-            var port = HasPort(fieldName) ? ports[fieldName] : new NodePort(GraphData.GetId(), this, fieldName, direction, connectionType, showBackingValue, types);
+            var port = HasPort(fieldName) ? ports[fieldName] : 
+                new NodePort(GraphData.GetId(), this, fieldName, direction, connectionType, showBackingValue, types);
             return AddPort(port);
         }
 

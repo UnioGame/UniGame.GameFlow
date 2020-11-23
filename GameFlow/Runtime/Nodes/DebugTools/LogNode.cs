@@ -2,8 +2,10 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using NodeSystem.Runtime.Attributes;
     using NodeSystem.Runtime.Core;
+    using NodeSystem.Runtime.Core.Nodes;
     using NodeSystem.Runtime.Extensions;
     using NodeSystem.Runtime.Interfaces;
     using UniCore.Runtime.ProfilerTools;
@@ -12,6 +14,7 @@
     using UniModules.UniGame.Core.Runtime.Interfaces;
     using UniModules.UniGameFlow.NodeSystem.Runtime.Core.Attributes;
     using UniRx;
+    using UnityEngine;
 
     [Serializable]
     [CreateNodeMenu("Debug/Log","Log")]
@@ -72,14 +75,20 @@
 
     }
 
-    public class DemoComponentNode : UniNode
+    [Serializable]
+    public class DemoComponentNode : SNode
     {
         [Port(PortIO.Input)]
-        public object inPort;
-
-        [Port(PortIO.Output)]
-        public object outPort;
+        public int intPort;
+        
+        protected override void OnExecute()
+        {
+            var intPortHandle = GetPort(nameof(intPort));
+            var portValue     = intPortHandle.Value;
+            portValue.Receive<int>().
+                Subscribe(x => Debug.Log($"RECEIVE INT VALUE {x}")).
+                AddTo(LifeTime);
+        }
         
     }
-    
 }

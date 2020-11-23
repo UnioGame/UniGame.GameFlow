@@ -114,7 +114,7 @@
         }
 
 
-        public void SetValueTypeFilter(IReadOnlyList<Type> types)
+        public void SetValueTypeFilter(IEnumerable<Type> types)
         {
             _valueTypeFilter = _valueTypeFilter ?? new List<Type>();
             _valueTypeFilter.Clear();

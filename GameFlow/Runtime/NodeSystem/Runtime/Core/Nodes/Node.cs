@@ -9,9 +9,7 @@
     using UniCore.Runtime.ProfilerTools;
     using UniModules.UniCore.Runtime.Attributes;
     using UniModules.UniGame.Core.Runtime.Attributes.FieldTypeDrawer;
-    using UniModules.UniGame.Core.Runtime.Interfaces;
     using UnityEngine;
-    using Debug = UnityEngine.Debug;
 
     [Serializable]
     public abstract class Node : MonoBehaviour, INode
@@ -142,7 +140,8 @@
         /// </summary>
         public NodePort AddPort(
             string fieldName,
-            IReadOnlyList<Type> types, PortIO direction,
+            IEnumerable<Type> types, 
+            PortIO direction,
             ConnectionType connectionType = ConnectionType.Multiple,
             ShowBackingValue showBackingValue = ShowBackingValue.Always)
         {
