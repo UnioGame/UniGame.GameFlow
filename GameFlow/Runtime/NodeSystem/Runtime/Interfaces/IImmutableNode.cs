@@ -6,7 +6,7 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
     using IGraphData = Core.IGraphData;
     using Vector2 = UnityEngine.Vector2;
 
-    public interface IImmutableNode : IGraphItem
+    public interface IImmutableNode : IGraphItem, IEditorNode
     {
         IGraphData GraphData { get; }
 
@@ -29,14 +29,5 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
 
         bool HasPort(string fieldName);
 
-        #region Editor Api
-        
-        
-        Vector2 Position { get; }
-
-        int Width { get; }
-
-        #endregion
-        
     }
 }

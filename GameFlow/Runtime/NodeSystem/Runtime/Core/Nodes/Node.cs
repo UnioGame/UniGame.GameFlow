@@ -204,6 +204,10 @@
             nodeName = itemName;
         }
 
+        public virtual string GetStyle() => string.Empty;
+        
+        #endregion
+
         
         /// <summary>
         /// create target source node and bind with mono node methods
@@ -221,8 +225,6 @@
         /// create base node realization
         /// </summary>
         protected virtual IProxyNode CreateInnerNode() => new SNode(id, nodeName, ports);
-        
-        #endregion
 
         [Conditional("UNITY_EDITOR")]
         protected void LogMessage(string message)

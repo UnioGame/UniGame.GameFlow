@@ -5,6 +5,8 @@
     [Serializable]
     public class GameFlowStyleConstants
     {
+        public const string CssResourcePath = "GameFlow/UCSS";
+        
         public const string activeWindowGroup   = nameof(activeWindowGroup);
         public const string selectedWindowGroup = nameof(selectedWindowGroup);
         public const string disabledWindowGroup = nameof(disabledWindowGroup);

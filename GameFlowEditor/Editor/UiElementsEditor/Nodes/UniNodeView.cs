@@ -10,6 +10,7 @@ namespace UniGame.GameFlowEditor.Editor
     using UniModules.UniGame.GameFlow.GameFlowEditor.Editor.UiElementsEditor.Tools.PortData;
     using UniModules.UniGameFlow.GameFlowEditor.Editor.Tools;
     using UniNodes.NodeSystem.Runtime.Core;
+    using UniNodes.NodeSystem.Runtime.Interfaces;
     using UnityEngine;
     using UnityEngine.UIElements;
 
@@ -53,24 +54,11 @@ namespace UniGame.GameFlowEditor.Editor
                 NodeContainer.Initialize(assetNode, sourceNode.GraphData as NodeGraph);
             }
 
-            var container      = sourceNode.DrawNodeUiElements();
-            var containerStyle = container.style;
-
-            containerStyle.backgroundColor = new StyleColor(_backgroundColor);
-            containerStyle.paddingTop      = 4;
-            containerStyle.paddingLeft     = 4;
-            containerStyle.marginBottom    = 4;
-
-            containerStyle.paddingTop    = 4;
-            containerStyle.paddingBottom = 4;
-            containerStyle.marginLeft    = 4;
-            containerStyle.marginRight   = 4;
-            containerStyle.minWidth      = 250;
-
-            controlsContainer.Add(container);
-
+            DrawNode(sourceNode);
+            
             //add into node processor
             NodeViewProcessor.Asset.Add(this);
+
         }
 
 
@@ -95,7 +83,26 @@ namespace UniGame.GameFlowEditor.Editor
 
             ContextContentWindow.Open(content).Focus();
         }
-        
+
+        protected virtual void DrawNode(INode sourceNode)
+        {
+            var container      = sourceNode.DrawNodeUiElements();
+            var containerStyle = container.style;
+
+            containerStyle.backgroundColor = new StyleColor(_backgroundColor);
+            containerStyle.paddingTop      = 4;
+            containerStyle.paddingLeft     = 4;
+            containerStyle.marginBottom    = 4;
+
+            containerStyle.paddingTop    = 4;
+            containerStyle.paddingBottom = 4;
+            containerStyle.marginLeft    = 4;
+            containerStyle.marginRight   = 4;
+            containerStyle.minWidth      = 250;
+            
+            controlsContainer.Add(container);
+
+        }
         
         private void ShowPortsValues()
         {

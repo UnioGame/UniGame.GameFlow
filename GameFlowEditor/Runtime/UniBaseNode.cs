@@ -8,7 +8,7 @@ namespace UniGame.GameFlowEditor.Runtime
     using UniNodes.NodeSystem.Runtime.Core;
     using UniNodes.NodeSystem.Runtime.Interfaces;
     using UnityEngine;
-    using PortData = GraphProcessor.PortData;
+    using PortData = PortData;
 
     [HideNode]
     [Serializable]
@@ -32,6 +32,8 @@ namespace UniGame.GameFlowEditor.Runtime
 
         public override string name => SourceNode == null ? base.name : SourceNode.ItemName;
 
+        public override string layoutStyle => GetNodeStyle();
+        
         #endregion
         
         public void Initialize(INode node)
@@ -86,9 +88,14 @@ namespace UniGame.GameFlowEditor.Runtime
 
         #endregion
         
-        
         #region private methods
-        
+
+        protected virtual string GetNodeStyle()
+        {
+            var nodeStyle = SourceNode == null ? base.layoutStyle : SourceNode.GetStyle();
+            nodeStyle = string.IsNullOrEmpty(nodeStyle) ? base.layoutStyle : nodeStyle;
+            return nodeStyle;
+        }
                 
         private void UpdatePorts()
         {

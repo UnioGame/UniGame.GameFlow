@@ -34,21 +34,5 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
         
         void Validate();
 
-        #region editor api
-
-        int SetId(int id);
-        
-        /// <summary>
-        /// set up graph node position
-        /// </summary>
-        new Vector2 Position { get; set; }
-
-        /// <summary>
-        /// setup node view width
-        /// </summary>
-        new int Width { get; set; }
-        
-        #endregion
-
     }
 }

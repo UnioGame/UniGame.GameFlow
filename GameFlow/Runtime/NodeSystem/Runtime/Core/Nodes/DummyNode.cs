@@ -42,8 +42,9 @@
 
         public Vector2 Position { get; set; } = Vector2.zero;
         
-        public int Width { get; set; } = 220;
-        
+        public int    Width      { get; set; } = 220;
+        public string GetStyle() => string.Empty;
+
 
         public void OnIdUpdate(int oldId, int newId, IGraphItem updatedItem) { }
         

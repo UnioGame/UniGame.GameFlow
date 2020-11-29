@@ -298,6 +298,8 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
             removedPorts.Despawn();
         }
 
+        public virtual string GetStyle() => string.Empty;
+
         #endregion
 
         protected bool AddPortValue(INodePort runtimePort)

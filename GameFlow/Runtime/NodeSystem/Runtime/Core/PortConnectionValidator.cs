@@ -28,12 +28,8 @@
         
         public bool IsAlreadyConnectedPort(INodePort from, INodePort to)
         {
-            var result = !from.IsConnectedTo(to);
-            if (result) return true;
-
-            ReportError(from,to,"FROM Already connected TO");
-            
-            return false;
+            var result = from.IsConnectedTo(to);
+            return !result;
         }
         
         public bool TypeValidation(INodePort from, INodePort to)

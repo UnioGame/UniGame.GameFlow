@@ -4,14 +4,34 @@ namespace UniGame.GameFlowEditor.Runtime
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
+    using UniModules.UniCore.Runtime.ReflectionUtils;
+    using UniModules.UniCore.Runtime.Utils;
+    using UniModules.UniGame.GameFlow.GameFlowEditor.Editor.Attributes;
     using UniNodes.NodeSystem.Runtime.Core;
     using UniNodes.NodeSystem.Runtime.Interfaces;
-    using UnityEditor;
+    using UnityEngine;
     using Vector2 = UnityEngine.Vector2;
 
     public class UniAssetGraph : BaseGraph
     {
-        private UniGraph sourceGraph;
+        #region static data
+
+        private static MemorizeItem<Type, Type> nodeDataMap =
+            MemorizeTool.Memorize<Type, Type>(nodeType =>
+            {
+                var baseType      = typeof(UniBaseNode);
+                var allDataNodes  = baseType.GetAssignableWithAttributeMap<NodeBindAttribute>();
+                var attributePair = allDataNodes.
+                    Where(x => x.attribute!=null).
+                    FirstOrDefault(x => x.attribute.NodeType == nodeType);
+                var attribute     = attributePair.attribute;
+                return attribute == null ? typeof(UniBaseNode) : attribute.NodeData;
+            });
+
+        #endregion
+            
+        private        UniGraph sourceGraph;
 
         public Dictionary<int,UniBaseNode> uniNodes = new Dictionary<int,UniBaseNode>(16);
 
@@ -37,7 +57,7 @@ namespace UniGame.GameFlowEditor.Runtime
             var name = type.Name;
             
             #if UNITY_EDITOR
-            name = ObjectNames.NicifyVariableName(name);
+            name = UnityEditor.ObjectNames.NicifyVariableName(name);
             #endif
             var newNode = sourceGraph.AddNode(
                 type,
@@ -49,8 +69,15 @@ namespace UniGame.GameFlowEditor.Runtime
 
         public UniBaseNode CreateNode(INode node)
         {
+            var nodeType  = node.GetType();
+            var dataType  = nodeDataMap.GetValue(nodeType);
+            var graphNode = BaseNode.CreateFromType(dataType,node.Position) as UniBaseNode;
+            if (graphNode == null)
+            {
+                Debug.LogError($"NULL Node bind with UniNode : {node}");
+                return null;
+            }
             
-            var graphNode = BaseNode.CreateFromType<UniBaseNode>(node.Position);
             graphNode.Initialize(node);
             
             //register node into all nodes list
@@ -62,7 +89,7 @@ namespace UniGame.GameFlowEditor.Runtime
             //sourceGraph.Save();
             return graphNode;
         }
-
+        
         public void UpdateGraph()
         {
             CreateNodes();
