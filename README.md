@@ -490,3 +490,8 @@ At Any moment of Graph execution you can check - What kind of data that port con
 
 ![](https://github.com/UniGameTeam/UniGame.GameFlow/blob/master/GitAssets/port_info.png)
 
+# Dependencies
+
+- Node Graph Processor https://github.com/alelievr/NodeGraphProcessor
+
+
