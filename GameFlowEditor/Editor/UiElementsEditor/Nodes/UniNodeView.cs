@@ -11,6 +11,7 @@ namespace UniGame.GameFlowEditor.Editor
     using UniModules.UniGameFlow.GameFlowEditor.Editor.Tools;
     using UniNodes.NodeSystem.Runtime.Core;
     using UniNodes.NodeSystem.Runtime.Interfaces;
+    using UnityEditor;
     using UnityEngine;
     using UnityEngine.UIElements;
 
@@ -43,6 +44,8 @@ namespace UniGame.GameFlowEditor.Editor
 
         public int Id => NodeData.SourceNode.Id;
 
+        public bool IsSerializable { get; protected set; }
+
         #endregion
 
         public override void Enable()
@@ -51,6 +54,7 @@ namespace UniGame.GameFlowEditor.Editor
             var sourceNode = NodeData?.SourceNode;
             if (sourceNode is SerializableNode assetNode)
             {
+                IsSerializable = true;
                 NodeContainer.Initialize(assetNode, sourceNode.GraphData as NodeGraph);
             }
 
@@ -103,7 +107,13 @@ namespace UniGame.GameFlowEditor.Editor
             controlsContainer.Add(container);
 
         }
-        
+
+        public override void OnSelected()
+        {
+            base.OnSelected();
+            Selection.activeObject = IsSerializable ? NodeContainer : NodeData.SourceNode as Object ;
+        }
+
         private void ShowPortsValues()
         {
             PortDataWindow.Open(NodeData.SourceNode).Focus();

@@ -5,7 +5,6 @@
     using Attributes;
     using Runtime.Extensions;
     using Runtime.Interfaces;
-    using UniCore.Runtime.ProfilerTools;
     using UniModules.UniCore.Runtime.Rx.Extensions;
     using UniModules.UniGame.AddressableTools.Runtime.Extensions;
     using UniModules.UniGame.SerializableContext.Runtime.Addressables;
