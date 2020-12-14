@@ -7,5 +7,7 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
         IState
     {
 
+        IContext Context { get; }
+
     }
 }

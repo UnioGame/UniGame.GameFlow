@@ -16,7 +16,7 @@
         
         public override string layoutStyle => nodeStyle;
 
-        [IsCompatibleWithGraph]
+        //[IsCompatibleWithGraph]
         public static bool Create(BaseGraph assetGraph)
         {
             var uniGraph = assetGraph as UniAssetGraph;

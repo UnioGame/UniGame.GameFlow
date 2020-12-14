@@ -92,16 +92,16 @@
         
         #region connection api
 
-        public int ConnectionsCount => _data.ConnectionsCount;
+        public int BindingsCount => _data.BindingsCount;
 
-        public void Disconnect(IMessagePublisher connection) {
-            _data.Disconnect(connection);
+        public void Break(IMessagePublisher connection) {
+            _data.Break(connection);
         }
 
         public IDisposable Bind(IMessagePublisher contextData)
         {
             var disposable = _data.Bind(contextData);
-            broadcastersCount = _data.ConnectionsCount;
+            broadcastersCount = _data.BindingsCount;
             return disposable;
         }
 
@@ -112,7 +112,6 @@
             name = portName;
             Initialize();
         }
-
 
         public void SetValueTypeFilter(IEnumerable<Type> types)
         {

@@ -44,7 +44,8 @@
         
         public PortConnection(INodePort connectionPort, int id)
         {
-            _port      = connectionPort;
+            _port  = connectionPort;
+            portId = _port.PortId;
             Initialize(_port.Node,id,_port.ItemName);
         }
 
