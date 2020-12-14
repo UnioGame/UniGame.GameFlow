@@ -15,7 +15,7 @@
     public class PortValuePreTransferCommand : ILifeTimeCommand,IContextWriter
     {
         private readonly Func<IContext,IMessagePublisher,IEnumerator> action;
-        private readonly IConnector<IMessagePublisher>                connector;
+        private readonly IBinder<IMessagePublisher>                connector;
         private readonly IContext                                     sourceContext;
         private readonly IMessagePublisher                            target;
 
@@ -23,7 +23,7 @@
 
         public PortValuePreTransferCommand(
             Func<IContext,IMessagePublisher,IEnumerator> action,
-            IConnector<IMessagePublisher> connector,
+            IBinder<IMessagePublisher> connector,
             IContext sourceContext,
             IMessagePublisher target)
         {

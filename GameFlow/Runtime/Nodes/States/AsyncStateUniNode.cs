@@ -1,6 +1,4 @@
-﻿using UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes;
-
-namespace UniModules.UniGameFlow.Nodes.Runtime.States
+﻿namespace UniModules.UniGameFlow.Nodes.Runtime.States
 {
     using System;
     using System.Diagnostics;
@@ -44,8 +42,7 @@ namespace UniModules.UniGameFlow.Nodes.Runtime.States
         #region private fields
 
         private AsyncContextStateProxy _asyncStateProxy;
-
-
+        
         private IAsyncStateToken _token;
         private IPortValue       _inputPort;
 
@@ -126,6 +123,12 @@ namespace UniModules.UniGameFlow.Nodes.Runtime.States
             var result = await token.TakeOwnership(this);
             _token         = result ? token : null;
             _isStateActive = result;
+            
+            if (_token == null)
+                return;
+
+            ExecuteAsync(_token.Context)
+                .WithCancellation(token.LifeTime.AsCancellationToken());
         }
     }
 }

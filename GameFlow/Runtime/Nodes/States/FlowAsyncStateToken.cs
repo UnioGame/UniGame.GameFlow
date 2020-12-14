@@ -1,38 +1,34 @@
-﻿namespace UniModules.UniGameFlow.Nodes.Runtime.States
+﻿namespace UniModules.UniGame.GameFlow.GameFlow.Runtime.Nodes.States
 {
     using System;
     using System.Collections.Generic;
+    using Context.Runtime.Connections;
+    using Context.SerializableContext.Runtime.Abstract;
+    using Core.Runtime.DataFlow.Interfaces;
     using Cysharp.Threading.Tasks;
-    using UniCore.Runtime.DataFlow;
-    using UniGame.Context.Runtime.Context;
-    using UniGame.Context.SerializableContext.Runtime.Abstract;
-    using UniGame.Core.Runtime.DataFlow.Interfaces;
-    using UniGame.Core.Runtime.Interfaces;
+    using UniGameFlow.Nodes.Runtime.States;
+    using UnityEngine;
 
     [Serializable]
     public class FlowAsyncStateToken : IAsyncStateToken
     {
       
-        private readonly EntityContext            _context;
-        private readonly LifeTimeDefinition       _lifeTime;
+        private readonly IContextConnection       _context;
         private readonly List<IAsyncContextState> _states;
 
         #region constructor
-
+        
         public FlowAsyncStateToken()
         {
-            _context  = new EntityContext();
-            _lifeTime = new LifeTimeDefinition();
+            _context  = new ContextConnection();
             _states   = new List<IAsyncContextState>();
         }
 
         #endregion
 
-        public IContext Context => _context;
+        public IContextConnection Context => _context;
 
-        public int Id => _context.Id;
-
-        public ILifeTime LifeTime => _lifeTime;
+        public ILifeTime LifeTime => _context.LifeTime;
 
         public async UniTask<bool> StopAfter(IAsyncContextState node)
         {
@@ -44,8 +40,12 @@
         public async UniTask<bool> TakeOwnership(IAsyncContextState asyncState)
         {
             var stopResult = await StopSince(asyncState);
+            if (!stopResult)
+            {
+                Debug.LogError($"CAN't STOP State's for token {GetType().Name}");
+                return false;
+            }
             _states.Add(asyncState);
-            asyncState.ExecuteAsync(_context);
             return true;
         }
 
@@ -53,8 +53,7 @@
         {
             StopAt(0);
             
-            _context.Release();
-            _lifeTime.Release();
+            _context.Dispose();
             _states.Clear();
         }
 
@@ -66,7 +65,7 @@
         public async UniTask<bool> StopAt(int index)
         {
             if (index < 0 || index >= _states.Count)
-                return false;
+                return true;
 
             for (var i = index; i < _states.Count; i++)
             {

@@ -10,6 +10,8 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
     {
         IGraphData GraphData { get; }
 
+        IContext Context { get; }
+
         IEnumerable<INodePort> Ports { get; }
 
         /// <summary> Iterate over all outputs on this node. </summary>

@@ -7,6 +7,8 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
 
     public interface IPortValue : 
         IContext,
+        IManagedBinder<IMessagePublisher>,
+        IDisposable,
         INamedItem
     {
         IReadOnlyList<Type> ValueTypes { get; }

@@ -2,6 +2,7 @@
 {
     using System;
     using Cysharp.Threading.Tasks;
+    using UniGame.Context.Runtime.Connections;
     using UniGame.Context.SerializableContext.Runtime.Abstract;
     using UniGame.Core.Runtime.Interfaces;
 
@@ -9,9 +10,8 @@
         ILifeTimeContext,
         IDisposable
     {
-        IContext      Context { get; }
-        int           Id      { get; }
-        
+        IContextConnection Context { get; }
+
         /// <summary>
         /// Try to launch target state for this execution token
         /// </summary>

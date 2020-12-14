@@ -86,6 +86,7 @@ namespace UniGame.GameFlowEditor.Editor
 
             UpdateNodePositions();
             //save prefab data
+            SourceGraph.UniGraph.MarkDirty();
             SourceGraph.UniGraph.Save();
         }
 
