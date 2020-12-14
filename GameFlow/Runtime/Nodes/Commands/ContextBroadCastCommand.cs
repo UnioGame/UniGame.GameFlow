@@ -12,9 +12,9 @@
     public class ContextBroadCastCommand<TTarget> : ILifeTimeCommand, IContextWriter
     {
         private readonly Action<TTarget> action;
-        private readonly IConnector<IMessagePublisher> connector;
+        private readonly IBinder<IMessagePublisher> connector;
 
-        public ContextBroadCastCommand(Action<TTarget> action,IConnector<IMessagePublisher> connector)
+        public ContextBroadCastCommand(Action<TTarget> action,IBinder<IMessagePublisher> connector)
         {
             this.action = action;
             this.connector = connector;

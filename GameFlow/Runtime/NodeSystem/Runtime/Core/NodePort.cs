@@ -153,6 +153,8 @@
 
         public bool InstancePortList => instancePortList;
 
+        public int PortId => Id;
+        
         public IReadOnlyList<Type> ValueTypes => portValue.ValueTypes;
 
         public int ConnectionCount => connections.Count;

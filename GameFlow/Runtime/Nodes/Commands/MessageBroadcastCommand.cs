@@ -10,10 +10,10 @@
     [Serializable]
     public class MessageBroadcastCommand : ILifeTimeCommand
     {
-        private readonly IConnector<IMessagePublisher> _source;
+        private readonly IBinder<IMessagePublisher> _source;
         private readonly IMessagePublisher             _target;
 
-        public MessageBroadcastCommand(IConnector<IMessagePublisher> source, IMessagePublisher target)
+        public MessageBroadcastCommand(IBinder<IMessagePublisher> source, IMessagePublisher target)
         {
             _source = source;
             _target = target;

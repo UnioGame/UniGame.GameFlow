@@ -8,7 +8,9 @@
     using Runtime.Interfaces;
     using UniCore.Runtime.ProfilerTools;
     using UniModules.UniCore.Runtime.Attributes;
+    using UniModules.UniGame.Core.Runtime.Attributes;
     using UniModules.UniGame.Core.Runtime.Attributes.FieldTypeDrawer;
+    using UniModules.UniGame.Core.Runtime.Interfaces;
     using UnityEngine;
 
     [Serializable]
@@ -33,11 +35,13 @@
         /// <summary> Position on the <see cref="NodeGraph"/> </summary>
         [HideInInspector]
         [HideNodeInspector] 
-        [SerializeField] public Vector2 position;
+        [SerializeField] 
+        public Vector2 position;
 
         /// <summary> It is recommended not to modify these at hand. Instead, see <see cref="NodeInputAttribute"/> and <see cref="NodeOutputAttribute"/> </summary>
         [SerializeField] 
         [HideNodeInspector] 
+        [IgnoreDrawer]
         public NodePortDictionary ports = new NodePortDictionary();
 
         #endregion
@@ -45,14 +49,16 @@
         private IProxyNode _serializableNode;
 
         private IGraphData _graph;
-
-        #region public properties
         
         /// <summary>
         /// regular source node
         /// </summary>
         protected IProxyNode SNode => GetSourceNode();
 
+        #region public properties
+
+        public IContext Context => SNode.Context;
+        
         /// <summary>
         /// unique node id
         /// </summary>

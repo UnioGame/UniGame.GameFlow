@@ -2,6 +2,7 @@
 {
     using System;
     using Cysharp.Threading.Tasks;
+    using UniGame.Context.Runtime.Connections;
     using UniGame.Context.Runtime.Context;
     using UniGame.Context.SerializableContext.Runtime.Abstract;
     using UniGame.Core.Runtime.DataFlow.Interfaces;
@@ -10,22 +11,20 @@
     [Serializable]
     public class SingleAsyncStateToken : IAsyncStateToken
     {
-        private EntityContext      _context;
+        private ContextConnection      _context;
         private IAsyncContextState _state;
 
         #region constructor
 
         public SingleAsyncStateToken()
         {
-            _context  = new EntityContext();
+            _context  = new ContextConnection();
         }
 
         #endregion
 
-        public IContext Context => _context;
+        public IContextConnection Context => _context;
 
-        public int Id => _context.Id;
-        
         public ILifeTime LifeTime => _context.LifeTime;
 
         public async UniTask<bool> TakeOwnership(IAsyncContextState state)

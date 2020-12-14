@@ -11,7 +11,7 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
 
     public interface INodePort : 
         INamedItem, 
-        IConnector<IMessagePublisher>,
+        IBinder<IMessagePublisher>,
         IPoolable
     {
         Type ValueType { get; }
@@ -39,6 +39,8 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
         INode Node { get; }
 
         int NodeId { get; }
+
+        int PortId { get; }
 
         IReadOnlyList<Type> ValueTypes { get; }
 

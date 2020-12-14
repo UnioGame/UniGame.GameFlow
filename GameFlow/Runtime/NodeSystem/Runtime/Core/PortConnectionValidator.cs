@@ -5,6 +5,7 @@
     using System.Linq;
     using Runtime.Interfaces;
     using UniCore.Runtime.ProfilerTools;
+    using UnityEngine;
 
     public class PortConnectionValidator : IPortConnectionValidator
     {
@@ -29,6 +30,10 @@
         public bool IsAlreadyConnectedPort(INodePort from, INodePort to)
         {
             var result = from.IsConnectedTo(to);
+            if (result)
+            {
+                Debug.LogError($"PORT {from.PortId} ALREADY CONNECTED TO {to.PortId}");
+            }
             return !result;
         }
         

@@ -12,6 +12,7 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
     using UniModules.UniCore.Runtime.Attributes;
     using UniModules.UniCore.Runtime.ObjectPool.Runtime;
     using UniModules.UniCore.Runtime.ObjectPool.Runtime.Extensions;
+    using UniModules.UniGame.Core.Runtime.Attributes;
     using UniModules.UniGame.Core.Runtime.Attributes.FieldTypeDrawer;
     using UniModules.UniGame.Core.Runtime.Interfaces;
 
@@ -44,6 +45,7 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
         /// see <see cref="NodeInputAttribute"/> and <see cref="NodeOutputAttribute"/>
         /// </summary>
         [SerializeField]
+        [IgnoreDrawer]
         public NodePortDictionary ports = new NodePortDictionary();
 
         #endregion
