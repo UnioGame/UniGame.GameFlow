@@ -53,7 +53,7 @@ MonoBehaviour:
     - input
     values:
     - id: 4
-      nodeId: 226
+      nodeId: 227
       fieldName: input
       direction: 0
       connectionType: 0
@@ -69,7 +69,7 @@ MonoBehaviour:
   exitOnDisable: 1
   activateOnEnable: 1
   guid: c0e4bceee78f1bd4cab830a4693cd524
-  uniqueId: 226
+  uniqueId: 229
   nodes:
   - {fileID: 5704820702322957396}
   serializableNodes:
@@ -126,7 +126,7 @@ MonoBehaviour:
               serializedValueTypes: []
               broadcastersCount: 0
             connections:
-            - fieldName: tokenPort
+            - fieldName: tokenOutput
               nodeId: 29
               reroutePoints: []
               portId: 0
@@ -296,23 +296,40 @@ MonoBehaviour:
   position: {x: -75, y: 367}
   ports:
     keys:
-    - tokenPort
+    - tokenOutput
+    - input
     values:
-    - id: 133
+    - id: 228
       nodeId: 29
-      fieldName: tokenPort
+      fieldName: tokenOutput
       direction: 1
       connectionType: 0
       showBackingValue: 2
       isDynamic: 1
       isInstancePortList: 0
       portValue:
-        name: tokenPort
+        name: tokenOutput
         serializedValueTypes: []
         broadcastersCount: 0
       connections:
       - fieldName: input
         nodeId: 24
         reroutePoints: []
-        portId: 0
+        portId: 26
       instancePortList: 0
+    - id: 229
+      nodeId: 29
+      fieldName: input
+      direction: 0
+      connectionType: 0
+      showBackingValue: 2
+      isDynamic: 1
+      isInstancePortList: 0
+      portValue:
+        name: input
+        serializedValueTypes: []
+        broadcastersCount: 0
+      connections: []
+      instancePortList: 0
+  fireOnStart: 1
+  connectWithGrphContext: 1

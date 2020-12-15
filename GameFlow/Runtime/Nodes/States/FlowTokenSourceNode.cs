@@ -25,7 +25,7 @@
         
         #endregion
 
-        private IAsyncStateToken _token;
+        private IStateToken _token;
         
         private LifeTimeDefinition _tokenLifeTime;
         private LifeTimeDefinition TokenLifeTime => _tokenLifeTime = _tokenLifeTime ?? new LifeTimeDefinition();
@@ -64,12 +64,12 @@
             TokenLifeTime.Release();
         }
 
-        private IAsyncStateToken CreateToken()
+        private IStateToken CreateToken()
         {
             if (_token != null)
                 return _token;
                         
-            _token = new FlowAsyncStateToken()
+            _token = new FlowStateToken()
                 .AddTo(TokenLifeTime);
 
             if (connectWithGrphContext)

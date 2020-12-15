@@ -23,7 +23,8 @@
         IAsyncStateCommand<IContext, AsyncStatus>,
         IAsyncCompletion<AsyncStatus, IContext>,
         IAsyncEndPoint<IContext>,
-        IAsyncRollback<IContext>
+        IAsyncRollback<IContext>,
+        IStateCancellation
     {
         #region inspector
 
@@ -43,14 +44,14 @@
 
         private AsyncContextStateProxy _asyncStateProxy;
         
-        private IAsyncStateToken _token;
+        private IStateToken _token;
         private IPortValue       _inputPort;
 
         #endregion
 
         public bool IsStateActive => _isStateActive;
 
-        public IAsyncStateToken Token => _token;
+        public IStateToken Token => _token;
         
         
         #region public methods
@@ -64,6 +65,7 @@
             await _asyncStateProxy.ExitAsync();
         }
 
+        public void StopState() => ExitAsync();
         
         #region custom execution handlers
         
@@ -104,31 +106,33 @@
             LogNodeExecutionState();
 
             //get all actual stat tokens and try to run state
-            _inputPort.Receive<IAsyncStateToken>().
+            _inputPort.Receive<IStateToken>().
                 Where(x => _isStateActive == false).
                 Select(async x => await OwnToken(x)).
                 Subscribe().
                 AddTo(LifeTime);
         }
         
-
         [Conditional("UNITY_EDITOR")]
         private void LogNodeExecutionState()
         {
-            _asyncStateProxy.Value.Do(x => GameLog.Log($"STATE NODE {ItemName} ID {Id} STATUS : {x}")).Subscribe().AddTo(LifeTime);
+            _asyncStateProxy.Value
+                .Do(x => GameLog.Log($"STATE NODE {ItemName} ID {Id} STATUS : {x}"))
+                .Subscribe()
+                .AddTo(LifeTime);
         }
 
-        private async UniTask OwnToken(IAsyncStateToken token)
+        private async UniTask OwnToken(IStateToken token)
         {
-            var result = await token.TakeOwnership(this);
+            var result = token.TakeOwnership(this);
             _token         = result ? token : null;
             _isStateActive = result;
             
             if (_token == null)
                 return;
 
-            ExecuteAsync(_token.Context)
-                .WithCancellation(token.LifeTime.AsCancellationToken());
+            await ExecuteAsync(_token.Context);
         }
+
     }
 }

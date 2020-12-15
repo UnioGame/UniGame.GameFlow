@@ -9,14 +9,14 @@
     using UniGame.Core.Runtime.Interfaces;
 
     [Serializable]
-    public class SingleAsyncStateToken : IAsyncStateToken
+    public class SingleStateToken : IStateToken
     {
-        private ContextConnection      _context;
-        private IAsyncContextState _state;
+        private ContextConnection  _context;
+        private IStateCancellation _state;
 
         #region constructor
 
-        public SingleAsyncStateToken()
+        public SingleStateToken()
         {
             _context  = new ContextConnection();
         }
@@ -27,29 +27,28 @@
 
         public ILifeTime LifeTime => _context.LifeTime;
 
-        public async UniTask<bool> TakeOwnership(IAsyncContextState state)
+        public bool TakeOwnership(IStateCancellation state)
         {
-            await StopCurrent();
+            StopCurrent();
             
             _state = state;
-            _state.ExecuteAsync(_context);
             return true;
         }
 
-        public async UniTask<bool> StopAfter(IAsyncContextState node)
+        public bool StopAfter(IStateCancellation node)
         {
-            return await StopCurrent();
+            return StopCurrent();
         }
 
-        public async UniTask<bool> StopSince(IAsyncContextState node)
+        public bool StopSince(IStateCancellation node)
         {
-            return await StopCurrent();
+            return StopCurrent();
         }
 
         public void Dispose()
         {
             _context.Release();
-            _state.ExitAsync();
+            _state.StopState();
             _state = null;
         }
 
@@ -60,10 +59,10 @@
         /// <returns></returns>
         public override bool Equals(object obj) => false;
 
-        private async UniTask<bool> StopCurrent()
+        private bool StopCurrent()
         {
             if (_state == null) return false;
-            await _state.ExitAsync();
+            _state.StopState();
             _state = null;
             return true;
         }

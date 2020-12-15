@@ -24,13 +24,12 @@ namespace UniModules.UniGameFlow.Nodes.Runtime.States
         IAsyncStateCommand<IContext, AsyncStatus>,
         IAsyncCompletion<AsyncStatus, IContext>,
         IAsyncEndPoint<IContext>,
-        IAsyncRollback<IContext>
+        IAsyncRollback<IContext>,
+        IStateCancellation
     {
         #region inspector
 
-        [ReadOnlyValue] 
-        [SerializeField] 
-        protected bool _isStateActive;
+        [ReadOnlyValue] [SerializeField] protected bool _isStateActive;
 
         #endregion
 
@@ -45,16 +44,16 @@ namespace UniModules.UniGameFlow.Nodes.Runtime.States
         private AsyncContextStateProxy _asyncStateProxy;
 
 
-        private IAsyncStateToken _token;
-        private IPortValue       _inputPort;
+        private IStateToken _token;
+        private IPortValue  _inputPort;
 
         #endregion
 
         public bool IsStateActive => _isStateActive;
 
-        public IAsyncStateToken Token => _token;
-        
-        
+        public IStateToken Token => _token;
+
+
         #region public methods
 
         public async UniTask<AsyncStatus> ExecuteAsync(IContext value) => await _asyncStateProxy.ExecuteAsync(value);
@@ -66,9 +65,9 @@ namespace UniModules.UniGameFlow.Nodes.Runtime.States
             await _asyncStateProxy.ExitAsync();
         }
 
-        
+
         #region custom execution handlers
-        
+
         /// <summary>
         /// Regular Execution logic behaviour
         /// </summary>
@@ -89,8 +88,10 @@ namespace UniModules.UniGameFlow.Nodes.Runtime.States
         /// </summary>
         public virtual UniTask Rollback(IContext source) => UniTask.FromResult(UniTask.CompletedTask);
 
+        public void StopState() => ExitAsync();
+
         #endregion
-        
+
         #endregion
 
         protected void PublishToken(INodePort port)
@@ -108,7 +109,7 @@ namespace UniModules.UniGameFlow.Nodes.Runtime.States
         {
             if (!Application.isPlaying)
                 return;
-            
+
             _isStateActive   = false;
             _asyncStateProxy = new AsyncContextStateProxy(this, this, this, this);
             _inputPort       = GetPortValue(nameof(input));
@@ -118,13 +119,9 @@ namespace UniModules.UniGameFlow.Nodes.Runtime.States
             LogNodeExecutionState();
 
             //get all actual stat tokens and try to run state
-            _inputPort.Receive<IAsyncStateToken>().
-                Where(x => _isStateActive == false).
-                Select(async x => await OwnToken(x)).
-                Subscribe().
-                AddTo(LifeTime);
+            _inputPort.Receive<IStateToken>().Where(x => _isStateActive == false).Select(async x => await OwnToken(x)).Subscribe().AddTo(LifeTime);
         }
-        
+
 
         [Conditional("UNITY_EDITOR")]
         private void LogNodeExecutionState()
@@ -132,11 +129,12 @@ namespace UniModules.UniGameFlow.Nodes.Runtime.States
             _asyncStateProxy.Value.Do(x => GameLog.Log($"STATE NODE {ItemName} ID {Id} STATUS : {x}")).Subscribe().AddTo(LifeTime);
         }
 
-        private async UniTask OwnToken(IAsyncStateToken token)
+        private async UniTask OwnToken(IStateToken token)
         {
-            var result = await token.TakeOwnership(this);
+            var result = token.TakeOwnership(this);
             _token         = result ? token : null;
             _isStateActive = result;
+            await ExecuteAsync(token.Context);
         }
     }
 }
