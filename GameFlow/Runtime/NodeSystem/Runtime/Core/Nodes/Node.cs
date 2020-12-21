@@ -22,7 +22,9 @@
 
         [HideNodeInspector] 
         [ReadOnlyValue] 
-        [SerializeField] public int id;
+        [SerializeField]
+        [HideInInspector]
+        public int id;
 
         [HideInInspector]
         [HideNodeInspector]
@@ -42,6 +44,7 @@
         [SerializeField] 
         [HideNodeInspector] 
         [IgnoreDrawer]
+        [HideInInspector]
         public NodePortDictionary ports = new NodePortDictionary();
 
         #endregion
