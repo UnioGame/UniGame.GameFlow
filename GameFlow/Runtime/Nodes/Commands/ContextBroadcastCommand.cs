@@ -1,34 +1,32 @@
 ﻿namespace UniGame.UniNodes.Nodes.Runtime.Commands
 {
     using System;
-    using NodeSystem.Runtime.Interfaces;
     using UniModules.UniCore.Runtime.Rx.Extensions;
     using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
     using UniModules.UniGame.Core.Runtime.Interfaces;
     using UniRx;
 
-
     [Serializable]
-    public class ContextBroadCastCommand<TTarget> : ILifeTimeCommand, IContextWriter
+    public class ContextBroadcastCommand<TTarget> : ILifeTimeCommand, IContextWriter
     {
-        private readonly Action<TTarget> action;
-        private readonly IBinder<IMessagePublisher> connector;
+        private readonly Action<TTarget> _action;
+        private readonly IBinder<IMessagePublisher> _connector;
 
-        public ContextBroadCastCommand(Action<TTarget> action,IBinder<IMessagePublisher> connector)
+        public ContextBroadcastCommand(Action<TTarget> action, IBinder<IMessagePublisher> connector)
         {
-            this.action = action;
-            this.connector = connector;
+            _action = action;
+            _connector = connector;
         }
         
         public void Execute(ILifeTime lifeTime)
         {
-            connector.Bind(this).AddTo(lifeTime);
+            _connector.Bind(this).AddTo(lifeTime);
         }
 
         public void Publish<T>(T message)
         {
             if (message is TTarget data) {
-                action(data);
+                _action(data);
             }
         }
 

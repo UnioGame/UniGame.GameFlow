@@ -8,7 +8,7 @@
     using UnityEngine.UIElements;
 
     [NodeBind(typeof(PointNodeData),typeof(PointNode))]
-    [NodeMenuItem("Point",typeof(UniAssetGraph))]
+    [NodeMenuItem("Point")]
     [System.Serializable]
     public class PointNodeData : UniBaseNode
     {
