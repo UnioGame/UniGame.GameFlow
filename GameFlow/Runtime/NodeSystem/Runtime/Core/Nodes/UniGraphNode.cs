@@ -61,7 +61,7 @@
             var target    = direction == PortIO.Input ? targetPort : sourcePort;
 
             source.Value.
-                Bind(target.Value).
+                Broadcast(target.Value).
                 AddTo(LifeTime);
         }
         

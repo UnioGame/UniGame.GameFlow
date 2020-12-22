@@ -7,7 +7,7 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
 
     public interface IPortValue : 
         IContext,
-        IManagedBinder<IMessagePublisher>,
+        IManagedBroadcaster<IMessagePublisher>,
         IDisposable,
         INamedItem
     {

@@ -31,7 +31,7 @@
         protected override void OnExecute()
         {
             PrintLog(GetMessage(), mode);
-            logPort.Bind(this).
+            logPort.Broadcast(this).
                 AddTo(LifeTime);
         }
 

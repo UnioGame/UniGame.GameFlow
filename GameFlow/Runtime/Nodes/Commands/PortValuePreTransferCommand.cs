@@ -15,7 +15,7 @@
     public class PortValuePreTransferCommand : ILifeTimeCommand,IContextWriter
     {
         private readonly Func<IContext,IMessagePublisher,IEnumerator> action;
-        private readonly IBinder<IMessagePublisher>                connector;
+        private readonly IBroadcaster<IMessagePublisher>                connector;
         private readonly IContext                                     sourceContext;
         private readonly IMessagePublisher                            target;
 
@@ -23,7 +23,7 @@
 
         public PortValuePreTransferCommand(
             Func<IContext,IMessagePublisher,IEnumerator> action,
-            IBinder<IMessagePublisher> connector,
+            IBroadcaster<IMessagePublisher> connector,
             IContext sourceContext,
             IMessagePublisher target)
         {
@@ -35,7 +35,7 @@
         
         public void Execute(ILifeTime lifeTime)
         {
-            connector.Bind(this).
+            connector.Broadcast(this).
                 AddTo(lifeTime);
             lifeTime.AddCleanUpAction(() => handler.Cancel());
         }

@@ -11,7 +11,7 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
 
     public interface INodePort : 
         INamedItem, 
-        IBinder<IMessagePublisher>,
+        IBroadcaster<IMessagePublisher>,
         IPoolable
     {
         Type ValueType { get; }

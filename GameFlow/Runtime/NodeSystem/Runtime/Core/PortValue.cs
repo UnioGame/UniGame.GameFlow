@@ -98,9 +98,9 @@
             _data.Break(connection);
         }
 
-        public IDisposable Bind(IMessagePublisher contextData)
+        public IDisposable Broadcast(IMessagePublisher contextData)
         {
-            var disposable = _data.Bind(contextData);
+            var disposable = _data.Broadcast(contextData);
             broadcastersCount = _data.BindingsCount;
             return disposable;
         }
