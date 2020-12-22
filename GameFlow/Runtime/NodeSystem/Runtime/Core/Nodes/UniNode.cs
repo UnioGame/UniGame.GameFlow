@@ -63,7 +63,9 @@
         /// <summary>
         /// base logic realization
         /// </summary>
-        protected virtual void OnExecute(){}
+        protected virtual void OnExecute()
+        {
+        }
 
         /// <summary>
         /// update active list commands
