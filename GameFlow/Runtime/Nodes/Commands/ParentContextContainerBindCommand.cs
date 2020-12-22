@@ -2,6 +2,7 @@
 {
     using UniModules.UniCore.Runtime.Rx.Extensions;
     using UniModules.UniGame.AddressableTools.Runtime.Extensions;
+    using UniModules.UniGame.Context.Runtime.Connections;
     using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
     using UniModules.UniGame.Core.Runtime.Interfaces;
     using UniModules.UniGame.SerializableContext.Runtime.Addressables;
@@ -9,10 +10,10 @@
 
     public class ParentContextContainerBindCommand : ILifeTimeCommand
     {
-        private readonly IBinder<IMessagePublisher>     _source;
+        private readonly IContextConnection             _source;
         private readonly AssetReferenceContextContainer _parent;
 
-        public ParentContextContainerBindCommand(IBinder<IMessagePublisher> source, AssetReferenceContextContainer parent)
+        public ParentContextContainerBindCommand(IContextConnection source, AssetReferenceContextContainer parent)
         {
             _source = source;
             _parent = parent;
@@ -27,7 +28,7 @@
                 Where(x => x != null).
                 Subscribe(x =>
                 {
-                    _source.Bind(x).AddTo(lifeTime);
+                    _source.Connect(x).AddTo(lifeTime);
                 }).
                 AddTo(lifeTime);
         }
