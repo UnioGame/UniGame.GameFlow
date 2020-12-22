@@ -12,9 +12,9 @@
     public class ContextBroadCastCommand<TTarget> : ILifeTimeCommand, IContextWriter
     {
         private readonly Action<TTarget> action;
-        private readonly IBinder<IMessagePublisher> connector;
+        private readonly IBroadcaster<IMessagePublisher> connector;
 
-        public ContextBroadCastCommand(Action<TTarget> action,IBinder<IMessagePublisher> connector)
+        public ContextBroadCastCommand(Action<TTarget> action,IBroadcaster<IMessagePublisher> connector)
         {
             this.action = action;
             this.connector = connector;
@@ -22,7 +22,7 @@
         
         public void Execute(ILifeTime lifeTime)
         {
-            connector.Bind(this).AddTo(lifeTime);
+            connector.Broadcast(this).AddTo(lifeTime);
         }
 
         public void Publish<T>(T message)

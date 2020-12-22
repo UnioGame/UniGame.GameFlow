@@ -4,7 +4,7 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Interfaces
 
     public interface IBrodcastConnector<TConnection> : 
         IContextWriter, 
-        IBinder<TConnection>
+        IBroadcaster<TConnection>
     {
     }
 }

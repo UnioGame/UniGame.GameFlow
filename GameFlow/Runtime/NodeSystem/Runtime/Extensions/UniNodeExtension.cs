@@ -107,7 +107,7 @@
             var outputValue = outputPort;
             
             if(connectInOut)
-                inputValue.Bind(outputValue);
+                inputValue.Broadcast(outputValue);
         
             return (inputValue,outputValue);
         }

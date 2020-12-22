@@ -144,7 +144,7 @@
                 if(port == null || port.Direction == PortIO.Input || port.NodeId == Id)
                     continue;
                 
-                var disposable = port.Bind(publisher).
+                var disposable = port.Broadcast(publisher).
                     AddTo(LifeTime);
                 
                 LifeTime.AddDispose(disposable);

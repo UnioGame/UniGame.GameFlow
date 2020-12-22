@@ -235,7 +235,7 @@
         /// </summary>
         /// <param name="connection"></param>
         /// <returns></returns>
-        public IDisposable Bind(IMessagePublisher connection) => Value.Bind(connection);
+        public IDisposable Broadcast(IMessagePublisher connection) => Value.Broadcast(connection);
 
         #region comperer api
 

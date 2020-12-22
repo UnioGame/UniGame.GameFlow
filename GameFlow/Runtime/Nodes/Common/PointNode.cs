@@ -26,7 +26,7 @@ namespace UniModules.UniGame.GameFlow.GameFlow.Runtime.Nodes.Common
         protected sealed override void OnExecute()
         {
             GetPortValue(nameof(input)).
-                Bind(GetPortValue(nameof(output))).
+                Broadcast(GetPortValue(nameof(output))).
                 AddTo(LifeTime);
         }
     }

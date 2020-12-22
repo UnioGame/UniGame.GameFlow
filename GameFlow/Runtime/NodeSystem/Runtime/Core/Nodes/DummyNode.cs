@@ -93,8 +93,8 @@
             
             //Bind Output Port With input data
             //Now All Data from inputs will be transferred to output
-            inputValue1.Bind(outputValue).AddTo(LifeTime);
-            inputValue2.Bind(outputValue).AddTo(LifeTime);
+            inputValue1.Broadcast(outputValue).AddTo(LifeTime);
+            inputValue2.Broadcast(outputValue).AddTo(LifeTime);
         }
     }
     
