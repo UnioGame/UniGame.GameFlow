@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using UniGame.UniNodes.NodeSystem.Runtime.Interfaces;
-using UniModules.UniCore.Runtime.DataFlow;
-using UnityEngine;
-
-namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
+﻿namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
 {
-    using UniCore.Runtime.ProfilerTools;
+    using System;
+    using System.Collections.Generic;
+    using Runtime.Interfaces;
+    using UniModules.UniCore.Runtime.DataFlow;
     using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
     using UniModules.UniGame.Core.Runtime.Interfaces;
+    using UnityEngine;
 
     [Serializable]
     public class SNode : SerializableNode,
@@ -16,13 +14,13 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
     {
         #region private fields
 
-        private Action                         onInitialize;
-        private Action<List<ILifeTimeCommand>> onCommandsInitialize;
-        private Action                         onExecute;
+        private Action                         _onInitialize;
+        private Action<List<ILifeTimeCommand>> _onCommandsInitialize;
+        private Action                         _onExecute;
 
-        [NonSerialized] private bool                   _isInitialized = false;
-        private                 bool                   _isActive      = false;
-        private                 LifeTimeDefinition     _lifeTime      = new LifeTimeDefinition();
+        [NonSerialized] private bool                   _isInitialized;
+        private                 bool                   _isActive;
+        private                 LifeTimeDefinition     _lifeTime = new LifeTimeDefinition();
         private                 List<ILifeTimeCommand> _commands;
 
         #endregion
@@ -93,7 +91,7 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
             //user defined logic
             OnExecute();
             //proxy outer execution
-            onExecute?.Invoke();
+            _onExecute?.Invoke();
         }
 
         /// <summary>
@@ -148,9 +146,9 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
             if (Application.isPlaying && _isInitialized)
                 return;
 
-            this.onInitialize         = initializeAction;
-            this.onCommandsInitialize = initializeCommands;
-            this.onExecute            = executeAction;
+            _onInitialize         = initializeAction;
+            _onCommandsInitialize = initializeCommands;
+            _onExecute            = executeAction;
 
             _lifeTime?.Release();
 
@@ -167,7 +165,7 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
             //custom node initialization
             OnInitialize();
             //proxy initialization            
-            onInitialize?.Invoke();
+            _onInitialize?.Invoke();
 
             LifeTime.AddCleanUpAction(() => { _isActive = false; });
         }
@@ -185,7 +183,7 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes
             UpdateCommands(_commands);
 
             //outer node commands
-            onCommandsInitialize?.Invoke(_commands);
+            _onCommandsInitialize?.Invoke(_commands);
         }
 
         /// <summary>
