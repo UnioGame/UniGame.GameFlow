@@ -95,9 +95,7 @@
                 Destroy(this.gameObject);
                 return;
             }
-            
             Instance = this;
-            this.AddDisposable(_gameContext);
         }
 
         #endregion
