@@ -56,6 +56,12 @@
             await ExecuteGraphs();
         }
 
+        public void Dispose()
+        {
+            _gameContext.Dispose();
+            _gameContext = null;
+        }
+
         #endregion
         
         #region private methods
@@ -95,6 +101,5 @@
         }
 
         #endregion
-
     }
 }
