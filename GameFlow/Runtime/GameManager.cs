@@ -96,6 +96,7 @@
                 return;
             }
             Instance = this;
+            this.AddCleanUpAction(() => Instance = null);
         }
 
         #endregion
