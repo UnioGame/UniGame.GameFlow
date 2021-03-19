@@ -56,6 +56,12 @@
             await ExecuteGraphs();
         }
 
+        public void Dispose()
+        {
+            _gameContext.Dispose();
+            _gameContext = null;
+        }
+
         #endregion
         
         #region private methods
@@ -89,12 +95,10 @@
                 Destroy(this.gameObject);
                 return;
             }
-            
             Instance = this;
-            this.AddDisposable(_gameContext);
+            this.AddCleanUpAction(() => Instance = null);
         }
 
         #endregion
-
     }
 }
