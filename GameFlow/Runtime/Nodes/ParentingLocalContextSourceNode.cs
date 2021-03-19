@@ -22,8 +22,8 @@
         private AssetReferenceContextContainer _localContextContainer;
         [SerializeField]
         private AssetReferenceContextContainer _parentContextContainer;
-        
-        [Header("Data Source")] 
+
+        [Header("Data Source")]
         [SerializeField]
         private AssetReferenceDataSource _dataSources;
 
@@ -34,17 +34,17 @@
             _contextConnection = _contextConnection ?? new ContextConnection();
             LifeTime.AddDispose(_contextConnection);
 
-            var outPort       = UniTask.FromResult<IContext>(PortPair.OutputPort);
+            var outPort = UniTask.FromResult<IContext>(PortPair.OutputPort);
             var contextSource = UniTask.FromResult<IContext>(_contextConnection);
 
             var bindContextToOutput = new MessageBroadcastCommand(_contextConnection, PortPair.OutputPort);
             //register all Context Sources Data into target context asset
             var registerDataSourceIntoContext = new RegisterDataSourceCommand(contextSource, _dataSources);
             //Register context to output port
-            var contextToOutputPortCommand = new DataSourceTaskCommand<IContext>(contextSource,outPort);
+            var contextToOutputPortCommand = new DataSourceTaskCommand<IContext>(contextSource, outPort);
 
             var contextContainerBindCommand = new ParentContextContainerBindCommand(_contextConnection, _parentContextContainer);
-        
+
             nodeCommands.Add(bindContextToOutput);
             nodeCommands.Add(registerDataSourceIntoContext);
             nodeCommands.Add(contextToOutputPortCommand);
@@ -54,9 +54,12 @@
         protected override async void OnExecute()
         {
             base.OnExecute();
-            
-            var localContextContainer  = await _localContextContainer.LoadAssetTaskAsync(LifeTime);
-            localContextContainer.SetValue(_contextConnection);
+
+            if (_localContextContainer != null)
+            {
+                var localContextContainer = await _localContextContainer.LoadAssetTaskAsync(LifeTime);
+                localContextContainer.SetValue(_contextConnection);
+            }
         }
     }
 }

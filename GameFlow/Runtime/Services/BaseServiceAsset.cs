@@ -10,8 +10,8 @@ namespace UniModules.UniGameFlow.GameFlow.Runtime.Systems
     
     using UnityEngine;
 
-    public abstract class BaseServiceAsset<TData> : 
-        DisposableScriptableObject, 
+    public abstract class BaseServiceAsset<TData> :
+        LifetimeScriptableObject, 
         IAsyncState<TData,IDisposable>
         where TData : class
     {
@@ -58,9 +58,7 @@ namespace UniModules.UniGameFlow.GameFlow.Runtime.Systems
         #region private methods
 
         protected abstract UniTask<Unit> OnInitialize(TData context);
-
-        protected sealed override void OnDispose() => _lifeTimeDefinition.Terminate();
-
+        
         #if UNITY_EDITOR
 
 #if ODIN_INSPECTOR
