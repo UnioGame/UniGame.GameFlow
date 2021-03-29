@@ -4,21 +4,20 @@
     using Cysharp.Threading.Tasks;
     using UniCore.Runtime.ProfilerTools;
     using UniModules.UniContextData.Runtime.Interfaces;
-    using UniModules.UniCore.Runtime.Rx.Extensions;
+    using UniModules.UniCore.Runtime.DataFlow;
     using UniModules.UniGame.AddressableTools.Runtime.Extensions;
     using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
     using UniModules.UniGame.Core.Runtime.Interfaces;
     using UniModules.UniGame.Core.Runtime.ScriptableObjects;
-    using UniModules.UniGame.SerializableContext.Runtime.Addressables;
-    using UnityEngine;
+    using UniRx;
     using UnityEngine.AddressableAssets;
 
     [Serializable]
-    public class RegisterDataSourceCommand : ILifeTimeCommand 
+    public class RegisterDataSourceCommand : ILifeTimeCommand
     {
         private readonly UniTask<IContext> _contextTask;
         private readonly AssetReference _resource;
-        
+
         // TODO есть целый зоопарк наследников AssetReference этому конструктору на вход нужно получить
         // AssetReference по которому можно загрузить наследника LifeTimeScriptableObject приводимого к интерфейсу
         // IAsyncContextDataSource поскольку на вход принимаются реализации через синтаксис конструктора такое не реализовать,
@@ -34,13 +33,20 @@
             if (_resource == null)
                 return;
             var asset = await _resource.LoadAssetTaskAsync<LifetimeScriptableObject>(lifeTime);
-            if (!(asset is IAsyncContextDataSource dataSource)) {
+            if (!(asset is IAsyncContextDataSource dataSource))
+            {
                 GameLog.LogError($"Asset loaded by guid {_resource.AssetGUID} is not {nameof(IAsyncContextDataSource)} or NULL");
+                _resource.UnloadReference();
                 return;
             }
 
-            asset.AddTo(lifeTime);
+            OnSourceLoaded(asset, lifeTime);
             await dataSource.RegisterAsync(await _contextTask);
+        }
+
+        protected virtual void OnSourceLoaded(LifetimeScriptableObject asset, ILifeTime lifeTime)
+        {
+
         }
     }
 }
