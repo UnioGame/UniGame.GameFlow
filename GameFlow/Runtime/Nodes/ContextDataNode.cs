@@ -43,12 +43,5 @@
             nodeCommands.Add(sourceOutputPortCommand);
             nodeCommands.Add(contextToOutputPortCommand);
         }
-
-        protected sealed override void OnExecute()
-        {
-            //unload all source addressables
-            LifeTime.AddDispose(contextAsset);
-            LifeTime.AddDispose(contextDataSources);
-        }
     }
 }
