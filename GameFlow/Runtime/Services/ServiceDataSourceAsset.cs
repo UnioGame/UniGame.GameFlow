@@ -81,5 +81,13 @@
                 AddTo(LifeTime);
             base.OnActivate();
         }
+
+        protected override void OnReset()
+        {
+            base.OnReset();
+            _semaphoreSlim?.Dispose();
+            _semaphoreSlim = new SemaphoreSlim(1,1);
+            _sharedService = null;
+        }
     }
 }

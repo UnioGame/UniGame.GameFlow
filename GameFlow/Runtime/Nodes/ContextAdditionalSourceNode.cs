@@ -31,12 +31,5 @@
             
             Complete();
         }
-
-        protected sealed override void OnExecute()
-        {
-            foreach (var reference in sources) {
-                LifeTime.AddDispose(reference);
-            }
-        }
     }
 }
