@@ -90,6 +90,7 @@ namespace UniGame.GameFlowEditor.Editor
 
         protected virtual void DrawNode(INode sourceNode)
         {
+            
             var container      = sourceNode.DrawNodeUiElements();
             var containerStyle = container.style;
 
