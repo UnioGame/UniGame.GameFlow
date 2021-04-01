@@ -5,8 +5,12 @@ namespace UniGame.UniNodes.GameFlowEditor.Editor
 {
     using System;
     using UniGame.GameFlowEditor.Editor;
+
+#if ODIN_INSPECTOR
     using UniModules.UniGameFlow.GameFlowEditor.Editor.NodesSelectorWindow;
     using UnityEditor;
+#endif
+
     using UnityEngine;
 
     public class UniGraphSettingsPinnedView : PinnedElementView, IUniGraphSettings
@@ -53,14 +57,19 @@ namespace UniGame.UniNodes.GameFlowEditor.Editor
 
             AddButton(ReloadAction, ReloadText, ReloadGraphView);
             AddButton(SaveAction, SaveText, ReloadGraphView);
+#if ODIN_INSPECTOR
             AddButton(NodesAction, NodesText, ShowNodesWindow);
+#endif
+            
         }
 
+#if ODIN_INSPECTOR
         private void ShowNodesWindow()
         {
             NodesInfoWindow.ShowWindow();
         }
-
+#endif
+        
         private void ReloadGraphView()
         {
             SaveGraphView();
