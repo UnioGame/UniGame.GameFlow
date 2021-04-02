@@ -1,7 +1,11 @@
-﻿#if ODIN_INSPECTOR
+﻿using UnityEditor;
+
 
 namespace UniModules.UniGameFlow.GameFlowEditor.Editor.NodesSelectorWindow
 {
+    
+#if ODIN_INSPECTOR
+
     using Sirenix.OdinInspector;
     using Sirenix.OdinInspector.Editor;
     using UniGame.Core.EditorTools.Editor.AssetOperations;
@@ -67,7 +71,22 @@ namespace UniModules.UniGameFlow.GameFlowEditor.Editor.NodesSelectorWindow
         }
 
     }
+    
+#else
+
+    public class NodesInfoWindow : EditorWindow
+    {
+            
+        public static NodesInfoWindow ShowWindow() 
+        {
+            var window = GetWindow<NodesInfoWindow>();
+            window.Show();
+            return window;
+        }
+
+    }
+
+#endif
 }
 
 
-#endif
