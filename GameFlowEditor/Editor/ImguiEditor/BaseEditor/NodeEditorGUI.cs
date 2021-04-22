@@ -1,4 +1,6 @@
-﻿namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.BaseEditor
+﻿using UniModules.UniGame.Context.Editor.ContextEditorWindow;
+
+namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.BaseEditor
 {
     using System;
     using System.Collections.Generic;
@@ -6,13 +8,10 @@
     using Runtime.Attributes;
     using Runtime.Core;
     using Runtime.Core.Extensions;
-    using Runtime.Core.Nodes;
     using Runtime.Interfaces;
     using UniModules.UniCore.EditorTools.Editor.Utility;
-    using UniModules.UniGame.Context.Editor.ContextEditorWindow;
     using UniModules.UniGame.Core.Runtime.Extension;
     using UniModules.UniGameFlow.GameFlowEditor.Editor.Tools;
-    using UniRx;
     using UnityEditor;
     using UnityEngine;
     using Object = UnityEngine.Object;

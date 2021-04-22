@@ -1,8 +1,7 @@
 {
     "name": "unigame.gameflow.uielements.editor",
+    "rootNamespace": "",
     "references": [
-        "GUID:36e7a0119b7032945a982b4f96b73f47",
-        "GUID:ab2596dba8b275d45ab41e03d00510b8",
         "GUID:c2c4776829fe2a64cafd50231a30c336",
         "GUID:fd3adfba81bfda347831cce97e7a8c1c",
         "GUID:44c5a9fbe6286bb4da5426e7a847a8d3",
@@ -13,7 +12,9 @@
         "GUID:ca937d03ee5dd4d699091438dc0f3ae6",
         "GUID:560b04d1a97f54a4e82edc0cbbb69285",
         "GUID:f51ebe6a0ceec4240a699833d6309b23",
-        "GUID:478a2357cc57436488a56e564b08d223"
+        "GUID:478a2357cc57436488a56e564b08d223",
+        "GUID:5c6e9aa738dad73448283eae914b6a8c",
+        "GUID:26c6f93087453a2419810ff802ba0437"
     ],
     "includePlatforms": [
         "Editor"
