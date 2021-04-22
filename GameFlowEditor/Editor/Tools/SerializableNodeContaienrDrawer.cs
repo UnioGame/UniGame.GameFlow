@@ -1,10 +1,9 @@
-﻿namespace UniModules.UniGameFlow.GameFlowEditor.Editor.Tools
+﻿using UniGame.Core.EditorTools.Editor.UiElements;
+using UniGame.Core.Runtime.Attributes.FieldTypeDrawer;
+
+namespace UniModules.UniGameFlow.GameFlowEditor.Editor.Tools
 {
     using System;
-    using global::UniGame.Core.EditorTools.Editor.UiElements;
-    using global::UniGame.Core.Runtime.Attributes.FieldTypeDrawer;
-    using global::UniGame.UniNodes.NodeSystem.Runtime.Core;
-    using global::UniGame.UniNodes.NodeSystem.Runtime.Core.Nodes;
     using UnityEngine;
     using UnityEngine.UIElements;
 
