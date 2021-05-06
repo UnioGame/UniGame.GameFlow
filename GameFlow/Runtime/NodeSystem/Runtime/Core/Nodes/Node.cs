@@ -23,7 +23,6 @@
         [HideNodeInspector] 
         [ReadOnlyValue] 
         [SerializeField]
-        [HideInInspector]
         public int id;
 
         [HideInInspector]
@@ -117,8 +116,7 @@
         #endregion
 
         #region public methods
-
-
+        
         public virtual void Initialize(IGraphData data)
         {
             _graph = data;
@@ -216,7 +214,6 @@
         public virtual string GetStyle() => string.Empty;
         
         #endregion
-
         
         /// <summary>
         /// create target source node and bind with mono node methods
@@ -233,7 +230,12 @@
         /// <summary>
         /// create base node realization
         /// </summary>
-        protected virtual IProxyNode CreateInnerNode() => new SNode(id, nodeName, ports);
+        protected virtual IProxyNode CreateInnerNode() => new SNode()
+        {
+            id = id,
+            nodeName = nodeName,
+            ports = ports
+        };
 
         [Conditional("UNITY_EDITOR")]
         protected void LogMessage(string message)

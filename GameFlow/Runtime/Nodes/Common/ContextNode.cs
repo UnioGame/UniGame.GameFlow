@@ -36,7 +36,13 @@
         
         protected override IProxyNode CreateInnerNode()
         {  
-            contextNode = new SContextNode(id, nodeName, ports);
+            contextNode = new SContextNode()
+            {
+                id = id,
+                nodeName = nodeName,
+                ports = ports
+            };
+            
             return contextNode;
         }
         

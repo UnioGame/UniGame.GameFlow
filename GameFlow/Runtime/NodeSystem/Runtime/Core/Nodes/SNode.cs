@@ -25,22 +25,6 @@
 
         #endregion
 
-
-        #region constructor
-
-        public SNode()
-        {
-        }
-
-        public SNode(
-            int id,
-            string name,
-            NodePortDictionary ports) : base(id, name, ports)
-        {
-        }
-
-        #endregion
-
         #region public properties
 
         /// <summary>

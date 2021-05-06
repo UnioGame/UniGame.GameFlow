@@ -133,7 +133,10 @@
                 }
 
                 var graph = GetActiveGraph(window);
-                window.Initialize(graph);
+                if (graph)
+                {
+                    window.Initialize(graph);
+                }
             }
         }
         

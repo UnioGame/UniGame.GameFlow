@@ -15,17 +15,6 @@
         STypeBridgeNode<IContext>, 
         IMessageBroker
     {
-        #region constructor
-
-        public SContextNode(){}
-
-        public SContextNode(
-            int id,
-            string name,
-            NodePortDictionary ports) : base(id, name, ports){}
-
-        #endregion
-        
         /// <summary>
         /// subscribe to selected data from active context value
         /// </summary>

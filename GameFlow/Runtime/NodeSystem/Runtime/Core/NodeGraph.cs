@@ -87,7 +87,14 @@
         /// get unique Id in graph scope
         /// </summary>
         /// <returns></returns>
-        public int GetId() => ++uniqueId;
+        public int GetId()
+        {
+            var maxId           = nodes.Count <= 0 ? 0 : nodes.Max(x => x.id);
+            var serializableMax = serializableNodes.Count <= 0 ? 0 : serializableNodes.Max(x => x.Id);
+            maxId    = serializableMax > maxId ? serializableMax : maxId;
+            uniqueId = ++maxId;
+            return uniqueId;
+        }
 
         public int UpdateId(int oldId) => GetId();
 
@@ -137,7 +144,8 @@
                 AddSerializableNode(type);
 
             if (node == null) return null;
-            
+
+            node.SetId(GetId());
             node.SetUpData(this);
             node.Initialize(this);
             node.SetName(itemName);
@@ -207,8 +215,8 @@
                 guid = System.Guid.NewGuid().ToString();
             
             _allNodes?.Clear();
-            nodes.Clear();
             
+            nodes.Clear();
             
             serializableNodes.RemoveAll(x => x == null || x is Object);
             
@@ -228,6 +236,8 @@
             nodeItems.Despawn();
         }
 
+        
+        
         #endregion
         
         #region private methods

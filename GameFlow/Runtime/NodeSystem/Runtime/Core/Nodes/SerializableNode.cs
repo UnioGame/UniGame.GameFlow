@@ -54,24 +54,6 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
 
         private HashSet<INodePort> _portValues;
 
-        #region constructor
-
-        public SerializableNode()
-        {
-        }
-
-        public SerializableNode(
-            int id,
-            string name,
-            NodePortDictionary ports)
-        {
-            this.id       = id;
-            this.nodeName = name;
-            this.ports    = ports;
-        }
-
-        #endregion
-
         #region public properties
 
         public HashSet<INodePort> RuntimePorts => _portValues =

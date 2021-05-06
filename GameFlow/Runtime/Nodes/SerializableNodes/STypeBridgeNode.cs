@@ -37,18 +37,6 @@
 
         protected IReadOnlyReactiveProperty<TData> valueData;
 
-        #region constructor
-
-        public STypeBridgeNode(){}
-
-        public STypeBridgeNode(
-            int id,
-            string name,
-            NodePortDictionary ports) : base(id, name, ports){}
-
-        #endregion
-        
-        
         #region public properties
 
         public IReadOnlyReactiveProperty<TData> Source => valueData;

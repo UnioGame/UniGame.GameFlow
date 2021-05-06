@@ -21,7 +21,13 @@
         
         protected override IProxyNode CreateInnerNode()
         {  
-            value = new STypeBridgeNode<TData>(id, nodeName, ports);
+            value = new STypeBridgeNode<TData>()
+            {
+                id = id,
+                nodeName = nodeName,
+                ports = ports
+            };
+            
             return value;
         }
 
