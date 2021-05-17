@@ -4,9 +4,11 @@ namespace UniModules.UniGameFlow.Nodes.Runtime.Addressables
 {
     using System;
     using System.Collections.Generic;
+    using Cysharp.Threading.Tasks;
     using global::UniGame.UniNodes.Nodes.Runtime.Common;
     using global::UniGame.UniNodes.NodeSystem.Runtime.Attributes;
     using UniGame.Core.Runtime.Interfaces;
+    using UniGame.Core.Runtime.Rx;
     using UniModules.UniCore.Runtime.Rx.Extensions;
     using UniModules.UniGame.AddressableTools.Runtime.Extensions;
     using UniRx;
@@ -29,35 +31,18 @@ namespace UniModules.UniGameFlow.Nodes.Runtime.Addressables
         [SerializeField]
         private AssetReference _source;
 
-        private ReactiveProperty<TApi> _sourceValue = new ReactiveProperty<TApi>();
-        private IDisposable _localSourceValueDisposable;
-        
-        public IReadOnlyReactiveProperty<TApi> SourceValue { get; }
-
-        protected override void UpdateCommands(List<ILifeTimeCommand> nodeCommands)
+        protected override async UniTask OnContextActivate(IContext context)
         {
-            base.UpdateCommands(nodeCommands);
-            _sourceValue = new ReactiveProperty<TApi>();
-            
-            LifeTime.AddCleanUpAction(() => _localSourceValueDisposable.Cancel());
-        }
-
-        protected override async void OnContextActivate(IContext context)
-        {
-            _localSourceValueDisposable.Cancel();
-            _localSourceValueDisposable = _sourceValue.
-                Skip(1).
-                Subscribe(x => OnValueChanged(x,context));
-            
             var result = await _source.LoadAssetTaskAsync<T>(LifeTime);
-            if (result is TApi value) {
-                _sourceValue.Value = value;      
-            }
+            OnValueChanged(result, context);
         }
 
         protected virtual void OnValueChanged(TApi value, IContext context)
         {
-            context.Publish(value);
+            if (value != null)
+            {
+                context.Publish(value);
+            }
             Complete();
         }
     }

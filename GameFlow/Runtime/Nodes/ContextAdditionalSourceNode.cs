@@ -1,6 +1,7 @@
 ﻿namespace UniGame.UniNodes.GameFlow.Runtime.Nodes
 {
     using System.Collections.Generic;
+    using Cysharp.Threading.Tasks;
     using NodeSystem.Runtime.Core;
     using UniModules.UniCore.Runtime.ObjectPool.Runtime;
     using UniModules.UniCore.Runtime.ObjectPool.Runtime.Extensions;
@@ -17,7 +18,7 @@
         
         public List<AssetReferenceDataSource> sources;
 
-        protected override async void OnContextActivate(IContext context)
+        protected override async UniTask OnContextActivate(IContext context)
         {
             var results = ClassPool.Spawn<List<AsyncContextDataSource>>();
 

@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using Cysharp.Threading.Tasks;
     using NodeSystem.Runtime.Attributes;
     using NodeSystem.Runtime.Core;
     using NodeSystem.Runtime.Interfaces;
@@ -26,7 +27,10 @@
         
         public bool HasValue => contextNode.HasValue;
 
-        public void Complete() => contextNode.Complete();
+        public void Complete()
+        {
+            contextNode.Complete();
+        }
         
         public void Publish<T>(T message) => contextNode.Publish(message);
 
@@ -49,12 +53,14 @@
         protected override void OnExecute()
         {
             base.OnExecute();
-            Source.Where(x => x != null).
-                Do(OnContextActivate).
-                Subscribe().
-                AddTo(LifeTime);
+            Source.Where(x => x != null)
+                .Do(async context => 
+                    await OnContextActivate(context)
+                    .AttachExternalCancellation(LifeTime.AsCancellationToken()))
+                .Subscribe()
+                .AddTo(LifeTime);
         }
 
-        protected virtual void OnContextActivate(IContext context) { }
+        protected virtual UniTask OnContextActivate(IContext context) { return UniTask.CompletedTask; }
     }
 }
