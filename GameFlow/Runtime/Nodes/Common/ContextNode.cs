@@ -54,9 +54,9 @@
         {
             base.OnExecute();
             Source.Where(x => x != null)
-                .Do(async context => 
+                .Do(async context =>
                     await OnContextActivate(context)
-                    .AttachExternalCancellation(LifeTime.AsCancellationToken()))
+                        .AttachExternalCancellation(LifeTime.AsCancellationToken()).SuppressCancellationThrow())
                 .Subscribe()
                 .AddTo(LifeTime);
         }
