@@ -89,7 +89,9 @@
         /// <returns></returns>
         public int GetId()
         {
-            var maxId           = nodes.Count <= 0 ? 0 : nodes.Max(x => x.id);
+            var originId = GetIdFromOriginSource();
+            var maxId = originId.id;
+            maxId           = Mathf.Max(maxId,nodes.Count <= 0 ? 0 : nodes.Max(x => x.id));
             var serializableMax = serializableNodes.Count <= 0 ? 0 : serializableNodes.Max(x => x.Id);
             maxId    = serializableMax > maxId ? serializableMax : maxId;
             uniqueId = ++maxId;
@@ -242,6 +244,26 @@
         
         #region private methods
 
+        private (bool isValid, int id) GetIdFromOriginSource()
+        {
+            var result = (false,0);
+#if UNITY_EDITOR
+            var isVariant = UnityEditor.PrefabUtility.IsPartOfVariantPrefab(this);
+            if (!isVariant) return result;
+            
+            var origin = UnityEditor.PrefabUtility.GetCorrespondingObjectFromOriginalSource(gameObject);
+            var graph = origin?.GetComponent<NodeGraph>();
+            if (!graph)
+                return result;
+
+            var originId = graph.GetId();
+            UnityEditor.EditorUtility.SetDirty(origin);
+
+            return (true, originId);
+#endif
+            return result;
+        }
+        
         protected override void OnInitialize() => _allNodes?.Clear();
 
         private INode AddAssetNode(Type type)
