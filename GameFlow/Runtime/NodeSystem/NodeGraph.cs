@@ -105,7 +105,6 @@
             UnityEditor.EditorUtility.SetDirty(gameObject);
             UniGame.Tools.PrefabTools.Save(this);
 #endif
-            
             return newId;
         }
 
