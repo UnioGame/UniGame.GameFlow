@@ -259,7 +259,7 @@
             var originId = graph.GetId();
             UnityEditor.EditorUtility.SetDirty(origin);
 
-            return (true, originId);
+            result = (true, originId);
 #endif
             return result;
         }
