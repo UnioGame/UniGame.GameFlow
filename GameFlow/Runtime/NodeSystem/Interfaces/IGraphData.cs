@@ -6,7 +6,7 @@
 
     public interface IGraphData : INamedItem, IUnique
     {
-        int GetId();
+        int GetNextId();
         
         int UpdateId(int oldId);
         

@@ -87,18 +87,23 @@
         /// get unique Id in graph scope
         /// </summary>
         /// <returns></returns>
-        public int GetId()
+        public int GetNextId()
         {
-            var originId = GetIdFromOriginSource();
-            var maxId = originId.id;
-            maxId           = Mathf.Max(maxId,nodes.Count <= 0 ? 0 : nodes.Max(x => x.id));
+            var origin = GetIdFromOriginSource();
+            var originId = origin.id;
+            var maxId           = Mathf.Max(originId,nodes.Count <= 0 ? 0 : nodes.Max(x => x.id));
             var serializableMax = serializableNodes.Count <= 0 ? 0 : serializableNodes.Max(x => x.Id);
             maxId    = serializableMax > maxId ? serializableMax : maxId;
-            uniqueId = ++maxId;
+            uniqueId = maxId + 1;
+            if (originId == maxId)
+                ApplyOriginId(uniqueId);
+            
             return uniqueId;
         }
 
-        public int UpdateId(int oldId) => GetId();
+        public int GetId() => uniqueId;
+        
+        public int UpdateId(int oldId) => GetNextId();
 
         public IReadOnlyList<INode> GetNodes()
         {
@@ -147,7 +152,7 @@
 
             if (node == null) return null;
 
-            node.SetId(GetId());
+            node.SetId(GetNextId());
             node.SetUpData(this);
             node.Initialize(this);
             node.SetName(itemName);
@@ -178,7 +183,7 @@
         public virtual Node CopyNode(Node original)
         {
             var node = Instantiate(original);
-            node.SetId(GetId());
+            node.SetId(GetNextId());
             node.SetUpData(this);
             node.ClearConnections();
             nodes.Add(node);
@@ -246,15 +251,14 @@
 
         private (bool isValid, int id) GetIdFromOriginSource()
         {
-            var result = (false,0);
+            var result = (false,-1);
 #if UNITY_EDITOR
             var isVariant = UnityEditor.PrefabUtility.IsPartOfVariantPrefab(this);
             if (!isVariant) return result;
             
             var origin = UnityEditor.PrefabUtility.GetCorrespondingObjectFromOriginalSource(gameObject);
-            var graph = origin?.GetComponent<NodeGraph>();
-            if (!graph)
-                return result;
+            var graph = origin.GetComponent<NodeGraph>();
+            if (!graph) return result;
 
             var originId = graph.GetId();
             UnityEditor.EditorUtility.SetDirty(origin);
@@ -262,6 +266,22 @@
             result = (true, originId);
 #endif
             return result;
+        }
+
+        private void ApplyOriginId(int newId)
+        {
+#if UNITY_EDITOR
+            var isVariant = UnityEditor.PrefabUtility.IsPartOfVariantPrefab(this);
+            if (!isVariant) return;
+            
+            var origin = UnityEditor.PrefabUtility.GetCorrespondingObjectFromOriginalSource(gameObject);
+            var graph = origin.GetComponent<NodeGraph>();
+            var currentId = graph.uniqueId;
+            if (currentId > newId) return;
+            graph.uniqueId = newId;
+            
+            UniGame.Tools.PrefabTools.Save(graph);
+#endif
         }
         
         protected override void OnInitialize() => _allNodes?.Clear();

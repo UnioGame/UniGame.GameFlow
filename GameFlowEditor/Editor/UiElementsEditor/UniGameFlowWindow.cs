@@ -224,7 +224,7 @@
 
         protected override void InitializeGraphView(BaseGraphView view)
         {
-            CreateMinimap(view);
+            //CreateMinimap(view);
             CreatePinned(view);
         }
 

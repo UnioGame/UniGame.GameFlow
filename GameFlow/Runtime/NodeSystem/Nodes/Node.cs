@@ -64,7 +64,7 @@
         /// <summary>
         /// unique node id
         /// </summary>
-        public int Id => id != 0 ? id : SetId(_graph.GetId());
+        public int Id => id != 0 ? id : SetId(_graph.GetNextId());
 
         /// <summary>
         /// Node name

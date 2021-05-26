@@ -33,7 +33,7 @@
 
         public int Id => _id;
 
-        public int GetId() => throw new NotImplementedException();
+        public int GetNextId() => throw new NotImplementedException();
 
         public int UpdateId(int oldId) => throw new NotImplementedException();
 

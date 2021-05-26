@@ -158,7 +158,7 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
             ShowBackingValue showBackingValue = ShowBackingValue.Always)
         {
             var port = HasPort(fieldName) ? ports[fieldName] : 
-                new NodePort(GraphData.GetId(), this, fieldName, direction, connectionType, showBackingValue, types);
+                new NodePort(GraphData.GetNextId(), this, fieldName, direction, connectionType, showBackingValue, types);
             return AddPort(port);
         }
 
