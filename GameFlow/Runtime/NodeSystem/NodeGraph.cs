@@ -99,6 +99,8 @@
             uniqueId = newId;
             
 #if UNITY_EDITOR
+            if(originId < uniqueId)
+                ApplyOriginId(uniqueId);
             UnityEditor.EditorUtility.SetDirty(this);
             UnityEditor.EditorUtility.SetDirty(gameObject);
             UniGame.Tools.PrefabTools.Save(this);
