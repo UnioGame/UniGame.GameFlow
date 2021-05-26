@@ -93,12 +93,18 @@
             var originId = origin.id;
             var maxId           = Mathf.Max(originId,nodes.Count <= 0 ? 0 : nodes.Max(x => x.id));
             var serializableMax = serializableNodes.Count <= 0 ? 0 : serializableNodes.Max(x => x.Id);
-            maxId    = serializableMax > maxId ? serializableMax : maxId;
-            uniqueId = maxId + 1;
-            if (originId == maxId)
-                ApplyOriginId(uniqueId);
+            maxId = serializableMax > maxId ? serializableMax : maxId;
+            maxId = Mathf.Max(uniqueId, maxId);
+            var newId= maxId == originId ? originId : maxId + 1;
+            uniqueId = newId;
             
-            return uniqueId;
+#if UNITY_EDITOR
+            UnityEditor.EditorUtility.SetDirty(this);
+            UnityEditor.EditorUtility.SetDirty(gameObject);
+            UniGame.Tools.PrefabTools.Save(this);
+#endif
+            
+            return newId;
         }
 
         public int GetId() => uniqueId;
@@ -152,7 +158,8 @@
 
             if (node == null) return null;
 
-            node.SetId(GetNextId());
+            var nextId = GetNextId();
+            node.SetId(nextId);
             node.SetUpData(this);
             node.Initialize(this);
             node.SetName(itemName);
@@ -260,7 +267,7 @@
             var graph = origin.GetComponent<NodeGraph>();
             if (!graph) return result;
 
-            var originId = graph.GetId();
+            var originId = graph.GetNextId();
             UnityEditor.EditorUtility.SetDirty(origin);
 
             result = (true, originId);
