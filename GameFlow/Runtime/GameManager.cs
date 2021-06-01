@@ -1,5 +1,6 @@
 ﻿namespace UniModules.UniGame.GameFlow.GameFlow.Runtime
 {
+    using System;
     using System.Collections.Generic;
     using AddressableTools.Runtime.Extensions;
     using Context.Runtime.Context;
@@ -60,7 +61,7 @@
 
         public void Dispose()
         {
-            _gameContext.Dispose();
+            _gameContext?.Dispose();
             _gameContext = null;
         }
 
@@ -108,6 +109,11 @@
                 graph.AddTo(LifeTime);
             }
             this.AddCleanUpAction(() => Instance = null);
+        }
+
+        private void OnDestroy()
+        {
+            Dispose();
         }
 
         #endregion
