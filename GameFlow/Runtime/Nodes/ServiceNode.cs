@@ -28,7 +28,6 @@
 
         #region inspector
 
-        [Header("Service Status")]
         [ReadOnlyValue]
         [SerializeField]
         private bool _isReady;
