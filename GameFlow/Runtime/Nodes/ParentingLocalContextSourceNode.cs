@@ -58,6 +58,7 @@
             if (_localContextContainer != null)
             {
                 var localContextContainer = await _localContextContainer.LoadAssetTaskAsync(LifeTime);
+                LifeTime.AddCleanUpAction(localContextContainer.Dispose);
                 localContextContainer.SetValue(_contextConnection);
             }
         }
