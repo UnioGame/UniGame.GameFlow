@@ -17,11 +17,10 @@
     {
         private ContextConnection _contextConnection;
 
-        [Header("Context Sources")]
         [SerializeField]
-        private AssetReferenceContextContainer _localContextContainer;
+        public AssetReferenceContextContainer _localContextContainer;
         [SerializeField]
-        private AssetReferenceContextContainer _parentContextContainer;
+        public AssetReferenceContextContainer _parentContextContainer;
 
         [Header("Data Source")]
         [SerializeField]
@@ -32,6 +31,7 @@
             base.UpdateCommands(nodeCommands);
 
             _contextConnection = _contextConnection ?? new ContextConnection();
+            
             LifeTime.AddDispose(_contextConnection);
 
             var outPort = UniTask.FromResult<IContext>(PortPair.OutputPort);
@@ -55,12 +55,11 @@
         {
             base.OnExecute();
 
-            if (_localContextContainer != null)
-            {
-                var localContextContainer = await _localContextContainer.LoadAssetTaskAsync(LifeTime);
-                LifeTime.AddCleanUpAction(localContextContainer.Dispose);
-                localContextContainer.SetValue(_contextConnection);
-            }
+            if (_localContextContainer == null) return;
+            
+            var localContextContainer = await _localContextContainer.LoadAssetTaskAsync(LifeTime);
+            LifeTime.AddDispose(localContextContainer);
+            localContextContainer.SetValue(_contextConnection);
         }
     }
 }
