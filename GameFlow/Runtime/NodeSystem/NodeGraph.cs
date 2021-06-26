@@ -36,6 +36,7 @@
 
 #if ODIN_INSPECTOR
         [Sirenix.OdinInspector.InlineEditor(Expanded = false)]
+        [Sirenix.OdinInspector.Searchable]
 #endif
         [SerializeField]
         public List<Node> nodes = new List<Node>();
