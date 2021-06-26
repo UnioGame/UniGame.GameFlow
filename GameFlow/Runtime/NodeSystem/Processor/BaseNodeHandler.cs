@@ -8,7 +8,8 @@
     using NodeSystem.Runtime.Extensions;
 
     [Serializable]
-    public class BaseNodeHandler : INodeHandler
+    public class 
+        BaseNodeHandler : INodeHandler
     {
         public PortField UpdatePortFieldData(INode node, FieldInfo fieldInfo)
         {
