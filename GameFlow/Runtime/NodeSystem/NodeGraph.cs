@@ -227,19 +227,10 @@
         [ContextMenu("Validate")]
         public override void Validate()
         {
-            if (string.IsNullOrEmpty(guid))
-                guid = System.Guid.NewGuid().ToString();
-            
             _allNodes?.Clear();
-            
-            nodes.Clear();
-            
-            serializableNodes.RemoveAll(x => x == null || x is Object);
-            
-            nodes.AddRange(GetComponents<Node>());
-            nodes.RemoveAll(x => !x);
-            nodes.Remove(this);
 
+            OnInnerValidate();
+            
             var nodeItems = ClassPool.Spawn<List<INode>>();
             nodeItems.AddRange(serializableNodes);
             nodeItems.AddRange(nodes);
@@ -252,11 +243,26 @@
             nodeItems.Despawn();
         }
 
-        
-        
         #endregion
         
         #region private methods
+
+        protected virtual void OnInnerValidate()
+        {
+            if (string.IsNullOrEmpty(guid))
+                guid = System.Guid.NewGuid().ToString();
+
+            serializableNodes.RemoveAll(x => x == null || x is UnityEngine.Object);
+            nodes.RemoveAll(x => !x);
+            nodes.RemoveAll(x => x == null);
+            nodes.Remove(this);
+            
+            foreach (var childNode in GetComponents<Node>())
+            {
+                if(nodes.Contains(childNode) || childNode == this) continue;
+                nodes.Add(childNode);
+            }
+        }
 
         private (bool isValid, int id) GetIdFromOriginSource()
         {

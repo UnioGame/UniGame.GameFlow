@@ -55,6 +55,7 @@
         {
             foreach (var portView in ports)
             {
+                if(portView == null) continue;
                 var port = node.GetPort(portView.portName);
                 portView.EnableInClassList(className,port.Value.HasValue);
             }
