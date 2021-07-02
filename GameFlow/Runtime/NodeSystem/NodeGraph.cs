@@ -59,9 +59,6 @@
         private EntityContext _graphContext = new EntityContext();
         
         private List<INode> _allNodes = new List<INode>();
-        
-        [NonSerialized] 
-        private Dictionary<int, INode> _nodesCache;
 
         #region public properties
 
@@ -123,14 +120,7 @@
         /// </summary>
         public INode GetNode(int nodeId)
         {
-            _nodesCache ??= new Dictionary<int, INode>();
-            if (_nodesCache.Count != nodes.Count) {
-                _nodesCache.Clear();
-                _nodesCache = Nodes.ToDictionary(x => x.Id);
-            }
-
-            _nodesCache.TryGetValue(nodeId, out var node);
-            return node;
+            return Nodes.FirstOrDefault(x => x.Id == nodeId);
         }
 
         /// <summary>
