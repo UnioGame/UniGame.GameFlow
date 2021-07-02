@@ -24,14 +24,13 @@
         /// unique graph space port id 
         /// </summary>
         [ReadOnlyValue]
-        [SerializeField]
-        private int id;
+        [SerializeField] private int id;
         /// <summary>
         /// parent Node id
         /// </summary>
         [ReadOnlyValue]
-        [SerializeField]
-        public int nodeId;
+        [SerializeField] public int nodeId;
+        
         [SerializeField] public string           fieldName;
         [SerializeField] public PortIO           direction          = PortIO.Input;
         [SerializeField] public ConnectionType   connectionType     = ConnectionType.Multiple;
@@ -41,13 +40,11 @@
         /// <summary>
         /// port container value
         /// </summary>
-        [SerializeField]
-        public PortValue portValue = new PortValue();
+        [SerializeField] public PortValue portValue = new PortValue();
         /// <summary>
         /// registered port connections
         /// </summary>
-        [SerializeField]
-        public List<PortConnection> connections = new List<PortConnection>();
+        [SerializeField] public List<PortConnection> connections = new List<PortConnection>();
         /// <summary>
         /// dynamic port list
         /// </summary>
@@ -198,11 +195,11 @@
             this.node   = data;
             this.nodeId = data.Id;
 
-            connections = connections ?? new List<PortConnection>();
+            connections ??= new List<PortConnection>();
             connections.ForEach(x => x.Initialize(node.GraphData));
 
             //initialize port lifetime
-            lifeTimeDefinition = lifeTimeDefinition ?? new LifeTimeDefinition();
+            lifeTimeDefinition ??= new LifeTimeDefinition();
             lifeTime           = lifeTimeDefinition.LifeTime;
             lifeTimeDefinition.Release();
 

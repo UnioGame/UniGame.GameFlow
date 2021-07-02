@@ -53,6 +53,9 @@
 
         #endregion
 
+        [NonSerialized]
+        private NodeGraph _originSource;
+        
         private EntityContext _graphContext = new EntityContext();
         
         private List<INode> _allNodes = new List<INode>();
@@ -88,26 +91,7 @@
         /// get unique Id in graph scope
         /// </summary>
         /// <returns></returns>
-        public int GetNextId()
-        {
-            var origin = GetIdFromOriginSource();
-            var originId = origin.id;
-            var maxId           = Mathf.Max(originId,nodes.Count <= 0 ? 0 : nodes.Max(x => x.id));
-            var serializableMax = serializableNodes.Count <= 0 ? 0 : serializableNodes.Max(x => x.Id);
-            maxId = serializableMax > maxId ? serializableMax : maxId;
-            maxId = Mathf.Max(uniqueId, maxId);
-            var newId= maxId == originId ? originId : maxId + 1;
-            uniqueId = newId;
-            
-#if UNITY_EDITOR
-            if(originId < uniqueId)
-                ApplyOriginId(uniqueId);
-            UnityEditor.EditorUtility.SetDirty(this);
-            UnityEditor.EditorUtility.SetDirty(gameObject);
-            UniGame.Tools.PrefabTools.Save(this);
-#endif
-            return newId;
-        }
+        public int GetNextId() => UnityEngine.Random.Range(Int32.MinValue, Int32.MaxValue);
 
         public int GetId() => uniqueId;
         
@@ -115,7 +99,7 @@
 
         public IReadOnlyList<INode> GetNodes()
         {
-            _allNodes = _allNodes ?? new List<INode>();
+            _allNodes ??= new List<INode>();
             if (_allNodes.Count > 0)
                 return _allNodes;
             
@@ -139,7 +123,7 @@
         /// </summary>
         public INode GetNode(int nodeId)
         {
-            _nodesCache = _nodesCache ?? new Dictionary<int, INode>();
+            _nodesCache ??= new Dictionary<int, INode>();
             if (_nodesCache.Count != nodes.Count) {
                 _nodesCache.Clear();
                 _nodesCache = Nodes.ToDictionary(x => x.Id);
@@ -247,6 +231,7 @@
         
         #region private methods
 
+
         protected virtual void OnInnerValidate()
         {
             if (string.IsNullOrEmpty(guid))
@@ -264,41 +249,7 @@
             }
         }
 
-        private (bool isValid, int id) GetIdFromOriginSource()
-        {
-            var result = (false,-1);
-#if UNITY_EDITOR
-            var isVariant = UnityEditor.PrefabUtility.IsPartOfVariantPrefab(this);
-            if (!isVariant) return result;
-            
-            var origin = UnityEditor.PrefabUtility.GetCorrespondingObjectFromOriginalSource(gameObject);
-            var graph = origin.GetComponent<NodeGraph>();
-            if (!graph) return result;
 
-            var originId = graph.GetNextId();
-            UnityEditor.EditorUtility.SetDirty(origin);
-
-            result = (true, originId);
-#endif
-            return result;
-        }
-
-        private void ApplyOriginId(int newId)
-        {
-#if UNITY_EDITOR
-            var isVariant = UnityEditor.PrefabUtility.IsPartOfVariantPrefab(this);
-            if (!isVariant) return;
-            
-            var origin = UnityEditor.PrefabUtility.GetCorrespondingObjectFromOriginalSource(gameObject);
-            var graph = origin.GetComponent<NodeGraph>();
-            var currentId = graph.uniqueId;
-            if (currentId > newId) return;
-            graph.uniqueId = newId;
-            
-            UniGame.Tools.PrefabTools.Save(graph);
-#endif
-        }
-        
         protected override void OnInitialize() => _allNodes?.Clear();
 
         private INode AddAssetNode(Type type)

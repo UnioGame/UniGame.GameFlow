@@ -179,11 +179,11 @@
             foreach (var port in Ports)
             {
                 port.Initialize(this);
-                if (Application.isPlaying)
-                {
-                    LifeTime.AddCleanUpAction(port.Release);
-                    AddPortValue(port);
-                }
+                
+                if (!Application.isPlaying) continue;
+                
+                LifeTime.AddCleanUpAction(port.Release);
+                AddPortValue(port);
             }
         }
 

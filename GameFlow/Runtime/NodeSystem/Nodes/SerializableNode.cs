@@ -23,7 +23,8 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
 
         #region inspector
 
-        [ReadOnlyValue] [SerializeField] public int id;
+        [ReadOnlyValue] 
+        [SerializeField] public int id;
 
         [HideInInspector]
         [HideNodeInspector]
@@ -56,15 +57,14 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
 
         #region public properties
 
-        public HashSet<INodePort> RuntimePorts => _portValues =
-            _portValues ?? (_portValues = new HashSet<INodePort>());
+        public HashSet<INodePort> RuntimePorts => _portValues ??= new HashSet<INodePort>();
 
         public IContext Context => GraphData.Context;
 
         /// <summary>
         /// unique node id
         /// </summary>
-        public int Id => id == 0 ? UpdateId() : id;
+        public int Id => id;
 
         /// <summary>
         /// Node name
@@ -146,7 +146,6 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
             if (_graph == parent)
                 return;
             _graph = parent;
-            UpdateId();
         }
 
         /// <summary> Add a serialized port to this node. </summary>
@@ -157,8 +156,17 @@ namespace UniGame.UniNodes.NodeSystem.Runtime.Core
             ConnectionType connectionType = ConnectionType.Multiple,
             ShowBackingValue showBackingValue = ShowBackingValue.Always)
         {
-            var port = HasPort(fieldName) ? ports[fieldName] : 
-                new NodePort(GraphData.GetNextId(), this, fieldName, direction, connectionType, showBackingValue, types);
+            NodePort port = null;
+            
+            if (HasPort(fieldName))
+            {
+                port = ports[fieldName];
+            }
+            else
+            {
+                port = new NodePort(GraphData.GetNextId(), this, fieldName, direction, connectionType, showBackingValue, types);
+            }
+
             return AddPort(port);
         }
 
