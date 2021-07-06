@@ -10,6 +10,7 @@ using UniModules.UniGame.CoreModules.UniGame.Context.Runtime.Extension;
 using UnityEngine.AddressableAssets;
 
 
+
 #if ODIN_INSPECTOR
 [Sirenix.OdinInspector.InlineProperty]
 [Sirenix.OdinInspector.HideLabel]
@@ -17,7 +18,7 @@ using UnityEngine.AddressableAssets;
 [Serializable]
 public class AddressableAtlasHandle : AsyncSharedContextState<IContext>
 {
-    public List<AssetReferenceT<AddressableAtlasesStateAsset>> atlases = new List<AssetReferenceT<AddressableAtlasesStateAsset>>();
+    public List<AssetReferenceAtlasState> atlases = new List<AssetReferenceAtlasState>();
     
     protected override async UniTask<IContext> OnExecute(IContext context, ILifeTime executionLifeTime)
     {
@@ -26,11 +27,22 @@ public class AddressableAtlasHandle : AsyncSharedContextState<IContext>
         var tasks         = atlases.Select(x => x.LoadAssetTaskAsync(executionLifeTime));
         var atlasesAssets = await UniTask.WhenAll(tasks);
 
-        foreach (var atlaseAsset in atlasesAssets)
+        foreach (var atlasAsset in atlasesAssets)
         {
-            atlasHandler.BindAtlasesLifeTime(LifeTime,atlaseAsset);
+            atlasHandler.BindAtlasesLifeTime(LifeTime,atlasAsset);
         }
 
         return context;
+    }
+}
+
+[Serializable]
+#if ODIN_INSPECTOR
+[Sirenix.OdinInspector.DrawWithUnity]
+#endif
+public class AssetReferenceAtlasState : AssetReferenceT<AddressableAtlasesStateAsset>
+{
+    public AssetReferenceAtlasState(string guid) : base(guid)
+    {
     }
 }
