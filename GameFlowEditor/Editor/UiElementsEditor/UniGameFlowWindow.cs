@@ -97,7 +97,7 @@
 
         public EditorResource Resource => _graphResource;
 
-        public UniAssetGraph AssetGraph { get; protected set; }
+        public UniGraphAsset AssetGraph { get; protected set; }
 
         #region public methods
 
@@ -139,22 +139,25 @@
             InitializeGraph(assetGraph);
         }
 
-        public virtual UniAssetGraph CreateAssetGraph(UniGraph uniGraph)
+        public virtual UniGraphAsset CreateAssetGraph(UniGraph uniGraph)
         {
             if (Application.isPlaying == false)
             {
                 InitializeGraph(uniGraph);
             }
 
-            var graphAsset = ScriptableObject.CreateInstance<UniAssetGraph>();
-
+            var graphAsset = uniGraph.serializedGraph;
+            graphAsset = graphAsset ? graphAsset : CreateInstance<UniGraphAsset>();
+            uniGraph.serializedGraph = graphAsset;
+            
             if (AssetGraph && uniGraph.name == _graphName)
             {
                 graphAsset.position = AssetGraph.position;
                 graphAsset.scale    = AssetGraph.scale;
             }
 
-            _graphName      = uniGraph == null ? string.Empty : uniGraph.name;
+            _graphName      = uniGraph.name;
+            
             graphAsset.name = _graphName;
             AssetGraph      = graphAsset;
             AssetGraph.Activate(uniGraph);

@@ -56,7 +56,7 @@ namespace UniGame.GameFlowEditor.Editor
 
         public IUniGraph ActiveGraph => SourceGraph.UniGraph;
 
-        public UniAssetGraph SourceGraph { get; protected set; }
+        public UniGraphAsset SourceGraph { get; protected set; }
 
         public ILifeTime LifeTime => lifeTimeDefinition;
 
@@ -151,7 +151,7 @@ namespace UniGame.GameFlowEditor.Editor
         {
             lifeTimeDefinition.Release();
             
-            SourceGraph = graph as UniAssetGraph;
+            SourceGraph = graph as UniGraphAsset;
 
             BindEvents();
             CreateGroupViews(SourceGraph.UniGraph);

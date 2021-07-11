@@ -19,7 +19,7 @@
         //[IsCompatibleWithGraph]
         public static bool Create(BaseGraph assetGraph)
         {
-            var uniGraph = assetGraph as UniAssetGraph;
+            var uniGraph = assetGraph as UniGraphAsset;
             
             if (!uniGraph)
                 return false;

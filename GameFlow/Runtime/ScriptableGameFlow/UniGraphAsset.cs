@@ -13,7 +13,7 @@ namespace UniGame.GameFlowEditor.Runtime
     using UnityEngine;
     using Vector2 = UnityEngine.Vector2;
 
-    public class UniAssetGraph : BaseGraph
+    public class UniGraphAsset : BaseGraph
     {
         #region static data
 

@@ -1,4 +1,6 @@
-﻿namespace UniGame.UniNodes.NodeSystem.Runtime.Core
+﻿using UniGame.GameFlowEditor.Runtime;
+
+namespace UniGame.UniNodes.NodeSystem.Runtime.Core
 {
     using System.Collections.Generic;
     using System.Runtime.CompilerServices;
@@ -24,6 +26,9 @@
         
         [SerializeField]
         private List<AsyncContextDataSource> _dataSources = new List<AsyncContextDataSource>();
+
+        [SerializeField]
+        public UniGraphAsset serializedGraph;
         
         #endregion
         
