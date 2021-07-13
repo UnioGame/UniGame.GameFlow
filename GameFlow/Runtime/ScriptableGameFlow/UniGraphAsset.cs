@@ -13,11 +13,13 @@ namespace UniGame.GameFlowEditor.Runtime
     using UnityEngine;
     using Vector2 = UnityEngine.Vector2;
 
+    [Serializable]
+    [CreateAssetMenu(menuName = "UniGame/GameFlow/UniGraphAsset",fileName = "UniGraphAsset")]
     public class UniGraphAsset : BaseGraph
     {
         #region static data
 
-        private static MemorizeItem<Type, Type> nodeDataMap =
+        public static MemorizeItem<Type, Type> nodeDataMap =
             MemorizeTool.Memorize<Type, Type>(nodeType =>
             {
                 var baseType      = typeof(UniBaseNode);
@@ -59,10 +61,8 @@ namespace UniGame.GameFlowEditor.Runtime
             #if UNITY_EDITOR
             name = UnityEditor.ObjectNames.NicifyVariableName(name);
             #endif
-            var newNode = sourceGraph.AddNode(
-                type,
-                name,
-                nodePosition);
+            
+            var newNode = sourceGraph.AddNode(type, name, nodePosition);
             
             return CreateNode(newNode);
         }
