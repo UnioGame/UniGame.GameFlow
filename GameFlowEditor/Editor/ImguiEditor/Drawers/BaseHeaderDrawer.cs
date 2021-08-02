@@ -5,7 +5,7 @@
     using Interfaces;
     using Runtime.Core;
     using Runtime.Interfaces;
-    using UniModules.UniCore.EditorTools.Editor.Utility;
+    using UniModules.Editor;
     using UniModules.UniGameFlow.NodeSystem.Runtime.Core.Attributes;
     using UnityEditor;
     using UnityEngine;
