@@ -151,9 +151,14 @@
             //proxy initialization            
             _onInitialize?.Invoke();
 
-            LifeTime.AddCleanUpAction(() => { _isActive = false; });
+            LifeTime.AddCleanUpAction(ResetData);
         }
 
+        private void ResetData()
+        {
+            _isActive = false;
+            _isInitialized = false;
+        }
 
         /// <summary>
         /// Initialize all node commands
