@@ -1,16 +1,16 @@
-﻿using UniGame.UniNodes.NodeSystem.Runtime.Core;
-
-namespace UniGame.UniNodes.Nodes.Runtime.Addressables
+﻿namespace UniGame.UniNodes.Nodes.Runtime.Addressables
 {
     using System.Collections.Generic;
-    using Commands;
+    using Common;
+    using Cysharp.Threading.Tasks;
     using UniModules.UniGame.AddressableTools.Runtime.Extensions;
     using UniModules.UniGame.Core.Runtime.Interfaces;
     using UniModules.UniGameFlow.NodeSystem.Runtime.Core.Attributes;
+    using UnityEngine;
     using UnityEngine.AddressableAssets;
 
     [CreateNodeMenu("Addressables/AddressableLoadResources","AddressableLoadResources")]
-    public class AddressableLoadResources : UniNode
+    public class AddressableLoadResources : ContextNode
     {
         #region inspector
         
@@ -21,18 +21,10 @@ namespace UniGame.UniNodes.Nodes.Runtime.Addressables
 
         #endregion
 
-        protected override void UpdateCommands(List<ILifeTimeCommand> nodeCommands)
+        protected override async UniTask OnContextActivate(IContext context)
         {
-            base.UpdateCommands(nodeCommands);
-            var portCommand = new ConnectedPortPairCommands();
-            portCommand.Initialize(this,"in","complete",false);
-        }
-
-        protected override void OnExecute()
-        {
-            foreach (var reference in assetReferences) {
-                LifeTime.AddCleanUpAction(() => reference.UnloadReference());
-            }
+            await UniTask.WhenAll(assetReferences.Select(x => x.LoadAssetTaskAsync<Object>(LifeTime)));
+            Complete();
         }
     }
 }
