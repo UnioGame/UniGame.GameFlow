@@ -1,0 +1,9 @@
+.activeWindowGroup{
+    border-color: green;
+    border-width: 4px;
+}
+
+.disabledWindowGroup{
+    border-color: red;
+    border-width: 2px;
+}
