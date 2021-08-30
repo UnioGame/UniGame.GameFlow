@@ -12,13 +12,16 @@ namespace UniModules.UniGame.GameFlow.GameFlowEditor.Editor.ScriptableGameFlow
         [InitializeOnLoadMethod]
         public static void InitializeFlowWindow()
         {
-            MessageBroker.Default.Receive<OpenGameFlowGraphMessage>().Subscribe(x => ShowWindow(x.gameFlowGraph));
+            MessageBroker.Default
+                .Receive<OpenGameFlowGraphMessage>()
+                .Subscribe(x => ShowWindow(x.gameFlowGraph));
         }
 
         public static void ShowWindow(GameFlowGraph gameFlowGraph)
         {
             var window = GetWindow<ScriptableGameFlowWindow>();
             window.InitializeGraph(gameFlowGraph);
+            window.Show();
         }
 
         #endregion
