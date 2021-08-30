@@ -28,7 +28,8 @@
         {
             base.UpdateCommands(nodeCommands);
 
-            _context = _context ?? new EntityContext();
+            _context = new EntityContext();
+            
             LifeTime.AddDispose(_context);
 
             var port          = UniTask.FromResult<IContext>(PortPair.OutputPort);
@@ -45,9 +46,8 @@
             nodeCommands.Add(contextToOutputPortCommand);
         }
 
-        protected override async void OnExecute()
+        protected sealed override async void OnExecute()
         {
-            base.OnExecute();
             var container = await localContextContainer.LoadAssetTaskAsync(LifeTime);
             container.SetValue(_context);
         }
