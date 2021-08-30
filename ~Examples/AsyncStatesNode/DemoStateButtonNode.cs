@@ -3,8 +3,8 @@
 namespace HunterLands.Tests.Experiments.GraphExamples.States
 {
     using System;
-    using UniGame.UniNodes.NodeSystem.Runtime.Attributes;
-    using UniGame.UniNodes.NodeSystem.Runtime.Core;
+    using UniModules.GameFlow.Runtime.Attributes;
+    using UniModules.GameFlow.Runtime.Core;
     using UniModules.UniGameFlow.Nodes.Runtime.States;
 
     [CreateNodeMenu("Examples/States/DemoStateButtonNode")]

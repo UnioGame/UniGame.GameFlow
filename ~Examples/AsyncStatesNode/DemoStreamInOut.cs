@@ -1,8 +1,8 @@
-﻿using UniGame.UniNodes.NodeSystem.Runtime.Core;
+﻿using UniModules.GameFlow.Runtime.Core;
 
 namespace HunterLands.Tests.Experiments.GraphExamples
 {
-    using UniGame.UniNodes.NodeSystem.Runtime.Attributes;
+    using UniModules.GameFlow.Runtime.Attributes;
     using UniModules.UniGameFlow.NodeSystem.Runtime.Core.Attributes;
 
     [CreateNodeMenu("Examples/Nodes/DemoStreamInOut")]
