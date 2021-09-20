@@ -1,8 +1,9 @@
-﻿using UniModules.UniGame.Core.Editor.EditorProcessors;
-using UniModules.UniGame.UiToolkit.Runtime.Extensions;
-
-namespace UniModules.GameFlow.Editor.Processor.FlowProcessors
+﻿namespace UniModules.GameFlow.Editor.Processor.FlowProcessors
 {
+    using UniModules.UniGame.Core.Editor.EditorProcessors;
+    using UniModules.UniGame.UiToolkit.Runtime.Extensions;
+
+    
     using System;
     using System.Collections.Generic;
     using Abstract;
