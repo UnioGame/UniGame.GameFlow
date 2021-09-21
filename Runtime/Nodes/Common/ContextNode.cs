@@ -52,12 +52,12 @@
         
         protected override void OnExecute()
         {
-            base.OnExecute();
             Source.Where(x => x != null)
                 .ObserveOnMainThread()
                 .Do(async context =>
                     await OnContextActivate(context)
-                        .AttachExternalCancellation(LifeTime.AsCancellationToken()).SuppressCancellationThrow())
+                        .AttachExternalCancellation(LifeTime.AsCancellationToken())
+                        .SuppressCancellationThrow())
                 .Subscribe()
                 .AddTo(LifeTime);
         }
