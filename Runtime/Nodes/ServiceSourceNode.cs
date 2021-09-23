@@ -11,22 +11,36 @@ namespace Game.Modules.Assets.UniGame.GameFlow.Runtime.Nodes
     using UnityEngine.AddressableAssets;
 
     [HideNode]
-    public class ServiceSourceNode<TService> : ContextNode
-        where TService : Object, IAsyncContextDataSource
+    public class ServiceSourceNode<TSource> : ContextNode
+        where TSource : Object, IAsyncContextDataSource
     {
-        public AssetReferenceT<TService> sourceAsset;
+        public AssetReferenceT<TSource> sourceAsset;
 
         protected sealed override async UniTask OnContextActivate(IContext context)
         {
-            var source = await sourceAsset.LoadAssetTaskAsync(LifeTime);
-            context = await source.RegisterAsync(context);
+            var serviceSource = await sourceAsset.LoadAssetTaskAsync(LifeTime);
+            var validation = await OnValidateSource(context, serviceSource)
+                .AttachExternalCancellation(LifeTime.TokenSource);
+            
+            if (!validation)
+            {
+                Complete();
+                return;
+            }
+            
+            context        = await serviceSource.RegisterAsync(context);
 
-            await OnSourceComplete(context);
+            await OnSourceComplete(context,serviceSource);
             
             Complete();
         }
 
-        protected virtual UniTask OnSourceComplete(IContext context)
+        protected virtual UniTask<bool> OnValidateSource(IContext context,TSource source)
+        {
+            return UniTask.FromResult(true);
+        }
+        
+        protected virtual UniTask OnSourceComplete(IContext context,TSource source)
         {
             return UniTask.CompletedTask;
         }
