@@ -1,4 +1,5 @@
-﻿using UniGame.GameFlowEditor.Runtime;
+﻿using System;
+using UniGame.GameFlowEditor.Runtime;
 
 namespace UniModules.GameFlow.Runtime.Core
 {
