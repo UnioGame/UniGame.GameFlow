@@ -33,6 +33,8 @@
             if (_resource == null)
                 return;
             var asset = await _resource.LoadAssetTaskAsync<LifetimeScriptableObject>(lifeTime);
+            // HACK HOGM-6286
+            await UniTask.WaitForEndOfFrame();
             if (!(asset is IAsyncContextDataSource dataSource))
             {
                 GameLog.LogError($"Asset loaded by guid {_resource.AssetGUID} is not {nameof(IAsyncContextDataSource)} or NULL");
