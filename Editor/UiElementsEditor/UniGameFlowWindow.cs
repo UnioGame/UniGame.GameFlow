@@ -142,17 +142,21 @@ namespace UniModules.GameFlow.Editor
         {
             if (Application.isPlaying == false)
                 InitializeGraph(uniGraph);
+
+            _graphName = uniGraph.name;
+            var graphAsset = uniGraph.useVariants
+                ? CreateInstance<UniGraphAsset>()
+                : uniGraph.serializedGraph;
             
-            _graphName      = uniGraph.name;
-            var graphAsset = uniGraph.serializedGraph;
-            if (!graphAsset || uniGraph.useVariants)
+            if (!graphAsset && Application.isPlaying == false)
             {
-                graphAsset = CreateInstance<UniGraphAsset>();
+                graphAsset               = CreateInstance<UniGraphAsset>();
                 uniGraph.serializedGraph = graphAsset;
-                graphAsset.name = _graphName;
                 graphAsset.SaveAssetAsNested(uniGraph.gameObject);
                 uniGraph.gameObject.MarkDirty();
             }
+            
+            graphAsset.name = _graphName;
             
             if (AssetGraph && uniGraph.name == _graphName)
             {
@@ -160,9 +164,9 @@ namespace UniModules.GameFlow.Editor
                 graphAsset.scale    = AssetGraph.scale;
             }
 
-            AssetGraph      = graphAsset;
+            AssetGraph = graphAsset;
             AssetGraph.ConnectToGraph(uniGraph);
-            
+
             return AssetGraph;
         }
 
@@ -183,7 +187,7 @@ namespace UniModules.GameFlow.Editor
         {
             if (!AssetEditorTools.IsPureEditorMode)
                 return;
-            
+
             uniGraph.Initialize();
             uniGraph.Validate();
         }
