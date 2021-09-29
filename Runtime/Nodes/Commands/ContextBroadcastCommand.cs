@@ -1,6 +1,7 @@
 ﻿namespace UniGame.UniNodes.Nodes.Runtime.Commands
 {
     using System;
+    using Cysharp.Threading.Tasks;
     using UniModules.GameFlow.Runtime.Interfaces;
     using UniModules.UniCore.Runtime.Rx.Extensions;
     using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
@@ -20,9 +21,10 @@
             this.connector = connector;
         }
         
-        public void Execute(ILifeTime lifeTime)
+        public UniTask Execute(ILifeTime lifeTime)
         {
             connector.Broadcast(this).AddTo(lifeTime);
+            return UniTask.CompletedTask;
         }
 
         public void Publish<T>(T message)

@@ -18,7 +18,7 @@
             _target = target;
         }
 
-        public async void Execute(ILifeTime lifeTime)
+        public async UniTask Execute(ILifeTime lifeTime)
         {
             var context = await _target;
             var asset = await _source;

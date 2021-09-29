@@ -25,7 +25,7 @@
             this.loadAssetCommand = new LoadAddressablesSourcesCommand<ScriptableObject,IAsyncContextDataSource>(resources);
         }
 
-        public async void Execute(ILifeTime lifeTime)
+        public async UniTask Execute(ILifeTime lifeTime)
         {
             var context = await contextTask;
             var resources = await loadAssetCommand.Execute(lifeTime);

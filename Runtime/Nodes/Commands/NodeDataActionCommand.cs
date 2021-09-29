@@ -1,6 +1,7 @@
 ﻿namespace UniGame.UniNodes.Nodes.Runtime.Commands
 {
     using System;
+    using Cysharp.Threading.Tasks;
     using UniModules.GameFlow.Runtime.Interfaces;
     using UniModules.UniCore.Runtime.DataFlow.Interfaces;
     using UniModules.UniCore.Runtime.Rx.Extensions;
@@ -26,10 +27,10 @@
             this.onRemove = onRemove;
         }
         
-        public void Execute(ILifeTime lifeTime)
+        public UniTask Execute(ILifeTime lifeTime)
         {
-            port.Broadcast(this).
-                AddTo(lifeTime);
+            port.Broadcast(this).AddTo(lifeTime);
+            return UniTask.CompletedTask;
         }
 
         public bool Remove<TData>()
@@ -38,13 +39,8 @@
             return true;
         }
 
-        public void Publish<TData>(TData data)
-        {
-            onAddData?.Invoke();
-        }
+        public void Publish<TData>(TData data) => onAddData?.Invoke();
         
-        public void CleanUp()
-        {
-        }
+        public void CleanUp() { }
     }
 }

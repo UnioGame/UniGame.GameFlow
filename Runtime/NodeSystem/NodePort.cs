@@ -291,18 +291,15 @@ namespace UniModules.GameFlow.Runtime.Core
             if (connections == null)
                 connections = new List<PortConnection>();
 
-            if (!ConnectionValidator.Validate(this, port)) {
-                GameLog.LogError($"{node?.GraphData.ItemName}:{Node?.ItemName}:{ItemName} Connection Error. Validation Failed");
+            if (!ConnectionValidator.Validate(this, port)) 
                 return;
-            }
 
-            if (port.ConnectionType == ConnectionType.Override && port.ConnectionCount != 0) {
+            if (port.ConnectionType == ConnectionType.Override && port.ConnectionCount != 0)
                 port.ClearConnections();
-            }
-
-            if (ConnectionType == ConnectionType.Override && ConnectionCount != 0) {
+            
+            if (ConnectionType == ConnectionType.Override && ConnectionCount != 0)
                 ClearConnections();
-            }
+            
 
             var portNode = port.Node;
             connections.Add(new PortConnection(port, portNode.Id));

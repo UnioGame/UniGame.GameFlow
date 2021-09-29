@@ -1,6 +1,7 @@
 ﻿namespace UniGame.UniNodes.GameFlow.Runtime.Commands
 {
     using System;
+    using Cysharp.Threading.Tasks;
     using UniCore.Runtime.ProfilerTools;
     using UniModules.UniCore.Runtime.DataFlow.Interfaces;
     using UniModules.UniCore.Runtime.ProfilerTools;
@@ -23,7 +24,7 @@
             this.resource = resource;
         }
 
-        public async void Execute(ILifeTime lifeTime)
+        public async UniTask Execute(ILifeTime lifeTime)
         {
             var context = await contextResource.LoadAssetTaskAsync<ContextAsset>(lifeTime);
             var asset = await resource.LoadAssetTaskAsync(lifeTime);

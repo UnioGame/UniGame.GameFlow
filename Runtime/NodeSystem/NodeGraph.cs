@@ -47,25 +47,17 @@
         [SerializeReference]
         public List<INode> serializableNodes = new List<INode>();
 
-        [HideInInspector]
-        [SerializeReference]
-        public List<INodesGroup> nodeGroups = new List<INodesGroup>();
-
         #endregion
 
         [NonSerialized]
         private NodeGraph _originSource;
-        
-        private EntityContext _graphContext = new EntityContext();
-        
+
         private List<INode> _allNodes = new List<INode>();
 
         #region public properties
 
         public override string ItemName => name;
 
-        public IContext Context => _graphContext;
-        
         public IReadOnlyList<INode> Nodes => GetNodes();
 
         public IReadOnlyList<INode> SerializableNodes => serializableNodes;
@@ -81,8 +73,6 @@
         public void Dispose() => Exit();
 
         #region graph operations
-
-        protected override void OnExecute() => LifeTime.AddCleanUpAction(() => _graphContext.Release());
 
         /// <summary>
         /// get unique Id in graph scope

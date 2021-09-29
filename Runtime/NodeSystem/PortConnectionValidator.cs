@@ -14,15 +14,13 @@ namespace UniModules.GameFlow.Runtime.Core
         [NonSerialized]
         private IReadOnlyList<Func<INodePort, INodePort, bool>> connectionsValidators;
         
-        public IReadOnlyList<Func<INodePort, INodePort, bool>> ConnectionsValidators => connectionsValidators = 
-            connectionsValidators ?? 
-            new List<Func<INodePort, INodePort, bool>>() {
-                IsNullPort,
-                IsSavePort,
-                IsAlreadyConnectedPort,
-                IsSameDirection,
-                TypeValidation,
-            };
+        public IReadOnlyList<Func<INodePort, INodePort, bool>> ConnectionsValidators => connectionsValidators ??= new List<Func<INodePort, INodePort, bool>>() {
+            IsNullPort,
+            IsSavePort,
+            IsAlreadyConnectedPort,
+            IsSameDirection,
+            TypeValidation,
+        };
         
         public bool Validate(INodePort from, INodePort to)
         {
@@ -32,10 +30,6 @@ namespace UniModules.GameFlow.Runtime.Core
         public bool IsAlreadyConnectedPort(INodePort from, INodePort to)
         {
             var result = from.IsConnectedTo(to);
-            if (result)
-            {
-                Debug.LogError($"PORT {from.PortId} ALREADY CONNECTED TO {to.PortId}");
-            }
             return !result;
         }
         

@@ -1,6 +1,7 @@
 ﻿namespace UniModules.GameFlow.Runtime.Core.Commands
 {
     using System;
+    using Cysharp.Threading.Tasks;
     using Interfaces;
     using Runtime.Interfaces;
     using UniModules.UniCore.Runtime.DataFlow.Interfaces;
@@ -41,7 +42,7 @@
 
         public IPortValue OutputPort => portPair.OutputPort;
         
-        public void Execute(ILifeTime lifeTime)
+        public UniTask Execute(ILifeTime lifeTime)
         {
             //reset local value
             lifeTime.AddCleanUpAction(CleanUpNode);
@@ -50,16 +51,13 @@
             var output = portPair.OutputPort;
             
             var valueObservable = input.Receive<TData>();
-            
             var source = BindToDataSource(valueObservable);
             
             if (distinctInput) {
-                source.Subscribe(x => valueData.Value = x).
-                    AddTo(lifeTime);
+                source.Subscribe(x => valueData.Value = x).AddTo(lifeTime);
             }
             else {
-                source.Subscribe(valueData.SetValueAndForceNotify).
-                    AddTo(lifeTime);
+                source.Subscribe(valueData.SetValueAndForceNotify).AddTo(lifeTime);
             }
             
             isFinalyze.
@@ -67,6 +65,8 @@
                 Do(x => output.Publish(valueData.Value)).
                 Subscribe().
                 AddTo(lifeTime);
+            
+            return UniTask.CompletedTask;
         }
 
         protected virtual IObservable<TData> BindToDataSource(IObservable<TData> source)

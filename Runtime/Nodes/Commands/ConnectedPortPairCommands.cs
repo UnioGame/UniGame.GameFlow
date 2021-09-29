@@ -1,6 +1,7 @@
 ﻿namespace UniGame.UniNodes.Nodes.Runtime.Commands
 {
     using System;
+    using Cysharp.Threading.Tasks;
     using UniModules.GameFlow.Runtime.Core.Interfaces;
     using UniModules.GameFlow.Runtime.Extensions;
     using UniModules.GameFlow.Runtime.Interfaces;
@@ -28,7 +29,7 @@
             outputPort = ports.outputValue;
         }
         
-        public virtual void Execute(ILifeTime lifeTime){}
+        public virtual UniTask Execute(ILifeTime lifeTime) => UniTask.CompletedTask;
 
     }
 }

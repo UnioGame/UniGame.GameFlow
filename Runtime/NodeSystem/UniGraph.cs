@@ -1,20 +1,18 @@
-﻿using System;
-using UniGame.GameFlowEditor.Runtime;
+﻿using UniGame.GameFlowEditor.Runtime;
 
 namespace UniModules.GameFlow.Runtime.Core
 {
     using System.Collections.Generic;
-    using System.Runtime.CompilerServices;
     using Attributes;
+    using Cysharp.Threading.Tasks;
     using Runtime.Extensions;
     using Runtime.Interfaces;
-    using UniModules.UniCore.Runtime.Rx.Extensions;
+    using UniGame.Context.Runtime.Context;
     using UniModules.UniGame.AddressableTools.Runtime.Extensions;
     using UniModules.UniGame.SerializableContext.Runtime.Addressables;
     using UniModules.UniGame.Context.Runtime.Abstract;
     using UniModules.UniGame.Core.Runtime.Extension;
     using UniModules.UniGame.Core.Runtime.Interfaces;
-    using UniRx;
     using UnityEngine;
 
     [HideNode]
@@ -30,16 +28,25 @@ namespace UniModules.GameFlow.Runtime.Core
 
         [SerializeField]
         public UniGraphAsset serializedGraph;
+
+        #if ODIN_INSPECTOR
+        [Sirenix.OdinInspector.InlineProperty]
+        #endif
+        [SerializeReference]
+        public IUniGraphProcessor graphProcessor = new UniGraphProcessor();
+
+        [Tooltip("if true, editor serializedGraph will be create each graph update")]
+        public bool useVariants = true;
         
         #endregion
         
         #region private properties
-
-        /// <summary>
-        /// graph cancellation
-        /// </summary>
-        private List<IGraphCancelationNode> cancellationNodes = new List<IGraphCancelationNode>();
         
+        /// <summary>
+        /// graph context
+        /// </summary>
+        private EntityContext _graphContext = new EntityContext();
+
         /// <summary>
         /// graph inputs
         /// </summary>
@@ -50,13 +57,10 @@ namespace UniModules.GameFlow.Runtime.Core
         /// </summary>
         private List<IGraphPortNode> outputs = new List<IGraphPortNode>();
 
-        /// <summary>
-        /// all child nodes
-        /// </summary>
-        private List<IUniNode> uniNodes = new List<IUniNode>();
-
         #endregion
 
+        public sealed override IContext Context => _graphContext;
+        
         public GameObject AssetInstance => gameObject;
 
         public IReadOnlyList<IGraphPortNode> OutputsPorts => outputs;
@@ -82,86 +86,38 @@ namespace UniModules.GameFlow.Runtime.Core
             InitializeGraphNodes();
                
 #if UNITY_EDITOR
-            if (Application.isPlaying == false) {
+            if (Application.isPlaying == false) 
                 Validate();
-            }
 #endif
-            if (Application.isPlaying) {
-                LifeTime.AddCleanUpAction(StopAllNodes);
-            }
+
         }
 
         protected sealed override void OnExecute()
         {
-            base.OnExecute();
+            LifeTime.AddCleanUpAction(() => _graphContext.Release());
 
-            ExecuteNodes();
-            LoadDataSources();
+            graphProcessor?.ExecuteAsync(this)
+                .AttachExternalCancellation(LifeTime.TokenSource)
+                .Forget();
+
+            LoadDataSources()
+                .AttachExternalCancellation(LifeTime.TokenSource)
+                .Forget();
         }
         
-        private async void LoadDataSources()
+        private async UniTask LoadDataSources()
         {
-            foreach (var dataSource in _dataSources) {
+            foreach (var dataSource in _dataSources)
                 dataSource.RegisterAsync(Context);
-            }
-            
+
             foreach (var referenceSource in _assetReferenceSources) {
                 var source = await referenceSource.LoadAssetTaskAsync(LifeTime);
                 source.RegisterAsync(Context);
             }
         }
 
-        private void StopAllNodes() => uniNodes.ForEach( x => x.Exit());
-
-        private void ExecuteNodes()
-        {
-            for (var i = 0; i < cancellationNodes.Count; i++) {
-                var x = cancellationNodes[i];
-                x.PortValue.PortValueChanged.
-                    Subscribe(unit => Exit()).
-                    AddTo(LifeTime);
-            }
-                      
-            inputs.ForEach(x => BindConnections(this,GetPort(x.ItemName),x.PortValue) );
-            outputs.ForEach(x => BindConnections(this,GetPort(x.ItemName),x.PortValue));
-
-            //bind all ports and only after that start execution
-            for (var i = 0; i < uniNodes.Count; i++) {
-                var node = uniNodes[i];
-                node.Ports.ForEach(x => BindConnections(node, x, x.Value));
-            }
-            
-            uniNodes.ForEach( x => x.Execute());
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void BindConnections(IUniNode node,INodePort sourcePort,IContext publisher)
-        {
-            //data source connections allowed only for input ports
-            if (sourcePort.Direction != PortIO.Input) {
-                return;
-            }
-
-            var connections = sourcePort.Connections;
-            
-            for (var i = 0; i < connections.Count; i++) {
-                var connection = connections[i];
-                var port       = connection.Port;
-                if(port == null || port.Direction == PortIO.Input || port.NodeId == Id)
-                    continue;
-                
-                var disposable = port.Broadcast(publisher).
-                    AddTo(LifeTime);
-                
-                LifeTime.AddDispose(disposable);
-            }
-            
-        }
-
         private void InitializeGraphNodes()
         {
-            uniNodes.Clear();
-            cancellationNodes.Clear();
             inputs.Clear();
             outputs.Clear();
             
@@ -171,23 +127,12 @@ namespace UniModules.GameFlow.Runtime.Core
                 
                 //register graph ports by nodes
                 UpdatePortNode(node);
-
-                //stop graph execution, if cancelation node output triggered
-                if (node is IGraphCancelationNode cancelationNode) {
-                    cancellationNodes.Add(cancelationNode);
-                }
                 
                 //initialize node
                 node.Initialize(this);
                 
                 //update ports by attributes & another triggers
                 node.UpdateNodePorts();
-
-                if (!(node is IUniNode uniNode))
-                    continue;
-
-                LifeTime.AddCleanUpAction(uniNode.Exit);
-                uniNodes.Add(uniNode);
 
             }
             
@@ -200,8 +145,9 @@ namespace UniModules.GameFlow.Runtime.Core
                 return;
             }
 
-            var container = graphPortNode.Direction == PortIO.Input ? 
-                inputs : outputs;
+            var container = graphPortNode.Direction == PortIO.Input 
+                ? inputs 
+                : outputs;
       
             //add graph ports for exists port nodes
             this.UpdatePortValue(graphPortNode.ItemName, graphPortNode.Direction);
@@ -212,19 +158,22 @@ namespace UniModules.GameFlow.Runtime.Core
 
         #endregion
 
+
+        #region editor api
+
+#if UNITY_EDITOR
+        
         private void ReleaseNodes()
         {
             if (!this) return;
             
             Release();
-            uniNodes.ForEach(x => x.Release());
-            
+            Nodes.ForEach(x =>
+            {
+                if(x is IUniNode uniNode) uniNode.Release();
+            });
         }
-
-        #region editor api
-
-#if UNITY_EDITOR
-
+        
         private void OnPlayingModeChanged(UnityEditor.PlayModeStateChange mode)
         {
             UnityEditor.EditorApplication.playModeStateChanged -= OnPlayingModeChanged;

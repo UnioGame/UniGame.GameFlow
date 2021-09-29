@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections;
+    using Cysharp.Threading.Tasks;
     using UniModules.GameFlow.Runtime.Interfaces;
     using UniModules.UniCore.Runtime.DataFlow.Interfaces;
     using UniModules.UniRoutine.Runtime.Extension;
@@ -21,9 +22,10 @@
             transferCommand = new PortValuePreTransferCommand(DelayAction,input,input,output);
         }
         
-        public void Execute(ILifeTime lifeTime)
+        public UniTask Execute(ILifeTime lifeTime)
         {
             transferCommand.Execute(lifeTime);
+            return UniTask.CompletedTask;
         }
 
         private IEnumerator DelayAction(IContext source,IMessagePublisher target)

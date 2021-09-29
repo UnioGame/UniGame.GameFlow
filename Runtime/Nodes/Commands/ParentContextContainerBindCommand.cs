@@ -1,5 +1,6 @@
 ﻿namespace UniGame.UniNodes.Nodes.Runtime.Commands
 {
+    using Cysharp.Threading.Tasks;
     using UniModules.UniCore.Runtime.Rx.Extensions;
     using UniModules.UniGame.AddressableTools.Runtime.Extensions;
     using UniModules.UniGame.Context.Runtime.Connections;
@@ -20,17 +21,13 @@
         }
         
         // TODO: надо будет сделать UniTask Execute, чтобы гарантировать прямое выполнение
-        public async void Execute(ILifeTime lifeTime)
+        public async UniTask Execute(ILifeTime lifeTime)
         {
             var parentContextContainer = await _parent.LoadAssetTaskAsync(lifeTime);
-            
-            parentContextContainer.
-                Where(x => x != null).
-                Subscribe(x =>
-                {
-                    _source.Connect(x).AddTo(lifeTime);
-                }).
-                AddTo(lifeTime);
+            parentContextContainer
+                .Where(x => x != null)
+                .Subscribe(x => _source.Connect(x).AddTo(lifeTime))
+                .AddTo(lifeTime);
         }
     }
 }

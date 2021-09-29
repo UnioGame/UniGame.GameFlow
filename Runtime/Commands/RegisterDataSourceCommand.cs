@@ -28,7 +28,7 @@
             _resource = resource;
         }
 
-        public async void Execute(ILifeTime lifeTime)
+        public async UniTask Execute(ILifeTime lifeTime)
         {
             if (_resource == null)
                 return;

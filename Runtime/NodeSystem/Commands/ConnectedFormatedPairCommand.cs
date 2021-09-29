@@ -1,6 +1,7 @@
 ﻿namespace UniModules.GameFlow.Runtime.Core.Commands
 {
     using System;
+    using Cysharp.Threading.Tasks;
     using Extensions;
     using Interfaces;
     using Runtime.Extensions;
@@ -30,7 +31,7 @@
             OutputPort = ports.outputValue;
         }
         
-        public void Execute(ILifeTime lifeTime) {}
+        public UniTask Execute(ILifeTime lifeTime) => UniTask.CompletedTask;
         
     }
 }

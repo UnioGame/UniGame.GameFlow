@@ -61,7 +61,7 @@ namespace UniModules.GameFlow.Runtime.Core
 
         #region public properties
 
-        public IContext Context => SNode.Context;
+        public virtual IContext Context => SNode.Context;
         
         /// <summary>
         /// unique node id

@@ -7,7 +7,5 @@ namespace UniModules.GameFlow.Runtime.Interfaces
         IState
     {
 
-        IContext Context { get; }
-
     }
 }

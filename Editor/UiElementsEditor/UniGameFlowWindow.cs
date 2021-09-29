@@ -145,7 +145,7 @@ namespace UniModules.GameFlow.Editor
             
             _graphName      = uniGraph.name;
             var graphAsset = uniGraph.serializedGraph;
-            if (!graphAsset)
+            if (!graphAsset || uniGraph.useVariants)
             {
                 graphAsset = CreateInstance<UniGraphAsset>();
                 uniGraph.serializedGraph = graphAsset;
@@ -161,7 +161,7 @@ namespace UniModules.GameFlow.Editor
             }
 
             AssetGraph      = graphAsset;
-            AssetGraph.Activate(uniGraph);
+            AssetGraph.ConnectToGraph(uniGraph);
             
             return AssetGraph;
         }
@@ -169,9 +169,7 @@ namespace UniModules.GameFlow.Editor
         public void Save()
         {
             if (AssetEditorTools.IsPureEditorMode)
-            {
                 _uniGraphView.Save();
-            }
         }
 
         #endregion

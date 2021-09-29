@@ -4,6 +4,7 @@ namespace UniGame.GameFlowEditor.Runtime
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using UniModules.GameFlow.Runtime.Attributes;
     using UniModules.GameFlow.Runtime.Core;
     using UniModules.GameFlow.Runtime.Interfaces;
@@ -27,7 +28,9 @@ namespace UniGame.GameFlowEditor.Runtime
         private Dictionary<INodePort,PortData> portData = new Dictionary<INodePort, PortData>(8);
         
         #region public properties
-        
+
+        public int sourceId;
+
         public INode SourceNode { get; protected set; }
 
         public override string name => SourceNode == null ? base.name : SourceNode.ItemName;
@@ -38,10 +41,10 @@ namespace UniGame.GameFlowEditor.Runtime
         
         public void Initialize(INode node)
         {
-            SourceNode = node;
-
-            position = new Rect(node.Position,new Vector2(node.Width,100));
+            sourceId   = node.Id;
             
+            SourceNode = node;
+            position = new Rect(node.Position,new Vector2(node.Width,100));
             UpdatePorts();
         }
 
@@ -52,18 +55,18 @@ namespace UniGame.GameFlowEditor.Runtime
             if(SourceNode == null)
                 yield break;
             foreach (var port in SourceNode.Ports) {
-                if (port.Direction == direction) {
+                if (port.Direction == direction) 
                     yield return GetPortData(port);
-                }
             }
         }
 
         public PortData GetPortData(INodePort port)
         {
-            if (this.portData.TryGetValue(port, out var data))
+            if (portData.TryGetValue(port, out var data))
                 return data;
+            
             var targetType = port.ValueType;
-            targetType = targetType == null ? typeof(object) : targetType;
+            targetType ??= typeof(object);
             
             data = new PortData() {
                 acceptMultipleEdges = port.ConnectionType == ConnectionType.Multiple,
@@ -72,7 +75,7 @@ namespace UniGame.GameFlowEditor.Runtime
                 identifier          = port.ItemName,
             };
             
-            this.portData[port] = data;
+            portData[port] = data;
             return data;
         }
 
@@ -100,10 +103,14 @@ namespace UniGame.GameFlowEditor.Runtime
         private void UpdatePorts()
         {
             foreach (var port in SourceNode.Ports) {
-                var data = GetPortData(port);
-                var fieldName = port.IsInput ? 
-                    nameof(inputs) : 
-                    nameof(outputs);
+                
+                var fieldName = port.IsInput ? nameof(inputs) : nameof(outputs);
+                
+                var data     = GetPortData(port);
+                var basePort = GetPort(fieldName, data.identifier);
+                if(basePort!=null)
+                    continue;
+                
                 AddPort(port.IsInput,fieldName,data);
             }
         }

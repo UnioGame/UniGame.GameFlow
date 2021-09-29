@@ -9,8 +9,7 @@
     using UnityEngine;
 
     [Serializable]
-    public class SNode : SerializableNode,
-        IProxyNode
+    public class SNode : SerializableNode, IProxyNode
     {
         #region private fields
 
@@ -58,22 +57,22 @@
         /// <summary>
         /// start node execution
         /// </summary>
-        public void Execute()
+        public async void Execute()
         {
             //node already active
-            if (_isActive)
-            {
-                return;
-            }
-
+            if (_isActive) return;
+            
             //initialize
             Initialize(GraphData);
             //mark as active
             _isActive = true;
             //execute all node commands
-            _commands.ForEach(x => x.Execute(LifeTime));
+            foreach (var command in _commands)
+                await command.Execute(LifeTime);
+            
             //user defined logic
             OnExecute();
+            
             //proxy outer execution
             _onExecute?.Invoke();
         }
@@ -84,6 +83,7 @@
         public void Release()
         {
             Exit();
+            
             _isInitialized = false;
             _isActive      = false;
             _commands.Clear();
@@ -103,6 +103,7 @@
         /// </summary>
         protected virtual void OnExecute()
         {
+            
         }
 
         /// <summary>
@@ -123,10 +124,8 @@
         {
 
             if (Application.isEditor && Application.isPlaying == false)
-            {
                 _lifeTime?.Release();
-            }
-
+            
             if (Application.isPlaying && _isInitialized)
                 return;
 
@@ -196,8 +195,8 @@
         {
             GraphData = graphData;
             //restart lifetime
-            _lifeTime = _lifeTime ?? new LifeTimeDefinition();
-            _commands = _commands ?? new List<ILifeTimeCommand>();
+            _lifeTime ??= new LifeTimeDefinition();
+            _commands ??= new List<ILifeTimeCommand>();
         }
 
         #endregion

@@ -38,7 +38,7 @@ namespace UniGame.GameFlowEditor.Runtime
 
         public UniGraph UniGraph => sourceGraph;
 
-        public void Activate(UniGraph graph)
+        public void ConnectToGraph(UniGraph graph)
         {
             sourceGraph = graph;
             //update dynamic graph ports
@@ -48,47 +48,49 @@ namespace UniGame.GameFlowEditor.Runtime
         public void RemoveUniNode(BaseNode node)
         {
             if (node is UniBaseNode targetNode)
-            {
                 sourceGraph.RemoveNode(targetNode.SourceNode);
-            }
-
             RemoveNode(node);
         }
 
         public UniBaseNode CreateNode(Type type, Vector2 nodePosition)
         {
-            var name = type.Name;
+            var nodeName = type.Name;
 
 #if UNITY_EDITOR
-            name = UnityEditor.ObjectNames.NicifyVariableName(name);
+            nodeName = UnityEditor.ObjectNames.NicifyVariableName(nodeName);
 #endif
-
-            var newNode = sourceGraph.AddNode(type, name, nodePosition);
+            var newNode = sourceGraph.AddNode(type, nodeName, nodePosition);
 
             return CreateNode(newNode);
         }
 
         public UniBaseNode CreateNode(INode node)
         {
-            var nodeType = node.GetType();
-            var dataType = nodeDataMap.GetValue(nodeType);
-            var graphNode = BaseNode.CreateFromType(dataType, node.Position) as UniBaseNode;
-            if (graphNode == null)
-            {
-                Debug.LogError($"NULL Node bind with UniNode : {node}");
-                return null;
-            }
-
+            var graphNode = nodes.FirstOrDefault(x => x is UniBaseNode baseNode && baseNode.sourceId == node.Id) as UniBaseNode;
+            graphNode ??= CreateUniBaseNode(node);
             graphNode.Initialize(node);
-
-            //register node into all nodes list
-            AddNode(graphNode);
-
+            
             //register only uni nodes
             uniNodes[node.Id] = graphNode;
 
             //sourceGraph.Save();
             return graphNode;
+        }
+
+        public UniBaseNode CreateUniBaseNode(INode node)
+        {
+            var nodeType  = node.GetType();
+            var dataType  = nodeDataMap.GetValue(nodeType);
+            var graphNode = BaseNode.CreateFromType(dataType, node.Position) as UniBaseNode;
+            
+            //register node into all nodes list
+            AddNode(graphNode);
+            
+            if (graphNode != null) 
+                return graphNode;
+            
+            Debug.LogError($"NULL Node bind with UniNode : {node}");
+            return null;
         }
 
         public void UpdateGraph()
@@ -100,9 +102,7 @@ namespace UniGame.GameFlowEditor.Runtime
         private void CreateNodes()
         {
             foreach (var node in sourceGraph.Nodes)
-            {
                 CreateNode(node);
-            }
         }
 
         private void ConnectNodePorts()

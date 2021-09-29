@@ -20,17 +20,3 @@ public class FlowServiceNode : BaseFlowNode
         base.Process();
     }
 }
-
-[System.Serializable]
-public class BaseFlowNode : BaseNode
-{
-    public IContext graphContext;
-    
-    
-    public override string		name => nameof(FlowServiceNode);
-
-    protected override void Process()
-    {
-        base.Process();
-    }
-}

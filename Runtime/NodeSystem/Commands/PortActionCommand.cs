@@ -1,6 +1,7 @@
 ﻿namespace UniModules.GameFlow.Runtime.Core.Commands
 {
     using System;
+    using Cysharp.Threading.Tasks;
     using Runtime.Interfaces;
     using UniModules.UniCore.Runtime.DataFlow.Interfaces;
     using UniModules.UniCore.Runtime.Rx.Extensions;
@@ -20,11 +21,12 @@
             this.port = port;
         }
         
-        public void Execute(ILifeTime lifeTime)
+        public UniTask Execute(ILifeTime lifeTime)
         {
             port.Receive<TTarget>().
                 Subscribe(action).
                 AddTo(lifeTime);
+            return UniTask.CompletedTask;
         }
         
     }

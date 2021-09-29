@@ -1,6 +1,7 @@
 ﻿namespace UniGame.UniNodes.Nodes.Runtime.Commands
 {
     using System;
+    using Cysharp.Threading.Tasks;
     using UniModules.GameFlow.Runtime.Core;
     using UniModules.GameFlow.Runtime.Core.Commands;
     using UniModules.GameFlow.Runtime.Extensions;
@@ -24,9 +25,10 @@
             portAction = new PortActionCommand<T>(action,portInfo);
         }
         
-        public void Execute(ILifeTime lifeTime)
+        public UniTask Execute(ILifeTime lifeTime)
         {
             portAction.Execute(lifeTime);
+            return UniTask.CompletedTask;
         }
     }
 }

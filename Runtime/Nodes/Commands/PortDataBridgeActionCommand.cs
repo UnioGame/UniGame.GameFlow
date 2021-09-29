@@ -1,6 +1,7 @@
 ﻿namespace UniGame.UniNodes.Nodes.Runtime.Commands
 {
     using System;
+    using Cysharp.Threading.Tasks;
     using UniModules.UniCore.Runtime.DataFlow.Interfaces;
     using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
     using UniModules.UniGame.Core.Runtime.Interfaces;
@@ -28,7 +29,6 @@
             Source = valueObservable;
         }
 
-
-        public void Execute(ILifeTime lifeTime) { }
+        public UniTask Execute(ILifeTime lifeTime) => UniTask.CompletedTask;
     }
 }

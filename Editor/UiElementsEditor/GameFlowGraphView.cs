@@ -76,10 +76,6 @@ namespace UniGame.GameFlowEditor.Editor
             var graphData = SourceGraph.UniGraph;
 
             graphData.SetPosition(graph.position);
-            
-            SaveGroupInfo(graphData);
-            SaveStackNodeInfo(graphData);
-
             UpdateNodePositions();
             //save prefab data
             SourceGraph.UniGraph.MarkDirty();
@@ -153,7 +149,6 @@ namespace UniGame.GameFlowEditor.Editor
             SourceGraph = graph as UniGraphAsset;
 
             BindEvents();
-            CreateGroupViews(SourceGraph.UniGraph);
             
             lifeTimeDefinition.AddCleanUpAction(() => registeredNodes.Clear());
         }
@@ -183,48 +178,6 @@ namespace UniGame.GameFlowEditor.Editor
             selectionUpdated = false;
         }
 
-        private void CreateGroupViews(UniGraph graphData)
-        {
-            graphData.nodeGroups.RemoveAll(x => x == null);
-            foreach (var group in graphData.nodeGroups) {
-                var title = string.IsNullOrEmpty(group.Title) ? string.Empty : group.Title;
-                var groupData = new Group(title,group.Size) {
-                    color = group.Color,
-                    position = group.Position,
-                    innerNodeGUIDs = nodeViews.
-                        OfType<UniNodeView>().
-                        Where(x => group.NodeIds.Contains(x.Id)).
-                        Select(x => x.Guid).
-                        ToList()
-                };
-                AddGroup(groupData);
-            }
-        }
-        
-        private void SaveStackNodeInfo(UniGraph graphData)
-        {
-            foreach (var groupView in stackNodeViews) {
-                
-            }
-        }
-        
-        private void SaveGroupInfo(UniGraph graphData)
-        {
-            graphData.nodeGroups.Clear();
-
-            foreach (var groupView in groupViews) {
-                var groupData = groupView.group;
-                var groupInfo = new NodesGroup() {
-                    color    = groupData.color,
-                    position = groupData.position,
-                    size     = groupData.size,
-                    title    = groupData.title,
-                    nodeIds  = GetNodesIdsByGuid(groupData.innerNodeGUIDs),
-                };
-                graphData.nodeGroups.Add(groupInfo);
-            }
-        }
-        
         private bool UpdateSelection(UniNodeView nodeView,UniBaseNode nodeData)
         {
             if (selectionUpdated || !nodeView.selected) 
@@ -258,27 +211,27 @@ namespace UniGame.GameFlowEditor.Editor
         private void OnOnGraphChanges(GraphChanges changes)
         {
             switch (changes) {
-                case GraphChanges _ when changes.addedNode != null :
+                case {addedNode: { }}:
                     UniNodeAction(changes.addedNode,OnNodeAdded);
                     break;
-                case GraphChanges _ when changes.removedNode != null :
+                case {removedNode: { }}:
                     UniNodeAction(changes.removedNode,OnNodeRemoved);
                     break;
-                case GraphChanges _ when changes.removedEdge != null :
+                case {removedEdge: { }}:
                     UniPortAction(changes.removedEdge,OnEdgeRemoved);
                     break;
-                case GraphChanges _ when changes.addedEdge != null :
+                case {addedEdge: { }}:
                     UniPortAction(changes.addedEdge,OnEdgeAdded);
                     break;
-                case GraphChanges _ when changes.addedGroups != null :
+                case {addedGroups: { }}:
                     break;
-                case GraphChanges _ when changes.removedGroups != null :
+                case {removedGroups: { }}:
                     break;
-                case GraphChanges _ when changes.removedStackNode != null :
+                case {removedStackNode: { }}:
                     break;
-                case GraphChanges _ when changes.addedStackNode != null :
+                case {addedStackNode: { }}:
                     break;
-                case GraphChanges _ when changes.nodeChanged != null :
+                case {nodeChanged: { }}:
                     UniNodeAction(changes.nodeChanged,OnNodeChanged);
                     break;
             }
