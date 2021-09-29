@@ -10,6 +10,7 @@
     using UniGame.Context.Runtime.Context;
     using UniGame.Core.Runtime.Interfaces;
     using UniGame.SerializableContext.Runtime.Addressables;
+    using UniRx;
     using UnityEngine;
 
     [CreateNodeMenu("GameSystem/Graph Source Node")]
@@ -41,7 +42,7 @@
             nodeCommands.Add(contextToOutputPortCommand);
         }
 
-        protected sealed override async void OnExecute()
+        protected sealed override async UniTask OnExecute()
         {
             if (contextContainer.RuntimeKeyIsValid() == false)
                 return;

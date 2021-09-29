@@ -207,8 +207,8 @@ MonoBehaviour:
         computeOrder: 0
         position:
           serializedVersion: 2
-          x: 899
-          y: 180
+          x: 599
+          y: 117
           width: 250
           height: 100
         expanded: 0

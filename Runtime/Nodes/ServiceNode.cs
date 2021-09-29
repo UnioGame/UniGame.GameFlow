@@ -42,12 +42,14 @@
 
         protected abstract UniTask<TServiceApi> CreateService(IContext context);
 
-        protected sealed override void OnExecute()
+        protected sealed override UniTask OnExecute()
         {
             Source.Where(x => x != null).
                 Do(async x => await OnContextAvailable(x)).
                 Subscribe().
                 AddTo(LifeTime);
+            
+            return  UniTask.CompletedTask;
         }
 
         protected virtual void OnServiceCreated(IContext context)

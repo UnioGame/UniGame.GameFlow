@@ -2,10 +2,12 @@
 {
     using System;
     using System.Collections.Generic;
+    using Cysharp.Threading.Tasks;
     using Runtime.Interfaces;
     using UniModules.UniCore.Runtime.DataFlow;
     using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
     using UniModules.UniGame.Core.Runtime.Interfaces;
+    using UniRx;
     using UnityEngine;
 
     [Serializable]
@@ -15,7 +17,7 @@
 
         private Action                         _onInitialize;
         private Action<List<ILifeTimeCommand>> _onCommandsInitialize;
-        private Action                         _onExecute;
+        private Func<UniTask>                  _onExecute;
 
         [NonSerialized] private bool                   _isInitialized;
         private                 bool                   _isActive;
@@ -41,7 +43,7 @@
             IGraphData graphData,
             Action initializeAction,
             Action<List<ILifeTimeCommand>> initializeCommands = null,
-            Action executeAction = null) => InnerInitialize(graphData, initializeAction, initializeCommands, executeAction);
+            Func<UniTask> executeAction = null) => InnerInitialize(graphData, initializeAction, initializeCommands, executeAction);
 
         public sealed override void Initialize(IGraphData graphData) => InnerInitialize(graphData);
 
@@ -57,7 +59,7 @@
         /// <summary>
         /// start node execution
         /// </summary>
-        public async void Execute()
+        public async UniTask ExecuteAsync()
         {
             //node already active
             if (_isActive) return;
@@ -74,7 +76,8 @@
             OnExecute();
             
             //proxy outer execution
-            _onExecute?.Invoke();
+            if(_onExecute!=null)
+              await _onExecute();
         }
 
         /// <summary>
@@ -120,7 +123,7 @@
             IGraphData graphData,
             Action initializeAction = null,
             Action<List<ILifeTimeCommand>> initializeCommands = null,
-            Action executeAction = null)
+            Func<UniTask> executeAction = null)
         {
 
             if (Application.isEditor && Application.isPlaying == false)

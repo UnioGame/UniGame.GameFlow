@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Cysharp.Threading.Tasks;
     using UniModules.GameFlow.Runtime.Attributes;
     using UniModules.GameFlow.Runtime.Core;
     using UniModules.GameFlow.Runtime.Core.Nodes;
@@ -28,11 +29,13 @@
 
         private IPortValue logPort;
 
-        protected override void OnExecute()
+        protected override UniTask OnExecute()
         {
             PrintLog(GetMessage(), mode);
             logPort.Broadcast(this).
                 AddTo(LifeTime);
+            
+            return UniTask.CompletedTask;
         }
 
         protected override void UpdateCommands(List<ILifeTimeCommand> nodeCommands)

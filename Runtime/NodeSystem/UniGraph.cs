@@ -13,6 +13,7 @@ namespace UniModules.GameFlow.Runtime.Core
     using UniModules.UniGame.Context.Runtime.Abstract;
     using UniModules.UniGame.Core.Runtime.Extension;
     using UniModules.UniGame.Core.Runtime.Interfaces;
+    using UniRx;
     using UnityEngine;
 
     [HideNode]
@@ -59,8 +60,8 @@ namespace UniModules.GameFlow.Runtime.Core
 
         #endregion
 
-        public sealed override IContext Context => _graphContext;
-        
+        public sealed override IContext GraphContext => _graphContext;
+
         public GameObject AssetInstance => gameObject;
 
         public IReadOnlyList<IGraphPortNode> OutputsPorts => outputs;
@@ -92,10 +93,8 @@ namespace UniModules.GameFlow.Runtime.Core
 
         }
 
-        protected sealed override void OnExecute()
+        protected sealed override UniTask OnExecute()
         {
-            LifeTime.AddCleanUpAction(() => _graphContext.Release());
-
             graphProcessor?.ExecuteAsync(this)
                 .AttachExternalCancellation(LifeTime.TokenSource)
                 .Forget();
@@ -103,6 +102,8 @@ namespace UniModules.GameFlow.Runtime.Core
             LoadDataSources()
                 .AttachExternalCancellation(LifeTime.TokenSource)
                 .Forget();
+            
+            return UniTask.CompletedTask;
         }
         
         private async UniTask LoadDataSources()
@@ -156,6 +157,8 @@ namespace UniModules.GameFlow.Runtime.Core
 
         }
 
+        private void Awake() => _graphContext = new EntityContext();
+        
         #endregion
 
 

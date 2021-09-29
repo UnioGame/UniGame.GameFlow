@@ -1,11 +1,15 @@
 ﻿namespace UniModules.GameFlow.Runtime.Core
 {
+    using Cysharp.Threading.Tasks;
     using Extensions;
     using Runtime.Extensions;
     using Runtime.Interfaces;
+    using UniGame.Context.Runtime.Extension;
+    using UniGame.Core.Runtime.Interfaces;
     using UniModules.UniCore.Runtime.DataFlow.Interfaces;
     using UniModules.UniCore.Runtime.Rx.Extensions;
     using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
+    using UniRx;
 
     public abstract class UniGraphNode : UniNode
     {
@@ -32,16 +36,12 @@
             }
         }
 
-        protected override void OnExecute()
+        protected override async UniTask OnExecute()
         {
-            base.OnExecute();
-            
             var graphPrefab = CreateGraph(LifeTime);
-            if (!graphPrefab) {
-                return;
-            }
+            if (!graphPrefab) return;
 
-            graphPrefab.Execute();
+            await graphPrefab.ExecuteAsync();
 
             foreach (var port in Ports) {
                 var portName = port.ItemName;
@@ -49,8 +49,8 @@
                 var targetPort = graphPrefab.GetPort(portName);
                 ConnectToGraphPort(port,targetPort, originPort.Direction);
             }
-            
-            LifeTime.AddCleanUpAction(() => graphPrefab?.Exit());
+
+            graphPrefab.AddTo(LifeTime);
         }
 
         protected abstract UniGraph CreateGraph(ILifeTime lifeTime);

@@ -1,7 +1,10 @@
 ﻿namespace UniModules.GameFlow.Runtime.Components
 {
     using Core;
+    using Cysharp.Threading.Tasks;
     using Interfaces;
+    using UniGame.Context.Runtime.Context;
+    using UniGame.Core.Runtime.DataFlow.Extensions;
     using UnityEngine;
 
     public class GraphLauncher : MonoBehaviour
@@ -23,12 +26,15 @@
 #endif
         public void Execute()
         {
-            targetGraph?.Execute();
+            var lifeTime = this.GetAssetLifeTime();
+            targetGraph?.ExecuteAsync()
+                .AttachExternalCancellation(lifeTime.TokenSource)
+                .Forget();
         }
         
         private void Awake() => targetGraph = graph ? graph : GetComponent<IUniGraph>();
 
-        private void Start() => targetGraph?.Execute();
+        private void Start() => Execute();
 
         private void OnDisable() =>  targetGraph?.Exit();
 

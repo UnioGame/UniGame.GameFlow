@@ -1,9 +1,11 @@
 ﻿namespace UniGame.UniNodes.Nodes.Runtime.Addressables
 {
     using System.Collections.Generic;
+    using Cysharp.Threading.Tasks;
     using UniModules.GameFlow.Runtime.Core;
     using UniModules.GameFlow.Runtime.Core.Commands;
     using UniModules.GameFlow.Runtime.Interfaces;
+    using UniModules.UniCore.Runtime.Extension;
     using UniModules.UniCore.Runtime.Rx.Extensions;
     using UniModules.UniGame.AddressableTools.Runtime.Extensions;
     using UniModules.UniGame.Core.Runtime.Interfaces;
@@ -48,14 +50,14 @@
             
         }
 
-        protected override void OnExecute()
+        protected override async UniTask OnExecute()
         {
-            input.PortValueChanged.
-                Where(x => input.HasValue).
-                First().
-                Do(async x => await sceneAsset.LoadSceneTaskAsync(LifeTime)).
-                Subscribe().
-                AddTo(LifeTime);
+            await input.PortValueChanged
+                .Where(x => input.HasValue)
+                .AwaitFirstAsync(LifeTime);
+
+            await sceneAsset.LoadSceneTaskAsync(LifeTime)
+                .AttachExternalCancellation(LifeTime.TokenSource);
         }
         
     }

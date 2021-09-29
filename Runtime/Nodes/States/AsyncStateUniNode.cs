@@ -92,10 +92,10 @@
             port.Value.Publish(_token);
         }
 
-        protected sealed override void OnExecute()
+        protected sealed override UniTask OnExecute()
         {
             if (!Application.isPlaying)
-                return;
+                return UniTask.CompletedTask;
             
             _isStateActive   = false;
             _asyncStateProxy = new AsyncContextStateProxy(this, this, this, this);
@@ -111,6 +111,8 @@
                 Select(async x => await OwnToken(x)).
                 Subscribe().
                 AddTo(LifeTime);
+
+            return UniTask.CompletedTask;
         }
         
         [Conditional("UNITY_EDITOR")]

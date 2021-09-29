@@ -23,9 +23,7 @@
             //create sync result for task
             var outputContextTarget = UniTask.FromResult<IContext>(PortPair.OutputPort);
             //create node commands
-            var sourceOutputPortCommand = new RegisterDataSourceCommand(outputContextTarget,contextDataSource);
-            
-            nodeCommands.Add(sourceOutputPortCommand);
+            nodeCommands.Add(new RegisterDataSourceCommand(outputContextTarget,contextDataSource));
         }
 
     }

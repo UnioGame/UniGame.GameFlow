@@ -10,6 +10,7 @@
     using System.Collections.Generic;
     using global::UniGame.UniNodes.GameFlow.Runtime.Commands;
     using global::UniGame.UniNodes.Nodes.Runtime.Common;
+    using UniRx;
     using UnityEngine;
 
     /// <summary>
@@ -34,7 +35,7 @@
         {
             base.UpdateCommands(nodeCommands);
 
-            _context = _context ?? new EntityContext();
+            _context ??= new EntityContext();
             LifeTime.AddDispose(_context);
             
             var port = UniTask.FromResult<IContext>(PortPair.OutputPort);
@@ -51,9 +52,8 @@
             nodeCommands.Add(contextToOutputPortCommand);
         }
 
-        protected override async void OnExecute()
+        protected override async UniTask OnExecute()
         {
-            base.OnExecute();
             var container = await localContextContainer.LoadAssetTaskAsync(LifeTime);
             container.SetValue(_context);
         }

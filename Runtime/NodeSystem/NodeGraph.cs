@@ -5,11 +5,11 @@
     using System.Linq;
     using Runtime.Extensions;
     using Runtime.Interfaces;
+    using UniGame.Context.Runtime.Context;
+    using UniGame.Core.Runtime.Interfaces;
     using UniModules.UniCore.Runtime.Attributes;
     using UniModules.UniCore.Runtime.ObjectPool.Runtime;
     using UniModules.UniCore.Runtime.ObjectPool.Runtime.Extensions;
-    using UniModules.UniGame.Context.Runtime.Context;
-    using UniModules.UniGame.Core.Runtime.Interfaces;
     using UnityEngine;
     using Object = UnityEngine.Object;
 
@@ -55,6 +55,8 @@
         private List<INode> _allNodes = new List<INode>();
 
         #region public properties
+
+        public abstract IContext GraphContext { get; }
 
         public override string ItemName => name;
 
@@ -108,10 +110,7 @@
         /// <summary>
         /// return node by it ID
         /// </summary>
-        public INode GetNode(int nodeId)
-        {
-            return Nodes.FirstOrDefault(x => x.Id == nodeId);
-        }
+        public INode GetNode(int nodeId) => Nodes.FirstOrDefault(x => x.Id == nodeId);
 
         /// <summary>
         /// add node by type
@@ -267,16 +266,8 @@
                 Exit();
         }
 
-        private void OnDestroy()
-        {
-            Exit();
-        }
+        private void OnDestroy() => Exit();
 
-        private void OnEnable()
-        {
-            if(activateOnEnable && Application.isPlaying)
-                Execute();
-        }
 
         #endregion
         

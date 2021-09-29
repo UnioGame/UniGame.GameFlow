@@ -50,7 +50,7 @@
             return contextNode;
         }
         
-        protected override void OnExecute()
+        protected override UniTask OnExecute()
         {
             Source.Where(x => x != null)
                 .ObserveOnMainThread()
@@ -60,6 +60,8 @@
                         .SuppressCancellationThrow())
                 .Subscribe()
                 .AddTo(LifeTime);
+            
+            return UniTask.CompletedTask;
         }
 
         protected virtual UniTask OnContextActivate(IContext context) { return UniTask.CompletedTask; }

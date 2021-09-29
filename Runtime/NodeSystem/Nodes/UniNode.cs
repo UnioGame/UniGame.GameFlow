@@ -3,9 +3,11 @@
     using System;
     using System.Collections.Generic;
     using Attributes;
+    using Cysharp.Threading.Tasks;
     using Runtime.Interfaces;
     using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
     using UniModules.UniGame.Core.Runtime.Interfaces;
+    using UniRx;
 
     [HideNode]
     [Serializable]
@@ -38,11 +40,12 @@
         /// <summary>
         /// start node execution
         /// </summary>
-        public void Execute()
+        public async UniTask ExecuteAsync()
         {
             Initialize(GraphData);
             
-            SNode.Execute();
+            await SNode.ExecuteAsync()
+                .AttachExternalCancellation(LifeTime.TokenSource);
         }
 
         /// <summary>
@@ -63,9 +66,7 @@
         /// <summary>
         /// base logic realization
         /// </summary>
-        protected virtual void OnExecute()
-        {
-        }
+        protected virtual UniTask OnExecute() => UniTask.CompletedTask;
 
         /// <summary>
         /// update active list commands

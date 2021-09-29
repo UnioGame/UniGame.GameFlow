@@ -7,6 +7,7 @@ namespace UniModules.UniGame.GameFlow.GameFlow.Runtime.Nodes.States
     using Context.SerializableContext.Runtime.States;
     using Core.Runtime.DataFlow.Interfaces;
     using Core.Runtime.Interfaces;
+    using Cysharp.Threading.Tasks;
     using global::UniCore.Runtime.ProfilerTools;
     using global::UniModules.GameFlow.Runtime.Attributes;
     using global::UniModules.GameFlow.Runtime.Core;
@@ -83,10 +84,10 @@ namespace UniModules.UniGame.GameFlow.GameFlow.Runtime.Nodes.States
             port.Value.Publish(_token);
         }
 
-        protected sealed override void OnExecute()
+        protected sealed override UniTask OnExecute()
         {
             if (!Application.isPlaying)
-                return;
+                return UniTask.CompletedTask;
 
             _isStateActive = false;
             _state         = new RxStateProxy<IContext>(this, this, this, this);
@@ -104,6 +105,8 @@ namespace UniModules.UniGame.GameFlow.GameFlow.Runtime.Nodes.States
                 .Do(x => OnActivateState(x.token))
                 .Subscribe()
                 .AddTo(LifeTime);
+            
+            return UniTask.CompletedTask;
         }
 
 

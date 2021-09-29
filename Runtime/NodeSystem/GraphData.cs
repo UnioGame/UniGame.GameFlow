@@ -27,7 +27,7 @@
         
         #endregion
 
-        public IContext Context => _context;
+        public IContext GraphContext => _context;
 
         public string ItemName => _name;
 

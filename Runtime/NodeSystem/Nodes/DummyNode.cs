@@ -6,6 +6,7 @@ namespace UniModules.GameFlow.Runtime.Core.Nodes
 {
     using System;
     using System.Collections.Generic;
+    using Cysharp.Threading.Tasks;
     using Runtime.Attributes;
     using Runtime.Core;
     using Runtime.Core.Interfaces;
@@ -13,6 +14,7 @@ namespace UniModules.GameFlow.Runtime.Core.Nodes
     using UniModules.UniContextData.Runtime.Entities;
     using UniModules.UniCore.Runtime.Rx.Extensions;
     using UniModules.UniGame.Core.Runtime.Interfaces;
+    using UniRx;
     using UnityEngine;
 
     [HideNode]
@@ -88,7 +90,7 @@ namespace UniModules.GameFlow.Runtime.Core.Nodes
         [Port(PortIO.Output)]
         public object output;
 
-        protected override void OnExecute()
+        protected override UniTask OnExecute()
         {
             var inputValue1 = GetPortValue(nameof(input1));
             var inputValue2 = GetPortValue(nameof(input2));
@@ -99,6 +101,8 @@ namespace UniModules.GameFlow.Runtime.Core.Nodes
             //Now All Data from inputs will be transferred to output
             inputValue1.Broadcast(outputValue).AddTo(LifeTime);
             inputValue2.Broadcast(outputValue).AddTo(LifeTime);
+            
+            return UniTask.CompletedTask;
         }
     }
     

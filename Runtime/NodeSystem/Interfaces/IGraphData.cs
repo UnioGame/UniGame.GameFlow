@@ -16,6 +16,6 @@
         /// <param name="node"> The node to remove </param>
         IGraphData RemoveNode(INode node);
 
-        IContext Context { get; }
+        IContext GraphContext { get; }
     }
 }

@@ -10,6 +10,7 @@
     using UniGame.Context.Runtime.Connections;
     using UniGame.Core.Runtime.Interfaces;
     using UniGame.SerializableContext.Runtime.Addressables;
+    using UniRx;
     using UnityEngine;
 
     [CreateNodeMenu("GameSystem/Parenting Local Context Source")]
@@ -51,10 +52,8 @@
             nodeCommands.Add(contextContainerBindCommand);
         }
 
-        protected override async void OnExecute()
+        protected override async UniTask OnExecute()
         {
-            base.OnExecute();
-
             if (_localContextContainer == null) return;
             
             var localContextContainer = await _localContextContainer.LoadAssetTaskAsync(LifeTime);

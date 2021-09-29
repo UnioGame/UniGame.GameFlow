@@ -34,10 +34,15 @@
             {
                 uniGraph.AddCleanUpAction(node.Exit);
                 node.Ports.ForEach(x => BindConnections(uniGraph, x, x.Value));
-            }            
-            
-            uniNodes.ForEach( x => x.Execute());
+            }
 
+            foreach (var uniNode in uniNodes)
+            {
+                uniNode.ExecuteAsync()
+                    .AttachExternalCancellation(uniGraph.LifeTime.TokenSource)
+                    .Forget();
+            }
+            
             await this.AwaitWhileAsync(() => !cancellationToken.IsCancellationRequested,cancellationToken);
             
             return AsyncStatus.Succeeded;

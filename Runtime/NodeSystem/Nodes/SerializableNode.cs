@@ -60,7 +60,7 @@ namespace UniModules.GameFlow.Runtime.Core
 
         public HashSet<INodePort> RuntimePorts => _portValues ??= new HashSet<INodePort>();
 
-        public IContext Context => GraphData.Context;
+        public virtual IContext Context => GraphData.GraphContext;
 
         /// <summary>
         /// unique node id
@@ -157,16 +157,9 @@ namespace UniModules.GameFlow.Runtime.Core
             ConnectionType connectionType = ConnectionType.Multiple,
             ShowBackingValue showBackingValue = ShowBackingValue.Always)
         {
-            NodePort port = null;
-            
-            if (HasPort(fieldName))
-            {
-                port = ports[fieldName];
-            }
-            else
-            {
-                port = new NodePort(GraphData.GetNextId(), this, fieldName, direction, connectionType, showBackingValue, types);
-            }
+            NodePort port = HasPort(fieldName) 
+                ? ports[fieldName] 
+                : new NodePort(GraphData.GetNextId(), this, fieldName, direction, connectionType, showBackingValue, types);
 
             return AddPort(port);
         }
@@ -297,7 +290,7 @@ namespace UniModules.GameFlow.Runtime.Core
 
         protected bool AddPortValue(INodePort runtimePort)
         {
-            _portValues = _portValues ?? new HashSet<INodePort>();
+            _portValues ??= new HashSet<INodePort>();
 
             if (runtimePort == null)
             {

@@ -1,5 +1,7 @@
 ﻿namespace UniModules.UniGame.GameFlow.GameFlow.Runtime.Nodes.States
 {
+    using Core.Runtime.Interfaces;
+    using Cysharp.Threading.Tasks;
     using global::UniModules.GameFlow.Runtime.Attributes;
     using global::UniModules.GameFlow.Runtime.Core;
     using UniCore.Runtime.DataFlow;
@@ -30,7 +32,7 @@
         private LifeTimeDefinition _tokenLifeTime;
         private LifeTimeDefinition TokenLifeTime => _tokenLifeTime = _tokenLifeTime ?? new LifeTimeDefinition();
         
-        protected override void OnExecute()
+        protected override UniTask OnExecute()
         {
             var inputValue  = GetPortValue(nameof(input));
 
@@ -41,10 +43,9 @@
                 .AddTo(LifeTime);
 
             if (fireOnStart)
-            {
                 FireToken();
-            }
-
+            
+            return UniTask.CompletedTask;
         }
 
 #if ODIN_INSPECTOR

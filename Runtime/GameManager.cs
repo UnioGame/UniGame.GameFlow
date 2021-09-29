@@ -12,6 +12,7 @@
     using Taktika.GameRuntime.Abstract;
     using UniContextData.Runtime.Interfaces;
     using UniCore.Runtime.Rx.Extensions;
+    using UniRx;
     using UnityEngine;
 
     public class GameManager : MonoBehaviour, IGameManager
@@ -77,16 +78,19 @@
         private UniTask ExecuteGraphs()
         {
             foreach (var graph in executionItems)
-                graph.Execute();
+                graph.AddTo(LifeTime)
+                    .ExecuteAsync()
+                    .AttachExternalCancellation(LifeTime.TokenSource)
+                    .Forget();
 
-            ExecuteAsyncGraphs()
+            ExecuteAsyncGraphs(_gameContext)
                 .AttachExternalCancellation(LifeTime.TokenSource)
                 .Forget();
             
             return UniTask.CompletedTask;
         }
 
-        private async UniTask ExecuteAsyncGraphs()
+        private async UniTask ExecuteAsyncGraphs(IContext context)
         {
             var asyncAsset = asyncGraphs.Select(asset => asset.LoadAssetTaskAsync(LifeTime));
             var graphs      = await UniTask.WhenAll(asyncAsset);
@@ -94,8 +98,10 @@
             {
                 var graphObject = Object.Instantiate(graphAsset.gameObject,transform);
                 var graph       = graphObject.GetComponent<UniGraph>();
-                graph.Execute();
-                graph.AddTo(LifeTime);
+                graph.AddTo(LifeTime)
+                    .ExecuteAsync()
+                    .AttachExternalCancellation(LifeTime.TokenSource)
+                    .Forget();
             }
         }
 

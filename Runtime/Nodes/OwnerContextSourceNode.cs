@@ -6,17 +6,21 @@
     using global::UniGame.UniNodes.Nodes.Runtime.Commands;
     using global::UniGame.UniNodes.Nodes.Runtime.Common;
     using NodeSystem.Runtime.Core.Attributes;
+    using UniCore.Runtime.Rx.Extensions;
     using UniGame.AddressableTools.Runtime.Extensions;
     using UniGame.Context.Runtime.Context;
     using UniGame.Core.Runtime.Interfaces;
     using UniGame.SerializableContext.Runtime.Addressables;
+    using UniRx;
     using UnityEngine;
 
     [CreateNodeMenu("GameSystem/Owner Context Source")]
     public class OwnerContextSourceNode : InOutPortNode
     {
-        private EntityContext _context;
+        #region inspector
 
+        public bool useGraphContext = true;
+        
         [SerializeField]
         private AssetReferenceContextContainer localContextContainer;
 
@@ -24,14 +28,16 @@
         [SerializeField]
         private AssetReferenceDataSource dataSources;
 
+        #endregion
+
+        private IContext _context;
+
         protected override void UpdateCommands(List<ILifeTimeCommand> nodeCommands)
         {
             base.UpdateCommands(nodeCommands);
 
-            _context = new EntityContext();
+            _context = useGraphContext ? Context : new EntityContext().AddTo(LifeTime);
             
-            LifeTime.AddDispose(_context);
-
             var port          = UniTask.FromResult<IContext>(PortPair.OutputPort);
             var contextSource = UniTask.FromResult<IContext>(_context);
 
@@ -46,7 +52,7 @@
             nodeCommands.Add(contextToOutputPortCommand);
         }
 
-        protected sealed override async void OnExecute()
+        protected sealed override async UniTask OnExecute()
         {
             var container = await localContextContainer.LoadAssetTaskAsync(LifeTime);
             container.SetValue(_context);
