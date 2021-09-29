@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 365616753886776688}
   - component: {fileID: 2675487599679384024}
   - component: {fileID: 2857653701872454474}
-  - component: {fileID: 992295372190591754}
   m_Layer: 0
   m_Name: UniGraph
   m_TagString: Untagged
@@ -74,17 +73,44 @@ MonoBehaviour:
   uniqueId: 0
   nodes:
   - {fileID: 2675487599679384024}
-  - {fileID: 992295372190591754}
-  serializableNodes: []
+  serializableNodes:
+  - id: 0
   _assetReferenceSources: []
   _dataSources: []
   serializedGraph: {fileID: 7071043137338104480}
   graphProcessor:
-    id: 0
+    id: 1
   useVariants: 0
   references:
     version: 1
     00000000:
+      type: {class: ExampleActionNode, ns: , asm: Assembly-CSharp}
+      data:
+        id: 213961835
+        width: 220
+        nodeName: Example Action Node
+        position: {x: 597, y: -14}
+        ports:
+          keys:
+          - outputValue
+          values:
+          - id: 1253994120
+            nodeId: 213961835
+            fieldName: outputValue
+            direction: 0
+            connectionType: 0
+            showBackingValue: 2
+            isDynamic: 1
+            isInstancePortList: 0
+            portValue:
+              name: outputValue
+              serializedValueTypes: []
+              broadcastersCount: 0
+            connections: []
+            instancePortList: 0
+        outputValue: 
+        message: outputValue
+    00000001:
       type: {class: UniGraphProcessor, ns: UniModules.GameFlow.Runtime.Core, asm: unigame.gamesystem.runtime}
 --- !u!114 &2675487599679384024
 MonoBehaviour:
@@ -118,11 +144,7 @@ MonoBehaviour:
         name: log
         serializedValueTypes: []
         broadcastersCount: 0
-      connections:
-      - fieldName: outputValue
-        nodeId: 879613630
-        reroutePoints: []
-        portId: 0
+      connections: []
       instancePortList: 0
   mode: 1
   message: LogNode
@@ -139,48 +161,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   graph: {fileID: 365616753886776688}
---- !u!114 &992295372190591754
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 710058365270767007}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 615a60f273708f24db8ace735f49bdd9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  id: 879613630
-  width: 250
-  nodeName: Example Action Node
-  position: {x: 232, y: 120}
-  ports:
-    keys:
-    - outputValue
-    values:
-    - id: 2133951925
-      nodeId: 879613630
-      fieldName: outputValue
-      direction: 1
-      connectionType: 0
-      showBackingValue: 2
-      isDynamic: 1
-      isInstancePortList: 0
-      portValue:
-        name: outputValue
-        serializedValueTypes:
-        - fullTypeName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
-            PublicKeyToken=b77a5c561934e089
-        broadcastersCount: 0
-      connections:
-      - fieldName: log
-        nodeId: -2097247136
-        reroutePoints: []
-        portId: 593709211
-      instancePortList: 0
-  outputValue: 
-  message: outputValue
 --- !u!114 &7071043137338104480
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -215,7 +195,7 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: -30, y: 183, z: 0}
+  position: {x: -472, y: 200, z: 0}
   scale: {x: 1.3225, y: 1.3225, z: 1}
   references:
     version: 1
@@ -227,8 +207,8 @@ MonoBehaviour:
         computeOrder: 0
         position:
           serializedVersion: 2
-          x: 599
-          y: 117
+          x: 899
+          y: 180
           width: 250
           height: 100
         expanded: 0
@@ -239,15 +219,15 @@ MonoBehaviour:
       type: {class: UniBaseNode, ns: UniGame.GameFlowEditor.Runtime, asm: unigame.gamesystem.runtime}
       data:
         nodeCustomName: 
-        GUID: 7d7fcc0d-1ccb-4cba-b264-94748a304773
+        GUID: e3ae62e6-a9b6-44f1-b3c9-4f7110e60551
         computeOrder: 1
         position:
           serializedVersion: 2
-          x: 232
-          y: 120
-          width: 250
+          x: 597
+          y: -14
+          width: 220
           height: 100
         expanded: 0
         debug: 0
         nodeLock: 0
-        sourceId: 879613630
+        sourceId: 213961835

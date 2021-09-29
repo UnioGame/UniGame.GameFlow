@@ -2,14 +2,15 @@ using System;
 using System.Collections.Generic;
 using UniModules.GameFlow.Runtime.Attributes;
 using UniModules.GameFlow.Runtime.Core;
+using UniModules.GameFlow.Runtime.Core.Nodes;
 using UniModules.GameFlow.Runtime.Extensions;
 using UniModules.GameFlow.Runtime.Interfaces;
 using UniModules.UniGame.Core.Runtime.Interfaces;
 using UniModules.UniGameFlow.NodeSystem.Runtime.Core.Attributes;
 
 [Serializable]
-[CreateNodeMenu("Examples/SampleActionNode")]
-public class ExampleActionNode : UniNode
+[CreateNodeMenu("Examples/ActionTest/SampleActionNode")]
+public class ExampleActionNode : SNode
 {
 
     [Port(PortIO.Output)]

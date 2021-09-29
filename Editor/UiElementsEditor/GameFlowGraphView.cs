@@ -284,8 +284,8 @@ namespace UniGame.GameFlowEditor.Editor
         
         private void OnNodeRemoved(UniBaseNode node)
         {
-            SourceGraph.UniGraph.
-                RemoveNode(node.SourceNode);
+            if (node.SourceNode == null) return;
+            SourceGraph.UniGraph.RemoveNode(node.SourceNode);
         }
 
         private void OnNodeChanged(UniBaseNode node)

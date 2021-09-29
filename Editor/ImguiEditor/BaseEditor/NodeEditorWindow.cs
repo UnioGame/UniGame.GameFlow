@@ -231,6 +231,8 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
 
         private void OnSelectionChange()
         {
+            return;
+            
             selectionAssets.Clear();
             selectionAssets.AddRange(Selection.objects);
             selectionAssets.AddRange(Selection.gameObjects);
