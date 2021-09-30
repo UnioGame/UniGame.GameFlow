@@ -3,10 +3,8 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
-    using System.Linq;
     using System.Runtime.CompilerServices;
     using Runtime.Interfaces;
-    using UniCore.Runtime.ProfilerTools;
     using UniModules.UniCore.Runtime.Attributes;
     using UniModules.UniCore.Runtime.DataFlow;
     using UniModules.UniGame.Context.Runtime.Context;
@@ -15,7 +13,6 @@
     using UniModules.UniGame.Core.Runtime.SerializableType;
     using UniRx;
     using UnityEngine;
-    using Debug = UnityEngine.Debug;
 
     [Serializable]
     public class PortValue : IPortValue, ISerializationCallbackReceiver
@@ -115,7 +112,7 @@
 
         public void SetValueTypeFilter(IEnumerable<Type> types)
         {
-            _valueTypeFilter = _valueTypeFilter ?? new List<Type>();
+            _valueTypeFilter ??= new List<Type>();
             _valueTypeFilter.Clear();
             _valueTypeFilter.AddRange(types);
 
@@ -168,11 +165,11 @@
 
         private void Initialize()
         {
-            _lifeTimeDefeDefinition = _lifeTimeDefeDefinition ?? new LifeTimeDefinition();
-            _lifeTime               = _lifeTimeDefeDefinition.LifeTime;
+            _lifeTimeDefeDefinition ??= new LifeTimeDefinition();
+            _lifeTime               =   _lifeTimeDefeDefinition.LifeTime;
             _lifeTimeDefeDefinition.Release();
 
-            _data        = _data ?? new EntityContext();
+            _data ??= new EntityContext();
 
             _lifeTime.AddCleanUpAction(_data.Release);
             _lifeTime.AddCleanUpAction(RemoveAllConnections);
@@ -180,14 +177,11 @@
 
         #region serialization rules
 
-        public void OnBeforeSerialize()
-        {
-            UpdateSerializedFilter(_valueTypeFilter);
-        }
+        public void OnBeforeSerialize() => UpdateSerializedFilter(_valueTypeFilter);
 
         public void OnAfterDeserialize()
         {
-            _valueTypeFilter = _valueTypeFilter ?? new List<Type>();
+            _valueTypeFilter ??= new List<Type>();
             _valueTypeFilter.Clear();
 
             for (var i = 0; i < serializedValueTypes.Count; i++) {

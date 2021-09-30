@@ -6,6 +6,7 @@
     using global::UniGame.UniNodes.Nodes.Runtime.Commands;
     using global::UniGame.UniNodes.Nodes.Runtime.Common;
     using NodeSystem.Runtime.Core.Attributes;
+    using UniCore.Runtime.Rx.Extensions;
     using UniGame.AddressableTools.Runtime.Extensions;
     using UniGame.Context.Runtime.Connections;
     using UniGame.Core.Runtime.Interfaces;
@@ -31,10 +32,8 @@
         {
             base.UpdateCommands(nodeCommands);
 
-            _contextConnection = _contextConnection ?? new ContextConnection();
+            _contextConnection ??= new ContextConnection().AddTo(LifeTime);
             
-            LifeTime.AddDispose(_contextConnection);
-
             var outPort = UniTask.FromResult<IContext>(PortPair.OutputPort);
             var contextSource = UniTask.FromResult<IContext>(_contextConnection);
 

@@ -20,7 +20,6 @@
             _parent = parent;
         }
         
-        // TODO: надо будет сделать UniTask Execute, чтобы гарантировать прямое выполнение
         public async UniTask Execute(ILifeTime lifeTime)
         {
             var parentContextContainer = await _parent.LoadAssetTaskAsync(lifeTime);
