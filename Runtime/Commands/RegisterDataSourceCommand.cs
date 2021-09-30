@@ -15,8 +15,8 @@
     [Serializable]
     public class RegisterDataSourceCommand : ILifeTimeCommand
     {
-        private readonly UniTask<IContext> _contextTask;
-        private readonly AssetReference _resource;
+        private UniTask<IContext> _contextTask;
+        private AssetReference    _resource;
 
         // TODO есть целый зоопарк наследников AssetReference этому конструктору на вход нужно получить
         // AssetReference по которому можно загрузить наследника LifeTimeScriptableObject приводимого к интерфейсу
@@ -30,11 +30,13 @@
 
         public async UniTask Execute(ILifeTime lifeTime)
         {
-            if (_resource == null)
+            if (_resource == null) 
                 return;
+            
             var asset = await _resource.LoadAssetTaskAsync<LifetimeScriptableObject>(lifeTime);
-            // HACK HOGM-6286
+            
             await UniTask.WaitForEndOfFrame();
+            
             if (!(asset is IAsyncContextDataSource dataSource))
             {
                 GameLog.LogError($"Asset loaded by guid {_resource.AssetGUID} is not {nameof(IAsyncContextDataSource)} or NULL");
@@ -43,7 +45,10 @@
             }
 
             OnSourceLoaded(asset, lifeTime);
-            await dataSource.RegisterAsync(await _contextTask);
+            
+            dataSource.RegisterAsync(await _contextTask)
+                .AttachExternalCancellation(lifeTime.TokenSource)
+                .Forget();
         }
 
         protected virtual void OnSourceLoaded(LifetimeScriptableObject asset, ILifeTime lifeTime)
