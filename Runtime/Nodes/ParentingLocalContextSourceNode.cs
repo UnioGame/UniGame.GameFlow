@@ -11,7 +11,6 @@
     using UniGame.Context.Runtime.Connections;
     using UniGame.Core.Runtime.Interfaces;
     using UniGame.SerializableContext.Runtime.Addressables;
-    using UniRx;
     using UnityEngine;
 
     [CreateNodeMenu("GameSystem/Parenting Local Context Source")]
@@ -41,8 +40,7 @@
             //register all Context Sources Data into target context asset
             var registerDataSourceIntoContext = new RegisterDataSourceCommand(contextSource, _dataSources);
             //Register context to output port
-            var contextToOutputPortCommand = new DataSourceTaskCommand<IContext>(contextSource, outPort);
-
+            var contextToOutputPortCommand  = new DataSourceTaskCommand<IContext>(contextSource, outPort);
             var contextContainerBindCommand = new ParentContextContainerBindCommand(_contextConnection, _parentContextContainer);
 
             nodeCommands.Add(bindContextToOutput);
