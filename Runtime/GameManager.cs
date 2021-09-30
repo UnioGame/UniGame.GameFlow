@@ -43,8 +43,6 @@
 
         #region public properties
 
-        public static IGameManager Instance { get; private set; }
-
         public IContext GameContext => _gameContext;
 
         public ILifeTime LifeTime => _lifeTime;
@@ -74,16 +72,7 @@
             Object.Destroy(gameObject);
         }
         
-        public void Dispose()
-        {
-            if (LifeTime.IsTerminated)
-                return;
-            
-            _lifeTime.Terminate();
-            
-            if (ReferenceEquals(Instance, this))
-                Instance = null;
-        }
+        public void Dispose() => _lifeTime.Terminate();
 
         #endregion
 
@@ -138,17 +127,6 @@
         {
             var sourceAsset = await dataSource.LoadAssetTaskAsync(LifeTime);
             await sourceAsset.RegisterAsync(context);
-        }
-
-        private void Awake()
-        {
-            if (Instance != null)
-            {
-                Destroy(gameObject);
-                return;
-            }
-            
-            Instance = this;
         }
 
         private void OnDestroy() => Dispose();
