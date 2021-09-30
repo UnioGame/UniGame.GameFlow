@@ -10,5 +10,7 @@
 
         UniTask Execute();
         
+        void Destroy();
+
     }
 }

@@ -11,6 +11,7 @@
     using SerializableContext.Runtime.Addressables;
     using Taktika.GameRuntime.Abstract;
     using UniContextData.Runtime.Interfaces;
+    using UniCore.Runtime.DataFlow;
     using UniCore.Runtime.Rx.Extensions;
     using UniRx;
     using UnityEngine;
@@ -36,15 +37,17 @@
 
         #endregion
 
+        private LifeTimeDefinition _lifeTime = new LifeTimeDefinition();
+        
         private EntityContext _gameContext = new EntityContext();
 
         #region public properties
 
-        public static IGameManager Instance { get; protected set; }
+        public static IGameManager Instance { get; private set; }
 
         public IContext GameContext => _gameContext;
 
-        public ILifeTime LifeTime => _gameContext.LifeTime;
+        public ILifeTime LifeTime => _lifeTime;
 
         #endregion
 
@@ -52,8 +55,8 @@
 
         public async UniTask Execute()
         {
-            _gameContext.Cancel();
-            _gameContext = new EntityContext();
+            _lifeTime.Release();
+            _gameContext = new EntityContext().AddTo(LifeTime);
             
             if (_contextContainer.RuntimeKeyIsValid())
             {
@@ -65,10 +68,21 @@
             await ExecuteGraphs();
         }
 
+        public void Destroy()
+        {
+            Dispose();
+            Object.Destroy(gameObject);
+        }
+        
         public void Dispose()
         {
-            _gameContext?.Dispose();
-            _gameContext = null;
+            if (LifeTime.IsTerminated)
+                return;
+            
+            _lifeTime.Terminate();
+            
+            if (ReferenceEquals(Instance, this))
+                Instance = null;
         }
 
         #endregion
@@ -130,15 +144,11 @@
         {
             if (Instance != null)
             {
-                Destroy(this.gameObject);
+                Destroy(gameObject);
                 return;
             }
             
             Instance = this;
-            foreach (var graph in executionItems)
-                graph.AddTo(LifeTime);
-            
-            this.AddCleanUpAction(() => Instance = null);
         }
 
         private void OnDestroy() => Dispose();
