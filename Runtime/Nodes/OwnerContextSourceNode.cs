@@ -56,6 +56,7 @@
         {
             var container = await localContextContainer.LoadAssetTaskAsync(LifeTime);
             container.SetValue(_context);
+            LifeTime.AddCleanUpAction(() => container.SetValue(null));
         }
     }
 }
