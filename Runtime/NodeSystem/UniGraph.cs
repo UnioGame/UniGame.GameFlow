@@ -95,6 +95,8 @@ namespace UniModules.GameFlow.Runtime.Core
 
         protected sealed override UniTask OnExecute()
         {
+            LifeTime.AddCleanUpAction(() => _graphContext.Release());
+            
             graphProcessor?.ExecuteAsync(this)
                 .AttachExternalCancellation(LifeTime.TokenSource)
                 .Forget();
