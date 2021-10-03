@@ -7,7 +7,6 @@
     using Core.Runtime.DataFlow.Interfaces;
     using Core.Runtime.Interfaces;
     using Cysharp.Threading.Tasks;
-    using global::UniCore.Runtime.ProfilerTools;
     using global::UniModules.GameFlow.Runtime.Core;
     using SerializableContext.Runtime.Addressables;
     using Taktika.GameRuntime.Abstract;
