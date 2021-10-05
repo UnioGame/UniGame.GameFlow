@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using Cysharp.Threading.Tasks;
     using UniModules.GameFlow.Runtime.Attributes;
     using UniModules.GameFlow.Runtime.Core;
     using UniModules.GameFlow.Runtime.Core.Commands;
@@ -67,9 +68,6 @@
             nodeCommands.Add(valueSource);
         }
 
-        public void Complete()
-        {
-            valueSource.Complete();
-        }
+        public void Complete() => valueSource.Complete();
     }
 }

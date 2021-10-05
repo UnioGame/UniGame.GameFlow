@@ -5,6 +5,7 @@
     using Interfaces;
     using Runtime.Interfaces;
     using UniModules.UniGame.Core.Runtime.Interfaces;
+    using UnityEngine;
 
     [Serializable]
     public class GraphData : IGraphData, IUniqueIdProvider
@@ -29,6 +30,8 @@
 
         public IContext GraphContext => _context;
 
+        public Transform Root => null;
+        
         public string ItemName => _name;
 
         public int Id => _id;

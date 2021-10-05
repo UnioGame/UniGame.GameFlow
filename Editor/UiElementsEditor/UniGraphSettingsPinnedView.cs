@@ -72,7 +72,7 @@ namespace UniGame.UniNodes.GameFlowEditor.Editor
         
         private void ReloadGraphView()
         {
-            SaveGraphView();
+            //SaveGraphView();
             graphView.GameFlowWindow.Reload();
         }
 

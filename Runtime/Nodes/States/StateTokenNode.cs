@@ -3,6 +3,7 @@ using UniModules.GameFlow.Runtime.Core.Nodes;
 
 namespace UniModules.UniGameFlow.Nodes.Runtime.States
 {
+    using Cysharp.Threading.Tasks;
     using global::UniModules.GameFlow.Runtime.Attributes;
     using global::UniModules.GameFlow.Runtime.Core;
 
@@ -15,11 +16,12 @@ namespace UniModules.UniGameFlow.Nodes.Runtime.States
         [Port(PortIO.Output)]
         public object output;
 
-        protected override void OnExecute()
+        protected override UniTask OnExecute()
         {
             var inputPort  = GetPort(nameof(input));
             var outputPort = GetPort(nameof(output));
             
+            return UniTask.CompletedTask;
         }
     }
 }

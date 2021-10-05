@@ -46,7 +46,7 @@ namespace UniModules.GameFlow.Runtime.Core
         /// <summary>
         /// graph context
         /// </summary>
-        private EntityContext _graphContext = new EntityContext();
+        private IDisposableContext _graphContext = new EntityContext();
 
         /// <summary>
         /// graph inputs
@@ -74,8 +74,14 @@ namespace UniModules.GameFlow.Runtime.Core
             UnityEditor.EditorApplication.playModeStateChanged -= OnPlayingModeChanged;
             UnityEditor.EditorApplication.playModeStateChanged += OnPlayingModeChanged;
 #endif
-
+            
             Initialize(this);
+        }
+
+        public async UniTask ExecuteAsync(IDisposableContext context)
+        {
+            _graphContext = context;
+            await ExecuteAsync();
         }
         
         #region private methods
@@ -85,7 +91,6 @@ namespace UniModules.GameFlow.Runtime.Core
             base.OnInitialize();
             
             InitializeGraphNodes();
-               
 #if UNITY_EDITOR
             if (Application.isPlaying == false) 
                 Validate();
@@ -95,7 +100,8 @@ namespace UniModules.GameFlow.Runtime.Core
 
         protected sealed override UniTask OnExecute()
         {
-            LifeTime.AddCleanUpAction(() => _graphContext.Release());
+            LifeTime.AddDispose(_graphContext);
+            LifeTime.AddCleanUpAction(() => _graphContext = new EntityContext());
             
             graphProcessor?.ExecuteAsync(this)
                 .AttachExternalCancellation(LifeTime.TokenSource)

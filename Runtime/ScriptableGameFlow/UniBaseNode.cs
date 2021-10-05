@@ -29,6 +29,7 @@ namespace UniGame.GameFlowEditor.Runtime
         
         #region public properties
 
+        [HideInInspector]
         public int sourceId;
 
         public INode SourceNode { get; protected set; }
@@ -42,7 +43,6 @@ namespace UniGame.GameFlowEditor.Runtime
         public void Initialize(INode node)
         {
             sourceId   = node.Id;
-            
             SourceNode = node;
             position = new Rect(node.Position,new Vector2(node.Width,100));
             UpdatePorts();

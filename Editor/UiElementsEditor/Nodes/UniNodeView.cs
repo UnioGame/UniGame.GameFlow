@@ -59,10 +59,8 @@ namespace UniGame.GameFlowEditor.Editor
             }
 
             DrawNode(sourceNode);
-            
             //add into node processor
             NodeViewProcessor.Asset.Add(this);
-
         }
 
 
@@ -90,7 +88,6 @@ namespace UniGame.GameFlowEditor.Editor
 
         protected virtual void DrawNode(INode sourceNode)
         {
-            
             var container      = sourceNode.DrawNodeUiElements();
             var containerStyle = container.style;
 
@@ -106,7 +103,6 @@ namespace UniGame.GameFlowEditor.Editor
             containerStyle.minWidth      = 250;
             
             controlsContainer.Add(container);
-
         }
 
         public override void OnSelected()

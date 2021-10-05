@@ -3,9 +3,12 @@
     using Interfaces;
     using Runtime.Interfaces;
     using UniModules.UniGame.Core.Runtime.Interfaces;
+    using UnityEngine;
 
     public interface IGraphData : INamedItem, IUnique
     {
+        Transform Root { get; }
+
         int GetNextId();
         
         int UpdateId(int oldId);

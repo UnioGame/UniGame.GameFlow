@@ -7,7 +7,6 @@
     using UniModules.UniCore.Runtime.DataFlow;
     using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
     using UniModules.UniGame.Core.Runtime.Interfaces;
-    using UniRx;
     using UnityEngine;
 
     [Serializable]
@@ -68,12 +67,13 @@
             Initialize(GraphData);
             //mark as active
             _isActive = true;
+            
             //execute all node commands
             foreach (var command in _commands)
                 await command.Execute(LifeTime);
             
             //user defined logic
-            OnExecute();
+            await OnExecute();
             
             //proxy outer execution
             if(_onExecute!=null)
@@ -97,25 +97,18 @@
         /// <summary>
         /// Call once on node initialization
         /// </summary>
-        protected virtual void OnInitialize()
-        {
-        }
+        protected virtual void OnInitialize() { }
 
         /// <summary>
         /// base logic realization
         /// </summary>
-        protected virtual void OnExecute()
-        {
-            
-        }
+        protected virtual UniTask OnExecute() => UniTask.CompletedTask;
 
         /// <summary>
         /// update active list commands
         /// add all supported node commands here
         /// </summary>
-        protected virtual void UpdateCommands(List<ILifeTimeCommand> nodeCommands)
-        {
-        }
+        protected virtual void UpdateCommands(List<ILifeTimeCommand> nodeCommands) { }
 
         #region private methods
 

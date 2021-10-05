@@ -1,0 +1,27 @@
+﻿.node
+{
+    margin: 0px;
+    padding: 0px;
+    width: 150px;
+}
+
+.NodeControls
+{
+    visibility: hidden;
+    height: 0px;
+}
+
+.node > #node-border
+{
+    border-radius: 9px;
+}
+
+#contents > #top > #input .unity-label
+{
+    display: none;
+}
+
+.hideLabels .unity-label
+{
+    display: none;
+}

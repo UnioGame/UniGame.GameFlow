@@ -3,6 +3,7 @@
 namespace UniModules.UniGame.GameFlow.GameFlow.Runtime.Nodes.Common
 {
     using System;
+    using Cysharp.Threading.Tasks;
     using global::UniModules.GameFlow.Runtime.Attributes;
     using global::UniModules.GameFlow.Runtime.Core;
     using UniCore.Runtime.Rx.Extensions;
@@ -11,10 +12,7 @@ namespace UniModules.UniGame.GameFlow.GameFlow.Runtime.Nodes.Common
 
     [Serializable]
     [CreateNodeMenu("Flow/Point")]
-    [NodeInfo(
-        nameof(PointNode),
-        "flow",
-        "serializable node for transfer data from input port to output")]
+    [NodeInfo(nameof(PointNode), "flow", "serializable node for transfer data from input port to output")]
     public class PointNode : SNode
     {
         [Port(PortIO.Input)]
@@ -23,11 +21,13 @@ namespace UniModules.UniGame.GameFlow.GameFlow.Runtime.Nodes.Common
         [Port(PortIO.Output)]
         private object output;
 
-        protected sealed override void OnExecute()
+        protected sealed override UniTask OnExecute()
         {
             GetPortValue(nameof(input)).
                 Broadcast(GetPortValue(nameof(output))).
                 AddTo(LifeTime);
+            
+            return UniTask.CompletedTask;
         }
     }
 }
