@@ -298,11 +298,15 @@ namespace UniGame.GameFlowEditor.Editor
             var viewNodes = nodeViews.OfType<UniNodeView>().ToList();
             foreach (var nodeView in viewNodes)
             {
+                var sourceNode = nodeView.NodeData.SourceNode;
+                if(sourceNode == null)
+                    continue;
                 //package view position calculation bug
                 var position = nodeView.GetPosition().position;
                 if (position == Vector2.zero)
                     return;
-                nodeView.NodeData.SourceNode.Position = position;
+                
+                sourceNode.Position = position;
             }
         }
         
