@@ -2,10 +2,11 @@
 
 namespace UniModules.UniGameFlow.GameFlow.Runtime.Interfaces
 {
+    using Cysharp.Threading.Tasks;
     using UniGame.Core.Runtime.Interfaces;
 
     public interface IContextService
     {
-        void Bind(IContext context, ILifeTime lifeTime);
+        UniTask Bind(IContext context, ILifeTime lifeTime);
     }
 }
