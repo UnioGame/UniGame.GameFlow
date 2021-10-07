@@ -17,9 +17,8 @@
     using UniModules.UniGame.Core.Runtime.Interfaces;
     using UniModules.UniGame.CoreModules.UniGame.Context.Runtime.Extension;
     using UniModules.UniGameFlow.NodeSystem.Runtime.Core.Attributes;
+    using UnityEngine;
     using Object = UnityEngine.Object;
-    using Quaternion = UnityEngine.Quaternion;
-    using Vector3 = UnityEngine.Vector3;
 
     [Serializable]
     [CreateNodeMenu("SubGraph/SubGraphNode")]
@@ -33,17 +32,23 @@
         
         #region inspector
 
+        [HideInInspector]
+        public string graphName;
+        
         [DrawWithUnity]
+        [HideLabel]
         public AssetReferenceComponent<UniGraph> subGraph;
 
-        public bool passContext = true;
-        
         #endregion
         
-        public sealed override string ItemName => SubGraphNodeName;
+        public sealed override string ItemName => graphName;
         
         protected sealed override void UpdateCommands(List<ILifeTimeCommand> nodeCommands)
         {
+#if UNITY_EDITOR
+            graphName = subGraph.editorAsset ? subGraph.editorAsset.name : SubGraphNodeName;
+#endif
+
             base.UpdateCommands(nodeCommands);
             this.UpdatePortValue(dataIn, PortIO.Input);
             this.UpdatePortValue(dataOut, PortIO.Output);
@@ -60,18 +65,10 @@
                 .DestroyWith(LifeTime)
                 .GetComponent<UniGraph>();
 
-            IDisposableContext graphContext = null;
+            var connection = new ContextConnection();
+            connection.Connect(context).AddTo(LifeTime);
             
-            if (passContext)
-            {
-                var connection = new ContextConnection();
-                connection.Connect(context).AddTo(LifeTime);
-                graphContext = connection;
-            }
-
-            graphContext ??= new EntityContext();
-            
-            await graph.ExecuteAsync(graphContext);
+            await graph.ExecuteAsync(connection);
         }
     }
 }

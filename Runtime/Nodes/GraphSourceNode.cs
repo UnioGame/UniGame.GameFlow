@@ -16,9 +16,15 @@
     [CreateNodeMenu("GameSystem/Graph Source Node")]
     public class GraphSourceNode : InOutPortNode
     {
+#if ODIN_INSPECTOR
+        [Sirenix.OdinInspector.DrawWithUnity]
+#endif
         [SerializeField]
         private AssetReferenceContextContainer contextContainer;
 
+#if ODIN_INSPECTOR
+        [Sirenix.OdinInspector.DrawWithUnity]
+#endif
         [Header("Data Source")]
         [SerializeField]
         private AssetReferenceDataSource dataSources;

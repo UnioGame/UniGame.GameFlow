@@ -14,6 +14,10 @@
     [CreateNodeMenu("GameSystem/Data Source")]
     public class ContextDataSourceNode : InOutPortNode
     {
+        
+#if ODIN_INSPECTOR
+        [Sirenix.OdinInspector.DrawWithUnity]
+#endif
         public AssetReferenceDataSource contextDataSource;
 
         protected override void UpdateCommands(List<ILifeTimeCommand> nodeCommands)
