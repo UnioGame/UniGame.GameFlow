@@ -122,12 +122,14 @@ namespace UniModules.GameFlow.Runtime.Core
         
         private async UniTask LoadDataSources()
         {
-            foreach (var dataSource in _dataSources)
-                dataSource.RegisterAsync(Context);
+            UniTask.WhenAll(_dataSources.Select(x => x.RegisterAsync(Context)))
+                .AttachExternalCancellation(LifeTime.TokenSource)
+                .Forget();
 
             foreach (var referenceSource in _assetReferenceSources) {
                 var source = await referenceSource.LoadAssetTaskAsync(LifeTime);
-                source.RegisterAsync(Context);
+                source.RegisterAsync(Context).AttachExternalCancellation(LifeTime.TokenSource)
+                    .Forget();
             }
         }
 
