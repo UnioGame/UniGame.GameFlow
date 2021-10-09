@@ -22,9 +22,15 @@ namespace UniModules.GameFlow.Runtime.Core
         #region inspector properties
         
         [SerializeField]
+#if ODIN_INSPECTOR
+        [Sirenix.OdinInspector.DrawWithUnity]
+#endif
         private List<AssetReferenceDataSource> _assetReferenceSources = new List<AssetReferenceDataSource>();
         
         [SerializeField]
+#if ODIN_INSPECTOR
+        [Sirenix.OdinInspector.DrawWithUnity]
+#endif
         private List<AsyncContextDataSource> _dataSources = new List<AsyncContextDataSource>();
 
         [SerializeField]
