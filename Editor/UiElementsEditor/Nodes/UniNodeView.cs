@@ -18,23 +18,16 @@ namespace UniGame.GameFlowEditor.Editor
     [NodeCustomEditor(typeof(UniBaseNode))]
     public class UniNodeView : BaseNodeView
     {
-        private const string                   PortsInfoMenu    = "Ports Data Info";
-        private const string                   OpenScriptMenu    = "Open UniNode Script";
-        
-        private       List<ContextDescription> content          = new List<ContextDescription>();
-        private       Color                    _backgroundColor = new Color(0.4f, 0.4f, 0.4f);
+        private const string PortsInfoMenu  = "Ports Data Info";
+        private const string OpenScriptMenu = "Open UniNode Script";
 
-        private SerializableNodeContainer serializableNode;
+        private List<ContextDescription>  _content          = new List<ContextDescription>();
+        private Color                     _backgroundColor = new Color(0.4f, 0.4f, 0.4f);
+        private SerializableNodeContainer _serializableNode;
 
-        protected SerializableNodeContainer NodeContainer
-        {
-            get
-            {
-                if (!serializableNode)
-                    serializableNode = ScriptableObject.CreateInstance<SerializableNodeContainer>();
-                return serializableNode;
-            }
-        }
+        private SerializableNodeContainer NodeContainer
+            => _serializableNode ??= ScriptableObject.CreateInstance<SerializableNodeContainer>();
+
 
         #region public properties
 
@@ -46,6 +39,7 @@ namespace UniGame.GameFlowEditor.Editor
 
         public bool IsSerializable { get; protected set; }
 
+        
         #endregion
 
         public override void Enable()
@@ -73,17 +67,17 @@ namespace UniGame.GameFlowEditor.Editor
 
         public void ShowPortsData()
         {
-            content.Clear();
+            _content.Clear();
             foreach (var nodePort in NodeData.SourceNode.Ports)
             {
-                content.Add(new ContextDescription()
+                _content.Add(new ContextDescription()
                 {
                     Data  = nodePort.Value,
                     Label = nodePort.ItemName
                 });
             }
 
-            ContextContentWindow.Open(content).Focus();
+            ContextContentWindow.Open(_content).Focus();
         }
 
         protected virtual void DrawNode(INode sourceNode)
@@ -101,14 +95,14 @@ namespace UniGame.GameFlowEditor.Editor
             containerStyle.marginLeft    = 4;
             containerStyle.marginRight   = 4;
             containerStyle.minWidth      = 250;
-            
+
             controlsContainer.Add(container);
         }
 
         public override void OnSelected()
         {
             base.OnSelected();
-            Selection.activeObject = IsSerializable ? NodeContainer : NodeData.SourceNode as Object ;
+            Selection.activeObject = IsSerializable ? NodeContainer : NodeData.SourceNode as Object;
         }
 
         private void ShowPortsValues()
@@ -116,14 +110,8 @@ namespace UniGame.GameFlowEditor.Editor
             PortDataWindow.Open(NodeData.SourceNode).Focus();
         }
 
-        private void OpenUniNodeSourceCode()
-        {
-            NodeData.SourceNode.GetType().OpenEditorScript();
-        }
+        private void OpenUniNodeSourceCode() => NodeData.SourceNode.GetType().OpenEditorScript();
 
-        protected void OnDestroy()
-        {
-            NodeViewProcessor.Asset.Remove(this);
-        }
+        protected void OnDestroy() => NodeViewProcessor.Asset.Remove(this);
     }
 }

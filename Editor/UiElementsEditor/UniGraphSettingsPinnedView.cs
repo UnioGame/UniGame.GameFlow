@@ -56,7 +56,7 @@ namespace UniGame.UniNodes.GameFlowEditor.Editor
             this.graphView = graphView as GameFlowGraphView;
 
             AddButton(ReloadAction, ReloadText, ReloadGraphView);
-            AddButton(SaveAction, SaveText, ReloadGraphView);
+            AddButton(SaveAction, SaveText, SaveGraphView);
 #if ODIN_INSPECTOR
             AddButton(NodesAction, NodesText, ShowNodesWindow);
 #endif

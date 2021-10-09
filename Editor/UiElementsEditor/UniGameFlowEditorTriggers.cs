@@ -80,8 +80,7 @@ namespace UniModules.GameFlow.Editor
         }
 
         public static void Select(UniGraph uniGraph) {
-
-
+            
             var window = UniGameFlowWindow.Windows.
                 FirstOrDefault(x => x.IsEmpty);
             if (window == null) {
