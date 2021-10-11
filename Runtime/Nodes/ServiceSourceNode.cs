@@ -21,26 +21,26 @@ namespace Game.Modules.Assets.UniGame.GameFlow.Runtime.Nodes
             var serviceSource = await sourceAsset.LoadAssetTaskAsync(LifeTime);
             var validation = await OnValidateSource(context, serviceSource)
                 .AttachExternalCancellation(LifeTime.TokenSource);
-            
+
             if (!validation)
             {
                 Complete();
                 return;
             }
-            
-            context        = await serviceSource.RegisterAsync(context);
 
-            await OnSourceComplete(context,serviceSource);
-            
+            context = await serviceSource.RegisterAsync(context);
+
+            await OnSourceComplete(context, serviceSource);
+
             Complete();
         }
 
-        protected virtual UniTask<bool> OnValidateSource(IContext context,TSource source)
+        protected virtual UniTask<bool> OnValidateSource(IContext context, TSource source)
         {
             return UniTask.FromResult(true);
         }
-        
-        protected virtual UniTask OnSourceComplete(IContext context,TSource source)
+
+        protected virtual UniTask OnSourceComplete(IContext context, TSource source)
         {
             return UniTask.CompletedTask;
         }
