@@ -45,7 +45,9 @@
         protected sealed override UniTask OnExecute()
         {
             Source.Where(x => x != null).
-                Do(async x => await OnContextAvailable(x)).
+                Do(async x => await OnContextAvailable(x)
+                    .AttachExternalCancellation(LifeTime.TokenSource)
+                    .SuppressCancellationThrow()).
                 Subscribe().
                 AddTo(LifeTime);
             
@@ -71,7 +73,7 @@
             return context;
         }
         
-        private async UniTask<IContext> BindService(IContext context)
+        private UniTask<IContext> BindService(IContext context)
         {
             _serviceDisposable = _service.IsReady.
                 Where(x => x || !waitForServiceReady).
@@ -80,7 +82,7 @@
                 Subscribe().
                 AddTo(LifeTime);
             
-            return context;
+            return UniTask.FromResult(context);
         }
     }
 }

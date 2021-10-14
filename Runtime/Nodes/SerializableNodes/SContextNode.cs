@@ -1,9 +1,8 @@
 ﻿namespace UniGame.UniNodes.Nodes.Runtime.Common
 {
     using System;
-    using System.Collections.Generic;
+    using Cysharp.Threading.Tasks;
     using UniModules.GameFlow.Runtime.Attributes;
-    using UniModules.GameFlow.Runtime.Core;
     using UniCore.Runtime.ProfilerTools;
     using UniModules.UniCore.Runtime.Rx.Extensions;
     using UniModules.UniGame.Core.Runtime.Interfaces;
@@ -41,18 +40,19 @@
             Source.Value.Publish(data);
         }
 
-
-        protected override void UpdateCommands(List<ILifeTimeCommand> nodeCommands)
+        protected override UniTask OnExecute()
         {
-            base.UpdateCommands(nodeCommands);
-                        
-            Source.Where(x => x!=null).
-                Do(OnContextActivate).
-                Subscribe().
-                AddTo(LifeTime);
+            Source.Where(x => x!=null)
+                .Do(x => OnContextActivate(x)
+                    .AttachExternalCancellation(LifeTime.TokenSource)
+                    .Forget())
+                .Subscribe()
+                .AddTo(LifeTime);
+            
+            return UniTask.CompletedTask;
         }
 
-        protected virtual void OnContextActivate(IContext context) { }
+        protected virtual UniTask OnContextActivate(IContext context)  => UniTask.CompletedTask;
         
     }
 }

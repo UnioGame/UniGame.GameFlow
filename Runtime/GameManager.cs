@@ -13,8 +13,8 @@
     using UniContextData.Runtime.Interfaces;
     using UniCore.Runtime.DataFlow;
     using UniCore.Runtime.Rx.Extensions;
-    using UniRx;
     using UnityEngine;
+    using Object = UnityEngine.Object;
 
     public class GameManager : MonoBehaviour, IGameManager
     {
@@ -35,6 +35,9 @@
         [SerializeReference]
         private List<IAsyncContextDataSource> _sources = new List<IAsyncContextDataSource>();
 
+        [SerializeReference]
+        private bool executeOnStart = true;
+        
         #endregion
 
         private LifeTimeDefinition _lifeTime = new LifeTimeDefinition();
@@ -53,7 +56,6 @@
 
         public async UniTask Execute()
         {
-            _lifeTime.Release();
             _gameContext = new EntityContext().AddTo(LifeTime);
             
             if (_contextContainer.RuntimeKeyIsValid())

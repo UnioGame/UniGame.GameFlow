@@ -24,6 +24,7 @@ namespace UniModules.GameFlow.Runtime.Core
 
         #region inspector
 
+        [HideInInspector]
         [ReadOnlyValue] 
         [SerializeField] public int id;
 
@@ -70,7 +71,7 @@ namespace UniModules.GameFlow.Runtime.Core
         /// <summary>
         /// Node name
         /// </summary>
-        public string ItemName => nodeName;
+        public virtual string ItemName => nodeName;
 
         /// <summary>
         /// Iterate over all ports on this node.

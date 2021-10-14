@@ -105,21 +105,28 @@ namespace UniModules.UniGameFlow.Nodes.Runtime.States
             port.Value.Publish(_token);
         }
 
-        protected sealed override void OnExecute()
+        protected sealed override UniTask OnExecute()
         {
             if (!Application.isPlaying)
-                return;
+                return UniTask.CompletedTask;
 
             _isStateActive   = false;
             _asyncStateProxy = new AsyncContextStateProxy(this, this, this, this);
             _inputPort       = GetPortValue(nameof(input));
 
-            LifeTime.AddCleanUpAction(() => _asyncStateProxy.ExitAsync());
+            LifeTime.AddCleanUpAction(async () => await _asyncStateProxy.ExitAsync()
+                .AttachExternalCancellation(LifeTime.TokenSource));
 
             LogNodeExecutionState();
 
             //get all actual stat tokens and try to run state
-            _inputPort.Receive<IStateToken>().Where(x => _isStateActive == false).Select(async x => await OwnToken(x)).Subscribe().AddTo(LifeTime);
+            _inputPort.Receive<IStateToken>()
+                .Where(x => _isStateActive == false)
+                .Select(async x => await OwnToken(x))
+                .Subscribe()
+                .AddTo(LifeTime);
+            
+            return UniTask.CompletedTask;
         }
 
 

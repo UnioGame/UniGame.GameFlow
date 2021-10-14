@@ -56,6 +56,8 @@
 
         #region public properties
 
+        public Transform Root => transform;
+        
         public abstract IContext GraphContext { get; }
 
         public override string ItemName => name;

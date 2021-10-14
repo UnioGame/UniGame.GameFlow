@@ -83,13 +83,15 @@
         [Port(PortIO.Input)]
         public int intPort;
         
-        protected override void OnExecute()
+        protected override UniTask OnExecute()
         {
             var intPortHandle = GetPort(nameof(intPort));
             var portValue     = intPortHandle.Value;
             portValue.Receive<int>().
                 Subscribe(x => Debug.Log($"RECEIVE INT VALUE {x}")).
                 AddTo(LifeTime);
+            
+            return UniTask.CompletedTask;
         }
         
     }

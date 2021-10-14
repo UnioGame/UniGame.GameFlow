@@ -28,8 +28,8 @@
             node = target;
             graph = graphData;
             var nodeType = node?.GetType();
-            type = node?.GetType().Name;
-            script = AssetEditorTools.GetScriptAsset(nodeType);
+            type     = node?.GetType().Name;
+            script   = nodeType.GetScriptAsset();
             fullType = node?.GetType().AssemblyQualifiedName;
             return this;
         }
