@@ -54,10 +54,10 @@
         {
             Source.Where(x => x != null)
                 .ObserveOnMainThread()
-                .Do(async context =>
-                    await OnContextActivate(context)
-                        .AttachExternalCancellation(LifeTime.AsCancellationToken())
-                        .SuppressCancellationThrow())
+                .Do(context => OnContextActivate(context)
+                    .AttachExternalCancellation(LifeTime.AsCancellationToken())
+                    .SuppressCancellationThrow()
+                    .Forget())
                 .Subscribe()
                 .AddTo(LifeTime);
             
