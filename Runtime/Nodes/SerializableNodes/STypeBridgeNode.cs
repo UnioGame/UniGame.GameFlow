@@ -5,12 +5,14 @@
     using Cysharp.Threading.Tasks;
     using UniModules.GameFlow.Runtime.Attributes;
     using UniModules.GameFlow.Runtime.Core;
-    using UniModules.GameFlow.Runtime.Core.Commands;
     using UniModules.GameFlow.Runtime.Core.Nodes;
+    using UniModules.GameFlow.Runtime.Extensions;
     using UniModules.GameFlow.Runtime.Interfaces;
     using UniModules.UniCore.Runtime.Attributes;
+    using UniModules.UniCore.Runtime.Rx.Extensions;
     using UniModules.UniGame.Core.Runtime.Interfaces;
     using UniModules.UniGame.Core.Runtime.Interfaces.Rx;
+    using UniModules.UniGame.Core.Runtime.Rx;
     using UniRx;
     using UnityEngine;
 
@@ -24,50 +26,82 @@
         #region inspector
         
         public bool distinctInput = true;
-
+        public bool completeOnce  = false;
+        
         [ReadOnlyValue]
-        [SerializeField] protected TData defaultValue;
+        [SerializeField]
+        protected TData editorValue;
 
         #endregion
-
-        protected IPortValue input;
-
-        protected IPortValue output;
         
-        protected IDataSourceCommand<TData> valueSource;
+        private RecycleReactiveProperty<TData> _valueData;
+        private RecycleReactiveProperty<bool>  _isReady;
 
-        protected IReadOnlyReactiveProperty<TData> valueData;
+        public IPortValue input;
+        public IPortValue output;
 
         #region public properties
 
-        public IReadOnlyReactiveProperty<TData> Source => valueData;
+        public IReadOnlyReactiveProperty<TData> Source => _valueData;
 
         #endregion
 
         #region IReactiveProperty API
 
-        public TData Value => valueData.Value;
+        public TData Value => _valueData.Value;
 
-        public bool HasValue => valueData.HasValue;
+        public bool HasValue => _valueData.HasValue;
         
-        public IDisposable Subscribe(IObserver<TData> observer) => valueData.Subscribe(observer);
+        public IDisposable Subscribe(IObserver<TData> observer) => _valueData.Subscribe(observer);
         
         #endregion
 
-        protected override void UpdateCommands(List<ILifeTimeCommand> nodeCommands)
+        protected sealed override void UpdateCommands(List<ILifeTimeCommand> nodeCommands)
         {
             base.UpdateCommands(nodeCommands);
 
-            var command = new PortTypeDataBridgeCommand<TData>(this,portName,defaultValue,distinctInput);
-            input = command.InputPort;
-            output = command.OutputPort;
+            _valueData = new RecycleReactiveProperty<TData>().AddTo(LifeTime);
+            _isReady   = new RecycleReactiveProperty<bool>().AddTo(LifeTime);
             
-            valueSource = command;
-            valueData   = valueSource.Value;
+            var inputName   = portName.GetFormatedPortName(PortIO.Input);
+            var outputName  = portName.GetFormatedPortName(PortIO.Output);
+            var bridgePorts = this.CreatePortPair(inputName, outputName, false);
 
-            nodeCommands.Add(valueSource);
+            input  = bridgePorts.inputValue;
+            output = bridgePorts.outputValue;
         }
 
-        public void Complete() => valueSource.Complete();
+        protected sealed override UniTask OnExecute()
+        {
+            _valueData.Subscribe(x => OnValueUpdate(x).AttachExternalCancellation(LifeTime.TokenSource).Forget())
+                .AddTo(LifeTime);
+
+            _isReady.Where(x => x)
+                .CombineLatest(_valueData, (x, value) => value)
+                .Subscribe(output.Publish)
+                .AddTo(LifeTime);
+            
+            //reset local value
+            var valueObservable = input.Receive<TData>();
+
+            if (distinctInput)
+                valueObservable.Subscribe(x => _valueData.Value = x).AddTo(LifeTime);
+            else
+                valueObservable.Subscribe(_valueData.SetValueForce).AddTo(LifeTime);
+
+            return UniTask.CompletedTask;
+        }
+
+        public void Complete()
+        {
+            _isReady.Value = true;
+            if (completeOnce) return;
+            _isReady.Value = false;
+        }
+
+        protected virtual UniTask OnValueUpdate(TData value)
+        {
+            return UniTask.CompletedTask;
+        }
     }
 }

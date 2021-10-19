@@ -1,7 +1,6 @@
 ﻿namespace UniGame.UniNodes.Nodes.Runtime.Common
 {
     using System;
-    using System.Collections.Generic;
     using Cysharp.Threading.Tasks;
     using UniModules.GameFlow.Runtime.Attributes;
     using UniModules.GameFlow.Runtime.Core;
@@ -19,18 +18,13 @@
     {
         private SContextNode contextNode;
         
-
-        public IDisposable Subscribe(IObserver<IContext> observer) => 
-            contextNode.Subscribe(observer);
+        public IDisposable Subscribe(IObserver<IContext> observer) => contextNode.Subscribe(observer);
 
         public IContext Value => contextNode.Value;
         
         public bool HasValue => contextNode.HasValue;
 
-        public void Complete()
-        {
-            contextNode.Complete();
-        }
+        public void Complete() => contextNode.Complete();
         
         public void Publish<T>(T message) => contextNode.Publish(message);
 
@@ -53,7 +47,6 @@
         protected override UniTask OnExecute()
         {
             Source.Where(x => x != null)
-                .ObserveOnMainThread()
                 .Do(context => OnContextActivate(context)
                     .AttachExternalCancellation(LifeTime.AsCancellationToken())
                     .SuppressCancellationThrow()

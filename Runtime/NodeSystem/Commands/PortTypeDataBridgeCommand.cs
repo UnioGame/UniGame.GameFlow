@@ -4,6 +4,7 @@
     using Cysharp.Threading.Tasks;
     using Interfaces;
     using Runtime.Interfaces;
+    using UniGame.Core.Runtime.Rx;
     using UniModules.UniCore.Runtime.DataFlow.Interfaces;
     using UniModules.UniCore.Runtime.Rx.Extensions;
     using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
@@ -12,13 +13,13 @@
     [Serializable]
     public class PortTypeDataBridgeCommand<TData> : IDataSourceCommand<TData>, IPortPair
     {
-        protected readonly TData defaultValue;
-        protected readonly bool distinctInput;
-        
-        protected IPortPair portPair;
+        private readonly TData _defaultValue;
+        private readonly bool  _distinctInput;
 
-        protected ReactiveProperty<TData> valueData = new ReactiveProperty<TData>();
-        protected BoolReactiveProperty isFinalyze = new BoolReactiveProperty();
+        private IPortPair                      _portPair;
+        private INode                          _node;
+        private RecycleReactiveProperty<TData> _valueData  = new RecycleReactiveProperty<TData>();
+        private RecycleReactiveProperty<bool>  _isFinalyze = new RecycleReactiveProperty<bool>();
 
         public PortTypeDataBridgeCommand(
             IUniNode node,
@@ -26,46 +27,48 @@
             TData defaultValue,
             bool distinctInput = true)
         {
-            this.defaultValue = defaultValue;
-            this.valueData.Value = defaultValue;
-            this.distinctInput = distinctInput;
-            
+            _node                 = node;
+            _defaultValue    = defaultValue;
+            _valueData.Value = defaultValue;
+            _distinctInput   = distinctInput;
+
             //create port pairs
-            portPair = new ConnectedFormatedPairCommand(node, portName,false);
+            _portPair = new ConnectedFormatedPairCommand(node, portName, false);
         }
 
-        public bool IsComplete => isFinalyze.Value;
+        public bool IsComplete => _isFinalyze.Value;
 
-        public IReadOnlyReactiveProperty<TData> Value => valueData;
+        public IReadOnlyReactiveProperty<TData> Value => _valueData;
 
-        public IPortValue InputPort => portPair.InputPort;
+        public IPortValue InputPort => _portPair.InputPort;
 
-        public IPortValue OutputPort => portPair.OutputPort;
-        
+        public IPortValue OutputPort => _portPair.OutputPort;
+
         public UniTask Execute(ILifeTime lifeTime)
         {
             //reset local value
             lifeTime.AddCleanUpAction(CleanUpNode);
-            
-            var input = portPair.InputPort;
-            var output = portPair.OutputPort;
-            
+
+            var input  = _portPair.InputPort;
+            var output = _portPair.OutputPort;
+
             var valueObservable = input.Receive<TData>();
-            var source = BindToDataSource(valueObservable);
-            
-            if (distinctInput) {
-                source.Subscribe(x => valueData.Value = x).AddTo(lifeTime);
+            var source          = BindToDataSource(valueObservable);
+
+            if (_distinctInput)
+            {
+                source.Subscribe(x => _valueData.Value = x).AddTo(lifeTime);
             }
-            else {
-                source.Subscribe(valueData.SetValueAndForceNotify).AddTo(lifeTime);
+            else
+            {
+                source.Subscribe(_valueData.SetValueForce).AddTo(lifeTime);
             }
-            
-            isFinalyze.
-                Where(x => x).
-                Do(x => output.Publish(valueData.Value)).
-                Subscribe().
-                AddTo(lifeTime);
-            
+
+            _isFinalyze.Where(x => x)
+                .Do(x => output.Publish(_valueData.Value))
+                .Subscribe()
+                .AddTo(lifeTime);
+
             return UniTask.CompletedTask;
         }
 
@@ -73,23 +76,19 @@
         {
             return source;
         }
-        
+
         private void CleanUpNode()
         {
-            isFinalyze.Value = false;
-            valueData.Value  = defaultValue;
+            _isFinalyze.Value = false;
+            _valueData.Value  = _defaultValue;
         }
 
-        public void Dispose()
-        {
-            CleanUpNode();
-        }
+        public void Dispose() => CleanUpNode();
 
         public void Complete()
         {
-            isFinalyze.Value = true;
-            isFinalyze.Value = false;
+            _isFinalyze.Value = true;
+            _isFinalyze.Value = false;
         }
-
     }
 }

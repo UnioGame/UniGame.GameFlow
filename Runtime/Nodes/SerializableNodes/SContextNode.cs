@@ -4,7 +4,6 @@
     using Cysharp.Threading.Tasks;
     using UniModules.GameFlow.Runtime.Attributes;
     using UniCore.Runtime.ProfilerTools;
-    using UniModules.UniCore.Runtime.Rx.Extensions;
     using UniModules.UniGame.Core.Runtime.Interfaces;
     using UniRx;
 
@@ -40,16 +39,10 @@
             Source.Value.Publish(data);
         }
 
-        protected override UniTask OnExecute()
+        protected sealed override async UniTask OnValueUpdate(IContext context)
         {
-            Source.Where(x => x!=null)
-                .Do(x => OnContextActivate(x)
-                    .AttachExternalCancellation(LifeTime.TokenSource)
-                    .Forget())
-                .Subscribe()
-                .AddTo(LifeTime);
-            
-            return UniTask.CompletedTask;
+            if(context == null) return;
+            await OnContextActivate(context); ;
         }
 
         protected virtual UniTask OnContextActivate(IContext context)  => UniTask.CompletedTask;

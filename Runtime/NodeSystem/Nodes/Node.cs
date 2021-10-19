@@ -15,6 +15,10 @@ namespace UniModules.GameFlow.Runtime.Core
     using UniModules.UniGame.Core.Runtime.Interfaces;
     using UnityEngine;
 
+#if UNITY_EDITOR
+    using UnityEditor;
+#endif
+    
     [Serializable]
     public abstract class Node : MonoBehaviour, INode
     {
@@ -51,7 +55,6 @@ namespace UniModules.GameFlow.Runtime.Core
         #endregion
         
         private IProxyNode _serializableNode;
-
         private IGraphData _graph;
         
         /// <summary>
@@ -123,6 +126,11 @@ namespace UniModules.GameFlow.Runtime.Core
         {
             _graph = data;
             if (id != 0) SNode.SetId(id);
+
+#if UNITY_EDITOR
+            EditorApplication.playModeStateChanged -= BindEditorCallbacks;
+            EditorApplication.playModeStateChanged += BindEditorCallbacks;
+#endif
         }
 
         public virtual void OnIdUpdate(int oldId, int newId, IGraphItem updatedItem)
@@ -162,10 +170,7 @@ namespace UniModules.GameFlow.Runtime.Core
         /// <summary>
         /// Remove an instance port from the node
         /// </summary>
-        public void RemovePort(string fieldName)
-        {
-            RemovePort(GetPort(fieldName));
-        }
+        public void RemovePort(string fieldName) => RemovePort(GetPort(fieldName));
 
         /// <summary>
         /// Remove an instance port from the node
@@ -195,10 +200,7 @@ namespace UniModules.GameFlow.Runtime.Core
 
         public IPortValue GetPortValue(string portName) => SNode.GetPort(portName)?.Value;
 
-        public bool HasPort(string fieldName)
-        {
-            return SNode.HasPort(fieldName);
-        }
+        public bool HasPort(string fieldName) => SNode.HasPort(fieldName);
 
         /// <summary> Disconnect everything from this node </summary>
         public void ClearConnections()
@@ -208,10 +210,7 @@ namespace UniModules.GameFlow.Runtime.Core
 
         public virtual void Validate(){}
 
-        public void SetName(string itemName)
-        {
-            nodeName = itemName;
-        }
+        public void SetName(string itemName) => nodeName = itemName;
 
         public virtual string GetStyle() => string.Empty;
         
@@ -244,6 +243,24 @@ namespace UniModules.GameFlow.Runtime.Core
         {
             GameLog.Log($"{GraphData.ItemName}:{ItemName}: {message}");
         }
+
+#if UNITY_EDITOR
+        
+
+        private void BindEditorCallbacks(PlayModeStateChange playModeStateChange)
+        {
+            switch (playModeStateChange)
+            {
+                case PlayModeStateChange.ExitingEditMode:
+                case PlayModeStateChange.ExitingPlayMode:
+                    _serializableNode = null;
+                    _graph            = null;
+                    break;
+            }
+        }
+        
+#endif
+
         
     }
 }

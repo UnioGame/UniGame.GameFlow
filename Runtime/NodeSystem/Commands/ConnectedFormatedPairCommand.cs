@@ -24,7 +24,6 @@
         {
             var inputName = input.GetFormatedPortName(PortIO.Input);
             var outputName = input.GetFormatedPortName(PortIO.Output);
-            
             var ports = node.CreatePortPair(inputName, outputName, connect);
             
             InputPort = ports.inputValue;
