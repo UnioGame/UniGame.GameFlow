@@ -11,19 +11,28 @@
     using UniGame.Context.Runtime.Context;
     using UniGame.Core.Runtime.Interfaces;
     using UniGame.SerializableContext.Runtime.Addressables;
-    using UniRx;
     using UnityEngine;
 
+#if ODIN_INSPECTOR
+    using Sirenix.OdinInspector;
+#endif
+    
     [CreateNodeMenu("GameSystem/Owner Context Source")]
     public class OwnerContextSourceNode : InOutPortNode
     {
         #region inspector
 
         public bool useGraphContext = true;
-        
+
+#if ODIN_INSPECTOR
+        [DrawWithUnity]
+#endif
         [SerializeField]
         private AssetReferenceContextContainer localContextContainer;
 
+#if ODIN_INSPECTOR
+        [DrawWithUnity]
+#endif
         [Header("Data Source")]
         [SerializeField]
         private AssetReferenceDataSource dataSources;
