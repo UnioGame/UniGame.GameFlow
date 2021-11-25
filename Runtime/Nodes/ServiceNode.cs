@@ -30,11 +30,11 @@
 
         [ReadOnlyValue]
         [SerializeField]
-        private bool _isReady;
+        private bool isReady;
+
+        public bool waitServiceReady = true;
         
         #endregion
-        
-        private IDisposable _serviceDisposable;
 
         public bool waitForServiceReady = true;
 
@@ -42,45 +42,33 @@
 
         protected abstract UniTask<TServiceApi> CreateService(IContext context);
 
-        protected sealed override UniTask OnExecute()
+        protected sealed override async UniTask OnContextActivate(IContext context)
         {
-            Source.Where(x => x != null).
-                Do(async x => await OnContextAvailable(x)
-                    .AttachExternalCancellation(LifeTime.TokenSource)
-                    .SuppressCancellationThrow()).
-                Subscribe().
-                AddTo(LifeTime);
-            
-            return  UniTask.CompletedTask;
-        }
-
-        protected virtual void OnServiceCreated(IContext context)
-        {
-        }
-
-        private async UniTask<IContext> OnContextAvailable(IContext context)
-        {
-            var serviceLifeTime = context.LifeTime.Compose(LifeTime);
-            
             _service = await CreateService(context);
-            _service.AddTo<IDisposable>(serviceLifeTime);
+            _service.AddTo(LifeTime);
 
-            await BindService(context);
-            
-            OnServiceCreated(context);
+            await BindService(_service,context);
+            await OnServiceCreated(_service,context);
             
             GameLog.LogRuntime($"NODE SERVICE {typeof(TServiceApi).Name} CREATED");
-            return context;
         }
+
+        protected virtual UniTask OnServiceCreated(TServiceApi service,IContext context) => UniTask.CompletedTask;
         
-        private UniTask<IContext> BindService(IContext context)
+        private UniTask<IContext> BindService(TServiceApi service,IContext context)
         {
-            _serviceDisposable = _service.IsReady.
-                Where(x => x || !waitForServiceReady).
-                Do(_ => context.Publish<TServiceApi>(_service)).
-                Do(_ => Complete()).
-                Subscribe().
-                AddTo(LifeTime);
+            if (!waitServiceReady)
+                return UniTask.FromResult(context);
+            
+            service.IsReady
+#if UNITY_EDITOR
+                .Do(x => isReady = x)
+#endif
+                .Where(x => x || !waitForServiceReady)
+                .Do(_ => context.Publish<TServiceApi>(_service))
+                .Do(_ => Complete())
+                .Subscribe()
+                .AddTo(LifeTime);
             
             return UniTask.FromResult(context);
         }
