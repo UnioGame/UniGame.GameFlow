@@ -13,14 +13,25 @@
     using UniGame.SerializableContext.Runtime.Addressables;
     using UnityEngine;
 
+#if ODIN_INSPECTOR
+    using Sirenix.OdinInspector;
+#endif
+    
     [CreateNodeMenu("GameSystem/Parenting Local Context Source")]
     public class ParentingLocalContextSourceNode : InOutPortNode
     {
         private ContextConnection _contextConnection;
 
         [SerializeField]
+#if ODIN_INSPECTOR
+        [DrawWithUnity]
+#endif
         public AssetReferenceContextContainer _localContextContainer;
         [SerializeField]
+
+#if ODIN_INSPECTOR
+        [DrawWithUnity]
+#endif
         public AssetReferenceContextContainer _parentContextContainer;
 
         [Header("Data Source")]
