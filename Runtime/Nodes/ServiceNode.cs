@@ -55,7 +55,7 @@
             
 #if UNITY_EDITOR
             var watchResult = ProfilerUtils.GetWatchData(profileId);
-            GameLog.Log($"{nameof(ServiceDataSourceAsset)} RegisterAsync CreateServiceAsync: Service : {typeof(TServiceApi).Name} | Take {watchResult.watchMs} | {DateTime.Now}");
+            GameLog.Log($"GameService Profiler Create : {typeof(TServiceApi).Name} | Take {watchResult.watchMs} | {DateTime.Now}");
 #endif
             
             _service.AddTo(LifeTime);
