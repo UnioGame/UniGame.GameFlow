@@ -5,10 +5,12 @@
     using UniModules.GameFlow.Runtime.Attributes;
     using UniCore.Runtime.ProfilerTools;
     using UniModules.UniCore.Runtime.Attributes;
+    using UniModules.UniCore.Runtime.ProfilerTools;
     using UniModules.UniCore.Runtime.Rx.Extensions;
     using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
     using UniModules.UniGame.Core.Runtime.Interfaces;
     using UniModules.UniGameFlow.GameFlow.Runtime.Interfaces;
+    using UniModules.UniGameFlow.GameFlow.Runtime.Services;
     using UniNodes.Nodes.Runtime.Common;
     using UniRx;
     
@@ -44,7 +46,18 @@
 
         protected sealed override async UniTask OnContextActivate(IContext context)
         {
+            
+#if UNITY_EDITOR
+            var profileId = ProfilerUtils.BeginWatch($"Service_{typeof(TServiceApi).Name}");
+#endif 
+            
             _service = await CreateService(context);
+            
+#if UNITY_EDITOR
+            var watchResult = ProfilerUtils.GetWatchData(profileId);
+            GameLog.Log($"{nameof(ServiceDataSourceAsset)} RegisterAsync CreateServiceAsync: Service : {typeof(TServiceApi).Name} | Take {watchResult.watchMs} | {DateTime.Now}");
+#endif
+            
             _service.AddTo(LifeTime);
 
             await BindService(_service,context);
