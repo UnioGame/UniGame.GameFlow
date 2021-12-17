@@ -47,13 +47,14 @@
         protected sealed override async UniTask OnContextActivate(IContext context)
         {
             
-#if UNITY_EDITOR
+#if UNITY_EDITOR || GAME_LOGS_ENABLED
             var profileId = ProfilerUtils.BeginWatch($"Service_{typeof(TServiceApi).Name}");
+            GameLog.Log($"GameService Profiler Init : {typeof(TServiceApi).Name} | {DateTime.Now}");
 #endif 
             
             _service = await CreateService(context);
             
-#if UNITY_EDITOR
+#if UNITY_EDITOR || GAME_LOGS_ENABLED
             var watchResult = ProfilerUtils.GetWatchData(profileId);
             GameLog.Log($"GameService Profiler Create : {typeof(TServiceApi).Name} | Take {watchResult.watchMs} | {DateTime.Now}");
 #endif
