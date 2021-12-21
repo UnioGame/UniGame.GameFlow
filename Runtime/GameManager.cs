@@ -20,6 +20,8 @@
     {
         #region inspector
 
+        public bool isEnabled = true;
+        
         [SerializeField]
         private AssetReferenceContextContainer _contextContainer;
 
@@ -56,6 +58,8 @@
 
         public async UniTask Execute()
         {
+            if (!isEnabled) return;
+            
             _gameContext = new EntityContext().AddTo(LifeTime);
             
             if (_contextContainer.RuntimeKeyIsValid())
