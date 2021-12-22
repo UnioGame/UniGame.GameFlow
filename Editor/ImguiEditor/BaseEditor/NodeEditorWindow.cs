@@ -18,7 +18,6 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
     using UnityEngine;
     using Object = UnityEngine.Object;
 
-    [InitializeOnLoad]
     public partial class NodeEditorWindow : EditorWindow
     {
         public const string ActiveGraphPath     = "ActiveGraphPath";
