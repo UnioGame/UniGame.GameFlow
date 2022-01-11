@@ -33,7 +33,8 @@ namespace UniGame.GameFlowEditor.Runtime
         #endregion
 
         private UniGraph sourceGraph;
-
+        private List<NodePortConnection> portsConnections = new List<NodePortConnection>();
+        
         public Dictionary<int, UniBaseNode> uniNodes = new Dictionary<int, UniBaseNode>(16);
 
         public UniGraph UniGraph => sourceGraph;
@@ -107,6 +108,9 @@ namespace UniGame.GameFlowEditor.Runtime
 
         private void ConnectNodePorts()
         {
+            portsConnections ??= new List<NodePortConnection>();
+            portsConnections.Clear();
+            
             foreach (var nodeItem in uniNodes)
             {
                 var nodeView = nodeItem.Value;
@@ -118,20 +122,39 @@ namespace UniGame.GameFlowEditor.Runtime
 
                     foreach (var connection in sourcePort.Connections)
                     {
-                        if (!uniNodes.TryGetValue(connection.NodeId, out var connectionNode))
+                        if (!uniNodes.TryGetValue(connection.NodeId, out var connectionNode)) 
                             continue;
+                        
                         var targetNode = connectionNode.SourceNode;
                         var port = targetNode.GetPort(connection.PortName);
 
-                        if (port.Direction != PortIO.Input)
-                            continue;
+                        if (port.Direction != PortIO.Input) continue;
 
                         var inputPortView = connectionNode.GetPort(nameof(connectionNode.inputs), connection.PortName);
 
-                        Connect(inputPortView, outputPortView);
+                        portsConnections.Add(new NodePortConnection()
+                        {
+                            source = inputPortView,
+                            target = outputPortView
+                        });
                     }
                 }
             }
+
+            foreach (var nodePortConnection in portsConnections)
+            {
+                var inputPortView = nodePortConnection.source;
+                var outputPortView = nodePortConnection.target;
+                Connect(inputPortView, outputPortView);
+            }
+            
+            portsConnections.Clear();
         }
+    }
+
+    public struct NodePortConnection
+    {
+        public GraphProcessor.NodePort source;
+        public GraphProcessor.NodePort target;
     }
 }

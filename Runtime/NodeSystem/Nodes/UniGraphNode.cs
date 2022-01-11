@@ -1,4 +1,6 @@
-﻿namespace UniModules.GameFlow.Runtime.Core
+﻿using UniModules.GameFlow.Runtime.Attributes;
+
+namespace UniModules.GameFlow.Runtime.Core
 {
     using Cysharp.Threading.Tasks;
     using Extensions;
@@ -11,6 +13,7 @@
     using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
     using UniRx;
 
+    [HideNode]
     public abstract class UniGraphNode : UniNode
     {
         

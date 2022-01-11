@@ -1,4 +1,6 @@
-﻿namespace UniModules.GameFlow.Runtime.Core
+﻿using UniModules.GameFlow.Runtime.Attributes;
+
+namespace UniModules.GameFlow.Runtime.Core
 {
     using System;
     using System.Collections.Generic;
@@ -15,6 +17,7 @@
 
     /// <summary> Base class for all node graphs </summary>
     [Serializable]
+    [HideNode]
     public abstract class NodeGraph : UniNode, INodeGraph
     {
         #region static data

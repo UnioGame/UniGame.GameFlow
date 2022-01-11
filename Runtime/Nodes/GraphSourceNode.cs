@@ -13,7 +13,7 @@
     using UniRx;
     using UnityEngine;
 
-    [CreateNodeMenu("GameSystem/Graph Source Node")]
+    [CreateNodeMenu("Common/Sources/Graph Source Node")]
     public class GraphSourceNode : InOutPortNode
     {
 #if ODIN_INSPECTOR

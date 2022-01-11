@@ -1,4 +1,6 @@
-﻿namespace UniGame.UniNodes.GameFlow.Runtime.Nodes
+﻿using UniModules.GameFlow.Runtime.Attributes;
+
+namespace UniGame.UniNodes.GameFlow.Runtime.Nodes
 {
     using System.Collections.Generic;
     using Commands;
@@ -17,7 +19,10 @@
     /// 2. Publish ALL contextDataSources INTO Output port
     /// 3. Publish target Context INTO Output port
     /// </summary>
-    [CreateNodeMenu("GameSystem/Context Source")]
+    [CreateNodeMenu("Common/Sources/Context Source")]
+    [NodeInfo(category:"Sources", description:"1. Register ALL contextDataSources Source into target  contextAsset\n" +
+                                              "2. Publish ALL contextDataSources INTO Output port\n" +
+                                              "3. Publish target Context INTO Output port")]
     public class ContextDataNode : InOutPortNode
     {
         [Header("Context")]

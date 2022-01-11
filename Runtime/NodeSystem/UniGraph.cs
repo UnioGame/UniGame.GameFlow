@@ -150,7 +150,6 @@ namespace UniModules.GameFlow.Runtime.Core
                 
                 //update ports by attributes & another triggers
                 node.UpdateNodePorts();
-
             }
             
         }

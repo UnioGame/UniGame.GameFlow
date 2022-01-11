@@ -9,7 +9,7 @@
     using UnityEngine;
     using UnityEngine.AddressableAssets;
 
-    [CreateNodeMenu("Addressables/AddressableLoadResources","AddressableLoadResources")]
+    [CreateNodeMenu("Addressable/" + nameof(AddressableLoadResources),"AddressableLoadResources")]
     public class AddressableLoadResources : ContextNode
     {
         #region inspector

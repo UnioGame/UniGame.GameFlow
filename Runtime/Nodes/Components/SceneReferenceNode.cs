@@ -5,7 +5,7 @@
     using NodeSystem.Runtime.Core.Attributes;
     using UnityEngine;
 
-    [CreateNodeMenu("Scene/SceneReference")]
+    [CreateNodeMenu("Common/Scene/SceneReference")]
     public class SceneReferenceNode<T> : ContextNode where T : Object
     {
         [SerializeField]

@@ -6,7 +6,7 @@ using UniModules.UniGameFlow.NodeSystem.Runtime.Core.Attributes;
 using UniRx;
 using UnityEngine;
 
-[CreateNodeMenu("GameSystem/Pooling/Set Owner", nodeName = "SetAssetPoolOwner")]
+[CreateNodeMenu("Common/Pooling/Set Owner", nodeName = "SetAssetPoolOwner")]
 public class SetAssetPoolOwnerNode : InOutPortBindNode
 {
 

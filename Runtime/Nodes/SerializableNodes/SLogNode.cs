@@ -15,7 +15,7 @@ namespace UniGame.UniNodes.Nodes.Runtime.SerializableNodes
     using UniModules.UniGameFlow.NodeSystem.Runtime.Core.Attributes;
     using UniRx;
 
-    [CreateNodeMenu("Debug/SLog",nodeName = "SLog")]
+    [CreateNodeMenu("Common/Debug/SLog",nodeName = "SLog")]
     [Serializable]
     public class SLogNode : SNode,IMessagePublisher
     {

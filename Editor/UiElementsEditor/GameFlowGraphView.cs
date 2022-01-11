@@ -1,5 +1,7 @@
 ﻿using System;
 using UniGame.Tools;
+using UniModules.GameFlow.Runtime.Attributes;
+using UniModules.UniCore.Runtime.ReflectionUtils;
 
 namespace UniGame.GameFlowEditor.Editor
 {
@@ -123,6 +125,9 @@ namespace UniGame.GameFlowEditor.Editor
         {
             foreach (var nodeType in NodeEditorUtilities.NodeTypes)
             {
+                var isHidden = nodeType.HasAttribute(typeof(HideNodeAttribute)) || nodeType.IsGenericType;
+                if(isHidden) continue;
+                
                 var menuName = $"{NodesMenu}/{nodeType.GetNodeMenuName()}";
                 evt.menu.AppendAction(menuName, (e) => SourceGraph.CreateNode(nodeType, nodePosition),
                     DropdownMenuAction.AlwaysEnabled

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using UniModules.UniGameFlow.NodeSystem.Runtime.Core.Attributes;
+using UnityEngine;
 
 namespace UniModules.UniGame.GameFlow.GameFlow.Runtime.Nodes.States
 {
@@ -17,6 +18,7 @@ namespace UniModules.UniGame.GameFlow.GameFlow.Runtime.Nodes.States
     using UniGameFlow.Nodes.Runtime.States;
     using UniRx;
 
+    [CreateNodeMenu("Common/States/RxStateNode")]
     public class RxStateNode : UniNode,
         IRxStateExecution<IContext, Unit>,
         IRxCompletion<IContext, Unit>,

@@ -6,9 +6,9 @@
     using UniModules.UniGameFlow.NodeSystem.Runtime.Core.Attributes;
 
     [Serializable]
-    [CreateNodeMenu("Output/GraphContextOutput")]
+    [CreateNodeMenu("Parameters/GraphContextData")]
     [NodeInfo(nameof(GraphContextOutputNode), "output", "pass graph context as parameter")]
-    public class GraphContextOutputNode : OutPortNode
+    public class GraphContextOutputNode : GraphParameterDataNode, IGraphParameter
     {
         public const string GraphContextOutputName = "Graph Context";
         

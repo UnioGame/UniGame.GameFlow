@@ -1,5 +1,6 @@
 ﻿using System;
 using UniModules.GameFlow.Runtime.Core.Nodes;
+using UniModules.UniGameFlow.NodeSystem.Runtime.Core.Attributes;
 
 namespace UniModules.UniGameFlow.Nodes.Runtime.States
 {
@@ -8,6 +9,7 @@ namespace UniModules.UniGameFlow.Nodes.Runtime.States
     using global::UniModules.GameFlow.Runtime.Core;
 
     [Serializable]
+    [CreateNodeMenu("Common/States/StateTokenNode")]
     public class StateTokenNode : SNode
     {
         [Port]

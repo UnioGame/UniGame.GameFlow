@@ -11,7 +11,7 @@ namespace UniModules.UniGame.GameFlow.GameFlow.Runtime.Nodes.Common
     using UnityEngine;
 
     [Serializable]
-    [CreateNodeMenu("Flow/Point")]
+    [CreateNodeMenu("Common/Point")]
     [NodeInfo(nameof(PointNode), "flow", "serializable node for transfer data from input port to output")]
     public class PointNode : SNode
     {

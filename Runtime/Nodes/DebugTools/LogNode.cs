@@ -17,7 +17,7 @@
     using UniRx;
     using UnityEngine;
     
-    [CreateNodeMenu("Debug/Log","Log")]
+    [CreateNodeMenu("Common/Debug/Log","Log")]
     [NodeInfo("Logging Node","Profiling","Logging all data from input port")]
     public class LogNode : UniNode , IMessagePublisher
     {
@@ -76,23 +76,5 @@
         }
 
     }
-
-    [Serializable]
-    public class DemoComponentNode : SNode
-    {
-        [Port(PortIO.Input)]
-        public int intPort;
-        
-        protected override UniTask OnExecute()
-        {
-            var intPortHandle = GetPort(nameof(intPort));
-            var portValue     = intPortHandle.Value;
-            portValue.Receive<int>().
-                Subscribe(x => Debug.Log($"RECEIVE INT VALUE {x}")).
-                AddTo(LifeTime);
-            
-            return UniTask.CompletedTask;
-        }
-        
-    }
+    
 }

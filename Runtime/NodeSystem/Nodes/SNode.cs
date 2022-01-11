@@ -1,4 +1,6 @@
-﻿namespace UniModules.GameFlow.Runtime.Core.Nodes
+﻿using UniModules.GameFlow.Runtime.Attributes;
+
+namespace UniModules.GameFlow.Runtime.Core.Nodes
 {
     using System;
     using System.Collections.Generic;
@@ -10,6 +12,7 @@
     using UnityEngine;
 
     [Serializable]
+    [HideNode]
     public class SNode : SerializableNode, IProxyNode
     {
         #region private fields

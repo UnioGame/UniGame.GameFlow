@@ -15,7 +15,7 @@
     using UnityEngine.AddressableAssets;
     using UnityEngine.SceneManagement;
 
-    [CreateNodeMenu("Addressables/AddressableLoadScene")]
+    [CreateNodeMenu("Addressable/AddressableLoadScene")]
     public class AddressableLoadScene : UniNode
     {
         private const string portName = "data";

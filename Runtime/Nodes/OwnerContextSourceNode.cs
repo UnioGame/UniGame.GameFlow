@@ -1,4 +1,6 @@
-﻿namespace UniModules.UniGameFlow.GameFlow.Runtime.Nodes
+﻿using UniModules.GameFlow.Runtime.Attributes;
+
+namespace UniModules.UniGameFlow.GameFlow.Runtime.Nodes
 {
     using System.Collections.Generic;
     using Cysharp.Threading.Tasks;
@@ -17,7 +19,8 @@
     using Sirenix.OdinInspector;
 #endif
     
-    [CreateNodeMenu("GameSystem/Owner Context Source")]
+    [CreateNodeMenu("Common/Sources/Owner Context Source")]
+    [NodeInfo(category:"Sources", description:"register data source into context and manage context lifetime")]
     public class OwnerContextSourceNode : InOutPortNode
     {
         #region inspector

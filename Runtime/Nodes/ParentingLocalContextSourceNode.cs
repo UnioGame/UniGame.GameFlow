@@ -17,7 +17,7 @@
     using Sirenix.OdinInspector;
 #endif
     
-    [CreateNodeMenu("GameSystem/Parenting Local Context Source")]
+    [CreateNodeMenu("Common/Sources/Parenting Local Context Source")]
     public class ParentingLocalContextSourceNode : InOutPortNode
     {
         private ContextConnection _contextConnection;

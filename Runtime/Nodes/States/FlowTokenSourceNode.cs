@@ -1,6 +1,5 @@
 ﻿namespace UniModules.UniGame.GameFlow.GameFlow.Runtime.Nodes.States
 {
-    using Core.Runtime.Interfaces;
     using Cysharp.Threading.Tasks;
     using global::UniModules.GameFlow.Runtime.Attributes;
     using global::UniModules.GameFlow.Runtime.Core;
@@ -10,7 +9,7 @@
     using UniGameFlow.NodeSystem.Runtime.Core.Attributes;
     using UniRx;
 
-    [CreateNodeMenu("States/FlowTokenSource",nodeName = "FlowTokenSource")]
+    [CreateNodeMenu("Common/States/FlowTokenSource",nodeName = "FlowTokenSource")]
     public class FlowTokenSourceNode : UniNode
     {
         #region inspector

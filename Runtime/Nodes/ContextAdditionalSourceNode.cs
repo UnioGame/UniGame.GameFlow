@@ -12,7 +12,7 @@
     using UniModules.UniGameFlow.NodeSystem.Runtime.Core.Attributes;
     using UniNodes.Nodes.Runtime.Common;
 
-    [CreateNodeMenu("GameSystem/Context Additional Sources", nodeName = "ContextRegisterValues")]
+    [CreateNodeMenu("Common/Sources/Context Additional Sources", nodeName = "ContextRegisterValues")]
     public class ContextRegisterValuesNode : ContextNode
     {
         

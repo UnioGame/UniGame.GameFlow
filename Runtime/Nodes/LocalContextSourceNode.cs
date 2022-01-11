@@ -1,4 +1,6 @@
-﻿namespace UniModules.UniGameFlow.GameFlow.Runtime.Nodes
+﻿using UniModules.GameFlow.Runtime.Attributes;
+
+namespace UniModules.UniGameFlow.GameFlow.Runtime.Nodes
 {
     using Cysharp.Threading.Tasks;
     using global::UniGame.UniNodes.Nodes.Runtime.Commands;
@@ -19,7 +21,12 @@
     /// 2. Publish ALL contextDataSources INTO Local Context
     /// 3. Publish Local Context INTO Context container
     /// </summary>
-    [CreateNodeMenu("GameSystem/Local Context Source")]
+    [CreateNodeMenu("Common/Sources/Local Context Source")]
+    [NodeInfo(category:"Sources", description: 
+        "1. Create new Local Context on Init\n"+
+        "2. Publish ALL contextDataSources INTO Output port\n"+
+        "2. Publish ALL contextDataSources INTO Local Context\n"+
+        "3. Publish Local Context INTO Context container")]
     public class LocalContextSourceNode : InOutPortNode
     {
         private EntityContext _context;

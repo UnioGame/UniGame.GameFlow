@@ -16,11 +16,11 @@
     using Object = UnityEngine.Object;
 
     [Serializable]
-    [CreateNodeMenu("SubGraph/SubGraphNode")]
-    [NodeInfo(nameof(GraphContextOutputNode), "SubGraph", "create instance of subgraph and launch")]
+    [CreateNodeMenu("Common/Graph/NestedGraph")]
+    [NodeInfo(nameof(GraphContextOutputNode), "NestedGraph", "create instance of subgraph and launch")]
     public class SubGraphNode : SContextNode
     {
-        public const string SubGraphNodeName = "SubGraph";
+        public const string SubGraphNodeName = "NestedGraph";
         
         #region inspector
 

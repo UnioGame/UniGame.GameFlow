@@ -8,7 +8,7 @@ namespace Game.Modules.Assets.UniGame.GameFlow.Runtime.Nodes
     using UniModules.UniGameFlow.NodeSystem.Runtime.Core.Attributes;
     using UnityEngine;
 
-    [CreateNodeMenu("UniGame/ContextStateNode")]
+    [CreateNodeMenu("Common/States/ContextStateNode")]
     public class ContextStateNode : ContextNode
     {
 

@@ -11,7 +11,7 @@
     using UniNodes.Nodes.Runtime.Common;
     
 
-    [CreateNodeMenu("GameSystem/Data Source")]
+    [CreateNodeMenu("Common/Sources/Data Source")]
     public class ContextDataSourceNode : InOutPortNode
     {
         

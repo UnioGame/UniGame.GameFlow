@@ -1,6 +1,7 @@
 ﻿using UniModules.GameFlow.Runtime.Attributes;
 using UniModules.GameFlow.Runtime.Core.Interfaces;
 using UniModules.GameFlow.Runtime.Interfaces;
+using UniModules.UniGameFlow.NodeSystem.Runtime.Core.Attributes;
 
 namespace UniModules.GameFlow.Runtime.Core.Nodes
 {
@@ -19,6 +20,7 @@ namespace UniModules.GameFlow.Runtime.Core.Nodes
 
     [HideNode]
     [Serializable]
+    [CreateNodeMenu("Examples/Draft/DemoNode")]
     public class DummyNode : INode
     {
         public int    Id       { get; private set; }
@@ -80,6 +82,8 @@ namespace UniModules.GameFlow.Runtime.Core.Nodes
     }
 
 
+    [HideNode]
+    [CreateNodeMenu("Examples/Draft/DemoNode")]
     public class DemoNode : UniNode
     {
         [Port(PortIO.Input)]

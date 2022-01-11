@@ -7,7 +7,7 @@
     using UniModules.UniGame.Core.Runtime.Interfaces;
     using UniModules.UniGameFlow.NodeSystem.Runtime.Core.Attributes;
 
-    [CreateNodeMenu("Common/DataDelay")]
+    [CreateNodeMenu("Common/Time/DataDelay")]
     public class DataDelayNode : UniNode
     {
         #region inspector

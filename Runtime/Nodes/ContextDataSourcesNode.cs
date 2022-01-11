@@ -1,4 +1,6 @@
-﻿namespace UniGame.UniNodes.GameFlow.Runtime.Nodes
+﻿using UniModules.GameFlow.Runtime.Attributes;
+
+namespace UniGame.UniNodes.GameFlow.Runtime.Nodes
 {
     using System.Collections.Generic;
     using Commands;
@@ -11,7 +13,8 @@
     
     using UnityEngine;
 
-    [CreateNodeMenu("GameSystem/Data Sources")]
+    [CreateNodeMenu("Common/Sources/Data Sources")]
+    [NodeInfo(category:"Sources", description:"Register ALL sources into output port")]
     public class ContextDataSourcesNode : InOutPortNode
     {
         [Header("Node Output Data Source")]
