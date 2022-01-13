@@ -1,4 +1,5 @@
 using GraphProcessor;
+using UniModules.GameFlow.Runtime.Core;
 using UniModules.GameFlow.Runtime.Interfaces;
 
 namespace UniGame.GameFlow
@@ -11,13 +12,23 @@ namespace UniGame.GameFlow
     [HideNode]
     public class GraphProcessorNode : SNode,IRuntimeOnlyNode
     {
+        private readonly UniGraph graph;
         private readonly BaseNode node;
 
         public override string ItemName => node.name;
 
-        public GraphProcessorNode(BaseNode node)
+        public GraphProcessorNode(UniGraph graph,BaseNode node)
         {
+            this.graph = graph;
             this.node = node;
+        }
+
+
+        protected override void OnInitialize()
+        {
+            base.OnInitialize();
+            
+            
         }
     }
 

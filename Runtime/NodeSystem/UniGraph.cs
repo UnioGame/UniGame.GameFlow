@@ -100,7 +100,7 @@ namespace UniModules.GameFlow.Runtime.Core
             if(serializedGraph == null) 
                 yield break;
 
-            var items = NodeDataConverter.ConvertNodes(serializedGraph);
+            var items = NodeDataConverter.ConvertNodes(this,serializedGraph);
 
             foreach (var item in items)
                 yield return item;
