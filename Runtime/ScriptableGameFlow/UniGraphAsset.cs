@@ -35,7 +35,7 @@ namespace UniGame.GameFlowEditor.Runtime
 
         #endregion
 
-        private UniGraph sourceGraph;
+        public UniGraph sourceGraph;
 
         public Dictionary<int, UniBaseNode> uniNodes = new Dictionary<int, UniBaseNode>(16);
 
