@@ -16,6 +16,12 @@ namespace UniGame.GameFlowEditor.Runtime
     public class UniBaseNode : BaseNode
     {
         #region inspector
+
+        public int sourceId;
+
+        public string nodeName;
+        
+        #endregion
         
         [Input(name = nameof(inputs), allowMultiple = true)]
         public IEnumerable< object > inputs = null;
@@ -23,15 +29,10 @@ namespace UniGame.GameFlowEditor.Runtime
         [Output(name = nameof(outputs), allowMultiple = true)]
         public IEnumerable< object > outputs = null;
         
-        #endregion
-        
         private Dictionary<INodePort,PortData> portData = new Dictionary<INodePort, PortData>(8);
         
         #region public properties
-
-        [HideInInspector]
-        public int sourceId;
-
+        
         public INode SourceNode { get; protected set; }
 
         public override string name => SourceNode == null ? base.name : SourceNode.ItemName;
@@ -43,6 +44,8 @@ namespace UniGame.GameFlowEditor.Runtime
         public void Initialize(INode node)
         {
             sourceId   = node.Id;
+            nodeName = node.ItemName;
+            
             SourceNode = node;
             position = new Rect(node.Position,new Vector2(node.Width,100));
             UpdatePorts();

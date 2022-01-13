@@ -18,6 +18,17 @@ namespace UniGame.UniNodes.GameFlowEditor.Editor
         {
         }
 
+        public void AddTogglePinnedViewButton<TView>(string label,bool defaultStatus)
+            where TView : PinnedElementView
+        {
+            AddToggleButton(label, defaultStatus, (v) => graphView.ToggleView<TView>());
+        }
+        
+        public void AddToggleButton(string label,bool defaultStatus,Action<bool> action)
+        {
+            AddToggle(label, defaultStatus, action);
+        }
+
         protected override void AddButtons()
         {
             var isVisible = graphView.GetPinnedElementStatus<UniGraphSettingsPinnedView>() !=

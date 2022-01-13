@@ -1,4 +1,5 @@
-﻿using UniGame.GameFlowEditor.Runtime;
+﻿using UniGame.GameFlow;
+using UniGame.GameFlowEditor.Runtime;
 
 namespace UniModules.GameFlow.Runtime.Core
 {
@@ -34,6 +35,9 @@ namespace UniModules.GameFlow.Runtime.Core
         private List<AsyncContextDataSource> _dataSources = new List<AsyncContextDataSource>();
 
         [SerializeField]
+#if ODIN_INSPECTOR
+        [Sirenix.OdinInspector.InlineEditor()]
+#endif
         public UniGraphAsset serializedGraph;
 
         #if ODIN_INSPECTOR
@@ -91,6 +95,17 @@ namespace UniModules.GameFlow.Runtime.Core
         }
         
         #region private methods
+
+        protected sealed override IEnumerable<INode> GetCustomNodes()
+        {
+            if(serializedGraph == null) 
+                yield break;
+
+            var items = NodeDataConverter.ConvertNodes(serializedGraph);
+
+            foreach (var item in items)
+                yield return item;
+        }
 
         protected sealed override void OnInitialize()
         {
@@ -175,8 +190,7 @@ namespace UniModules.GameFlow.Runtime.Core
         private void Awake() => _graphContext = new EntityContext();
         
         #endregion
-
-
+        
         #region editor api
 
 #if UNITY_EDITOR

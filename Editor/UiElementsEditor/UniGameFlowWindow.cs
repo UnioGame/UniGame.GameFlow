@@ -3,6 +3,7 @@ using UniGame.GameFlowEditor.Editor;
 using UniGame.GameFlowEditor.Runtime;
 using UniGame.UniNodes.GameFlowEditor.Editor;
 using UniModules.GameFlow.Runtime.Core;
+using UniModules.UniGame.GameFlow.Editor.UiElementsEditor.Tools.ExposedParameterElement;
 
 namespace UniModules.GameFlow.Editor
 {
@@ -20,10 +21,10 @@ namespace UniModules.GameFlow.Editor
     {
         #region static data
 
-        private static   string                                defaultTitle = "(null)";
-        protected static bool                                  isInitialized;
+        private static string defaultTitle = "(null)";
+        protected static bool isInitialized;
         protected static ReactiveCollection<UniGameFlowWindow> windows = new ReactiveCollection<UniGameFlowWindow>();
-        protected static UniGameFlowWindow                     focusedWindow;
+        protected static UniGameFlowWindow focusedWindow;
 
         #endregion
 
@@ -52,8 +53,8 @@ namespace UniModules.GameFlow.Editor
         public static UniGameFlowWindow SelectWindow(UniGraph graph)
         {
             var window = windows.FirstOrDefault(x => x.titleContent.text == graph.name && x.IsEmpty);
-            window = window ?? windows.FirstOrDefault(x => x.IsEmpty);
-            window = window ?? CreateInstance<UniGameFlowWindow>();
+            window = window ? window : windows.FirstOrDefault(x => x.IsEmpty);
+            window = window ? window : CreateInstance<UniGameFlowWindow>();
 
             return window;
         }
@@ -62,19 +63,22 @@ namespace UniModules.GameFlow.Editor
 
         #region private fields
 
-        private string             _guid      = string.Empty;
-        private LifeTimeDefinition _lifeTime  = new LifeTimeDefinition();
-        private string             _graphName = string.Empty;
-        private UniGraph           _targetGraph;
-        private Vector2            _minimapPosition        = new Vector2(50, 50);
-        private Vector2            _settingsPinnedPosition = new Vector2(50, 250);
+        private string _guid = string.Empty;
+        private LifeTimeDefinition _lifeTime = new LifeTimeDefinition();
+        private string _graphName = string.Empty;
+        private UniGraph _targetGraph;
+        
+        private Vector2 _minimapPosition = new Vector2(50, 50);
+        private Vector2 _settingsPinnedPosition = new Vector2(50, 250);
+        private Vector2 _parametersPinnedPosition = new Vector2(50, 550);
 
-        private GameFlowGraphView          _uniGraphView;
+        private GameFlowGraphView _uniGraphView;
         private UniGraphSettingsPinnedView _settingsPinnedView;
-        private UniGraphToolbarView        _graphToolbarView;
-        private MiniMapView                _miniMapView;
-        private EditorResource             _graphResource;
-        private int                        _graphId;
+        private UniGraphToolbarView _graphToolbarView;
+        private MiniMapView _miniMapView;
+        private UniExposedParameterView _exposedParameterView;
+        private EditorResource _graphResource;
+        private int _graphId;
 
         #endregion
 
@@ -103,8 +107,8 @@ namespace UniModules.GameFlow.Editor
         public void Initialize(UniGraph uniGraph)
         {
             _targetGraph = uniGraph;
-            _graphId     = uniGraph.id;
-            _guid        = uniGraph.Guid;
+            _graphId = uniGraph.id;
+            _guid = uniGraph.Guid;
 
             Reload();
         }
@@ -147,21 +151,21 @@ namespace UniModules.GameFlow.Editor
             var graphAsset = uniGraph.useVariants
                 ? CreateInstance<UniGraphAsset>()
                 : uniGraph.serializedGraph;
-            
+
             if (!graphAsset && Application.isPlaying == false)
             {
-                graphAsset               = CreateInstance<UniGraphAsset>();
+                graphAsset = CreateInstance<UniGraphAsset>();
                 uniGraph.serializedGraph = graphAsset;
                 graphAsset.SaveAssetAsNested(uniGraph.gameObject);
                 uniGraph.gameObject.MarkDirty();
             }
-            
+
             graphAsset.name = _graphName;
-            
+
             if (AssetGraph && uniGraph.name == _graphName)
             {
                 graphAsset.position = AssetGraph.position;
-                graphAsset.scale    = AssetGraph.scale;
+                graphAsset.scale = AssetGraph.scale;
             }
 
             AssetGraph = graphAsset;
@@ -219,7 +223,7 @@ namespace UniModules.GameFlow.Editor
             if (!ActiveGraph)
                 return;
 
-            titleContent  = new GUIContent(ActiveGraph.name);
+            titleContent = new GUIContent(ActiveGraph.name);
             _uniGraphView = new GameFlowGraphView(this);
 
             rootView.Add(_uniGraphView);
@@ -230,16 +234,18 @@ namespace UniModules.GameFlow.Editor
         protected override void InitializeGraphView(BaseGraphView view)
         {
             CreateMinimap(view);
-            CreatePinned(view);
+            CreateSettingsPinned(view);
+            CreateExposedPinnedParameters(view);
         }
 
         private void CreateToolbar(BaseGraphView view)
         {
             _graphToolbarView = new UniGraphToolbarView(view);
+            _graphToolbarView.AddTogglePinnedViewButton<UniExposedParameterView>("Parameters",true);
             view.Add(_graphToolbarView);
         }
 
-        private void CreatePinned(BaseGraphView view)
+        private void CreateSettingsPinned(BaseGraphView view)
         {
             _settingsPinnedView = CreateGraphView(() =>
             {
@@ -254,11 +260,9 @@ namespace UniModules.GameFlow.Editor
 
         protected virtual void AddSettingsCommands(IUniGraphSettings settingsView)
         {
-            var graphButton = new Button(() => _targetGraph.PingInEditor())
-            {
-                name = "GraphPingAction",
-                text = "Ping",
-            };
+            var graphButton = new Button(() => 
+                _targetGraph.PingInEditor()) { name = "GraphPingAction", text = "Ping", };
+            
             settingsView.AddElement(graphButton);
         }
 
@@ -270,15 +274,26 @@ namespace UniModules.GameFlow.Editor
             view.Add(_miniMapView);
         }
 
+        private void CreateExposedPinnedParameters(BaseGraphView view)
+        {
+            _exposedParameterView = view.Q<UniExposedParameterView>();
+            
+            if(_exposedParameterView == null)
+                view.OpenPinned<UniExposedParameterView>();
+            
+            _exposedParameterView = view.Q<UniExposedParameterView>();
+            _exposedParameterView.SetPosition(new Rect(_parametersPinnedPosition, _exposedParameterView.GetPosition().size));
+        }
+
         private TView CreateGraphView<TView>(Func<TView> factory, GraphElement view)
             where TView : GraphElement
         {
-            var hasPosition      = false;
+            var hasPosition = false;
             var settingsPosition = new Rect();
 
             if (view != null)
             {
-                hasPosition      = true;
+                hasPosition = true;
                 settingsPosition = view.GetPosition();
             }
 

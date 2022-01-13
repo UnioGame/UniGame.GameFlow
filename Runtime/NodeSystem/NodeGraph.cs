@@ -99,6 +99,8 @@ namespace UniModules.GameFlow.Runtime.Core
             
             _allNodes.AddRange(nodes);
             _allNodes.AddRange(serializableNodes);
+            _allNodes.AddRange(GetCustomNodes());
+
             return _allNodes;
         }
         
@@ -215,6 +217,10 @@ namespace UniModules.GameFlow.Runtime.Core
         
         #region private methods
 
+        protected virtual IEnumerable<INode> GetCustomNodes()
+        {
+            yield break;
+        }
 
         protected virtual void OnInnerValidate()
         {
@@ -232,8 +238,7 @@ namespace UniModules.GameFlow.Runtime.Core
                 nodes.Add(childNode);
             }
         }
-
-
+        
         protected override void OnInitialize() => _allNodes?.Clear();
 
         private INode AddAssetNode(Type type)

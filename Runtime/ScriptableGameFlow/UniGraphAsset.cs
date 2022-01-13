@@ -1,4 +1,5 @@
 ﻿using GraphProcessor;
+using UniGame.GameFlow;
 
 namespace UniGame.GameFlowEditor.Runtime
 {
@@ -103,7 +104,12 @@ namespace UniGame.GameFlowEditor.Runtime
         private void CreateNodes()
         {
             foreach (var node in sourceGraph.Nodes)
+            {
+                if(node is IRuntimeOnlyNode) 
+                    continue;
                 CreateNode(node);
+            }
+            
         }
 
         private void ConnectNodePorts()
