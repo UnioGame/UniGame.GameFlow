@@ -1,4 +1,6 @@
-﻿namespace UniGame.UniNodes.Nodes.Runtime.Common
+﻿using UniGame.GameFlowEditor.Runtime;
+
+namespace UniGame.UniNodes.Nodes.Runtime.Common
 {
     using System;
     using Cysharp.Threading.Tasks;
@@ -20,5 +22,11 @@
             output.Publish(Context);
             return UniTask.CompletedTask;
         }
+    }
+
+    [Serializable]
+    public class GraphContextParameter : UniExposedParameter<GraphContextOutputNode>
+    {
+        
     }
 }

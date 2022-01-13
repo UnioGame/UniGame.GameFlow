@@ -16,6 +16,7 @@ namespace UniGame.GameFlowEditor.Runtime
     using UnityEngine;
     using Vector2 = UnityEngine.Vector2;
 
+
     [Serializable]
     [CreateAssetMenu(menuName = "UniGame/GameFlow/UniGraphAsset", fileName = "UniGraphAsset")]
     public class UniGraphAsset : BaseGraph
@@ -36,6 +37,12 @@ namespace UniGame.GameFlowEditor.Runtime
         #endregion
 
         public UniGraph sourceGraph;
+
+#if ODIN_INSPECTOR
+        [Sirenix.OdinInspector.InlineProperty]
+#endif
+        [SerializeReference]
+        public List<IUniExposedParameter> uniExposedParameters = new List<IUniExposedParameter>();
 
         public Dictionary<int, UniBaseNode> uniNodes = new Dictionary<int, UniBaseNode>(16);
 

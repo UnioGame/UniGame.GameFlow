@@ -103,8 +103,7 @@ namespace UniGame.GameFlowEditor.Editor
         {
             evt.menu.AppendSeparator();
 
-            var mousePos     = (evt.currentTarget as VisualElement)
-                .ChangeCoordinatesTo(contentViewContainer, evt.localMousePosition);
+            var mousePos     = (evt.currentTarget as VisualElement).ChangeCoordinatesTo(contentViewContainer, evt.localMousePosition);
             var nodePosition = mousePos;
 
             LastMenuPosition = nodePosition;

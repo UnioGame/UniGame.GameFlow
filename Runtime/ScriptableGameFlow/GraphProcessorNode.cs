@@ -1,6 +1,9 @@
+using Cysharp.Threading.Tasks;
 using GraphProcessor;
 using UniModules.GameFlow.Runtime.Core;
+using UniModules.GameFlow.Runtime.Extensions;
 using UniModules.GameFlow.Runtime.Interfaces;
+using NodePort = GraphProcessor.NodePort;
 
 namespace UniGame.GameFlow
 {
@@ -23,11 +26,29 @@ namespace UniGame.GameFlow
             this.node = node;
         }
 
-
-        protected override void OnInitialize()
+        protected sealed override void OnInitialize()
         {
             base.OnInitialize();
+
+            foreach (var port in node.inputPorts)
+                UpdatePort(port, PortIO.Input);
             
+            foreach (var port in node.outputPorts)
+                UpdatePort(port, PortIO.Output);
+        }
+
+        protected sealed override UniTask OnExecute()
+        {
+            return base.OnExecute();
+        }
+
+        private void UpdatePort(NodePort port, PortIO direction)
+        {
+            var portData = port.portData;
+            var connectionType = portData.acceptMultipleEdges ? ConnectionType.Multiple : ConnectionType.Override;
+            var portValue = this.UpdatePortValue(port.fieldName, direction,connectionType,ShowBackingValue.Always);
+            var nodePort = GetPort(port.fieldName);
+
             
         }
     }
