@@ -20,6 +20,8 @@ namespace UniGame.GameFlowEditor.Runtime
         public int sourceId;
 
         public string nodeName;
+
+        public UniGraph sourceGraph;
         
         #endregion
         
@@ -32,8 +34,8 @@ namespace UniGame.GameFlowEditor.Runtime
         private Dictionary<INodePort,PortData> portData = new Dictionary<INodePort, PortData>(8);
         
         #region public properties
-        
-        public INode SourceNode { get; protected set; }
+
+        public INode SourceNode => sourceGraph.GetNode(sourceId);
 
         public override string name => SourceNode == null ? base.name : SourceNode.ItemName;
 
@@ -41,13 +43,14 @@ namespace UniGame.GameFlowEditor.Runtime
         
         #endregion
         
-        public void Initialize(INode node)
+        public void Initialize(INode node, UniGraph ownerGraph)
         {
             sourceId   = node.Id;
             nodeName = node.ItemName;
+            sourceGraph = ownerGraph;
             
-            SourceNode = node;
             position = new Rect(node.Position,new Vector2(node.Width,100));
+            
             UpdatePorts();
         }
 
@@ -82,6 +85,12 @@ namespace UniGame.GameFlowEditor.Runtime
             return data;
         }
 
+        public override void InitializePorts()
+        {
+            base.InitializePorts();
+            UpdatePorts();
+        }
+
         #endregion
         
         #region custom port definition
@@ -95,7 +104,7 @@ namespace UniGame.GameFlowEditor.Runtime
         #endregion
         
         #region private methods
-
+        
         protected virtual string GetNodeStyle()
         {
             var nodeStyle = SourceNode == null ? base.layoutStyle : SourceNode.GetStyle();
@@ -105,7 +114,10 @@ namespace UniGame.GameFlowEditor.Runtime
                 
         private void UpdatePorts()
         {
-            foreach (var port in SourceNode.Ports) {
+            var sourceNode = SourceNode;
+            if (sourceNode == null) return;
+            
+            foreach (var port in sourceNode.Ports) {
                 
                 var fieldName = port.IsInput ? nameof(inputs) : nameof(outputs);
                 

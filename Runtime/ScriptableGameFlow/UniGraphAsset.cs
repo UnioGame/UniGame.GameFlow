@@ -1,5 +1,7 @@
 ﻿using GraphProcessor;
 using UniGame.GameFlow;
+using UniModules.UniCore.Runtime.ObjectPool.Runtime;
+using UniModules.UniCore.Runtime.ObjectPool.Runtime.Extensions;
 
 namespace UniGame.GameFlowEditor.Runtime
 {
@@ -34,8 +36,7 @@ namespace UniGame.GameFlowEditor.Runtime
         #endregion
 
         private UniGraph sourceGraph;
-        private List<NodePortConnection> portsConnections = new List<NodePortConnection>();
-        
+
         public Dictionary<int, UniBaseNode> uniNodes = new Dictionary<int, UniBaseNode>(16);
 
         public UniGraph UniGraph => sourceGraph;
@@ -70,7 +71,7 @@ namespace UniGame.GameFlowEditor.Runtime
         {
             var graphNode = nodes.FirstOrDefault(x => x is UniBaseNode baseNode && baseNode.sourceId == node.Id) as UniBaseNode;
             graphNode ??= CreateUniBaseNode(node);
-            graphNode.Initialize(node);
+            graphNode.Initialize(node,sourceGraph);
             
             //register only uni nodes
             uniNodes[node.Id] = graphNode;
@@ -114,8 +115,13 @@ namespace UniGame.GameFlowEditor.Runtime
 
         private void ConnectNodePorts()
         {
-            portsConnections ??= new List<NodePortConnection>();
-            portsConnections.Clear();
+            DisconnectUniNodeEdges();
+            CreatePortConnections();
+        }
+
+        private void CreatePortConnections()
+        {
+            var portsConnections = ClassPool.Spawn<List<NodePortConnection>>();
             
             foreach (var nodeItem in uniNodes)
             {
@@ -146,18 +152,25 @@ namespace UniGame.GameFlowEditor.Runtime
                     }
                 }
             }
-
+            
             foreach (var nodePortConnection in portsConnections)
             {
                 var inputPortView = nodePortConnection.source;
                 var outputPortView = nodePortConnection.target;
+                
                 Connect(inputPortView, outputPortView);
             }
-            
-            portsConnections.Clear();
-        }
-    }
 
+            portsConnections.Despawn();
+        }
+
+        private void DisconnectUniNodeEdges()
+        {
+            edges.RemoveAll(x => x.inputNode is UniBaseNode && x.outputNode is UniBaseNode);
+        }
+
+    }
+    
     public struct NodePortConnection
     {
         public GraphProcessor.NodePort source;

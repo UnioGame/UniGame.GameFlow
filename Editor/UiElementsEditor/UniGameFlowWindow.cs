@@ -4,6 +4,8 @@ using UniGame.GameFlowEditor.Runtime;
 using UniGame.UniNodes.GameFlowEditor.Editor;
 using UniModules.GameFlow.Runtime.Core;
 using UniModules.UniGame.GameFlow.Editor.UiElementsEditor.Tools.ExposedParameterElement;
+using UnityEditor;
+using UnityEditor.Experimental.SceneManagement;
 
 namespace UniModules.GameFlow.Editor
 {
@@ -168,8 +170,16 @@ namespace UniModules.GameFlow.Editor
                 graphAsset.scale = AssetGraph.scale;
             }
 
+            var sourceGraph = uniGraph;
+            var stage = PrefabStageUtility.GetPrefabStage(uniGraph.gameObject);
+            if (Application.isPlaying == false && stage != null && !string.IsNullOrEmpty(stage.assetPath))
+            {
+                var asset = AssetDatabase.LoadAssetAtPath<GameObject>(stage.assetPath);
+                sourceGraph = asset.GetComponent<UniGraph>();
+            }
+            
             AssetGraph = graphAsset;
-            AssetGraph.ConnectToGraph(uniGraph);
+            AssetGraph.ConnectToGraph(sourceGraph);
 
             return AssetGraph;
         }
