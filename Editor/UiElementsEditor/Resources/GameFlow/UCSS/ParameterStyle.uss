@@ -26,8 +26,22 @@
 }
 
 #title{
+    font-size: 5;
+    background-color: #084D27;
+}
+
+#title-button-container{
     visibility: hidden;
-    height: 0px;
+    width: 0px;
+}
+
+#title-button-container #icon{
+    visibility: hidden;
+}
+
+#RightTitleContainer{
+    visibility: hidden;
+    width: 0px;
 }
 
 PortView > Label{
