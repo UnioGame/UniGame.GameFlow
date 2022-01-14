@@ -11,7 +11,7 @@ namespace UniGame.UniNodes.Nodes.Runtime.Common
 
     [Serializable]
     [CreateNodeMenu("Parameters/GraphContextData")]
-    [NodeAsset(typeof(ParameterView))]
+    [NodeAsset(typeof(UniParameterNode))]
     [NodeInfo(nameof(GraphContextOutputNode), "output", "pass graph context as parameter")]
     public class GraphContextOutputNode : GraphParameterDataNode, IGraphParameter
     {

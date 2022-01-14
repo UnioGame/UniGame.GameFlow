@@ -60,7 +60,9 @@ namespace UniGame.GameFlowEditor.Editor
             }
 
             NodeData?.SourceNodeObservable
-                .Subscribe(DrawNode)
+                .Do(DrawNode)
+                .Do(x => ForceUpdatePorts())
+                .Subscribe()
                 .AddTo(_lifeTime);
             
             //add into node processor
@@ -106,10 +108,11 @@ namespace UniGame.GameFlowEditor.Editor
             container.name = BaseContainerStyle;
             container.AddToClassList(BaseContainerStyle);
 
+            controlsContainer.Add(container);
+            
             title = node.ItemName;
             
             ApplyStyle(container);
-            ForceUpdatePorts();
         }
 
         public override void OnSelected()
@@ -133,7 +136,6 @@ namespace UniGame.GameFlowEditor.Editor
             containerStyle.marginRight = 4;
             containerStyle.minWidth = 250;
 
-            controlsContainer.Add(container);
         }
 
         private void ShowPortsValues()
