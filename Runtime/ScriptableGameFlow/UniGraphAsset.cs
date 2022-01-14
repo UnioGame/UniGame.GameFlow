@@ -108,14 +108,13 @@ namespace UniGame.GameFlowEditor.Runtime
         public void UpdateGraph()
         {
             CreateNodes();
-            ValidateNodes();
+            ValidateGraph();
             ConnectNodePorts();
         }
 
-        private void ValidateNodes()
+        private void ValidateGraph()
         {
             var removed = ClassPool.Spawn<List<BaseNode>>();
-            
             foreach (var node in nodes)
             {
                 if (node is UniBaseNode uniBaseNode && !uniNodes.ContainsKey(uniBaseNode.sourceId))
@@ -123,8 +122,9 @@ namespace UniGame.GameFlowEditor.Runtime
             }
             
             removed.ForEach(RemoveNode);
-            
             removed.Despawn();
+
+            uniExposedParameters.RemoveAll(x => x == null);
         }
 
         private void CreateNodes()

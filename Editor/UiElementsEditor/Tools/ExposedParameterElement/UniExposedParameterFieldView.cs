@@ -16,7 +16,8 @@ namespace UniModules.UniGame.GameFlow.Editor.UiElementsEditor.Tools.ExposedParam
 
         public IUniExposedParameter	parameter { get; private set; }
 
-        public UniExposedParameterFieldView(UniGraphAsset graphView, IUniExposedParameter param, Action<IUniExposedParameter> removeAction) : base(null, param.DisplayName, string.Empty)
+        public UniExposedParameterFieldView(UniGraphAsset graphView, IUniExposedParameter param, Action<IUniExposedParameter> removeAction) 
+            : base(null, param.DisplayName, string.Empty)
         {
             this.graphView = graphView;
             _removeAction = removeAction;

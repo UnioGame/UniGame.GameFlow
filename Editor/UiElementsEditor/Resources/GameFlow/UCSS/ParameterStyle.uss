@@ -17,6 +17,14 @@
     height: 16px
 }
 
+#controls{
+    height: 0px;
+}
+
+#uninode-view-container{
+    visibility: hidden;
+}
+
 #title{
     visibility: hidden;
     height: 0px;
