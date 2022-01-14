@@ -229,6 +229,14 @@ namespace UniModules.GameFlow.Editor
                 .Subscribe()
                 .AddTo(_lifeTime);
             
+            MessageBroker.Default
+                .Receive<UniGraphReloadMessage>()
+                .Where(x => x.graph == _targetGraph)
+                .Do(x => Save())
+                .Do(x => Reload())
+                .Subscribe()
+                .AddTo(_lifeTime);
+            
             Reload();
         }
 

@@ -2,6 +2,7 @@
 using UniGame.GameFlow;
 using UniModules.UniCore.Runtime.ObjectPool.Runtime;
 using UniModules.UniCore.Runtime.ObjectPool.Runtime.Extensions;
+using UniRx;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -70,6 +71,9 @@ namespace UniGame.GameFlowEditor.Runtime
 #endif
             var newNode = sourceGraph.AddNode(type, nodeName, nodePosition);
             var node = CreateNode(newNode);
+            
+            MessageBroker.Default.Publish(new UniGraphSaveMessage() { graph = sourceGraph });
+            
             return node;
         }
         

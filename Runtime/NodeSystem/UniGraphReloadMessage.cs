@@ -7,4 +7,10 @@ namespace UniModules.GameFlow.Runtime.Core
     {
         public UniGraph graph;
     }
+    
+    [Serializable]
+    public struct UniGraphSaveMessage
+    {
+        public UniGraph graph;
+    }
 }
