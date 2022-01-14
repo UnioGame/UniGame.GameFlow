@@ -30,6 +30,10 @@
     background-color: #084D27;
 }
 
+#title #title-label{
+    font-size: 5px;
+}
+
 #title-button-container{
     visibility: hidden;
     width: 0px;
