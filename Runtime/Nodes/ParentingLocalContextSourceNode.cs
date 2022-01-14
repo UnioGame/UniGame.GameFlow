@@ -49,7 +49,7 @@
 
             var bindContextToOutput = new MessageBroadcastCommand(_contextConnection, PortPair.OutputPort);
             //register all Context Sources Data into target context asset
-            var registerDataSourceIntoContext = new RegisterDataSourceCommand(contextSource, _dataSources);
+            var registerDataSourceIntoContext = new OwnerRegisterDataSourceCommand(contextSource, _dataSources);
             //Register context to output port
             var contextToOutputPortCommand  = new DataSourceTaskCommand<IContext>(contextSource, outPort);
             var contextContainerBindCommand = new ParentContextContainerBindCommand(_contextConnection, _parentContextContainer);
