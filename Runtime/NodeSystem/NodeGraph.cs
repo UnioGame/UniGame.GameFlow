@@ -137,6 +137,8 @@ namespace UniModules.GameFlow.Runtime.Core
             node.SetName(itemName);
             node.UpdateNodePorts();
             
+            _allNodes?.Add(node);
+            
             return node;
         }
 

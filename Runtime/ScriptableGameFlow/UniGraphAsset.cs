@@ -108,7 +108,23 @@ namespace UniGame.GameFlowEditor.Runtime
         public void UpdateGraph()
         {
             CreateNodes();
+            ValidateNodes();
             ConnectNodePorts();
+        }
+
+        private void ValidateNodes()
+        {
+            var removed = ClassPool.Spawn<List<BaseNode>>();
+            
+            foreach (var node in nodes)
+            {
+                if (node is UniBaseNode uniBaseNode && !uniNodes.ContainsKey(uniBaseNode.sourceId))
+                    removed.Add(node);
+            }
+            
+            removed.ForEach(RemoveNode);
+            
+            removed.Despawn();
         }
 
         private void CreateNodes()
