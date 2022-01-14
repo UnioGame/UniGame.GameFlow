@@ -39,8 +39,9 @@
     width: 0px;
 }
 
-#title-button-container #icon{
+#node-border #icon{
     visibility: hidden;
+    width: 0px;
 }
 
 #RightTitleContainer{
