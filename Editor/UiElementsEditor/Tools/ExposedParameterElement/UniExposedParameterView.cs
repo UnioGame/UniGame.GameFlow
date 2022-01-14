@@ -103,16 +103,12 @@ namespace UniModules.UniGame.GameFlow.Editor.UiElementsEditor.Tools.ExposedParam
             RegisterCallback<DragUpdatedEvent>(OnDragUpdatedEvent);
             RegisterCallback<DragPerformEvent>(OnDragPerformEvent);
             RegisterCallback<MouseDownEvent>(OnMouseDownEvent, TrickleDown.TrickleDown);
-            RegisterCallback<DetachFromPanelEvent>(OnViewClosed);
 
             UpdateParameterList();
 
             // Add exposed parameter button
             header.Add(new Button(OnAddClicked){ text = "+" });
         }
-
-        void OnViewClosed(DetachFromPanelEvent evt)
-            => Undo.undoRedoPerformed -= UpdateParameterList;
 
         void OnMouseDownEvent(MouseDownEvent evt)
         {

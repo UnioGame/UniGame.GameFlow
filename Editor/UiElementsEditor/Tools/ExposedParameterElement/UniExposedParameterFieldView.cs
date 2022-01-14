@@ -39,10 +39,6 @@ namespace UniModules.UniGame.GameFlow.Editor.UiElementsEditor.Tools.ExposedParam
         public void ApplyParameter()
         {
             parameter.Apply(graphView);
-
-            MessageBroker.Default.Publish(new UniGraphReloadMessage() {
-                graph = graphView.sourceGraph
-            });
         }
 
         void BuildContextualMenu(ContextualMenuPopulateEvent evt)

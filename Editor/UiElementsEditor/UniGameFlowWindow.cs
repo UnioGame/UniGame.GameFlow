@@ -304,12 +304,15 @@ namespace UniModules.GameFlow.Editor
         private void CreateExposedPinnedParameters(BaseGraphView view)
         {
             _exposedParameterView = view.Q<UniExposedParameterView>();
-            
-            if(_exposedParameterView == null)
+
+            if (_exposedParameterView == null)
+            {
                 view.OpenPinned<UniExposedParameterView>();
+                _exposedParameterView = view.Q<UniExposedParameterView>();
+                _exposedParameterView.SetPosition(new Rect(_parametersPinnedPosition, _exposedParameterView.GetPosition().size));
+            }
             
             _exposedParameterView = view.Q<UniExposedParameterView>();
-            _exposedParameterView.SetPosition(new Rect(_parametersPinnedPosition, _exposedParameterView.GetPosition().size));
         }
 
         private TView CreateGraphView<TView>(Func<TView> factory, GraphElement view)
