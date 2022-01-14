@@ -1,4 +1,6 @@
 ﻿using UniGame.GameFlowEditor.Runtime;
+using UniModules.UniGame.GameFlow.GameFlowEditor.Editor.Attributes;
+using UniModules.UniGame.GameFlow.GameFlowEditor.Runtime.Nodes;
 
 namespace UniGame.UniNodes.Nodes.Runtime.Common
 {
@@ -9,6 +11,7 @@ namespace UniGame.UniNodes.Nodes.Runtime.Common
 
     [Serializable]
     [CreateNodeMenu("Parameters/GraphContextData")]
+    [NodeAsset(typeof(ParameterView))]
     [NodeInfo(nameof(GraphContextOutputNode), "output", "pass graph context as parameter")]
     public class GraphContextOutputNode : GraphParameterDataNode, IGraphParameter
     {
@@ -25,8 +28,5 @@ namespace UniGame.UniNodes.Nodes.Runtime.Common
     }
 
     [Serializable]
-    public class GraphContextParameter : UniExposedParameter<GraphContextOutputNode>
-    {
-        
-    }
+    public class GraphContextParameter : UniExposedParameter<GraphContextOutputNode> { }
 }

@@ -196,15 +196,7 @@ namespace UniModules.GameFlow.Runtime.Core
         #region editor api
         
 #if UNITY_EDITOR
-        
-        public void ReloadEditor()
-        {
-            MessageBroker.Default.Publish(new UniGraphReloadMessage()
-            {
-                graph = this
-            });
-        }
-        
+
         private void ReleaseNodes()
         {
             if (!this) return;

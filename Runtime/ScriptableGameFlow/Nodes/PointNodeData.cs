@@ -13,7 +13,6 @@
         
         public override string layoutStyle => nodeStyle;
 
-        //[IsCompatibleWithGraph]
         public static bool Create(BaseGraph assetGraph)
         {
             var uniGraph = assetGraph as UniGraphAsset;
@@ -22,6 +21,7 @@
                 return false;
 
             uniGraph.CreateNode(typeof(PointNode), Vector2.zero);
+            
             return true;
         }
     }

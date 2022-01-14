@@ -96,11 +96,12 @@ namespace UniModules.GameFlow.Runtime.Core
             _allNodes ??= new List<INode>();
             if (_allNodes.Count > 0)
                 return _allNodes;
-            
-            _allNodes.AddRange(nodes);
-            _allNodes.AddRange(serializableNodes);
-            _allNodes.AddRange(GetCustomNodes());
 
+            if(nodes!=null)
+                _allNodes.AddRange(nodes);
+            if(serializableNodes !=null)
+                _allNodes.AddRange(serializableNodes);
+    
             return _allNodes;
         }
         

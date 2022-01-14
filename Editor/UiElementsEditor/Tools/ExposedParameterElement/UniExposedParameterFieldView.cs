@@ -1,5 +1,7 @@
 ﻿using System;
 using UniGame.GameFlowEditor.Runtime;
+using UniModules.GameFlow.Runtime.Core;
+using UniRx;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -36,7 +38,10 @@ namespace UniModules.UniGame.GameFlow.Editor.UiElementsEditor.Tools.ExposedParam
         public void ApplyParameter()
         {
             parameter.Apply(graphView);
-            //graphView.sourceGraph.ReloadEditor();
+
+            MessageBroker.Default.Publish(new UniGraphReloadMessage() {
+                graph = graphView.sourceGraph
+            });
         }
 
         void BuildContextualMenu(ContextualMenuPopulateEvent evt)
