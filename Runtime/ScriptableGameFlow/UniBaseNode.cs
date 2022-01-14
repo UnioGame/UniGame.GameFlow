@@ -1,10 +1,11 @@
 ﻿using GraphProcessor;
+using UniModules.UniGame.Core.Runtime.Rx;
+using UniRx;
 
 namespace UniGame.GameFlowEditor.Runtime
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using UniModules.GameFlow.Runtime.Attributes;
     using UniModules.GameFlow.Runtime.Core;
     using UniModules.GameFlow.Runtime.Interfaces;
@@ -18,9 +19,7 @@ namespace UniGame.GameFlowEditor.Runtime
         #region inspector
 
         public int sourceId;
-
         public string nodeName;
-
         public UniGraph sourceGraph;
         
         #endregion
@@ -31,23 +30,33 @@ namespace UniGame.GameFlowEditor.Runtime
         [Output(name = nameof(outputs), allowMultiple = true)]
         public IEnumerable< object > outputs = null;
         
-        private Dictionary<INodePort,PortData> portData = new Dictionary<INodePort, PortData>(8);
-        
+        public Dictionary<INodePort,PortData> portData = new Dictionary<INodePort, PortData>(8);
+
+        private RecycleReactiveProperty<INode> nodeSubject = new RecycleReactiveProperty<INode>();
+
         #region public properties
 
-        public INode SourceNode => sourceGraph.GetNode(sourceId);
+        public INode SourceNode => sourceGraph?.GetNode(sourceId);
+
+        public IObservable<INode> SourceNodeObservable => nodeSubject;
 
         public override string name => SourceNode == null ? base.name : SourceNode.ItemName;
 
         public override string layoutStyle => GetNodeStyle();
         
         #endregion
+
+        public UniBaseNode()
+        {
+            nodeSubject ??= new RecycleReactiveProperty<INode>();
+        }
         
         public void Initialize(INode node, UniGraph ownerGraph)
         {
             sourceId   = node.Id;
             nodeName = node.ItemName;
             sourceGraph = ownerGraph;
+            nodeSubject.Value = node;
             
             position = new Rect(node.Position,new Vector2(node.Width,100));
             

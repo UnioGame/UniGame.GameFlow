@@ -1,13 +1,10 @@
 ﻿namespace UniModules.UniGame.GameFlow.GameFlowEditor.Runtime.Nodes
 {
-    using Editor.Attributes;
     using GameFlow.Runtime.Nodes.Common;
     using global::UniGame.GameFlowEditor.Runtime;
     using GraphProcessor;
     using UnityEngine;
-    using UnityEngine.UIElements;
 
-    [NodeBind(typeof(PointNodeData),typeof(PointNode))]
     [NodeMenuItem("Point")]
     [System.Serializable]
     public class PointNodeData : UniBaseNode

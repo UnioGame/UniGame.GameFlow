@@ -185,6 +185,9 @@ namespace UniGame.GameFlowEditor.Editor
                 return _selectionUpdated;
 
             var sourceNode = nodeData.SourceNode;
+            if (sourceNode == null)
+                return false;
+            
             Focus(sourceNode);
 
             return true;

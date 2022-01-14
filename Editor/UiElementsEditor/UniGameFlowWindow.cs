@@ -3,6 +3,7 @@ using UniGame.GameFlowEditor.Editor;
 using UniGame.GameFlowEditor.Runtime;
 using UniGame.UniNodes.GameFlowEditor.Editor;
 using UniModules.GameFlow.Runtime.Core;
+using UniModules.UniCore.Runtime.Rx.Extensions;
 using UniModules.UniGame.GameFlow.Editor.UiElementsEditor.Tools.ExposedParameterElement;
 using UnityEditor;
 using UnityEditor.Experimental.SceneManagement;
@@ -28,15 +29,12 @@ namespace UniModules.GameFlow.Editor
         protected static ReactiveCollection<UniGameFlowWindow> windows = new ReactiveCollection<UniGameFlowWindow>();
         protected static UniGameFlowWindow focusedWindow;
 
-        #endregion
-
+        
         public static IReadOnlyReactiveCollection<UniGameFlowWindow> Windows => windows;
 
         public static UniGameFlowWindow FocusedWindow => focusedWindow;
 
         public static string DefaultTitle => defaultTitle;
-
-        #region static methods
 
         public static UniGameFlowWindow Open(UniGraph graph)
         {
@@ -60,9 +58,9 @@ namespace UniModules.GameFlow.Editor
 
             return window;
         }
-
+        
         #endregion
-
+        
         #region private fields
 
         private string _guid = string.Empty;
@@ -171,11 +169,14 @@ namespace UniModules.GameFlow.Editor
             }
 
             var sourceGraph = uniGraph;
-            var stage = PrefabStageUtility.GetPrefabStage(uniGraph.gameObject);
-            if (Application.isPlaying == false && stage != null && !string.IsNullOrEmpty(stage.assetPath))
+            if (!uniGraph.useVariants)
             {
-                var asset = AssetDatabase.LoadAssetAtPath<GameObject>(stage.assetPath);
-                sourceGraph = asset.GetComponent<UniGraph>();
+                var stage = PrefabStageUtility.GetPrefabStage(uniGraph.gameObject);
+                if (Application.isPlaying == false && stage != null && !string.IsNullOrEmpty(stage.assetPath))
+                {
+                    var asset = AssetDatabase.LoadAssetAtPath<GameObject>(stage.assetPath);
+                    sourceGraph = asset.GetComponent<UniGraph>();
+                }
             }
             
             AssetGraph = graphAsset;
@@ -216,9 +217,18 @@ namespace UniModules.GameFlow.Editor
             base.OnEnable();
 
             _lifeTime.AddCleanUpAction(() => windows.Remove(this));
+            
             if (!windows.Contains(this))
                 windows.Add(this);
 
+            MessageBroker.Default
+                .Receive<UniGraphReloadMessage>()
+                .Where(x => x.graph == _targetGraph)
+                .Do(x => Save())
+                .Do(x => Reload())
+                .Subscribe()
+                .AddTo(_lifeTime);
+            
             Reload();
         }
 

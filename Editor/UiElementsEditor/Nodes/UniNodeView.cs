@@ -1,4 +1,7 @@
 ﻿using GraphProcessor;
+using UniModules.UniCore.Runtime.DataFlow;
+using UniModules.UniCore.Runtime.Rx.Extensions;
+using UniRx;
 
 namespace UniGame.GameFlowEditor.Editor
 {
@@ -18,19 +21,22 @@ namespace UniGame.GameFlowEditor.Editor
     [NodeCustomEditor(typeof(UniBaseNode))]
     public class UniNodeView : BaseNodeView
     {
-        private const string PortsInfoMenu  = "Ports Data Info";
+        private const string PortsInfoMenu = "Ports Data Info";
         private const string OpenScriptMenu = "Open UniNode Script";
+        private const string BaseContainerStyle = "uninode-view-container";
 
-        private List<ContextDescription>  _content          = new List<ContextDescription>();
-        private Color                     _backgroundColor = new Color(0.4f, 0.4f, 0.4f);
+        private List<ContextDescription> _content = new List<ContextDescription>();
+        private Color _backgroundColor = new Color(0.4f, 0.4f, 0.4f);
         private SerializableNodeContainer _serializableNode;
+        private LifeTimeDefinition _lifeTime = new LifeTimeDefinition();
+        private INode node;
 
         private SerializableNodeContainer NodeContainer
             => _serializableNode ??= ScriptableObject.CreateInstance<SerializableNodeContainer>();
 
 
         #region public properties
-
+        
         public UniBaseNode NodeData { get; protected set; }
 
         public string Guid => NodeData.GUID;
@@ -39,20 +45,24 @@ namespace UniGame.GameFlowEditor.Editor
 
         public bool IsSerializable { get; protected set; }
 
-        
         #endregion
 
         public override void Enable()
         {
             NodeData = nodeTarget as UniBaseNode;
+
             var sourceNode = NodeData?.SourceNode;
+
             if (sourceNode is SerializableNode assetNode)
             {
                 IsSerializable = true;
                 NodeContainer.Initialize(assetNode, sourceNode.GraphData as NodeGraph);
             }
 
-            DrawNode(sourceNode);
+            NodeData?.SourceNodeObservable
+                .Subscribe(DrawNode)
+                .AddTo(_lifeTime);
+            
             //add into node processor
             NodeViewProcessor.Asset.Add(this);
         }
@@ -72,7 +82,7 @@ namespace UniGame.GameFlowEditor.Editor
             {
                 _content.Add(new ContextDescription()
                 {
-                    Data  = nodePort.Value,
+                    Data = nodePort.Value,
                     Label = nodePort.ItemName
                 });
             }
@@ -82,27 +92,48 @@ namespace UniGame.GameFlowEditor.Editor
 
         protected virtual void DrawNode(INode sourceNode)
         {
-            var container      = sourceNode.DrawNodeUiElements();
-            var containerStyle = container.style;
+            if (sourceNode == null) return;
 
-            containerStyle.backgroundColor = new StyleColor(_backgroundColor);
-            containerStyle.paddingTop      = 4;
-            containerStyle.paddingLeft     = 4;
-            containerStyle.marginBottom    = 4;
+            var container = this.Q<VisualElement>(BaseContainerStyle, BaseContainerStyle);
+            if (container != null)
+                container.visible = false;
 
-            containerStyle.paddingTop    = 4;
-            containerStyle.paddingBottom = 4;
-            containerStyle.marginLeft    = 4;
-            containerStyle.marginRight   = 4;
-            containerStyle.minWidth      = 250;
+            if (node == sourceNode) return;
+            
+            node = sourceNode;
+            
+            container = node.DrawNodeUiElements();
+            container.name = BaseContainerStyle;
+            container.AddToClassList(BaseContainerStyle);
 
-            controlsContainer.Add(container);
+            title = node.ItemName;
+            
+            ApplyStyle(container);
+            ForceUpdatePorts();
         }
 
         public override void OnSelected()
         {
             base.OnSelected();
             Selection.activeObject = IsSerializable ? NodeContainer : NodeData.SourceNode as Object;
+        }
+
+        protected virtual void ApplyStyle(VisualElement container)
+        {
+            var containerStyle = container.style;
+
+            containerStyle.backgroundColor = new StyleColor(_backgroundColor);
+            containerStyle.paddingTop = 4;
+            containerStyle.paddingLeft = 4;
+            containerStyle.marginBottom = 4;
+
+            containerStyle.paddingTop = 4;
+            containerStyle.paddingBottom = 4;
+            containerStyle.marginLeft = 4;
+            containerStyle.marginRight = 4;
+            containerStyle.minWidth = 250;
+
+            controlsContainer.Add(container);
         }
 
         private void ShowPortsValues()
@@ -112,6 +143,10 @@ namespace UniGame.GameFlowEditor.Editor
 
         private void OpenUniNodeSourceCode() => NodeData.SourceNode.GetType().OpenEditorScript();
 
-        protected void OnDestroy() => NodeViewProcessor.Asset.Remove(this);
+        protected void OnDestroy()
+        {
+            _lifeTime.Terminate();
+            NodeViewProcessor.Asset.Remove(this);
+        }
     }
 }

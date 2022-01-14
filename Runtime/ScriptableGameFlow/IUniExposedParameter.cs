@@ -1,9 +1,5 @@
 ﻿namespace UniGame.GameFlowEditor.Runtime
 {
-    using System;
-    using UniModules.GameFlow.Runtime.Interfaces;
-    using UnityEngine.UIElements;
-    
     public interface IUniExposedParameter
     {
         string DisplayName { get; set; }
@@ -12,31 +8,24 @@
 
         void Apply(UniGraphAsset asset);
     }
-    
-    
-    [Serializable]
-    public class UniExposedParameter<TNode> : IUniExposedParameter
-        where TNode : INode
+
+
+    public static class UniExposedParametersTool
     {
-        public string parameter;
+        public static string GetNiceNameFromType(string type)
+        {
+            if(string.IsNullOrEmpty(type))
+                return string.Empty;
+            
+            var name = type;
 
-        public UniExposedParameter()
-        {
-            parameter = typeof(TNode).Name;
+            // Remove parameter in the name of the type if it exists
+            name = name.Replace("Parameter", "");
+            name = name.Replace("Node", "");
+            name = name.Replace("Output", "");
+
+            return name;
         }
 
-        public string DisplayName
-        {
-            get => parameter;
-            set => parameter = value;
-        }
- 
-        public string Info => typeof(TNode).Name;
-        
-        public void Apply(UniGraphAsset asset)
-        {
-            var mousePos     = ContextClickEvent.GetPooled().mousePosition;
-            asset.CreateNode(typeof(TNode), mousePos);
-        }
     }
 }

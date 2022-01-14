@@ -35,7 +35,7 @@ namespace UniModules.UniGame.GameFlow.Editor.UiElementsEditor.Tools.ExposedParam
             var parameterType = new GenericMenu();
 
             foreach (var paramType in GetExposedParameterTypes())
-                parameterType.AddItem(new GUIContent(GetNiceNameFromType(paramType)), false, () =>
+                parameterType.AddItem(new GUIContent(UniExposedParametersTool.GetNiceNameFromType(paramType.Name)), false, () =>
                 {
                     try
                     {
@@ -57,22 +57,12 @@ namespace UniModules.UniGame.GameFlow.Editor.UiElementsEditor.Tools.ExposedParam
             parameterType.ShowAsContext();
         }
 
-        protected string GetNiceNameFromType(Type type)
-        {
-            var name = type.Name;
-
-            // Remove parameter in the name of the type if it exists
-            name = name.Replace("Parameter", "");
-
-            return ObjectNames.NicifyVariableName(name);
-        }
-
         protected virtual IEnumerable< Type > GetExposedParameterTypes()
         {
             foreach (var type in TypeCache.GetTypesDerivedFrom<IUniExposedParameter>())
             {
                 if (type.IsGenericType || type.IsAbstract)
-                    continue ;
+                    continue;
 
                 yield return type;
             }
@@ -84,8 +74,9 @@ namespace UniModules.UniGame.GameFlow.Editor.UiElementsEditor.Tools.ExposedParam
             
             foreach (var param in graphAsset.uniExposedParameters)
             {
-                var propertyView = new UniExposedParameterPropertyView(graphView, param);
                 var fieldView = new UniExposedParameterFieldView(graphAsset, param,Remove);
+                var propertyView = new UniExposedParameterPropertyView(graphView, param);
+                
                 var row = new BlackboardRow(fieldView, propertyView);
                 content.Add(row);
             }

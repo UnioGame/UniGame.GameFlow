@@ -1,6 +1,7 @@
 ﻿using System;
 using UniGame.GameFlowEditor.Runtime;
 using UnityEditor.Experimental.GraphView;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace UniModules.UniGame.GameFlow.Editor.UiElementsEditor.Tools.ExposedParameterElement
@@ -13,7 +14,7 @@ namespace UniModules.UniGame.GameFlow.Editor.UiElementsEditor.Tools.ExposedParam
 
         public IUniExposedParameter	parameter { get; private set; }
 
-        public UniExposedParameterFieldView(UniGraphAsset graphView, IUniExposedParameter param, Action<IUniExposedParameter> removeAction) : base(null, param.DisplayName, param.Info)
+        public UniExposedParameterFieldView(UniGraphAsset graphView, IUniExposedParameter param, Action<IUniExposedParameter> removeAction) : base(null, param.DisplayName, string.Empty)
         {
             this.graphView = graphView;
             _removeAction = removeAction;
@@ -26,6 +27,16 @@ namespace UniModules.UniGame.GameFlow.Editor.UiElementsEditor.Tools.ExposedParam
                 param.DisplayName = e.newValue;
                 text = e.newValue;
             });
+
+            var addButton = new Button(ApplyParameter);
+            addButton.text = "+";
+            Add(addButton);
+        }
+
+        public void ApplyParameter()
+        {
+            parameter.Apply(graphView);
+            //graphView.sourceGraph.ReloadEditor();
         }
 
         void BuildContextualMenu(ContextualMenuPopulateEvent evt)

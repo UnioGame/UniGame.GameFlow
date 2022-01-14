@@ -1,6 +1,7 @@
 ﻿using UniGame.GameFlow;
 using UniGame.GameFlowEditor.Runtime;
 using UniModules.UniGame.Core.Runtime.Extension;
+using UniRx;
 
 namespace UniModules.GameFlow.Runtime.Core
 {
@@ -100,6 +101,8 @@ namespace UniModules.GameFlow.Runtime.Core
             if(serializedGraph == null) 
                 yield break;
 
+            yield break;
+
             var items = NodeDataConverter.ConvertNodes(this,serializedGraph);
 
             foreach (var item in items)
@@ -193,7 +196,15 @@ namespace UniModules.GameFlow.Runtime.Core
         #region editor api
         
 #if UNITY_EDITOR
-
+        
+        public void ReloadEditor()
+        {
+            MessageBroker.Default.Publish(new UniGraphReloadMessage()
+            {
+                graph = this
+            });
+        }
+        
         private void ReleaseNodes()
         {
             if (!this) return;

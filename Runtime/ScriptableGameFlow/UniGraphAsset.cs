@@ -3,6 +3,10 @@ using UniGame.GameFlow;
 using UniModules.UniCore.Runtime.ObjectPool.Runtime;
 using UniModules.UniCore.Runtime.ObjectPool.Runtime.Extensions;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 namespace UniGame.GameFlowEditor.Runtime
 {
     using System;
@@ -23,15 +27,10 @@ namespace UniGame.GameFlowEditor.Runtime
     {
         #region static data
 
-        public static MemorizeItem<Type, Type> nodeDataMap =
-            MemorizeTool.Memorize<Type, Type>(nodeType =>
-            {
-                var baseType = typeof(UniBaseNode);
-                var allDataNodes = baseType.GetAssignableWithAttributeMap<NodeBindAttribute>();
-                var attributePair = allDataNodes.Where(x => x.attribute != null)
-                    .FirstOrDefault(x => x.attribute.NodeType == nodeType);
-                var attribute = attributePair.attribute;
-                return attribute == null ? typeof(UniBaseNode) : attribute.NodeData;
+        public static MemorizeItem<Type, Type> NodeDataMap = MemorizeTool
+            .Memorize<Type, Type>(nodeType => {
+                var attribute = nodeType.GetCustomAttribute<NodeAssetAttribute>();
+                return attribute == null ? typeof(UniBaseNode) : attribute.NodeType;
             });
 
         #endregion
@@ -70,10 +69,10 @@ namespace UniGame.GameFlowEditor.Runtime
             nodeName = UnityEditor.ObjectNames.NicifyVariableName(nodeName);
 #endif
             var newNode = sourceGraph.AddNode(type, nodeName, nodePosition);
-
-            return CreateNode(newNode);
+            var node = CreateNode(newNode);
+            return node;
         }
-
+        
         public UniBaseNode CreateNode(INode node)
         {
             var graphNode = nodes.FirstOrDefault(x => x is UniBaseNode baseNode && baseNode.sourceId == node.Id) as UniBaseNode;
@@ -82,15 +81,14 @@ namespace UniGame.GameFlowEditor.Runtime
             
             //register only uni nodes
             uniNodes[node.Id] = graphNode;
-
-            //sourceGraph.Save();
+            
             return graphNode;
         }
 
         public UniBaseNode CreateUniBaseNode(INode node)
         {
             var nodeType  = node.GetType();
-            var dataType  = nodeDataMap.GetValue(nodeType);
+            var dataType  = NodeDataMap.GetValue(nodeType);
             var graphNode = BaseNode.CreateFromType(dataType, node.Position) as UniBaseNode;
             
             //register node into all nodes list

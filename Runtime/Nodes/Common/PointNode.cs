@@ -1,4 +1,7 @@
-﻿using UniModules.GameFlow.Runtime.Core.Nodes;
+﻿using UniGame.GameFlowEditor.Runtime;
+using UniModules.GameFlow.Runtime.Core.Nodes;
+using UniModules.UniGame.GameFlow.GameFlowEditor.Editor.Attributes;
+using UniModules.UniGame.GameFlow.GameFlowEditor.Runtime.Nodes;
 
 namespace UniModules.UniGame.GameFlow.GameFlow.Runtime.Nodes.Common
 {
@@ -11,6 +14,7 @@ namespace UniModules.UniGame.GameFlow.GameFlow.Runtime.Nodes.Common
     using UnityEngine;
 
     [Serializable]
+    [NodeAsset(typeof(PointNodeData))]
     [CreateNodeMenu("Common/Point")]
     [NodeInfo(nameof(PointNode), "flow", "serializable node for transfer data from input port to output")]
     public class PointNode : SNode
@@ -30,4 +34,8 @@ namespace UniModules.UniGame.GameFlow.GameFlow.Runtime.Nodes.Common
             return UniTask.CompletedTask;
         }
     }
+
+
+    [Serializable]
+    public class PointParameter : UniExposedParameter<PointNode> { }
 }
