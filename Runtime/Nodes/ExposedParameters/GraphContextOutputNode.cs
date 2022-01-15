@@ -1,5 +1,4 @@
-﻿using UniGame.GameFlowEditor.Runtime;
-using UniModules.UniGame.GameFlow.GameFlowEditor.Editor.Attributes;
+﻿using UniModules.UniGame.GameFlow.GameFlowEditor.Editor.Attributes;
 using UniModules.UniGame.GameFlow.GameFlowEditor.Runtime.Nodes;
 
 namespace UniGame.UniNodes.Nodes.Runtime.Common
@@ -26,7 +25,4 @@ namespace UniGame.UniNodes.Nodes.Runtime.Common
             return UniTask.CompletedTask;
         }
     }
-
-    [Serializable]
-    public class GraphContextParameter : UniExposedParameter<GraphContextOutputNode> { }
 }

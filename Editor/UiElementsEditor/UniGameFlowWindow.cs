@@ -71,6 +71,7 @@ namespace UniModules.GameFlow.Editor
         private Vector2 _minimapPosition = new Vector2(50, 50);
         private Vector2 _settingsPinnedPosition = new Vector2(50, 250);
         private Vector2 _parametersPinnedPosition = new Vector2(50, 550);
+        private Vector2 _parametersPinnedSize = new Vector2(250, 200);
 
         private GameFlowGraphView _uniGraphView;
         private UniGraphSettingsPinnedView _settingsPinnedView;
@@ -304,15 +305,11 @@ namespace UniModules.GameFlow.Editor
         private void CreateExposedPinnedParameters(BaseGraphView view)
         {
             _exposedParameterView = view.Q<UniExposedParameterView>();
-
-            if (_exposedParameterView == null)
-            {
-                view.OpenPinned<UniExposedParameterView>();
-                _exposedParameterView = view.Q<UniExposedParameterView>();
-                _exposedParameterView.SetPosition(new Rect(_parametersPinnedPosition, _exposedParameterView.GetPosition().size));
-            }
+            if (_exposedParameterView != null) return;
             
+            view.OpenPinned<UniExposedParameterView>();
             _exposedParameterView = view.Q<UniExposedParameterView>();
+            _exposedParameterView.SetPosition(new Rect(_parametersPinnedPosition, _parametersPinnedSize));
         }
 
         private TView CreateGraphView<TView>(Func<TView> factory, GraphElement view)

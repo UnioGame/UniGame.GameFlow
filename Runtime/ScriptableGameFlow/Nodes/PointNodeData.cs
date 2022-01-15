@@ -1,6 +1,6 @@
 ﻿namespace UniModules.UniGame.GameFlow.GameFlowEditor.Runtime.Nodes
 {
-    using GameFlow.Runtime.Nodes.Common;
+    using UniModules.UniGame.GameFlow.Runtime;
     using global::UniGame.GameFlowEditor.Runtime;
     using GraphProcessor;
     using UnityEngine;
