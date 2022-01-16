@@ -1,3 +1,5 @@
+using UniModules.GameFlow.Runtime.Core;
+
 namespace UniModules.GameFlow.Runtime.Interfaces
 {
     using System.Collections.Generic;
@@ -8,7 +10,7 @@ namespace UniModules.GameFlow.Runtime.Interfaces
 
     public interface IImmutableNode : IGraphItem, IEditorNode
     {
-        IGraphData GraphData { get; }
+        NodeGraph GraphData { get; }
 
         IContext Context { get; }
 

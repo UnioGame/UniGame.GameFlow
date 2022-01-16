@@ -25,28 +25,31 @@ namespace UniModules.GameFlow.Runtime.Core
         /// <summary>
         /// unique graph space port id 
         /// </summary>
-        [ReadOnlyValue]
-        [SerializeField] private int id;
+        [ReadOnlyValue] [SerializeField] public int id;
+
         /// <summary>
         /// parent Node id
         /// </summary>
-        [ReadOnlyValue]
-        [SerializeField] public int nodeId;
-        
-        [SerializeField] public string           fieldName;
-        [SerializeField] public PortIO           direction          = PortIO.Input;
-        [SerializeField] public ConnectionType   connectionType     = ConnectionType.Multiple;
-        [SerializeField] public ShowBackingValue showBackingValue   = ShowBackingValue.Always;
-        [SerializeField] public bool             isDynamic          = true;
-        [SerializeField] public bool             isInstancePortList = false;
+        [ReadOnlyValue] [SerializeField] public int nodeId;
+
+        [SerializeField] public NodeGraph graph;
+        [SerializeField] public string fieldName;
+        [SerializeField] public PortIO direction = PortIO.Input;
+        [SerializeField] public ConnectionType connectionType = ConnectionType.Multiple;
+        [SerializeField] public ShowBackingValue showBackingValue = ShowBackingValue.Always;
+        [SerializeField] public bool isDynamic = true;
+        [SerializeField] public bool isInstancePortList = false;
+
         /// <summary>
         /// port container value
         /// </summary>
         [SerializeField] public PortValue portValue = new PortValue();
+
         /// <summary>
         /// registered port connections
         /// </summary>
         [SerializeField] public List<PortConnection> connections = new List<PortConnection>();
+
         /// <summary>
         /// dynamic port list
         /// </summary>
@@ -54,30 +57,24 @@ namespace UniModules.GameFlow.Runtime.Core
 
         #endregion
 
-        [NonSerialized] public LifeTimeDefinition lifeTimeDefinition;
+        [NonSerialized] private LifeTimeDefinition lifeTimeDefinition;
+
         /// <summary>
         /// port lifeTime 
         /// </summary>
-        [NonSerialized]
-        private ILifeTime lifeTime;
+        [NonSerialized] private ILifeTime lifeTime;
 
-        /// <summary>
-        /// port parent info
-        /// </summary>    
-        [NonSerialized]
-        public INode node;
-
-        [NonSerialized]
-        private IPortConnectionValidator connectionValidator;
+        [NonSerialized] private IPortConnectionValidator connectionValidator;
 
         #region constructor
 
         /// <summary>
         /// Copy a nodePort but assign it to another node.
         /// </summary>
-        public NodePort(int id,NodePort nodePort, INode node) :
+        public NodePort(int id, int nodeId,NodeGraph graph, NodePort nodePort) :
             this(id,
-                node,
+                nodeId,
+                graph,
                 nodePort.ItemName,
                 nodePort.Direction,
                 nodePort.ConnectionType,
@@ -88,9 +85,10 @@ namespace UniModules.GameFlow.Runtime.Core
             connections.AddRange(nodePort.connections);
         }
 
-        public NodePort(int id,INode node, IPortData portData) :
+        public NodePort(int id, int nodeId,NodeGraph graph, IPortData portData) :
             this(id,
-                node,
+                nodeId,
+                graph,
                 portData.ItemName,
                 portData.Direction,
                 portData.ConnectionType,
@@ -105,20 +103,22 @@ namespace UniModules.GameFlow.Runtime.Core
         /// </summary>
         public NodePort(
             int id,
-            INode node,
+            int nodeId,
+            NodeGraph graph,
             string fieldName,
             Type type,
             PortIO direction = PortIO.Input,
             ConnectionType connectionType = ConnectionType.Multiple,
             ShowBackingValue showBackingValue = ShowBackingValue.Always) :
-            this(id,node, fieldName, direction, connectionType, showBackingValue, new List<Type>() {type})
+            this(id, nodeId, graph, fieldName, direction, connectionType, showBackingValue, new List<Type>() { type })
         {
         }
 
 
         public NodePort(
             int id,
-            INode node,
+            int nodeId,
+            NodeGraph graph,
             string fieldName,
             PortIO direction = PortIO.Input,
             ConnectionType connectionType = ConnectionType.Multiple,
@@ -126,15 +126,15 @@ namespace UniModules.GameFlow.Runtime.Core
             IEnumerable<Type> types = null)
         {
             this.id = id;
-            this.node   = node;
-            this.nodeId = node.Id;
-            this.fieldName        = fieldName;
-            this.direction        = direction;
-            this.connectionType   = connectionType;
+            this.nodeId = nodeId;
+            this.graph = graph;
+            this.fieldName = fieldName;
+            this.direction = direction;
+            this.connectionType = connectionType;
             this.showBackingValue = showBackingValue;
             portValue.SetValueTypeFilter(types);
-            
-            Initialize(node);
+
+            Initialize(nodeId,graph);
         }
 
         #endregion
@@ -146,22 +146,25 @@ namespace UniModules.GameFlow.Runtime.Core
         public IReadOnlyList<IPortConnection> Connections => connections;
 
 
-        public IPortConnectionValidator ConnectionValidator => connectionValidator = 
-            connectionValidator ?? 
+        public IPortConnectionValidator ConnectionValidator => connectionValidator =
+            connectionValidator ??
             new PortConnectionValidator();
 
         public bool InstancePortList => instancePortList;
 
         public int PortId => Id;
-        
+
         public IReadOnlyList<Type> ValueTypes => portValue.ValueTypes;
 
         public int ConnectionCount => connections.Count;
 
         /// <summary> Return the first non-null connection </summary>
-        public INodePort Connection {
-            get {
-                for (var i = 0; i < connections.Count; i++) {
+        public INodePort Connection
+        {
+            get
+            {
+                for (var i = 0; i < connections.Count; i++)
+                {
                     if (connections[i] != null) return connections[i].Port;
                 }
 
@@ -171,20 +174,20 @@ namespace UniModules.GameFlow.Runtime.Core
 
         public IPortValue Value => portValue;
 
-        public PortIO         Direction      => direction;
+        public PortIO Direction => direction;
         public ConnectionType ConnectionType => connectionType;
 
         /// <summary> Is this port connected to anytihng? </summary>
         public bool IsConnected => connections.Count != 0;
 
-        public bool   IsInput  => Direction == PortIO.Input;
-        public bool   IsOutput => Direction == PortIO.Output;
+        public bool IsInput => Direction == PortIO.Input;
+        public bool IsOutput => Direction == PortIO.Output;
         public string ItemName => fieldName;
 
         public ShowBackingValue ShowBackingValue => showBackingValue;
-        public Type             ValueType        => portValue.ValueTypes.FirstOrDefault();
+        public Type ValueType => portValue.ValueTypes.FirstOrDefault();
 
-        public INode Node => node;
+        public INode Node => graph.GetNode(nodeId);
 
         public ILifeTime LifeTime => lifeTime;
 
@@ -192,17 +195,17 @@ namespace UniModules.GameFlow.Runtime.Core
 
         #endregion
 
-        public void Initialize(INode data)
+        public void Initialize(int portNodeId,NodeGraph portGraph)
         {
-            this.node   = data;
-            this.nodeId = data.Id;
-
+            this.nodeId = portNodeId;
+            this.graph = portGraph;
+            
             connections ??= new List<PortConnection>();
-            connections.ForEach(x => x.Initialize(node.GraphData));
+            connections.ForEach(x => x.Initialize(portGraph));
 
             //initialize port lifetime
             lifeTimeDefinition ??= new LifeTimeDefinition();
-            lifeTime           = lifeTimeDefinition.LifeTime;
+            lifeTime = lifeTimeDefinition.LifeTime;
             lifeTimeDefinition.Release();
 
             //initialize port value
@@ -215,9 +218,9 @@ namespace UniModules.GameFlow.Runtime.Core
 
         public void SetPortData(IPortData portData)
         {
-            fieldName        = portData.ItemName;
-            direction        = portData.Direction;
-            connectionType   = portData.ConnectionType;
+            fieldName = portData.ItemName;
+            direction = portData.Direction;
+            connectionType = portData.ConnectionType;
             showBackingValue = portData.ShowBackingValue;
             portValue.SetValueTypeFilter(portData.ValueTypes);
         }
@@ -227,7 +230,7 @@ namespace UniModules.GameFlow.Runtime.Core
         /// <summary>
         /// terminate Port lifetime, release resources
         /// </summary>
-        public void Release() =>  lifeTimeDefinition.Terminate();
+        public void Release() => lifeTimeDefinition.Terminate();
 
         /// <summary>
         /// connect current port to publishers
@@ -261,10 +264,9 @@ namespace UniModules.GameFlow.Runtime.Core
         {
             return GetHashCode(this);
         }
-        
 
         #endregion
-        
+
         #region node methods
 
         /// <summary> Checks all connections for invalid references, and removes them. </summary>
@@ -272,7 +274,8 @@ namespace UniModules.GameFlow.Runtime.Core
         {
             var removedConnections = ClassPool.Spawn<List<PortConnection>>();
 
-            for (var i = connections.Count - 1; i >= 0; i--) {
+            for (var i = connections.Count - 1; i >= 0; i--)
+            {
                 var connection = connections[i];
                 var targetPort = connection.Port;
                 if (targetPort != null)
@@ -291,16 +294,15 @@ namespace UniModules.GameFlow.Runtime.Core
             if (connections == null)
                 connections = new List<PortConnection>();
 
-            if (!ConnectionValidator.Validate(this, port)) 
+            if (!ConnectionValidator.Validate(this, port))
                 return;
 
             if (port.ConnectionType == ConnectionType.Override && port.ConnectionCount != 0)
                 port.ClearConnections();
-            
+
             if (ConnectionType == ConnectionType.Override && ConnectionCount != 0)
                 ClearConnections();
             
-
             var portNode = port.Node;
             connections.Add(new PortConnection(port, portNode.Id));
 
@@ -311,14 +313,15 @@ namespace UniModules.GameFlow.Runtime.Core
         public IPortConnection CreateConnection(int targetNodeId, string portName)
         {
             var portConnection = new PortConnection(targetNodeId, portName);
-            portConnection.Initialize(node.GraphData);
+            portConnection.Initialize(graph);
             connections.Add(portConnection);
             return portConnection;
         }
 
         public IEnumerable<INodePort> GetConnections()
         {
-            for (var i = 0; i < connections.Count; i++) {
+            for (var i = 0; i < connections.Count; i++)
+            {
                 var port = GetConnection(i);
                 if (port != null)
                     yield return port;
@@ -339,9 +342,10 @@ namespace UniModules.GameFlow.Runtime.Core
         /// <summary> Get index of the connection connecting this and specified ports </summary>
         public int GetConnectionIndex(INodePort port)
         {
-            for (var i = 0; i < ConnectionCount; i++) {
+            for (var i = 0; i < ConnectionCount; i++)
+            {
                 var connection = connections[i];
-                if(connection.NodeId == port.NodeId && connection.PortName == port.ItemName)
+                if (connection.NodeId == port.NodeId && connection.PortName == port.ItemName)
                     return i;
             }
 
@@ -350,37 +354,44 @@ namespace UniModules.GameFlow.Runtime.Core
 
         public bool IsConnectedTo(INodePort port)
         {
-            for (var i = 0; i < connections.Count; i++) {
+            for (var i = 0; i < connections.Count; i++)
+            {
                 var connection = connections[i];
-                if (connection.IsTarget(port)) {
+                if (connection.IsTarget(port))
+                {
                     return true;
                 }
             }
-            
+
             return false;
         }
-        
+
         /// <summary>
         /// Disconnect this port from another port
         /// </summary>
         public void Disconnect(INodePort port)
         {
             // Remove this ports connection to the other
-            if (port == null) {
+            if (port == null)
+            {
                 return;
             }
 
-            for (var i = connections.Count - 1; i >= 0; i--) {
+            for (var i = connections.Count - 1; i >= 0; i--)
+            {
                 var connection = connections[i];
-                if (connection.IsTarget(port)) {
+                if (connection.IsTarget(port))
+                {
                     connections.RemoveAt(i);
                 }
             }
 
             // Remove the other ports connection to this port
-            for (var i = 0; i < port.Connections.Count; i++) {
+            for (var i = 0; i < port.Connections.Count; i++)
+            {
                 var connection = port.Connections[i];
-                if (connection.IsTarget(this)) {
+                if (connection.IsTarget(this))
+                {
                     port.RemoveConnection(connection);
                 }
             }
@@ -388,7 +399,8 @@ namespace UniModules.GameFlow.Runtime.Core
 
         public void RemoveConnection(IPortConnection connection)
         {
-            if (connection is PortConnection portConnection) {
+            if (connection is PortConnection portConnection)
+            {
                 var index = connections.IndexOf(portConnection);
                 connections.RemoveAt(index);
             }
@@ -399,10 +411,13 @@ namespace UniModules.GameFlow.Runtime.Core
         {
             // Remove the other ports connection to this port
             var otherPort = connections[i].GetPort();
-            if (otherPort != null) {
-                for (var k = 0; k < otherPort.Connections.Count; k++) {
+            if (otherPort != null)
+            {
+                for (var k = 0; k < otherPort.Connections.Count; k++)
+                {
                     var connection = otherPort.Connections[i];
-                    if (connection.IsTarget(this)) {
+                    if (connection.IsTarget(this))
+                    {
                         otherPort.RemoveConnection(connection);
                     }
                 }
@@ -417,7 +432,8 @@ namespace UniModules.GameFlow.Runtime.Core
             var removedConnections = ClassPool.Spawn<List<PortConnection>>();
             removedConnections.AddRange(connections);
 
-            foreach (var connection in removedConnections) {
+            foreach (var connection in removedConnections)
+            {
                 if (connection.Port == null) continue;
                 Disconnect(connection.Port);
             }
@@ -436,9 +452,10 @@ namespace UniModules.GameFlow.Runtime.Core
         public void AddConnections(INodePort targetPort)
         {
             var connectionCount = targetPort.ConnectionCount;
-            for (var i = 0; i < connectionCount; i++) {
+            for (var i = 0; i < connectionCount; i++)
+            {
                 var connection = targetPort.Connections[i];
-                var otherPort  = connection.Port;
+                var otherPort = connection.Port;
                 Connect(otherPort);
             }
         }
@@ -449,7 +466,7 @@ namespace UniModules.GameFlow.Runtime.Core
             var aConnectionCount = connections.Count;
             var bConnectionCount = targetPort.Connections.Count;
 
-            var portConnections       = new List<INodePort>();
+            var portConnections = new List<INodePort>();
             var targetPortConnections = new List<INodePort>();
 
             // Cache port connections
@@ -472,8 +489,7 @@ namespace UniModules.GameFlow.Runtime.Core
             for (var i = 0; i < targetPortConnections.Count; i++)
                 Connect(targetPortConnections[i]);
         }
-        
-        #endregion
 
+        #endregion
     }
 }

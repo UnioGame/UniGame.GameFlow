@@ -52,11 +52,12 @@ namespace UniModules.GameFlow.Runtime.Core
         [HideInInspector]
         public NodePortDictionary ports = new NodePortDictionary();
 
+        public NodeGraph graph;
+        
         #endregion
         
         private IProxyNode _serializableNode;
-        private IGraphData _graph;
-        
+       
         /// <summary>
         /// regular source node
         /// </summary>
@@ -69,7 +70,7 @@ namespace UniModules.GameFlow.Runtime.Core
         /// <summary>
         /// unique node id
         /// </summary>
-        public int Id => id != 0 ? id : SetId(_graph.GetNextId());
+        public int Id => id != 0 ? id : SetId(graph.GetNextId());
 
         /// <summary>
         /// Node name
@@ -116,15 +117,15 @@ namespace UniModules.GameFlow.Runtime.Core
         /// <summary>
         /// base context graph data
         /// </summary>
-        public virtual IGraphData GraphData => _graph;
+        public virtual NodeGraph GraphData => graph;
 
         #endregion
 
         #region public methods
         
-        public virtual void Initialize(IGraphData data)
+        public virtual void Initialize(NodeGraph data)
         {
-            _graph = data;
+            graph = data;
             if (id != 0) SNode.SetId(id);
 
 #if UNITY_EDITOR
@@ -144,11 +145,11 @@ namespace UniModules.GameFlow.Runtime.Core
             return SNode.SetId(itemId);
         }
 
-        public void SetUpData(IGraphData parent)
+        public void SetUpData(NodeGraph parent)
         {
-            if (_graph == parent)
+            if (graph == parent)
                 return;
-            _graph = parent;
+            graph = parent;
             SNode.SetUpData(parent);
         }
         
@@ -245,7 +246,6 @@ namespace UniModules.GameFlow.Runtime.Core
         }
 
 #if UNITY_EDITOR
-        
 
         private void BindEditorCallbacks(PlayModeStateChange playModeStateChange)
         {
@@ -254,7 +254,7 @@ namespace UniModules.GameFlow.Runtime.Core
                 case PlayModeStateChange.ExitingEditMode:
                 case PlayModeStateChange.ExitingPlayMode:
                     _serializableNode = null;
-                    _graph            = null;
+                    graph            = null;
                     break;
             }
         }

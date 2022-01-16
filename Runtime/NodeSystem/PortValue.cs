@@ -128,10 +128,9 @@
         public bool Remove<TData>()
         {
             var result = _data.Remove<TData>();
-            if (result) {
-                _portValueChanged.Execute(Unit.Default);
-            }
-
+            
+            if (result) _portValueChanged.Execute(Unit.Default);
+            
             return result;
         }
 

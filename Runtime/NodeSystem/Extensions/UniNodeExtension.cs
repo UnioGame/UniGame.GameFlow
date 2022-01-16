@@ -30,7 +30,7 @@
 #region port names
 
         [Conditional("UNITY_EDITOR")]
-        public static void UpdatePorts(this INode node, IGraphData data)
+        public static void UpdatePorts(this INode node, NodeGraph data)
         {
             var portList = ClassPool.Spawn<List<INodePort>>();
 

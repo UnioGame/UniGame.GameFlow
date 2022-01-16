@@ -71,7 +71,7 @@ namespace UniModules.GameFlow.Runtime.Core
         
         public IReadOnlyList<INode> ObjectNodes => nodes;
 
-        public sealed override IGraphData GraphData => this;
+        public sealed override NodeGraph GraphData => this;
 
         public string Guid => guid;
         

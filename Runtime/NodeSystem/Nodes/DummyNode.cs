@@ -27,7 +27,7 @@ namespace UniModules.GameFlow.Runtime.Core.Nodes
         public string ItemName { get; private set;  }
 
         public IContext Context { get; }
-        public IGraphData              GraphData { get; }
+        public NodeGraph              GraphData { get; }
         public IEnumerable<INodePort> Ports     { get; }
         public IEnumerable<INodePort>   Outputs   { get; }
     
@@ -56,7 +56,7 @@ namespace UniModules.GameFlow.Runtime.Core.Nodes
 
         public void OnIdUpdate(int oldId, int newId, IGraphItem updatedItem) { }
         
-        public void SetUpData(IGraphData data) { }
+        public void SetUpData(NodeGraph data) { }
 
         public void SetName(string nodeName) { }
 
@@ -65,7 +65,7 @@ namespace UniModules.GameFlow.Runtime.Core.Nodes
         public void RemovePort(INodePort port) { }
 
         public void ClearConnections() { }
-        public void Initialize(IGraphData data) {}
+        public void Initialize(NodeGraph data) {}
 
         public void Validate(){}
 

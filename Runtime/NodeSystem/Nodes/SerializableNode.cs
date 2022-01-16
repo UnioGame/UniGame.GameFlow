@@ -51,9 +51,10 @@ namespace UniModules.GameFlow.Runtime.Core
         [IgnoreDrawer]
         public NodePortDictionary ports = new NodePortDictionary();
 
+        [HideInInspector]
+        public NodeGraph graphData;
+        
         #endregion
-
-        private IGraphData _graph;
 
         private HashSet<INodePort> _portValues;
 
@@ -109,10 +110,10 @@ namespace UniModules.GameFlow.Runtime.Core
         /// <summary>
         /// base context graph data
         /// </summary>
-        public virtual IGraphData GraphData
+        public virtual NodeGraph GraphData
         {
-            get => _graph;
-            protected set => _graph = value;
+            get => graphData;
+            protected set => graphData = value;
         }
 
         #endregion
@@ -125,9 +126,9 @@ namespace UniModules.GameFlow.Runtime.Core
             return id;
         }
 
-        public virtual void Initialize(IGraphData data)
+        public virtual void Initialize(NodeGraph data)
         {
-            _graph = data;
+            graphData = data;
             RuntimePorts.Clear();
         }
 
@@ -143,12 +144,7 @@ namespace UniModules.GameFlow.Runtime.Core
 
         public virtual string GetName() => nodeName;
 
-        public void SetUpData(IGraphData parent)
-        {
-            if (_graph == parent)
-                return;
-            _graph = parent;
-        }
+        public void SetUpData(NodeGraph parent) => graphData = parent;
 
         /// <summary> Add a serialized port to this node. </summary>
         public NodePort AddPort(
@@ -160,7 +156,7 @@ namespace UniModules.GameFlow.Runtime.Core
         {
             NodePort port = HasPort(fieldName) 
                 ? ports[fieldName] 
-                : new NodePort(GraphData.GetNextId(), this, fieldName, direction, connectionType, showBackingValue, types);
+                : new NodePort(GraphData.GetNextId(), Id,graphData, fieldName, direction, connectionType, showBackingValue, types);
 
             return AddPort(port);
         }
@@ -172,27 +168,19 @@ namespace UniModules.GameFlow.Runtime.Core
             AddPortValue(port);
 
             if (!HasPort(portName))
-            {
                 ports.Add(portName, port);
-            }
-
-            port.Initialize(this);
+            
+            port.Initialize(Id,graphData);
 
             return port;
         }
 
-        public void SetPosition(Vector2 newPosition)
-        {
-            position = newPosition;
-        }
+        public void SetPosition(Vector2 newPosition) => position = newPosition;
 
         /// <summary>
         /// Remove an instance port from the node
         /// </summary>
-        public void RemovePort(string fieldName)
-        {
-            RemovePort(GetPort(fieldName));
-        }
+        public void RemovePort(string fieldName) => RemovePort(GetPort(fieldName));
 
         /// <summary>
         /// Remove an instance port from the node
@@ -210,8 +198,8 @@ namespace UniModules.GameFlow.Runtime.Core
         public INodePort GetOutputPort(string fieldName)
         {
             var port = GetPort(fieldName);
-            if (port == null || port.Direction != PortIO.Output) return null;
-            return port;
+            return !(port is { Direction: PortIO.Output }) 
+                ? null : port;
         }
 
         /// <summary>
@@ -220,8 +208,8 @@ namespace UniModules.GameFlow.Runtime.Core
         public INodePort GetInputPort(string fieldName)
         {
             var port = GetPort(fieldName);
-            if (port == null || port.Direction != PortIO.Input) return null;
-            return port;
+            return !(port is { Direction: PortIO.Input }) 
+                ? null : port;
         }
 
         public IPortValue GetPortValue(string portName)

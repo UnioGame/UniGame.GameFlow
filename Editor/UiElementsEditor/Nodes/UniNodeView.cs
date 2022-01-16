@@ -60,6 +60,8 @@ namespace UniGame.GameFlowEditor.Editor
             }
 
             NodeData?.SourceNodeObservable
+                .Where(x => node != x)
+                .Do(ApplyNodeInfo)
                 .Do(DrawNode)
                 .Do(x => ForceUpdatePorts())
                 .Subscribe()
@@ -100,19 +102,19 @@ namespace UniGame.GameFlowEditor.Editor
             if (container != null)
                 container.visible = false;
 
-            if (node == sourceNode) return;
-            
-            node = sourceNode;
-            
             container = node.DrawNodeUiElements();
             container.name = BaseContainerStyle;
             container.AddToClassList(BaseContainerStyle);
 
             controlsContainer.Add(container);
-            
-            title = node.ItemName;
-            
+
             ApplyStyle(container);
+        }
+
+        protected void ApplyNodeInfo(INode sourceNode)
+        {
+            node = sourceNode;
+            title = node.ItemName;
         }
 
         public override void OnSelected()

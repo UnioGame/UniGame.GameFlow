@@ -44,7 +44,7 @@ namespace UniModules.GameFlow.Runtime.Interfaces
 
         IReadOnlyList<Type> ValueTypes { get; }
 
-        void Initialize(INode node);
+        void Initialize(int nodeId, NodeGraph graph);
         
         /// <summary> Checks all connections for invalid references, and removes them. </summary>
         void VerifyConnections();

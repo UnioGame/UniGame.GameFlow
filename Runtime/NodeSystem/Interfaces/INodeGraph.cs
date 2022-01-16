@@ -11,7 +11,7 @@
         
         IReadOnlyList<INode> Nodes { get; }
 
-        IGraphData GraphData { get; }
+        NodeGraph GraphData { get; }
 
         /// <summary> Add a node to the graph by type </summary>
         T AddNode<T>() where T : class, INode;

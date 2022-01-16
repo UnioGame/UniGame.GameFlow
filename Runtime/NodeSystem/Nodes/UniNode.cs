@@ -26,7 +26,7 @@
 
         #region public methods
 
-        public sealed override void Initialize(IGraphData graphData)
+        public sealed override void Initialize(NodeGraph graphData)
         {
             base.Initialize(graphData);
             SNode.Initialize(graphData,OnInitialize, UpdateCommands, OnExecute);
@@ -42,7 +42,7 @@
         /// </summary>
         public async UniTask ExecuteAsync()
         {
-            Initialize(GraphData);
+            Initialize(graph);
             
             await SNode.ExecuteAsync()
                 .AttachExternalCancellation(LifeTime.TokenSource);

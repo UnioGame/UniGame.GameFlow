@@ -8,7 +8,7 @@ namespace UniModules.GameFlow.Runtime.Interfaces
     public interface INode : IImmutableNode
     {
 
-        void SetUpData(IGraphData data);
+        void SetUpData(NodeGraph data);
 
         void SetName(string nodeName);
         
@@ -21,7 +21,7 @@ namespace UniModules.GameFlow.Runtime.Interfaces
         /// <summary> Disconnect everything from this node </summary>
         void ClearConnections();
         
-        void Initialize(IGraphData data);
+        void Initialize(NodeGraph data);
 
         NodePort AddPort(
             string fieldName,

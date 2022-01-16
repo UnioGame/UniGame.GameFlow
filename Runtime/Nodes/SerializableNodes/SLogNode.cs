@@ -32,6 +32,13 @@ namespace UniGame.UniNodes.Nodes.Runtime.SerializableNodes
             PrintLog(GetMessage(), mode);
             logPort.Broadcast(this).
                 AddTo(LifeTime);
+
+            logPort.Receive<IContext>()
+                .Select(x => x.Receive<string>())
+                .Switch()
+                .Do(x => GameLog.Log(x))
+                .Subscribe()
+                .AddTo(LifeTime);
             
             return UniTask.CompletedTask;
         }

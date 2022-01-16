@@ -42,12 +42,12 @@ namespace UniModules.GameFlow.Runtime.Core.Nodes
         #region public methods
 
         public void Initialize(
-            IGraphData graphData,
+            NodeGraph graph,
             Action initializeAction,
             Action<List<ILifeTimeCommand>> initializeCommands = null,
-            Func<UniTask> executeAction = null) => InnerInitialize(graphData, initializeAction, initializeCommands, executeAction);
+            Func<UniTask> executeAction = null) => InnerInitialize(graph, initializeAction, initializeCommands, executeAction);
 
-        public sealed override void Initialize(IGraphData graphData) => InnerInitialize(graphData);
+        public override void Initialize(NodeGraph graph) => InnerInitialize(graph);
 
         /// <summary>
         /// stop execution
@@ -67,7 +67,8 @@ namespace UniModules.GameFlow.Runtime.Core.Nodes
             if (_isActive) return;
             
             //initialize
-            Initialize(GraphData);
+            Initialize(graphData);
+            
             //mark as active
             _isActive = true;
             
@@ -116,7 +117,7 @@ namespace UniModules.GameFlow.Runtime.Core.Nodes
         #region private methods
 
         private void InnerInitialize(
-            IGraphData graphData,
+            NodeGraph graph,
             Action initializeAction = null,
             Action<List<ILifeTimeCommand>> initializeCommands = null,
             Func<UniTask> executeAction = null)
@@ -134,9 +135,9 @@ namespace UniModules.GameFlow.Runtime.Core.Nodes
 
             _lifeTime?.Release();
 
-            base.Initialize(graphData);
+            base.Initialize(graph);
 
-            InitializeData(graphData);
+            InitializeData(graph);
 
             _isInitialized = Application.isPlaying;
             
@@ -181,7 +182,7 @@ namespace UniModules.GameFlow.Runtime.Core.Nodes
             //initialize ports
             foreach (var port in Ports)
             {
-                port.Initialize(this);
+                port.Initialize(Id,graphData);
                 
                 if (!Application.isPlaying) continue;
                 
@@ -190,9 +191,9 @@ namespace UniModules.GameFlow.Runtime.Core.Nodes
             }
         }
 
-        private void InitializeData(IGraphData graphData)
+        private void InitializeData(NodeGraph graph)
         {
-            GraphData = graphData;
+            GraphData = graph;
             //restart lifetime
             _lifeTime ??= new LifeTimeDefinition();
             _commands ??= new List<ILifeTimeCommand>();
