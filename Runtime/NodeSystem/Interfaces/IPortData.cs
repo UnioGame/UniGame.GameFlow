@@ -11,5 +11,7 @@
         ShowBackingValue    ShowBackingValue { get; }
         bool                InstancePortList { get; }
         IReadOnlyList<Type> ValueTypes       { get; }
+        
+        bool DistinctValues { get; }
     }
 }

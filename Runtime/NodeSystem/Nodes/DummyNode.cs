@@ -67,6 +67,13 @@ namespace UniModules.GameFlow.Runtime.Core.Nodes
         public void ClearConnections() { }
         public void Initialize(NodeGraph data) {}
 
+        public NodePort AddPort(string fieldName, IEnumerable<Type> types, PortIO direction,
+            ConnectionType connectionType = ConnectionType.Multiple,
+            ShowBackingValue showBackingValue = ShowBackingValue.Always, bool distinctValue = false)
+        {
+            return null;
+        }
+
         public void Validate(){}
 
         public void SetPosition(Vector2 position) { }

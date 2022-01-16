@@ -18,6 +18,7 @@
         public ShowBackingValue showBackingValue = ShowBackingValue.Always;
         public bool instancePortList = false;
         public List<Type> valueTypes;
+        public bool distinctValues = false;
 
         public string ItemName => fieldName;
 
@@ -32,6 +33,7 @@
         public bool InstancePortList => instancePortList;
 
         public IReadOnlyList<Type> ValueTypes => valueTypes;
+        public bool DistinctValues => distinctValues;
 
         public PortData() { }
 
@@ -42,6 +44,7 @@
             connectionType = portData.ConnectionType;
             showBackingValue = portData.ShowBackingValue;
             valueTypes = portData.ValueTypes.ToList();
+            distinctValues = portData.DistinctValues;
         }
         
         public void Release()

@@ -14,16 +14,19 @@
         public ConnectionType connectionType;
         public ShowBackingValue backingValue;
         public List<Type> typeFilter;
+        public bool distinctValues;
 
         public PortValueFilterAttribute(
             string portName,
             PortIO direction = PortIO.Input, 
+            bool distinctValues = false,
             ConnectionType connectionType = ConnectionType.Multiple,
             ShowBackingValue backingValue = ShowBackingValue.Always,
             params Type[] typeFilter)
         {
             this.portName = portName;
             this.direction = direction;
+            this.distinctValues = distinctValues;
             this.connectionType = connectionType;
             this.backingValue = backingValue;
             this.typeFilter = typeFilter.ToList();
@@ -36,5 +39,6 @@
         public ShowBackingValue ShowBackingValue => backingValue;
         public bool InstancePortList { get; } = false;
         public IReadOnlyList<Type> ValueTypes => typeFilter;
+        public bool DistinctValues => distinctValues;
     }
 }

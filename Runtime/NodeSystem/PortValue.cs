@@ -34,11 +34,15 @@
         /// allowed port value types
         /// </summary>
         [SerializeField]
-        protected List<SType> serializedValueTypes = new List<SType>();
+        public List<SType> serializedValueTypes = new List<SType>();
 
         [SerializeField] 
-        [ReadOnlyValue] protected int broadcastersCount;
+        [ReadOnlyValue] 
+        public int broadcastersCount;
 
+        [SerializeField]
+        public bool distinctValues = false;
+        
         #endregion
 
         #region private property
@@ -142,7 +146,15 @@
                 return;
             }
 
-            _data.Publish(value);
+            if (distinctValues)
+            {
+                _data.Publish(value);
+            }
+            else
+            {
+                _data.PublishForce(value);
+            }
+            
             _portValueChanged.Execute(Unit.Default);
         }
 

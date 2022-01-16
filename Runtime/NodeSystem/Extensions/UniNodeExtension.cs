@@ -1,4 +1,6 @@
-﻿namespace UniModules.GameFlow.Runtime.Extensions
+﻿using System.Linq;
+
+namespace UniModules.GameFlow.Runtime.Extensions
 {
     using System;
     using System.Collections.Generic;
@@ -100,8 +102,8 @@
         public static (IPortValue inputValue, IPortValue outputValue) 
             CreatePortPair(this IUniNode node,string inputPortName, string outputPortName, bool connectInOut = false)
         {
-            var outputPort = node.UpdatePortValue(outputPortName, PortIO.Output);
-            var inputPort  = node.UpdatePortValue(inputPortName, PortIO.Input);
+            var outputPort = node.UpdatePortValue(outputPortName, PortIO.Output,false);
+            var inputPort  = node.UpdatePortValue(inputPortName, PortIO.Input,false);
                 
             var inputValue  = inputPort;
             var outputValue = outputPort;
@@ -174,13 +176,23 @@
             this INode node,
             string portName,
             PortIO direction = PortIO.Output,
-            ConnectionType connectionType = ConnectionType.Multiple, 
-            ShowBackingValue showBackingValue = ShowBackingValue.Always,
-            IReadOnlyList<Type> types = null)
+            bool distinctValue = false,
+            IEnumerable<Type> types = null)
         {
-            types = types ?? new List<Type>();
-            var port = node.AddPort(portName, types, direction, connectionType, showBackingValue);
-            
+            return UpdatePortValue(node, portName, direction, ConnectionType.Multiple, ShowBackingValue.Always, types, distinctValue);
+        }
+
+        public static IPortValue UpdatePortValue(
+            this INode node,
+            string portName,
+            PortIO direction,
+            ConnectionType connectionType, 
+            ShowBackingValue showBackingValue = ShowBackingValue.Always,
+            IEnumerable<Type> types = null,
+            bool distinctValue = false)
+        {
+            types ??= Enumerable.Empty<Type>();
+            var port = node.AddPort(portName, types, direction, connectionType, showBackingValue,distinctValue);
             return port.Value;
         }
 

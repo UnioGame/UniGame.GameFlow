@@ -6,26 +6,29 @@
     using Core.Interfaces;
     using UnityEngine;
 
-    public class ReactivePortAttribute : PropertyAttribute , IReactivePortData
+    public class ReactivePortAttribute : PropertyAttribute, IReactivePortData
     {
-        public bool                instancePortList = false;
-        public string              fieldName        = string.Empty;
-        public PortIO              direction        = PortIO.Output;
-        public ConnectionType      connectionType   = ConnectionType.Multiple;
-        public bool                isDynamic        = false;
-        public ShowBackingValue    showBackingValue = ShowBackingValue.Always;
+        public bool instancePortList = false;
+        public string fieldName = string.Empty;
+        public PortIO direction = PortIO.Output;
+        public ConnectionType connectionType = ConnectionType.Multiple;
+        public bool isDynamic = false;
+        public ShowBackingValue showBackingValue = ShowBackingValue.Always;
         public IReadOnlyList<Type> valueTypes;
+        public bool distinctValues;
 
         public ReactivePortAttribute(
-            PortIO direction = PortIO.Input, 
+            PortIO direction = PortIO.Input,
+            bool distinctValues = false,
             ConnectionType connectionType = ConnectionType.Multiple,
             ShowBackingValue backingValue = ShowBackingValue.Always)
         {
-            this.direction        = direction;
-            this.connectionType   = connectionType;
+            this.distinctValues = distinctValues;
+            this.direction = direction;
+            this.connectionType = connectionType;
             this.showBackingValue = backingValue;
         }
-        
+
         public string ItemName => fieldName;
 
         public PortIO Direction => direction;
@@ -39,5 +42,6 @@
         public bool InstancePortList => instancePortList;
 
         public IReadOnlyList<Type> ValueTypes => valueTypes;
+        public bool DistinctValues => distinctValues;
     }
 }

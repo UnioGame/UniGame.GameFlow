@@ -15,14 +15,16 @@
     {
         public const string OutputPortName = "output";
 
-        public IPortValue OutputPort => GetPortValue(OutputPortName);
+        private IPortValue outputPortValue;
+        
+        public IPortValue OutputPort => outputPortValue;
 
         public override string GetStyle() => "GameFlow/UCSS/OutputPortNodeStyle";
 
-        protected override void UpdateCommands(List<ILifeTimeCommand> nodeCommands)
+        protected override void OnInitialize()
         {
-            base.UpdateCommands(nodeCommands);
-            this.UpdatePortValue(OutputPortName, PortIO.Output);
+            base.OnInitialize();
+            outputPortValue = this.UpdatePortValue(OutputPortName, PortIO.Output);
         }
     }
 }

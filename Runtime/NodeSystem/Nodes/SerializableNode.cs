@@ -152,12 +152,13 @@ namespace UniModules.GameFlow.Runtime.Core
             IEnumerable<Type> types, 
             PortIO direction,
             ConnectionType connectionType = ConnectionType.Multiple,
-            ShowBackingValue showBackingValue = ShowBackingValue.Always)
+            ShowBackingValue showBackingValue = ShowBackingValue.Always,
+            bool distinctValue = false)
         {
-            NodePort port = HasPort(fieldName) 
+            var port = HasPort(fieldName) 
                 ? ports[fieldName] 
-                : new NodePort(GraphData.GetNextId(), Id,graphData, fieldName, direction, connectionType, showBackingValue, types);
-
+                : new NodePort(GraphData.GetNextId(), Id,graphData, fieldName, direction, connectionType, showBackingValue, types,distinctValue);
+            
             return AddPort(port);
         }
 

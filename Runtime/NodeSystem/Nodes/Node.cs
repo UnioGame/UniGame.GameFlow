@@ -161,7 +161,8 @@ namespace UniModules.GameFlow.Runtime.Core
             IEnumerable<Type> types, 
             PortIO direction,
             ConnectionType connectionType = ConnectionType.Multiple,
-            ShowBackingValue showBackingValue = ShowBackingValue.Always)
+            ShowBackingValue showBackingValue = ShowBackingValue.Always,
+            bool distinctValue = false)
         {
             return SNode.AddPort(fieldName, types, direction, connectionType, showBackingValue);
         }

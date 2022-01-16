@@ -37,6 +37,7 @@ namespace UniModules.GameFlow.Runtime.Core
         [SerializeField] public PortIO direction = PortIO.Input;
         [SerializeField] public ConnectionType connectionType = ConnectionType.Multiple;
         [SerializeField] public ShowBackingValue showBackingValue = ShowBackingValue.Always;
+        [SerializeField] public bool distinctValue;
         [SerializeField] public bool isDynamic = true;
         [SerializeField] public bool isInstancePortList = false;
 
@@ -79,7 +80,8 @@ namespace UniModules.GameFlow.Runtime.Core
                 nodePort.Direction,
                 nodePort.ConnectionType,
                 nodePort.ShowBackingValue,
-                nodePort.Value.ValueTypes)
+                nodePort.Value.ValueTypes,
+                nodePort.distinctValue)
         {
             connections.Clear();
             connections.AddRange(nodePort.connections);
@@ -93,7 +95,8 @@ namespace UniModules.GameFlow.Runtime.Core
                 portData.Direction,
                 portData.ConnectionType,
                 portData.ShowBackingValue,
-                portData.ValueTypes)
+                portData.ValueTypes,
+                portData.DistinctValues)
         {
         }
 
@@ -109,8 +112,9 @@ namespace UniModules.GameFlow.Runtime.Core
             Type type,
             PortIO direction = PortIO.Input,
             ConnectionType connectionType = ConnectionType.Multiple,
-            ShowBackingValue showBackingValue = ShowBackingValue.Always) :
-            this(id, nodeId, graph, fieldName, direction, connectionType, showBackingValue, new List<Type>() { type })
+            ShowBackingValue showBackingValue = ShowBackingValue.Always,
+            bool distinctValue = false) :
+            this(id, nodeId, graph, fieldName, direction, connectionType, showBackingValue, new List<Type>() { type },distinctValue)
         {
         }
 
@@ -123,7 +127,8 @@ namespace UniModules.GameFlow.Runtime.Core
             PortIO direction = PortIO.Input,
             ConnectionType connectionType = ConnectionType.Multiple,
             ShowBackingValue showBackingValue = ShowBackingValue.Always,
-            IEnumerable<Type> types = null)
+            IEnumerable<Type> types = null,
+            bool distinctValue = false)
         {
             this.id = id;
             this.nodeId = nodeId;
@@ -132,7 +137,10 @@ namespace UniModules.GameFlow.Runtime.Core
             this.direction = direction;
             this.connectionType = connectionType;
             this.showBackingValue = showBackingValue;
+            this.distinctValue = distinctValue;
+            
             portValue.SetValueTypeFilter(types);
+            portValue.distinctValues = distinctValue;
 
             Initialize(nodeId,graph);
         }
@@ -144,8 +152,7 @@ namespace UniModules.GameFlow.Runtime.Core
         public int Id => id;
 
         public IReadOnlyList<IPortConnection> Connections => connections;
-
-
+        
         public IPortConnectionValidator ConnectionValidator => connectionValidator =
             connectionValidator ??
             new PortConnectionValidator();
@@ -155,6 +162,7 @@ namespace UniModules.GameFlow.Runtime.Core
         public int PortId => Id;
 
         public IReadOnlyList<Type> ValueTypes => portValue.ValueTypes;
+        public bool DistinctValues => portValue.distinctValues;
 
         public int ConnectionCount => connections.Count;
 
@@ -492,4 +500,5 @@ namespace UniModules.GameFlow.Runtime.Core
 
         #endregion
     }
+
 }

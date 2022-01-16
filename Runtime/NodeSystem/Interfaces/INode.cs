@@ -28,7 +28,8 @@ namespace UniModules.GameFlow.Runtime.Interfaces
             IEnumerable<Type> types, 
             PortIO direction,
             ConnectionType connectionType = ConnectionType.Multiple,
-            ShowBackingValue showBackingValue = ShowBackingValue.Always);
+            ShowBackingValue showBackingValue = ShowBackingValue.Always,
+            bool distinctValue = false);
         
         //NodePort AddPort(INodePort port);
         
