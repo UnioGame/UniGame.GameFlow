@@ -1,4 +1,5 @@
 using UniGame.UniNodes.Nodes.Runtime.Common;
+using UniModules.UniGame.CoreModules.UniGame.AddressableTools.Runtime.Extensions;
 
 namespace Game.Modules.Assets.UniGame.GameFlow.Runtime.Nodes
 {
@@ -7,7 +8,6 @@ namespace Game.Modules.Assets.UniGame.GameFlow.Runtime.Nodes
     using UniModules.GameFlow.Runtime.Attributes;
     using UniModules.UniContextData.Runtime.Interfaces;
     using UniModules.UniCore.Runtime.Rx.Extensions;
-    using UniModules.UniGame.AddressableTools.Runtime.Extensions;
     using UniModules.UniGame.Core.Runtime.Interfaces;
     using UnityEngine.AddressableAssets;
     using Object = UnityEngine.Object;

@@ -1,11 +1,12 @@
-﻿namespace UniGame.UniNodes.GameFlow.Runtime.Commands
+﻿using UniModules.UniGame.CoreModules.UniGame.AddressableTools.Runtime.Extensions;
+
+namespace UniGame.UniNodes.GameFlow.Runtime.Commands
 {
     using System;
     using Cysharp.Threading.Tasks;
     using UniCore.Runtime.ProfilerTools;
     using UniModules.UniContextData.Runtime.Interfaces;
     using UniModules.UniCore.Runtime.DataFlow;
-    using UniModules.UniGame.AddressableTools.Runtime.Extensions;
     using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
     using UniModules.UniGame.Core.Runtime.Interfaces;
     using UniModules.UniGame.Core.Runtime.ScriptableObjects;

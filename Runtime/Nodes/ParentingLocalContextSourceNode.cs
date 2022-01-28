@@ -1,4 +1,6 @@
-﻿namespace UniModules.UniGameFlow.GameFlow.Runtime.Nodes
+﻿using UniModules.UniGame.CoreModules.UniGame.AddressableTools.Runtime.Extensions;
+
+namespace UniModules.UniGameFlow.GameFlow.Runtime.Nodes
 {
     using System.Collections.Generic;
     using Cysharp.Threading.Tasks;
@@ -7,7 +9,6 @@
     using global::UniGame.UniNodes.Nodes.Runtime.Common;
     using NodeSystem.Runtime.Core.Attributes;
     using UniCore.Runtime.Rx.Extensions;
-    using UniGame.AddressableTools.Runtime.Extensions;
     using UniGame.Context.Runtime.Connections;
     using UniGame.Core.Runtime.Interfaces;
     using UniGame.SerializableContext.Runtime.Addressables;

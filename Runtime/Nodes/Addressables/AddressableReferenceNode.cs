@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using UniModules.UniGame.CoreModules.UniGame.AddressableTools.Runtime.Extensions;
+using UnityEngine;
 
 namespace UniModules.UniGameFlow.Nodes.Runtime.Addressables
 {
@@ -10,7 +11,6 @@ namespace UniModules.UniGameFlow.Nodes.Runtime.Addressables
     using UniGame.Core.Runtime.Interfaces;
     using UniGame.Core.Runtime.Rx;
     using UniModules.UniCore.Runtime.Rx.Extensions;
-    using UniModules.UniGame.AddressableTools.Runtime.Extensions;
     using UniRx;
     using UnityEngine.AddressableAssets;
     using Object = Object;
