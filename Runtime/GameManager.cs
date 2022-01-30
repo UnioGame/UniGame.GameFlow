@@ -1,5 +1,5 @@
 ﻿using UniModules.UniGame.AddressableTools.Runtime.AssetReferencies;
-using UniModules.UniGame.CoreModules.UniGame.AddressableTools.Runtime.Extensions;
+using UniModules.UniGame.AddressableTools.Runtime.Extensions;
 
 namespace UniModules.UniGame.GameFlow.GameFlow.Runtime
 {

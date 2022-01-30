@@ -1,7 +1,7 @@
 ﻿using UniGame.GameFlow;
 using UniGame.GameFlowEditor.Runtime;
 using UniModules.UniGame.Core.Runtime.Extension;
-using UniModules.UniGame.CoreModules.UniGame.AddressableTools.Runtime.Extensions;
+using UniModules.UniGame.AddressableTools.Runtime.Extensions;
 using UniRx;
 
 namespace UniModules.GameFlow.Runtime.Core

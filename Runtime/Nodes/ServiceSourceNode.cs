@@ -1,5 +1,5 @@
 using UniGame.UniNodes.Nodes.Runtime.Common;
-using UniModules.UniGame.CoreModules.UniGame.AddressableTools.Runtime.Extensions;
+using UniModules.UniGame.AddressableTools.Runtime.Extensions;
 
 namespace Game.Modules.Assets.UniGame.GameFlow.Runtime.Nodes
 {
