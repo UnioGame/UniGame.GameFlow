@@ -4,7 +4,7 @@
   "displayName": "UniGame GameFlow",
   "description": "GameFlow System for Unity. Include base nodes realisation",
   "unity": "2019.2",
-  "version": "2022.0.5",
+  "version": "2022.0.8",
   "homepage": "https://github.com/UniGameTeam/UniGameFlow#readme",
   "keywords": [
     "nodes",
@@ -13,7 +13,7 @@
     "gameflow"
   ],
   "dependencies": {
-    "com.unigame.coremodules": "2022.1.6",
+    "com.unigame.coremodules": "2022.1.12",
     "com.unity.addressables": "1.19.15",
     "com.unigame.alelievr.node-graph-processor": "2021.0.1",
     "com.unity.editorcoroutines": "1.0.0"

@@ -4,7 +4,7 @@ using Cysharp.Threading.Tasks;
 using UniModules.UniGame.Context.SerializableContext.Runtime.States;
 using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
 using UniModules.UniGame.Core.Runtime.Interfaces;
-using UniModules.UniGame.CoreModules.UniGame.AddressableTools.Runtime.SpriteAtlases;
+using UniModules.UniGame.AddressableTools.Runtime.SpriteAtlases;
 using UniModules.UniGame.CoreModules.UniGame.Context.Runtime.Extension;
 using UnityEngine.AddressableAssets;
 
