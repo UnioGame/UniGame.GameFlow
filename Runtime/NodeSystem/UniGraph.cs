@@ -1,5 +1,6 @@
 ﻿using UniGame.GameFlow;
 using UniGame.GameFlowEditor.Runtime;
+using UniModules.UniGame.AddressableTools.Runtime.Extensions;
 using UniModules.UniGame.Core.Runtime.Extension;
 using UniModules.UniGame.SerializableContext.Runtime.Addressables;
 using UniRx;
