@@ -127,11 +127,6 @@ namespace UniModules.GameFlow.Runtime.Core
         {
             graph = data;
             if (id != 0) SNode.SetId(id);
-
-#if UNITY_EDITOR
-            EditorApplication.playModeStateChanged -= BindEditorCallbacks;
-            EditorApplication.playModeStateChanged += BindEditorCallbacks;
-#endif
         }
 
         public virtual void OnIdUpdate(int oldId, int newId, IGraphItem updatedItem)
@@ -245,23 +240,6 @@ namespace UniModules.GameFlow.Runtime.Core
         {
             GameLog.Log($"{GraphData.ItemName}:{ItemName}: {message}");
         }
-
-#if UNITY_EDITOR
-
-        private void BindEditorCallbacks(PlayModeStateChange playModeStateChange)
-        {
-            switch (playModeStateChange)
-            {
-                case PlayModeStateChange.ExitingEditMode:
-                case PlayModeStateChange.ExitingPlayMode:
-                    _serializableNode = null;
-                    graph            = null;
-                    break;
-            }
-        }
-        
-#endif
-
         
     }
 }

@@ -29,7 +29,7 @@
         public sealed override void Initialize(NodeGraph graphData)
         {
             base.Initialize(graphData);
-            SNode.Initialize(graphData,OnInitialize, UpdateCommands, OnExecute);
+            SNode.Initialize(GraphData,OnInitialize, UpdateCommands, OnExecute);
         }
 
         /// <summary>
@@ -42,10 +42,8 @@
         /// </summary>
         public async UniTask ExecuteAsync()
         {
-            Initialize(graph);
-            
-            await SNode.ExecuteAsync()
-                .AttachExternalCancellation(LifeTime.TokenSource);
+            Initialize(GraphData);
+            await SNode.ExecuteAsync().AttachExternalCancellation(LifeTime.TokenSource);
         }
 
         /// <summary>
