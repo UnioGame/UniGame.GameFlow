@@ -52,6 +52,7 @@ namespace UniModules.GameFlow.Runtime.Core
         [HideInInspector]
         public NodePortDictionary ports = new NodePortDictionary();
 
+        [HideInInspector]
         public NodeGraph graph;
         
         #endregion
