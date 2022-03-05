@@ -8,9 +8,9 @@
     using UniModules.UniGame.SerializableContext.Runtime.Addressables;
     using UniModules.UniGameFlow.NodeSystem.Runtime.Core.Attributes;
     using UniNodes.Nodes.Runtime.Common;
-    
 
-    [CreateNodeMenu("Common/Sources/Data Source")]
+
+    [CreateNodeMenu("Common/Sources/Context Data Source")]
     public class ContextDataSourceNode : InOutPortNode
     {
         
