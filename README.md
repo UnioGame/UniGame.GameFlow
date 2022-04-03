@@ -13,7 +13,7 @@ Add to your project manifiest by path [%UnityProject%]/Packages/manifiest.json t
   "scopedRegistries": [
     {
       "name": "Unity",
-      "url": "https://packages.unity.com",
+      "url": "https://package.unity.com",
       "scopes": [
         "com.unity"
       ]
