@@ -73,21 +73,21 @@
 
         protected sealed override UniTask OnExecute()
         {
-            _valueData.Subscribe(x => OnValueUpdate(x).AttachExternalCancellation(LifeTime.TokenSource).Forget())
+            _valueData.RxSubscribe(x => OnValueUpdate(x).AttachExternalCancellation(LifeTime.TokenSource).Forget())
                 .AddTo(LifeTime);
 
             _isReady.Where(x => x)
                 .CombineLatest(_valueData, (x, value) => value)
-                .Subscribe(output.Publish)
+                .RxSubscribe(output.Publish)
                 .AddTo(LifeTime);
             
             //reset local value
             var valueObservable = input.Receive<TData>();
 
             if (distinctInput)
-                valueObservable.Subscribe(x => _valueData.Value = x).AddTo(LifeTime);
+                valueObservable.RxSubscribe(x => _valueData.Value = x).AddTo(LifeTime);
             else
-                valueObservable.Subscribe(_valueData.SetValueForce).AddTo(LifeTime);
+                valueObservable.RxSubscribe(_valueData.SetValueForce).AddTo(LifeTime);
 
             return UniTask.CompletedTask;
         }

@@ -76,7 +76,7 @@
                 if (!(node is IGraphCancelationNode cancelation)) continue;
                 
                 cancelation.PortValue.PortValueChanged.
-                    Subscribe(unit => uniGraph.Exit()).
+                    RxSubscribe(unit => uniGraph.Exit()).
                     AddTo(LifeTime);
             }
 

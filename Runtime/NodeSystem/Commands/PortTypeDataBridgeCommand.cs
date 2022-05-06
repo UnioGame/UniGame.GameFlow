@@ -57,16 +57,16 @@
 
             if (_distinctInput)
             {
-                source.Subscribe(x => _valueData.Value = x).AddTo(lifeTime);
+                source.RxSubscribe(x => _valueData.Value = x).AddTo(lifeTime);
             }
             else
             {
-                source.Subscribe(_valueData.SetValueForce).AddTo(lifeTime);
+                source.RxSubscribe(_valueData.SetValueForce).AddTo(lifeTime);
             }
 
             _isFinalyze.Where(x => x)
                 .Do(x => output.Publish(_valueData.Value))
-                .Subscribe()
+                .RxSubscribe()
                 .AddTo(lifeTime);
 
             return UniTask.CompletedTask;

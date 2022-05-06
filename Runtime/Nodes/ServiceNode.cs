@@ -81,7 +81,7 @@
                 .Where(x => x || !waitForServiceReady)
                 .Do(_ => context.Publish<TServiceApi>(_service))
                 .Do(_ => Complete())
-                .Subscribe()
+                .RxSubscribe()
                 .AddTo(LifeTime);
             
             return UniTask.FromResult(context);

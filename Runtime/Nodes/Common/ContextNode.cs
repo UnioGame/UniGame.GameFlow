@@ -51,7 +51,7 @@
                     .AttachExternalCancellation(LifeTime.AsCancellationToken())
                     .SuppressCancellationThrow()
                     .Forget())
-                .Subscribe()
+                .RxSubscribe()
                 .AddTo(LifeTime);
             
             return UniTask.CompletedTask;

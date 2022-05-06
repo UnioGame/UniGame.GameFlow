@@ -38,7 +38,7 @@
             inputValue.PortValueChanged
                 .Where(x => inputValue.HasValue)
                 .Do(x => FireToken())
-                .Subscribe()
+                .RxSubscribe()
                 .AddTo(LifeTime);
 
             if (fireOnStart)

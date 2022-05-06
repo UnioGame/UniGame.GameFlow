@@ -64,7 +64,7 @@ namespace UniGame.GameFlowEditor.Editor
                 .Do(ApplyNodeInfo)
                 .Do(DrawNode)
                 .Do(x => ForceUpdatePorts())
-                .Subscribe()
+                .RxSubscribe()
                 .AddTo(_lifeTime);
             
             //add into node processor

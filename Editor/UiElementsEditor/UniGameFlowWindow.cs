@@ -226,7 +226,7 @@ namespace UniModules.GameFlow.Editor
                 .Receive<UniGraphSaveMessage>()
                 .Where(x => x.graph == _targetGraph)
                 .Do(x => Save())
-                .Subscribe()
+                .RxSubscribe()
                 .AddTo(_lifeTime);
             
             MessageBroker.Default
@@ -234,7 +234,7 @@ namespace UniModules.GameFlow.Editor
                 .Where(x => x.graph == _targetGraph)
                 .Do(x => Save())
                 .Do(x => Reload())
-                .Subscribe()
+                .RxSubscribe()
                 .AddTo(_lifeTime);
             
             Reload();

@@ -26,31 +26,31 @@ namespace UniModules.GameFlow.Editor
             Observable.FromEvent(
                     ev => EditorSceneManager.sceneSaved += OnSceneSaved,
                     ev => EditorSceneManager.sceneSaved -= OnSceneSaved).
-                Subscribe();
+                RxSubscribe();
 
             //redraw editor if assembly reloaded
             Observable.FromEvent(
                     ev => AssemblyReloadEvents.afterAssemblyReload += OnAssemblyReloaded,
                     ev => AssemblyReloadEvents.afterAssemblyReload -= OnAssemblyReloaded).
-                Subscribe();
+                RxSubscribe();
 
             Observable.FromEvent(
                     ev => AssemblyReloadEvents.beforeAssemblyReload += OnBeforeAssemblyReload,
                     ev => AssemblyReloadEvents.beforeAssemblyReload -= OnBeforeAssemblyReload).
-                Subscribe();
+                RxSubscribe();
 
             Observable.FromEvent(
                     ev => EditorApplication.playModeStateChanged += OnPlayModeChanged,
                     ev => EditorApplication.playModeStateChanged -= OnPlayModeChanged).
-                Subscribe();
+                RxSubscribe();
 
             GameFlowWindows.
                 ObserveAdd().
-                Subscribe(x => AddWindow(x.Value));
+                RxSubscribe(x => AddWindow(x.Value));
             
             GameFlowWindows.
                 ObserveRemove().
-                Subscribe(x => GameFlowProcessor.Asset.Remove(x.Value));
+                RxSubscribe(x => GameFlowProcessor.Asset.Remove(x.Value));
 
             GameFlowWindows.ForEach(AddWindow);
         }

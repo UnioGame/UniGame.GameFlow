@@ -272,17 +272,17 @@ namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.B
                     ev => EditorApplication.playModeStateChanged -= OnPlayModeChanged);
             
             stateObservable.
-                Subscribe(x => PortConnectionPoints.Clear()).
+                RxSubscribe(x => PortConnectionPoints.Clear()).
                 AddTo(_lifeTime);
                     
             stateObservable.
-                Subscribe().
+                RxSubscribe().
                 AddTo(_lifeTime);
 
             Observable.FromEvent(
                     ev => AssemblyReloadEvents.beforeAssemblyReload += OnBeforeAssemblyReload,
                     ev => AssemblyReloadEvents.beforeAssemblyReload -= OnBeforeAssemblyReload).
-                Subscribe().
+                RxSubscribe().
                 AddTo(_lifeTime);
             
             ActiveWindows.Add(this);

@@ -109,7 +109,7 @@
             _inputPort.Receive<IStateToken>().
                 Where(x => _isStateActive == false).
                 Select(async x => await OwnToken(x)).
-                Subscribe().
+                RxSubscribe().
                 AddTo(LifeTime);
 
             return UniTask.CompletedTask;
@@ -120,7 +120,7 @@
         {
             _asyncStateProxy.Value
                 .Do(x => GameLog.Log($"STATE NODE {ItemName} ID {Id} STATUS : {x}"))
-                .Subscribe()
+                .RxSubscribe()
                 .AddTo(LifeTime);
         }
 

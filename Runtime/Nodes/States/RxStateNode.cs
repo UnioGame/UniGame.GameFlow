@@ -105,7 +105,7 @@ namespace UniModules.UniGame.GameFlow.GameFlow.Runtime.Nodes.States
                 .Select(x => (token:x,owned:OwnToken(x)))
                 .Where(x => x.owned)
                 .Do(x => OnActivateState(x.token))
-                .Subscribe()
+                .RxSubscribe()
                 .AddTo(LifeTime);
             
             return UniTask.CompletedTask;
@@ -115,7 +115,7 @@ namespace UniModules.UniGame.GameFlow.GameFlow.Runtime.Nodes.States
         [Conditional("UNITY_EDITOR")]
         private void LogNodeExecutionState()
         {
-            _state.Value.Do(x => GameLog.Log($"STATE NODE {ItemName} ID {Id} STATUS : {x}")).Subscribe().AddTo(LifeTime);
+            _state.Value.Do(x => GameLog.Log($"STATE NODE {ItemName} ID {Id} STATUS : {x}")).RxSubscribe().AddTo(LifeTime);
         }
 
         private bool OwnToken(IStateToken token)
@@ -133,7 +133,7 @@ namespace UniModules.UniGame.GameFlow.GameFlow.Runtime.Nodes.States
         private void OnActivateState(IStateToken token)
         {
             _state.Execute(token.Context)
-                .Subscribe()
+                .RxSubscribe()
                 .AddTo(_state.LifeTime);
         }
     }
