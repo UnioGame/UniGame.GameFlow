@@ -228,7 +228,7 @@
             //TODO REMOTE
             NodeEditor.PortPositions[port] = portPos;
 
-            portData.Despawn();
+            portData.DespawnWithRelease();
         }
 
         private static Type GetType(SerializedProperty property)
