@@ -6,6 +6,7 @@ using UniModules.GameFlow.Runtime.Core;
 using UniModules.UniCore.Runtime.Rx.Extensions;
 using UniModules.UniGame.GameFlow.Editor.UiElementsEditor.Tools.ExposedParameterElement;
 using UnityEditor;
+using UnityEditor.Experimental.SceneManagement;
 
 
 namespace UniModules.GameFlow.Editor
@@ -172,7 +173,7 @@ namespace UniModules.GameFlow.Editor
             var sourceGraph = uniGraph;
             if (!uniGraph.useVariants)
             {
-                var stage = UnityEditor.SceneManagement.PrefabStageUtility.GetPrefabStage(uniGraph.gameObject);
+                var stage = PrefabStageUtility.GetPrefabStage(uniGraph.gameObject);
                 if (Application.isPlaying == false && stage != null && !string.IsNullOrEmpty(stage.assetPath))
                 {
                     var asset = AssetDatabase.LoadAssetAtPath<GameObject>(stage.assetPath);
