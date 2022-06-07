@@ -36,7 +36,7 @@ namespace UniGame.UniNodes.Nodes.Runtime.SerializableNodes
 
             logPort.Receive<IContext>()
                 .Select(x => x.Broadcast(this))
-                .RxSubscribe()
+                .Subscribe()
                 .AddTo(LifeTime);
             
             return UniTask.CompletedTask;

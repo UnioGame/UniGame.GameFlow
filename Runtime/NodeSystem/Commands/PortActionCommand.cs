@@ -24,7 +24,7 @@
         public UniTask Execute(ILifeTime lifeTime)
         {
             port.Receive<TTarget>().
-                RxSubscribe(action).
+                Subscribe(action).
                 AddTo(lifeTime);
             return UniTask.CompletedTask;
         }

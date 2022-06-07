@@ -14,7 +14,7 @@ namespace UniModules.UniGame.GameFlow.GameFlowEditor.Editor.ScriptableGameFlow
         {
             MessageBroker.Default
                 .Receive<OpenGameFlowGraphMessage>()
-                .RxSubscribe(x => ShowWindow(x.gameFlowGraph));
+                .Subscribe(x => ShowWindow(x.gameFlowGraph));
         }
 
         public static void ShowWindow(GameFlowGraph gameFlowGraph)

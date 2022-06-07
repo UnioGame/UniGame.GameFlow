@@ -123,7 +123,7 @@ namespace UniModules.UniGameFlow.Nodes.Runtime.States
             _inputPort.Receive<IStateToken>()
                 .Where(x => _isStateActive == false)
                 .Select(async x => await OwnToken(x))
-                .RxSubscribe()
+                .Subscribe()
                 .AddTo(LifeTime);
             
             return UniTask.CompletedTask;
@@ -133,7 +133,7 @@ namespace UniModules.UniGameFlow.Nodes.Runtime.States
         [Conditional("UNITY_EDITOR")]
         private void LogNodeExecutionState()
         {
-            _asyncStateProxy.Value.Do(x => GameLog.Log($"STATE NODE {ItemName} ID {Id} STATUS : {x}")).RxSubscribe().AddTo(LifeTime);
+            _asyncStateProxy.Value.Do(x => GameLog.Log($"STATE NODE {ItemName} ID {Id} STATUS : {x}")).Subscribe().AddTo(LifeTime);
         }
 
         private async UniTask OwnToken(IStateToken token)

@@ -18,7 +18,7 @@
         
         static UniGraphProcessorExtensions()
         {
-            UniGraphEvent.NodeUpdateStream.RxSubscribe(UpdatePorts);
+            UniGraphEvent.NodeUpdateStream.Subscribe(UpdatePorts);
         }
         
         public static NodeProcessor NodeProcessor => GetNodeProcessor();

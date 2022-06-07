@@ -27,7 +27,7 @@ namespace UniGame.UniNodes.Nodes.Runtime.Commands
             var parentContextContainer = await _parent.LoadAssetTaskAsync(lifeTime);
             parentContextContainer
                 .Where(x => x != null)
-                .RxSubscribe(x => _source.Connect(x).AddTo(lifeTime))
+                .Subscribe(x => _source.Connect(x).AddTo(lifeTime))
                 .AddTo(lifeTime);
         }
     }
