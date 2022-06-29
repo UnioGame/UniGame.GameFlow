@@ -1,4 +1,4 @@
-﻿namespace Taktika.GameRuntime.Abstract
+﻿namespace UniGame.GameRuntime.Abstract
 {
     using System;
     using Cysharp.Threading.Tasks;
