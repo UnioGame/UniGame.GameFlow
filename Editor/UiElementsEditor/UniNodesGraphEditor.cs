@@ -28,11 +28,7 @@
             GUILayout.Space(10);
             GUILayout.BeginHorizontal();
             GUILayout.BeginVertical();
-        
-            if (GUILayout.Button("Show Graph(obsolete)", GUILayout.Height(26)))
-            {
-                NodeEditorWindow.Open(graph);
-            }
+
             if (GUILayout.Button("Show Graph", GUILayout.Height(26)))
             {
                 UniGameFlowWindow.Open(graph);

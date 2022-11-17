@@ -1,6 +1,5 @@
-﻿namespace UniGame.UniNodes.NodeSystem.Inspector.Editor.UniGraphWindowInspector.UnityGraph
+﻿namespace UniGame.GameFlow.Editor.UnityGraph
 {
-    using UniModules.GameFlow.Runtime.Core;
     using UniModules.GameFlow.Runtime.Interfaces;
 
     public class UnityGraphUniNode : UnityEditor.Graphs.Node
