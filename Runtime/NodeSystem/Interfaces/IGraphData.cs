@@ -1,4 +1,6 @@
-﻿namespace UniModules.GameFlow.Runtime.Core
+﻿using UniModules.UniGame.Context.Runtime.Connections;
+
+namespace UniModules.GameFlow.Runtime.Core
 {
     using Interfaces;
     using Runtime.Interfaces;
@@ -19,6 +21,6 @@
         /// <param name="node"> The node to remove </param>
         IGraphData RemoveNode(INode node);
 
-        IContext GraphContext { get; }
+        IContextConnection GraphContext { get; }
     }
 }

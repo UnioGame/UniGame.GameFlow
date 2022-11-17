@@ -1,4 +1,5 @@
 ﻿using UniCore.Runtime.ProfilerTools;
+using UniModules.UniGame.Context.Runtime.Connections;
 
 namespace UniModules.GameFlow.Runtime.Core
 {
@@ -66,7 +67,7 @@ namespace UniModules.GameFlow.Runtime.Core
 
         #region public properties
 
-        public virtual IContext Context => SNode.Context;
+        public virtual IContextConnection Context => SNode.Context;
         
         /// <summary>
         /// unique node id

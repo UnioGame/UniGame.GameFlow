@@ -1,4 +1,5 @@
-﻿using UniModules.UniGame.GameFlow.GameFlowEditor.Editor.Attributes;
+﻿using UniModules.UniGame.Core.Runtime.Interfaces;
+using UniModules.UniGame.GameFlow.GameFlowEditor.Editor.Attributes;
 using UniModules.UniGame.GameFlow.GameFlowEditor.Runtime.Nodes;
 
 namespace UniGame.UniNodes.Nodes.Runtime.Common
@@ -21,7 +22,7 @@ namespace UniGame.UniNodes.Nodes.Runtime.Common
         protected override UniTask OnExecute()
         {
             var output = GetPortValue(OutputPortName);
-            output.Publish(Context);
+            output.Publish<IContext>(Context);
             return UniTask.CompletedTask;
         }
     }

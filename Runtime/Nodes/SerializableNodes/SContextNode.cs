@@ -42,7 +42,7 @@
         protected sealed override async UniTask OnValueUpdate(IContext context)
         {
             if(context == null) return;
-            await OnContextActivate(context); ;
+            await OnContextActivate(context);
         }
 
         protected virtual UniTask OnContextActivate(IContext context)  => UniTask.CompletedTask;

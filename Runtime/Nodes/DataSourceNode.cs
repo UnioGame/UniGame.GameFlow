@@ -25,7 +25,8 @@
         {
             await base.OnContextActivate(context);
 
-            var loadedRef = await contextDataSource.LoadAssetInstanceTaskAsync<LifetimeScriptableObject>(LifeTime);
+            var loadedRef = await contextDataSource
+                .LoadAssetInstanceTaskAsync<LifetimeScriptableObject>(LifeTime,true);
 
             if (!(loadedRef is IAsyncContextDataSource asyncRef))
             {

@@ -1,24 +1,24 @@
-﻿using UniGame.GameFlow.Runtime.Interfaces;
+﻿using System;
+using Cysharp.Threading.Tasks;
+using UniCore.Runtime.ProfilerTools;
+using UniGame.GameFlow.Runtime.Interfaces;
+using UniGame.UniNodes.Nodes.Runtime.Common;
+using UniModules.GameFlow.Runtime.Attributes;
+using UniModules.UniCore.Runtime.Attributes;
+using UniModules.UniCore.Runtime.ProfilerTools;
+using UniModules.UniGame.Core.Runtime.Interfaces;
+using UnityEngine;
 
 namespace UniGame.UniNodes.GameFlow.Runtime.Nodes
 {
-    using System;
-    using Cysharp.Threading.Tasks;
-    using UniModules.GameFlow.Runtime.Attributes;
-    using UniCore.Runtime.ProfilerTools;
-    using UniModules.UniCore.Runtime.Attributes;
-    using UniModules.UniCore.Runtime.ProfilerTools;
-    using UniModules.UniGame.Core.Runtime.Interfaces;
-    using UniNodes.Nodes.Runtime.Common;
-    using UnityEngine;
-
     /// <summary>
     /// Base game service binder between Unity world and regular classes
     /// </summary>
     /// <typeparam name="TServiceApi"></typeparam>
     [HideNode]
-    public abstract class ServiceNode<TServiceApi> : 
-        ContextNode
+    [Serializable]
+    public abstract class ServiceSerializableNode<TServiceApi> : 
+        SContextNode
         where TServiceApi :  IGameService
     {
         [SerializeField]

@@ -1,4 +1,6 @@
-﻿namespace UniModules.GameFlow.Runtime.Core
+﻿using UniModules.UniGame.Context.Runtime.Connections;
+
+namespace UniModules.GameFlow.Runtime.Core
 {
     using System;
     using System.Collections.Generic;
@@ -12,14 +14,14 @@
     {
         private readonly string _name;
         private readonly int _id;
-        private readonly IContext _context;
+        private readonly IContextConnection _context;
         private readonly INodeGraph _graph;
         
         private Dictionary<int,IGraphItem> _graphItems = new Dictionary<int, IGraphItem>(16);
 
         #region constructor
 
-        public GraphData(string name,int id, IContext context)
+        public GraphData(string name,int id, IContextConnection context)
         {
             _name = name;
             _id = id;
@@ -28,7 +30,7 @@
         
         #endregion
 
-        public IContext GraphContext => _context;
+        public IContextConnection GraphContext => _context;
 
         public Transform Root => null;
         

@@ -56,7 +56,7 @@ namespace UniGame.UniNodes.Nodes.Runtime.Common
             Complete();
         }
 
-        private async UniTask LaunchGraph(UniGraph graph, IDisposableContext context)
+        private async UniTask LaunchGraph(UniGraph graph, IContextConnection context)
         {
             if (awaitGraph)
             {

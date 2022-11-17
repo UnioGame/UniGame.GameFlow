@@ -1,4 +1,5 @@
 using UniModules.GameFlow.Runtime.Core;
+using UniModules.UniGame.Context.Runtime.Connections;
 
 namespace UniModules.GameFlow.Runtime.Interfaces
 {
@@ -12,7 +13,7 @@ namespace UniModules.GameFlow.Runtime.Interfaces
     {
         NodeGraph GraphData { get; }
 
-        IContext Context { get; }
+        IContextConnection Context { get; }
 
         IEnumerable<INodePort> Ports { get; }
 

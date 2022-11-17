@@ -1,5 +1,4 @@
 ﻿using UniModules.UniGame.AddressableTools.Runtime.Extensions;
-using UniModules.UniGame.SerializableContext.Runtime.Addressables;
 
 namespace UniModules.UniGameFlow.GameFlow.Runtime.Nodes
 {
@@ -9,7 +8,6 @@ namespace UniModules.UniGameFlow.GameFlow.Runtime.Nodes
     using global::UniGame.UniNodes.Nodes.Runtime.Commands;
     using global::UniGame.UniNodes.Nodes.Runtime.Common;
     using NodeSystem.Runtime.Core.Attributes;
-    using UniCore.Runtime.Rx.Extensions;
     using UniGame.Context.Runtime.Connections;
     using UniGame.Core.Runtime.Interfaces;
     using UniGame.SerializableContext.Runtime.Addressables;
@@ -22,8 +20,10 @@ namespace UniModules.UniGameFlow.GameFlow.Runtime.Nodes
     [CreateNodeMenu("Common/Sources/Parenting Local Context Source")]
     public class ParentingLocalContextSourceNode : InOutPortNode
     {
-        private ContextConnection _contextConnection;
+        private IContextConnection _contextConnection;
 
+        #region inspector
+        
         [SerializeField]
 #if ODIN_INSPECTOR
         [DrawWithUnity]
@@ -36,15 +36,27 @@ namespace UniModules.UniGameFlow.GameFlow.Runtime.Nodes
 #endif
         public AssetReferenceContextContainer _parentContextContainer;
 
+#if ODIN_INSPECTOR
+        [DrawWithUnity]
+#endif
         [Header("Data Source")]
         [SerializeField]
         private AssetReferenceDataSource _dataSources;
 
-        protected override void UpdateCommands(List<ILifeTimeCommand> nodeCommands)
+        /// <summary>
+        /// use graph context instead of separate one
+        /// </summary>
+        public bool useGraphContextAsOutput = false;
+        
+        #endregion
+        
+        protected sealed override void UpdateCommands(List<ILifeTimeCommand> nodeCommands)
         {
             base.UpdateCommands(nodeCommands);
 
-            _contextConnection ??= new ContextConnection().AddTo(LifeTime);
+            _contextConnection =  useGraphContextAsOutput 
+                ? Context 
+                : _contextConnection ?? new ContextConnection().AddTo(LifeTime);
             
             var outPort = UniTask.FromResult<IContext>(PortPair.OutputPort);
             var contextSource = UniTask.FromResult<IContext>(_contextConnection);
@@ -71,4 +83,5 @@ namespace UniModules.UniGameFlow.GameFlow.Runtime.Nodes
             localContextContainer.SetValue(_contextConnection);
         }
     }
+    
 }

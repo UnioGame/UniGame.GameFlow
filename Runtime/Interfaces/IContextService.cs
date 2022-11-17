@@ -1,9 +1,9 @@
 ﻿using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
+using UniModules.UniGame.Core.Runtime.Interfaces;
 
-namespace UniModules.UniGameFlow.GameFlow.Runtime.Interfaces
+namespace UniGame.GameFlow.Runtime.Interfaces
 {
     using Cysharp.Threading.Tasks;
-    using UniGame.Core.Runtime.Interfaces;
 
     public interface IContextService
     {

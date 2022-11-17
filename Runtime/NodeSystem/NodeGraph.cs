@@ -1,4 +1,5 @@
 ﻿using UniModules.GameFlow.Runtime.Attributes;
+using UniModules.UniGame.Context.Runtime.Connections;
 
 namespace UniModules.GameFlow.Runtime.Core
 {
@@ -61,7 +62,7 @@ namespace UniModules.GameFlow.Runtime.Core
 
         public Transform Root => transform;
         
-        public abstract IContext GraphContext { get; }
+        public abstract IContextConnection GraphContext { get; }
 
         public override string ItemName => name;
 

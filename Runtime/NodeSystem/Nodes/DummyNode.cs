@@ -1,6 +1,7 @@
 ﻿using UniModules.GameFlow.Runtime.Attributes;
 using UniModules.GameFlow.Runtime.Core.Interfaces;
 using UniModules.GameFlow.Runtime.Interfaces;
+using UniModules.UniGame.Context.Runtime.Connections;
 using UniModules.UniGameFlow.NodeSystem.Runtime.Core.Attributes;
 
 namespace UniModules.GameFlow.Runtime.Core.Nodes
@@ -26,7 +27,7 @@ namespace UniModules.GameFlow.Runtime.Core.Nodes
         public int    Id       { get; private set; }
         public string ItemName { get; private set;  }
 
-        public IContext Context { get; }
+        public IContextConnection Context { get; }
         public NodeGraph              GraphData { get; }
         public IEnumerable<INodePort> Ports     { get; }
         public IEnumerable<INodePort>   Outputs   { get; }

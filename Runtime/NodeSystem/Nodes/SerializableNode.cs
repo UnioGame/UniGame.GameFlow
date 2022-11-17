@@ -1,4 +1,5 @@
 ﻿using UniCore.Runtime.ProfilerTools;
+using UniModules.UniGame.Context.Runtime.Connections;
 using UnityEngine;
 
 namespace UniModules.GameFlow.Runtime.Core
@@ -62,7 +63,7 @@ namespace UniModules.GameFlow.Runtime.Core
 
         public HashSet<INodePort> RuntimePorts => _portValues ??= new HashSet<INodePort>();
 
-        public virtual IContext Context => GraphData.GraphContext;
+        public virtual IContextConnection Context => GraphData.GraphContext;
 
         /// <summary>
         /// unique node id

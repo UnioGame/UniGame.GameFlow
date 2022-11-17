@@ -1,6 +1,7 @@
 ﻿using UniGame.GameFlow;
 using UniGame.GameFlowEditor.Runtime;
 using UniModules.UniGame.AddressableTools.Runtime.Extensions;
+using UniModules.UniGame.Context.Runtime.Connections;
 using UniModules.UniGame.Core.Runtime.Extension;
 using UniModules.UniGame.SerializableContext.Runtime.Addressables;
 using UniRx;
@@ -57,7 +58,7 @@ namespace UniModules.GameFlow.Runtime.Core
         /// <summary>
         /// graph context
         /// </summary>
-        private IDisposableContext _graphContext = new EntityContext();
+        private IContextConnection _graphContext = new ContextConnection();
 
         /// <summary>
         /// graph inputs
@@ -71,7 +72,7 @@ namespace UniModules.GameFlow.Runtime.Core
 
         #endregion
 
-        public sealed override IContext GraphContext => _graphContext;
+        public sealed override IContextConnection GraphContext => _graphContext;
 
         public GameObject AssetInstance => gameObject;
 
@@ -89,7 +90,7 @@ namespace UniModules.GameFlow.Runtime.Core
             Initialize(this);
         }
 
-        public async UniTask ExecuteAsync(IDisposableContext context)
+        public async UniTask ExecuteAsync(IContextConnection context)
         {
             _graphContext = context;
             await ExecuteAsync();
@@ -125,7 +126,7 @@ namespace UniModules.GameFlow.Runtime.Core
         protected sealed override UniTask OnExecute()
         {
             LifeTime.AddDispose(_graphContext);
-            LifeTime.AddCleanUpAction(() => _graphContext = new EntityContext());
+            LifeTime.AddCleanUpAction(() => _graphContext = new ContextConnection());
             
             graphProcessor?.ExecuteAsync(this)
                 .AttachExternalCancellation(LifeTime.TokenSource)
@@ -190,7 +191,7 @@ namespace UniModules.GameFlow.Runtime.Core
 
         }
 
-        private void Awake() => _graphContext = new EntityContext();
+        private void Awake() => _graphContext = new ContextConnection();
         
         #endregion
         
@@ -208,7 +209,7 @@ namespace UniModules.GameFlow.Runtime.Core
                 if(x is IUniNode uniNode) uniNode.Release();
             });
         }
-        
+
         private void OnPlayingModeChanged(UnityEditor.PlayModeStateChange mode)
         {
             UnityEditor.EditorApplication.playModeStateChanged -= OnPlayingModeChanged;

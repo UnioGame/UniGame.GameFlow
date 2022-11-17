@@ -18,7 +18,8 @@
 
     [HideNode]
     [Serializable]
-    public class STypeBridgeNode<TData> : SNode,
+    public class STypeBridgeNode<TData> : 
+        SNode,
         IReadonlyRecycleReactiveProperty<TData>
     {
         protected const string portName = "context";
@@ -42,6 +43,10 @@
 
         #region public properties
 
+        public IPortValue Output => output;
+
+        public IPortValue Input => input;
+        
         public IReadOnlyReactiveProperty<TData> Source => _valueData;
 
         #endregion
@@ -73,7 +78,10 @@
 
         protected sealed override UniTask OnExecute()
         {
-            _valueData.Subscribe(x => OnValueUpdate(x).AttachExternalCancellation(LifeTime.TokenSource).Forget())
+            _valueData
+                .Subscribe(x => OnValueUpdate(x)
+                    .AttachExternalCancellation(LifeTime.TokenSource)
+                    .Forget())
                 .AddTo(LifeTime);
 
             _isReady.Where(x => x)
