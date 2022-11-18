@@ -43,7 +43,7 @@ namespace UniModules.GameFlow.Runtime.Core
         [Sirenix.OdinInspector.Searchable]
 #endif
         [SerializeField]
-        public List<Node> nodes = new List<Node>();
+        public List<UniNode> nodes = new List<UniNode>();
   
 #if ODIN_INSPECTOR
         [Sirenix.OdinInspector.InlineProperty]
@@ -163,7 +163,7 @@ namespace UniModules.GameFlow.Runtime.Core
         /// <summary>
         /// Creates a copy of the original node in the graph
         /// </summary>
-        public virtual Node CopyNode(Node original)
+        public virtual UniNode CopyNode(UniNode original)
         {
             var node = Instantiate(original);
             node.SetId(GetNextId());
@@ -180,7 +180,7 @@ namespace UniModules.GameFlow.Runtime.Core
         {
             node.ClearConnections();
 
-            var nodeAsset = node as Node;
+            var nodeAsset = node as UniNode;
             if (nodeAsset == null) {
                 serializableNodes.Remove(node);
                 return this;
@@ -236,7 +236,7 @@ namespace UniModules.GameFlow.Runtime.Core
             nodes.RemoveAll(x => x == null);
             nodes.Remove(this);
             
-            foreach (var childNode in GetComponents<Node>())
+            foreach (var childNode in GetComponents<UniNode>())
             {
                 if(nodes.Contains(childNode) || childNode == this) continue;
                 nodes.Add(childNode);
@@ -254,7 +254,7 @@ namespace UniModules.GameFlow.Runtime.Core
                 case null:
                     DestroyImmediate(component, true);
                     return null;
-                case Node nodeAsset:
+                case UniNode nodeAsset:
                     nodes.Add(nodeAsset);
                     break;
             }

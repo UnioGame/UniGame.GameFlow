@@ -115,16 +115,12 @@ namespace UniModules.GameFlow.Runtime.Extensions
         }
 
         public static TValue GetConnectedNode<TValue>(this INodePort port)
-            where TValue :Node
+            where TValue :UniNode
         {
             if (port == null || !port.IsConnected)
-            {
                 return null;
-            }
             if (!(port.Node is TValue item))
-            {
                 return null;
-            }
 
             return item;
         }

@@ -13,7 +13,10 @@
 
         public UniGraph graph;
 
+        public bool IsPlaying => Application.isPlaying;
+        
 #if ODIN_INSPECTOR
+        [Sirenix.OdinInspector.EnableIf(nameof(IsPlaying))]
         [Sirenix.OdinInspector.Button]
 #endif
         public void Stop()
@@ -22,6 +25,7 @@
         }
         
 #if ODIN_INSPECTOR
+        [Sirenix.OdinInspector.EnableIf(nameof(IsPlaying))]
         [Sirenix.OdinInspector.Button]
 #endif
         public void Execute()
