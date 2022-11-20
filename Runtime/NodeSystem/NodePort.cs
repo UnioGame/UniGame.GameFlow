@@ -381,17 +381,13 @@ namespace UniModules.GameFlow.Runtime.Core
         {
             // Remove this ports connection to the other
             if (port == null)
-            {
                 return;
-            }
 
             for (var i = connections.Count - 1; i >= 0; i--)
             {
                 var connection = connections[i];
                 if (connection.IsTarget(port))
-                {
                     connections.RemoveAt(i);
-                }
             }
 
             // Remove the other ports connection to this port
@@ -399,9 +395,7 @@ namespace UniModules.GameFlow.Runtime.Core
             {
                 var connection = port.Connections[i];
                 if (connection.IsTarget(this))
-                {
                     port.RemoveConnection(connection);
-                }
             }
         }
 

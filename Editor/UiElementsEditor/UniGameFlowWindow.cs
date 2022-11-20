@@ -5,7 +5,7 @@ using UniGame.UniNodes.GameFlowEditor.Editor;
 using UniModules.GameFlow.Runtime.Core;
 using UniModules.UniGame.GameFlow.Editor.UiElementsEditor.Tools.ExposedParameterElement;
 using UnityEditor;
-
+using UnityEditor.SceneManagement;
 
 
 namespace UniModules.GameFlow.Editor
@@ -149,9 +149,7 @@ namespace UniModules.GameFlow.Editor
                 InitializeGraph(uniGraph);
 
             _graphName = uniGraph.name;
-            var graphAsset = uniGraph.useVariants
-                ? CreateInstance<UniGraphAsset>()
-                : uniGraph.serializedGraph;
+            var graphAsset = uniGraph.serializedGraph;
 
             if (!graphAsset && Application.isPlaying == false)
             {
@@ -170,14 +168,12 @@ namespace UniModules.GameFlow.Editor
             }
 
             var sourceGraph = uniGraph;
-            if (!uniGraph.useVariants)
+            var stage = PrefabStageUtility.GetPrefabStage(uniGraph.gameObject);
+            
+            if (Application.isPlaying == false && stage != null && !string.IsNullOrEmpty(stage.assetPath))
             {
-                var stage = UnityEditor.SceneManagement.PrefabStageUtility.GetPrefabStage(uniGraph.gameObject);
-                if (Application.isPlaying == false && stage != null && !string.IsNullOrEmpty(stage.assetPath))
-                {
-                    var asset = AssetDatabase.LoadAssetAtPath<GameObject>(stage.assetPath);
-                    sourceGraph = asset.GetComponent<UniGraph>();
-                }
+                var asset = AssetDatabase.LoadAssetAtPath<GameObject>(stage.assetPath);
+                sourceGraph = asset.GetComponent<UniGraph>();
             }
             
             AssetGraph = graphAsset;

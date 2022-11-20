@@ -1,4 +1,7 @@
-﻿using UniGame.GameRuntime.Abstract;
+﻿using System;
+using UniGame.GameRuntime.Abstract;
+using UniModules.GameFlow.Runtime.Interfaces;
+using UniModules.UniGame.Context.Runtime.Connections;
 
 namespace UniModules.UniGame.GameFlow.GameFlow.Runtime
 {
@@ -21,24 +24,24 @@ namespace UniModules.UniGame.GameFlow.GameFlow.Runtime
         #region inspector
 
         public bool isEnabled = true;
+
+        [SerializeField]
+        public AssetReferenceContextContainer contextContainer;
+
+        [SerializeField]
+        public List<UniGraph> gameFlows = new List<UniGraph>();
+
+        [SerializeField]
+        public List<AssetReferenceGameFlow> asyncGraphs = new List<AssetReferenceGameFlow>();
         
         [SerializeField]
-        private AssetReferenceContextContainer _contextContainer;
-
-        [SerializeField]
-        private List<UniGraph> executionItems = new List<UniGraph>();
-
-        [SerializeField]
-        private List<AssetReferenceComponent<UniGraph>> asyncGraphs = new List<AssetReferenceComponent<UniGraph>>();
-        
-        [SerializeField]
-        private List<AssetReferenceDataSource> _assetSources = new List<AssetReferenceDataSource>();
+        public List<AssetReferenceDataSource> asyncDataSources = new List<AssetReferenceDataSource>();
 
         [SerializeReference]
-        private List<IAsyncContextDataSource> _sources = new List<IAsyncContextDataSource>();
+        public List<IAsyncContextDataSource> dataSources = new List<IAsyncContextDataSource>();
 
         [SerializeReference]
-        private bool executeOnStart = true;
+        public bool executeOnStart = true;
         
         #endregion
 
@@ -59,17 +62,17 @@ namespace UniModules.UniGame.GameFlow.GameFlow.Runtime
         public async UniTask Execute()
         {
             if (!isEnabled) return;
-            
-            _gameContext = new EntityContext().AddTo(LifeTime);
-            
-            if (_contextContainer.RuntimeKeyIsValid())
+
+            _gameContext = new EntityContext();
+
+            if (contextContainer.RuntimeKeyIsValid())
             {
-                var contextContainer = await _contextContainer.LoadAssetTaskAsync(LifeTime);
-                contextContainer.SetValue(_gameContext);
+                var container = await contextContainer.LoadAssetTaskAsync(LifeTime);
+                container.SetValue(_gameContext);
             }
 
             await ExecuteSources(_gameContext);
-            await ExecuteGraphs();
+            await ExecuteGraphs(_gameContext);
         }
 
         public void Destroy()
@@ -84,44 +87,54 @@ namespace UniModules.UniGame.GameFlow.GameFlow.Runtime
 
         #region private methods
 
-        private UniTask ExecuteGraphs()
+        private UniTask ExecuteGraphs(IContext context)
         {
-            foreach (var graph in executionItems)
-                graph.AddTo(LifeTime)
-                    .ExecuteAsync()
+            foreach (var graph in gameFlows)
+            {
+                ExecuteGameFlowAsync(graph,context)
                     .AttachExternalCancellation(LifeTime.TokenSource)
                     .Forget();
+            }
 
-            ExecuteAsyncGraphs(_gameContext)
+            ExecuteAsyncFlows(_gameContext)
                 .AttachExternalCancellation(LifeTime.TokenSource)
                 .Forget();
             
             return UniTask.CompletedTask;
         }
 
-        private async UniTask ExecuteAsyncGraphs(IContext context)
+        private async UniTask ExecuteAsyncFlows(IContext context)
         {
-            var asyncAsset = asyncGraphs.Select(asset => asset.LoadAssetTaskAsync(LifeTime));
+            var asyncAsset = asyncGraphs
+                .Select(asset => asset.LoadAssetTaskAsync(LifeTime));
+            
             var graphs      = await UniTask.WhenAll(asyncAsset);
             foreach (var graphAsset in graphs)
             {
-                var graphObject = Object.Instantiate(graphAsset.gameObject,transform);
+                var graphObject = Instantiate(graphAsset.gameObject,transform);
                 var graph       = graphObject.GetComponent<UniGraph>();
-                graph.AddTo(LifeTime)
-                    .ExecuteAsync()
+                
+                ExecuteGameFlowAsync(graph,context)
                     .AttachExternalCancellation(LifeTime.TokenSource)
                     .Forget();
             }
         }
 
+        private async UniTask ExecuteGameFlowAsync(IUniGraph graph,IContext context)
+        {
+            var connection = new ContextConnection();
+            connection.Connect(context).AddTo(LifeTime);
+            await graph.AddTo(LifeTime).ExecuteAsync();
+        }
+
         private UniTask ExecuteSources(IContext context)
         {
-            foreach (var source in _sources)
+            foreach (var source in dataSources)
                 source.RegisterAsync(context)
                     .AttachExternalCancellation(LifeTime.TokenSource)
                     .Forget();
             
-            foreach (var sourceReference in _assetSources)
+            foreach (var sourceReference in asyncDataSources)
                 RegisterSource(sourceReference, context)
                     .AttachExternalCancellation(LifeTime.TokenSource)
                     .Forget();
@@ -138,5 +151,13 @@ namespace UniModules.UniGame.GameFlow.GameFlow.Runtime
         private void OnDestroy() => Dispose();
 
         #endregion
+    }
+
+    [Serializable]
+    public class AssetReferenceGameFlow : AssetReferenceComponent<UniGraph>
+    {
+        public AssetReferenceGameFlow(string guid) : base(guid)
+        {
+        }
     }
 }

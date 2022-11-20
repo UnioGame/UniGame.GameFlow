@@ -1,4 +1,6 @@
-﻿namespace UniGame.GameFlow.Runtime.Nodes
+﻿using UniModules.GameFlow.Runtime.Attributes;
+
+namespace UniGame.GameFlow.Runtime.Nodes
 {
     using System;
     using Cysharp.Threading.Tasks;
@@ -20,6 +22,11 @@
     
     [Serializable]
     [CreateNodeMenu("Common/Sources/Serializable Parent Context")]
+    [NodeInfo(category:"Sources", description: 
+        "1. Create new Local Context ot use Graph context on Init\n"+
+        "2. Publish ALL contextDataSources INTO Output port\n"+
+        "2. Publish ALL contextDataSources INTO Local Context\n"+
+        "3. Publish Local Context INTO Context container")]
     public class ParentContextSerializedNode : SContextNode
     {
         private IContextConnection _contextConnection;

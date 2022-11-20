@@ -32,12 +32,17 @@ namespace UniGame.UniNodes.GameFlow.Runtime.Commands
 
         public async UniTask Execute(ILifeTime lifeTime)
         {
-            if (_resource == null) 
+            if (_resource == null || _resource.RuntimeKeyIsValid() == false)
+            {
+#if UNITY_EDITOR
+                GameLog.LogWarning($"{nameof(RegisterDataSourceCommand)} : {nameof(_resource)} is empty");
+#endif
                 return;
+            }
             
             var asset = await _resource.LoadAssetTaskAsync<LifetimeScriptableObject>(lifeTime);
-            
-            await UniTask.WaitForEndOfFrame();
+
+            await UniTask.Yield(PlayerLoopTiming.LastPostLateUpdate);
             
             if (!(asset is IAsyncContextDataSource dataSource))
             {

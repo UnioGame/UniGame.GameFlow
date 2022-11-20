@@ -24,7 +24,7 @@ namespace UniModules.GameFlow.Runtime.Core
 #if ODIN_INSPECTOR
         [Sirenix.OdinInspector.DrawWithUnity]
 #endif
-        private List<AssetReferenceDataSource> _assetReferenceSources = new List<AssetReferenceDataSource>();
+        private List<AssetReferenceDataSource> _asyncDataSources = new List<AssetReferenceDataSource>();
         
         [SerializeField]
 #if ODIN_INSPECTOR
@@ -44,9 +44,6 @@ namespace UniModules.GameFlow.Runtime.Core
         [SerializeReference]
         public IUniGraphProcessor graphProcessor = new UniGraphProcessor();
 
-        [Tooltip("if true, editor serializedGraph will be create each graph update")]
-        public bool useVariants = true;
-        
         #endregion
         
         #region private properties
@@ -141,7 +138,7 @@ namespace UniModules.GameFlow.Runtime.Core
                 .AttachExternalCancellation(LifeTime.TokenSource)
                 .Forget();
 
-            foreach (var referenceSource in _assetReferenceSources) {
+            foreach (var referenceSource in _asyncDataSources) {
                 var source = await referenceSource.LoadAssetTaskAsync(LifeTime);
                 source.RegisterAsync(Context).AttachExternalCancellation(LifeTime.TokenSource)
                     .Forget();

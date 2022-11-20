@@ -1,6 +1,5 @@
 ﻿using UniModules.UniGame.AddressableTools.Runtime.AssetReferencies;
 using UniModules.UniGame.AddressableTools.Runtime.Extensions;
-using UniModules.UniGame.SerializableContext.Runtime.Addressables;
 
 namespace UniGame.UniNodes.Nodes.Runtime.Common
 {
@@ -9,20 +8,20 @@ namespace UniGame.UniNodes.Nodes.Runtime.Common
     using Sirenix.OdinInspector;
     using UniModules.GameFlow.Runtime.Attributes;
     using UniModules.GameFlow.Runtime.Core;
-    using UniModules.UniCore.Runtime.Rx.Extensions;
     using UniModules.UniGame.Context.Runtime.Connections;
-    using UniModules.UniGame.Core.Runtime.Extension;
     using UniModules.UniGame.Core.Runtime.Interfaces;
     using UniModules.UniGameFlow.NodeSystem.Runtime.Core.Attributes;
     using UnityEngine;
     using Object = UnityEngine.Object;
 
     [Serializable]
-    [CreateNodeMenu("Common/Graph/NestedGraph")]
-    [NodeInfo(nameof(GraphContextOutputNode), "NestedGraph", "create instance of subgraph and launch")]
-    public class SubGraphNode : SContextNode
+    [CreateNodeMenu("Common/Graph/NestedGraphNode")]
+    [NodeInfo(nameof(GraphContextOutputNode), 
+        "NestedGraph", 
+        "create instance of subgraph and launch")]
+    public class NestedGraphNode : SContextNode
     {
-        public const string SubGraphNodeName = "NestedGraph";
+        public const string NestedGraphNodeName = "NestedGraph";
         
         #region inspector
 
@@ -31,25 +30,41 @@ namespace UniGame.UniNodes.Nodes.Runtime.Common
         
         [DrawWithUnity]
         [HideLabel]
-        public AssetReferenceComponent<UniGraph> subGraph;
+        public AssetReferenceComponent<UniGraph> nestedGraph;
 
         public bool awaitGraph = false;
         
         #endregion
-        
-        public sealed override string ItemName => graphName;
+
+        public sealed override string ItemName
+        {
+            get
+            {
+#if UNITY_EDITOR
+                if (nestedGraph?.editorAsset != null)
+                    return $"[{nestedGraph.editorAsset.gameObject.name}]";
+#endif
+                return string.IsNullOrEmpty(graphName) 
+                    ? NestedGraphNodeName
+                    : graphName;
+            }
+        }
 
         protected override async UniTask OnContextActivate(IContext context)
         {
-            var graphAsset = await subGraph.LoadAssetTaskAsync(LifeTime);
-
+            var graphAsset = await nestedGraph.LoadAssetTaskAsync(LifeTime);
+            var graphGameObject = graphAsset.gameObject;
             var parent = GraphData.Root;
-            var graph = Object.Instantiate(graphAsset.gameObject,parent)
+            var graph = Object
+                .Instantiate(graphGameObject,parent)
                 .DestroyWith(LifeTime)
                 .GetComponent<UniGraph>();
 
+            graphName = graphGameObject.name;
+            
             var connection = new ContextConnection();
-            connection.Connect(context).AddTo(LifeTime);
+            connection.Connect(context)
+                .AddTo(LifeTime);
 
             await LaunchGraph(graph, connection);
             
@@ -61,13 +76,12 @@ namespace UniGame.UniNodes.Nodes.Runtime.Common
             if (awaitGraph)
             {
                 await graph.ExecuteAsync(context);
+                return;
             }
-            else
-            {
-                graph.ExecuteAsync(context)
-                    .AttachExternalCancellation(LifeTime.TokenSource)
-                    .Forget();
-            }
+            
+            graph.ExecuteAsync(context)
+                .AttachExternalCancellation(LifeTime.TokenSource)
+                .Forget();
         }
         
     }

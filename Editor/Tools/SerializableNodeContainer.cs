@@ -16,7 +16,7 @@
 #if ODIN_INSPECTOR
         [Sirenix.OdinInspector.HideLabel]
         [Sirenix.OdinInspector.InlineProperty]
-        [Sirenix.OdinInspector.CustomValueDrawer(nameof(DrawNode))]
+        //[Sirenix.OdinInspector.CustomValueDrawer(nameof(DrawNode))]
 #endif
         [SerializeReference]
         public SerializableNode node;
@@ -33,16 +33,16 @@
             fullType = node?.GetType().AssemblyQualifiedName;
             return this;
         }
-
-#if ODIN_INSPECTOR
-
-        public SerializableNode DrawNode(SerializableNode target, GUIContent label)
-        {
-            target.DrawSerializableNode(graph);
-            return node;
-        }
-        
-#endif
+//
+// #if ODIN_INSPECTOR
+//
+//         public SerializableNode DrawNode(SerializableNode target, GUIContent label)
+//         {
+//             target.DrawSerializableNode(graph);
+//             return node;
+//         }
+//         
+// #endif
         
     }
 }

@@ -1,4 +1,5 @@
 ﻿using UniCore.Runtime.ProfilerTools;
+using UniModules.GameFlow.Runtime.Attributes;
 using UniModules.UniGame.Context.Runtime.Connections;
 using UnityEngine;
 
@@ -10,14 +11,13 @@ namespace UniModules.GameFlow.Runtime.Core
     using System.Linq;
     using Nodes;
     using Runtime.Interfaces;
-    using UniCore.Runtime.ProfilerTools;
     using UniModules.UniCore.Runtime.Attributes;
     using UniModules.UniCore.Runtime.ObjectPool.Runtime;
     using UniModules.UniCore.Runtime.ObjectPool.Runtime.Extensions;
     using UniModules.UniGame.Core.Runtime.Attributes;
     using UniModules.UniGame.Core.Runtime.Attributes.FieldTypeDrawer;
-    using UniModules.UniGame.Core.Runtime.Interfaces;
 
+    [HideNode]
     [Serializable]
     public class SerializableNode : INode
     {
@@ -25,7 +25,7 @@ namespace UniModules.GameFlow.Runtime.Core
 
         #region inspector
 
-        [HideInInspector]
+        //[HideInInspector]
         [ReadOnlyValue] 
         [SerializeField] public int id;
 

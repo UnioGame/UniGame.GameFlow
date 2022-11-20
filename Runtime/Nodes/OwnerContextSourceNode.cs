@@ -21,7 +21,8 @@ namespace UniModules.UniGameFlow.GameFlow.Runtime.Nodes
 #endif
     
     [CreateNodeMenu("Common/Sources/Owner Context Source")]
-    [NodeInfo(category:"Sources", description:"register data source into context and manage context lifetime")]
+    [NodeInfo(category:"Sources", 
+        description:"register data source into context and manage context lifetime")]
     public class OwnerContextSourceNode : InOutPortNode
     {
         #region inspector

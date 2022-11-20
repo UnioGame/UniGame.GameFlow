@@ -35,13 +35,15 @@
             }
 
             GUILayout.EndVertical();
-        
             GUILayout.EndHorizontal();
             GUILayout.Space(10);
         }
 
         public override void OnInspectorGUI()
         {
+            var graph = target as UniGraph;
+            Open(graph);
+            
             var isOdinSupported = false;
 #if ODIN_INSPECTOR
             isOdinSupported = true;
@@ -53,9 +55,6 @@
                 base.OnInspectorGUI();
             }
 
-            var graph = target as UniGraph;
-
-            Open(graph);
         }
 
     }

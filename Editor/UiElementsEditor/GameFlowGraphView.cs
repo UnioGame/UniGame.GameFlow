@@ -77,6 +77,8 @@ namespace UniGame.GameFlowEditor.Editor
         public void Save()
         {
             var graphData = SourceGraph.UniGraph;
+            if (graphData == null) return;
+            
             graphData.SetPosition(graph.position);
             UpdateNodePositions();
 

@@ -8,14 +8,21 @@ namespace UniModules.GameFlow.Runtime.Core
     using System.Linq;
     using Runtime.Extensions;
     using Runtime.Interfaces;
-    using UniGame.Context.Runtime.Context;
-    using UniGame.Core.Runtime.Interfaces;
     using UniModules.UniCore.Runtime.Attributes;
     using UniModules.UniCore.Runtime.ObjectPool.Runtime;
     using UniModules.UniCore.Runtime.ObjectPool.Runtime.Extensions;
     using UnityEngine;
     using Object = UnityEngine.Object;
 
+#if UNITY_EDITOR
+    using UnityEditor;
+    using UniModules.Editor;
+#endif
+
+#if ODIN_INSPECTOR
+    using Sirenix.OdinInspector;
+#endif
+    
     /// <summary> Base class for all node graphs </summary>
     [Serializable]
     [HideNode]
@@ -36,17 +43,22 @@ namespace UniModules.GameFlow.Runtime.Core
         public string guid = System.Guid.NewGuid().ToString();
         
         [ReadOnlyValue] 
-        [SerializeField] private int uniqueId;
+        [SerializeField] 
+        public int uniqueId;
+
+        //[HideInInspector]
+        [SerializeField]
+        private int _nextId = 0;
 
 #if ODIN_INSPECTOR
-        [Sirenix.OdinInspector.InlineEditor(Expanded = false)]
-        [Sirenix.OdinInspector.Searchable]
+        [InlineEditor(Expanded = false)]
+        [Searchable]
 #endif
         [SerializeField]
         public List<UniNode> nodes = new List<UniNode>();
   
 #if ODIN_INSPECTOR
-        [Sirenix.OdinInspector.InlineProperty]
+        [InlineProperty]
 #endif
         [SerializeReference]
         public List<INode> serializableNodes = new List<INode>();
@@ -86,7 +98,15 @@ namespace UniModules.GameFlow.Runtime.Core
         /// get unique Id in graph scope
         /// </summary>
         /// <returns></returns>
-        public int GetNextId() => UnityEngine.Random.Range(Int32.MinValue, Int32.MaxValue);
+        public int GetNextId()
+        {
+            var activeId = _nextId;
+            _nextId++;
+#if UNITY_EDITOR
+            gameObject.MarkDirty();
+#endif
+            return activeId;
+        }
 
         public int GetId() => uniqueId;
         
@@ -231,7 +251,7 @@ namespace UniModules.GameFlow.Runtime.Core
             if (string.IsNullOrEmpty(guid))
                 guid = System.Guid.NewGuid().ToString();
 
-            serializableNodes.RemoveAll(x => x == null || x is UnityEngine.Object);
+            serializableNodes.RemoveAll(x => x == null || x is Object);
             nodes.RemoveAll(x => !x);
             nodes.RemoveAll(x => x == null);
             nodes.Remove(this);
@@ -285,7 +305,6 @@ namespace UniModules.GameFlow.Runtime.Core
 
         #endregion
         
-
-
+        
     }
 }
