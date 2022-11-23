@@ -2,8 +2,7 @@ using System;
 using GraphProcessor;
 using UniModules.UniCore.Runtime.DataFlow;
 using UniModules.UniGame.Context.Runtime.Context;
-using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
-using UniModules.UniGame.Core.Runtime.Interfaces;
+using UniGame.Core.Runtime;
 using UniRx;
 using UnityEngine;
 

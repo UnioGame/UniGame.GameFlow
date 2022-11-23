@@ -3,9 +3,8 @@
     using System;
     using Cysharp.Threading.Tasks;
     using UniModules.UniCore.Runtime.Rx.Extensions;
-    using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
-    using UniModules.UniGame.Core.Runtime.Interfaces;
-    using UniModules.UniGame.Core.Runtime.ScriptableObjects;
+    using Core.Runtime;
+    using Core.Runtime.ScriptableObjects;
     using UnityEngine.AddressableAssets;
 
     [Serializable]

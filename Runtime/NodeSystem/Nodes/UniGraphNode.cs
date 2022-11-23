@@ -7,10 +7,9 @@ namespace UniModules.GameFlow.Runtime.Core
     using Runtime.Extensions;
     using Runtime.Interfaces;
     using UniGame.Context.Runtime.Extension;
-    using UniGame.Core.Runtime.Interfaces;
     using UniModules.UniCore.Runtime.DataFlow.Interfaces;
     using UniModules.UniCore.Runtime.Rx.Extensions;
-    using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
+    using global::UniGame.Core.Runtime;
     using UniRx;
 
     [HideNode]

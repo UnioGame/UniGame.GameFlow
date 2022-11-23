@@ -1,33 +1,31 @@
-﻿using UniModules.UniGame.AddressableTools.Runtime.Extensions;
-using UniModules.UniGame.SerializableContext.Runtime.Addressables;
+﻿using UniGame.AddressableTools.Runtime;
+using UniGame.Core.Runtime.Extension;
 
 namespace UniGame.UniNodes.GameFlow.Runtime.Nodes
 {
     using System.Collections.Generic;
     using Cysharp.Threading.Tasks;
-    using UniModules.GameFlow.Runtime.Core;
-    using UniModules.UniCore.Runtime.ObjectPool.Runtime;
-    using UniModules.UniCore.Runtime.ObjectPool.Runtime.Extensions;
-    using UniModules.UniGame.SerializableContext.Runtime.Addressables;
-    using UniModules.UniGame.Context.Runtime.Abstract;
-    using UniModules.UniGame.Core.Runtime.Interfaces;
+    using UniGame.Runtime.ObjectPool;
+    using UniGame.Runtime.ObjectPool.Extensions;
+    using Context.Runtime;
+    using Core.Runtime;
     using UniModules.UniGameFlow.NodeSystem.Runtime.Core.Attributes;
     using UniNodes.Nodes.Runtime.Common;
 
     [CreateNodeMenu("Common/Sources/Context Additional Sources", nodeName = "ContextRegisterValues")]
     public class ContextRegisterValuesNode : ContextNode
     {
-        
         public List<AssetReferenceDataSource> sources;
 
         protected override async UniTask OnContextActivate(IContext context)
         {
-            var results = ClassPool.Spawn<List<AsyncContextDataSource>>();
+            var results = ClassPool.Spawn<List<AsyncSource>>();
 
             await sources.LoadAssetsTaskAsync(results,LifeTime);
 
             foreach (var dataSource in results) {
-                await dataSource.RegisterAsync(context);
+                await dataSource.ToSharedInstance(LifeTime)
+                    .RegisterAsync(context);
             }
             
             results.Despawn();

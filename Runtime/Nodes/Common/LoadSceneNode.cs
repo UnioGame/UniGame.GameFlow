@@ -3,7 +3,7 @@ namespace Game.Modules.Assets.UniGame.GameFlow.GameFlow.Runtime.Nodes.Common
 {
     using Cysharp.Threading.Tasks;
     using global::UniGame.UniNodes.Nodes.Runtime.Common;
-    using UniModules.UniGame.Core.Runtime.Interfaces;
+    using global::UniGame.Core.Runtime;
     using UniModules.UniGameFlow.NodeSystem.Runtime.Core.Attributes;
     using UnityEngine;
     using UnityEngine.SceneManagement;

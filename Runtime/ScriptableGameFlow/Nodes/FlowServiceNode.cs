@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using GraphProcessor;
-using UniModules.UniGame.Core.Runtime.Interfaces;
+using UniGame.Core.Runtime;
 using UnityEngine;
 
 [System.Serializable, NodeMenuItem("GameFlow/FlowServiceNode")]

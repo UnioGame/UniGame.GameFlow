@@ -7,7 +7,7 @@ namespace UniModules.GameFlow.Runtime.Core
     using Interfaces;
     using Runtime.Interfaces;
     using UniCore.Runtime.ProfilerTools;
-    using UniModules.UniCore.Runtime.Attributes;
+    using global::UniCore.Runtime.Attributes;
     using UniModules.UniCore.Runtime.ProfilerTools;
     using UniRx;
     using UnityEngine;

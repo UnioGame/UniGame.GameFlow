@@ -9,11 +9,11 @@ namespace UniModules.GameFlow.Runtime.Core
     using Interfaces;
     using Runtime.Interfaces;
     using UniCore.Runtime.ProfilerTools;
-    using UniModules.UniCore.Runtime.Attributes;
+    using global::UniCore.Runtime.Attributes;
     using UniModules.UniCore.Runtime.DataFlow;
-    using UniModules.UniCore.Runtime.ObjectPool.Runtime;
-    using UniModules.UniCore.Runtime.ObjectPool.Runtime.Extensions;
-    using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
+    using global::UniGame.Runtime.ObjectPool;
+    using global::UniGame.Runtime.ObjectPool.Extensions;
+    using global::UniGame.Core.Runtime;
     using UniRx;
     using UnityEngine;
 

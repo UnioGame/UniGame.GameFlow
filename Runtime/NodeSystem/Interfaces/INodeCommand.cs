@@ -1,6 +1,6 @@
 namespace UniModules.GameFlow.Runtime.Interfaces
 {
-    using UniModules.UniGame.Core.Runtime.Interfaces;
+    using global::UniGame.Core.Runtime;
 
     public interface INodeCommand : ICommand
     {

@@ -8,10 +8,10 @@
     using UniModules.GameFlow.Runtime.Core.Nodes;
     using UniModules.GameFlow.Runtime.Extensions;
     using UniModules.GameFlow.Runtime.Interfaces;
-    using UniModules.UniCore.Runtime.Attributes;
+    using UniCore.Runtime.Attributes;
     using UniModules.UniCore.Runtime.Rx.Extensions;
-    using UniModules.UniGame.Core.Runtime.Interfaces;
-    using UniModules.UniGame.Core.Runtime.Interfaces.Rx;
+    using Core.Runtime;
+    using Core.Runtime.Rx;
     using UniModules.UniGame.Core.Runtime.Rx;
     using UniRx;
     using UnityEngine;

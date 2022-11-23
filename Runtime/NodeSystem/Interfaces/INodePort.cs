@@ -4,8 +4,8 @@ namespace UniModules.GameFlow.Runtime.Interfaces
     using System.Collections.Generic;
     using Core;
     using Core.Interfaces;
-    using UniModules.UniCore.Runtime.ObjectPool.Runtime.Interfaces;
-    using UniModules.UniGame.Core.Runtime.Interfaces;
+    using global::UniGame.Core.Runtime.ObjectPool;
+    using global::UniGame.Core.Runtime;
     using UniRx;
     using UnityEngine;
 

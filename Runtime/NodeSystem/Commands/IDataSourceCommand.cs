@@ -1,6 +1,6 @@
 ﻿namespace UniModules.GameFlow.Runtime.Core.Commands
 {
-    using UniModules.UniGame.Core.Runtime.Interfaces;
+    using global::UniGame.Core.Runtime;
     using UniRx;
 
     public interface IDataSourceCommand<TData> : ILifeTimeCompletionCommand

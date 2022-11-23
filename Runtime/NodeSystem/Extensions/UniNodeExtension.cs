@@ -8,8 +8,8 @@ namespace UniModules.GameFlow.Runtime.Extensions
     using Core;
     using Core.Interfaces;
     using Interfaces;
-    using UniModules.UniCore.Runtime.ObjectPool.Runtime;
-    using UniModules.UniCore.Runtime.ObjectPool.Runtime.Extensions;
+    using global::UniGame.Runtime.ObjectPool;
+    using global::UniGame.Runtime.ObjectPool.Extensions;
     using UniModules.UniCore.Runtime.Rx.Extensions;
     using UniModules.UniCore.Runtime.Utils;
     using UniModules.UniGameFlow.NodeSystem.Runtime.Extensions;

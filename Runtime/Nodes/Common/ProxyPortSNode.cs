@@ -5,7 +5,7 @@ using UniModules.GameFlow.Runtime.Core.Commands;
 using UniModules.GameFlow.Runtime.Core.Interfaces;
 using UniModules.GameFlow.Runtime.Core.Nodes;
 using UniModules.GameFlow.Runtime.Interfaces;
-using UniModules.UniGame.Core.Runtime.Interfaces;
+using UniGame.Core.Runtime;
 
 namespace UniModules.UniGame.GameFlow.Runtime
 {

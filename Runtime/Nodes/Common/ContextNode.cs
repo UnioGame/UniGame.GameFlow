@@ -6,8 +6,8 @@
     using UniModules.GameFlow.Runtime.Core;
     using UniModules.GameFlow.Runtime.Interfaces;
     using UniModules.UniCore.Runtime.Rx.Extensions;
-    using UniModules.UniGame.Core.Runtime.Interfaces;
-    using UniModules.UniGame.Core.Runtime.Interfaces.Rx;
+    using Core.Runtime;
+    using Core.Runtime.Rx;
     using UniRx;
 
     [Serializable]

@@ -1,8 +1,8 @@
 ﻿namespace UniModules.GameFlow.Runtime.Interfaces
 {
     using Core;
-    using UniModules.UniCore.Runtime.ObjectPool.Runtime.Interfaces;
-    using UniModules.UniGame.Core.Runtime.Interfaces;
+    using global::UniGame.Core.Runtime.ObjectPool;
+    using global::UniGame.Core.Runtime;
 
     public interface IValueConnection<TValue>  : IDataValue<TValue>,IPoolable
     {

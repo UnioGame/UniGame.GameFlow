@@ -3,7 +3,7 @@
 namespace UniModules.UniGame.GameFlow.GameFlowEditor.Editor.NodesSelectorWindow.OdinWindow
 {
     using System;
-    using Core.Runtime.SerializableType;
+    using global::UniGame.Core.Runtime.SerializableType;
     using UnityEditor;
     using UnityEngine;
 

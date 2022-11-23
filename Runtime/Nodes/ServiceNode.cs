@@ -6,9 +6,9 @@ namespace UniGame.UniNodes.GameFlow.Runtime.Nodes
     using Cysharp.Threading.Tasks;
     using UniModules.GameFlow.Runtime.Attributes;
     using UniCore.Runtime.ProfilerTools;
-    using UniModules.UniCore.Runtime.Attributes;
+    using UniCore.Runtime.Attributes;
     using UniModules.UniCore.Runtime.ProfilerTools;
-    using UniModules.UniGame.Core.Runtime.Interfaces;
+    using Core.Runtime;
     using UniNodes.Nodes.Runtime.Common;
     using UnityEngine;
 

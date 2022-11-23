@@ -5,7 +5,7 @@ namespace UniModules.GameFlow.Runtime.Interfaces
 {
     using System.Collections.Generic;
     using Core.Interfaces;
-    using UniModules.UniGame.Core.Runtime.Interfaces;
+    using global::UniGame.Core.Runtime;
     using IGraphData = Core.IGraphData;
     using Vector2 = UnityEngine.Vector2;
 

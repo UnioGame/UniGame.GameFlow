@@ -5,8 +5,7 @@
     using UniGame.Context.Runtime.Connections;
     using UniGame.Context.Runtime.Context;
     using UniGame.Context.SerializableContext.Runtime.Abstract;
-    using UniGame.Core.Runtime.DataFlow.Interfaces;
-    using UniGame.Core.Runtime.Interfaces;
+    using global::UniGame.Core.Runtime;
 
     [Serializable]
     public class SingleStateToken : IStateToken

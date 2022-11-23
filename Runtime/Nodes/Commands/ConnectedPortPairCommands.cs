@@ -6,8 +6,7 @@
     using UniModules.GameFlow.Runtime.Extensions;
     using UniModules.GameFlow.Runtime.Interfaces;
     using UniModules.UniCore.Runtime.DataFlow.Interfaces;
-    using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
-    using UniModules.UniGame.Core.Runtime.Interfaces;
+    using Core.Runtime;
 
     [Serializable]
     public class ConnectedPortPairCommands : ILifeTimeCommand , IPortPair

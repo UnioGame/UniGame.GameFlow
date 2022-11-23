@@ -15,7 +15,7 @@ namespace UniModules.GameFlow.Runtime.Core.Nodes
     using Runtime.Interfaces;
     using UniModules.UniContextData.Runtime.Entities;
     using UniModules.UniCore.Runtime.Rx.Extensions;
-    using UniModules.UniGame.Core.Runtime.Interfaces;
+    using global::UniGame.Core.Runtime;
     using UniRx;
     using UnityEngine;
 

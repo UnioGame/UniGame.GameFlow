@@ -7,7 +7,7 @@
     using UniGame.Core.Runtime.Rx;
     using UniModules.UniCore.Runtime.DataFlow.Interfaces;
     using UniModules.UniCore.Runtime.Rx.Extensions;
-    using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
+    using global::UniGame.Core.Runtime;
     using UniRx;
 
     [Serializable]

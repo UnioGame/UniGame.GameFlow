@@ -4,7 +4,7 @@
     using UniModules.GameFlow.Runtime.Attributes;
     using UniModules.GameFlow.Runtime.Core;
     using UniModules.GameFlow.Runtime.Interfaces;
-    using UniModules.UniGame.Core.Runtime.Interfaces.Rx;
+    using Core.Runtime.Rx;
 
     [HideNode]
     [Serializable]

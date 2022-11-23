@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
     using Context.Runtime.Connections;
-    using Core.Runtime.DataFlow.Interfaces;
+    using global::UniGame.Core.Runtime;
     using UniGameFlow.Nodes.Runtime.States;
     using UnityEngine;
 

@@ -8,9 +8,9 @@ namespace UniModules.GameFlow.Runtime.Core
     using System.Linq;
     using Runtime.Extensions;
     using Runtime.Interfaces;
-    using UniModules.UniCore.Runtime.Attributes;
-    using UniModules.UniCore.Runtime.ObjectPool.Runtime;
-    using UniModules.UniCore.Runtime.ObjectPool.Runtime.Extensions;
+    using global::UniCore.Runtime.Attributes;
+    using global::UniGame.Runtime.ObjectPool;
+    using global::UniGame.Runtime.ObjectPool.Extensions;
     using UnityEngine;
     using Object = UnityEngine.Object;
 

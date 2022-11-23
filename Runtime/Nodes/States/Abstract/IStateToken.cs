@@ -2,7 +2,7 @@
 {
     using System;
     using UniGame.Context.Runtime.Connections;
-    using UniGame.Core.Runtime.Interfaces;
+    using global::UniGame.Core.Runtime;
 
     public interface IStateToken :
         ILifeTimeContext,

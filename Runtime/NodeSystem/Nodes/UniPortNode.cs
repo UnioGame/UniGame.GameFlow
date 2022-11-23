@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using Commands;
     using Runtime.Interfaces;
-    using UniModules.UniGame.Core.Runtime.Interfaces;
+    using global::UniGame.Core.Runtime;
     using UniModules.UniGameFlow.NodeSystem.Runtime.Core.Attributes;
 
     [CreateNodeMenu("Common/PortNode","GraphPort")]

@@ -5,7 +5,7 @@
     using UniModules.GameFlow.Runtime.Core;
     using UniModules.GameFlow.Runtime.Core.Commands;
     using UniModules.GameFlow.Runtime.Core.Interfaces;
-    using UniModules.UniGame.Core.Runtime.Interfaces;
+    using Core.Runtime;
 
     [HideNode]
     public class InOutPortBindNode : UniNode

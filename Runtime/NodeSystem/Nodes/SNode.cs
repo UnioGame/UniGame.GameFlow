@@ -7,8 +7,7 @@ namespace UniModules.GameFlow.Runtime.Core.Nodes
     using Cysharp.Threading.Tasks;
     using Runtime.Interfaces;
     using UniModules.UniCore.Runtime.DataFlow;
-    using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
-    using UniModules.UniGame.Core.Runtime.Interfaces;
+    using global::UniGame.Core.Runtime;
     using UnityEngine;
 
     [Serializable]

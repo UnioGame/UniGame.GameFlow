@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using Core;
     using Cysharp.Threading.Tasks;
-    using UniModules.UniGame.Core.Runtime.Interfaces;
+    using global::UniGame.Core.Runtime;
     using UniRx;
 
     public interface IProxyNode : IUniNode

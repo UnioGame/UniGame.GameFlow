@@ -1,5 +1,4 @@
-﻿using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
-using UniModules.UniGame.Core.Runtime.Interfaces;
+﻿using UniGame.Core.Runtime;
 
 namespace UniGame.GameFlow.Runtime.Interfaces
 {

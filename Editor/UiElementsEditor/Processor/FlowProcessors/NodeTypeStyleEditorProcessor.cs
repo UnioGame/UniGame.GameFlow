@@ -1,7 +1,7 @@
 ﻿using UniModules.UniGame.Core.Editor.EditorProcessors;
 using UniModules.UniGame.Core.Runtime.DataStructure;
-using UniModules.UniGame.Core.Runtime.SerializableType;
-using UniModules.UniGame.Core.Runtime.SerializableType.Attributes;
+using UniGame.Core.Runtime.SerializableType;
+using UniGame.Core.Runtime.SerializableType.Attributes;
 
 namespace UniModules.GameFlow.Editor.Processor.FlowProcessors
 {

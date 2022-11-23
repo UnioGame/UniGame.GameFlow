@@ -1,7 +1,6 @@
 ﻿namespace UniGame.UniNodes.GameFlow.Runtime
 {
-    using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
-    using UniModules.UniGame.Core.Runtime.Interfaces;
+    using Core.Runtime;
     using UniGame.GameFlow.Runtime.Interfaces;
     using UniRx;
     using UnityEngine;

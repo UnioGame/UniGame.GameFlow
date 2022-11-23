@@ -1,8 +1,8 @@
 ﻿using UniGame.GameFlow;
 using UniGame.GameFlowEditor.Runtime;
-using UniModules.UniGame.AddressableTools.Runtime.Extensions;
+using UniGame.AddressableTools.Runtime;
 using UniModules.UniGame.Context.Runtime.Connections;
-using UniModules.UniGame.Core.Runtime.Extension;
+using UniGame.Core.Runtime.Extension;
 
 namespace UniModules.GameFlow.Runtime.Core
 {
@@ -11,8 +11,7 @@ namespace UniModules.GameFlow.Runtime.Core
     using Cysharp.Threading.Tasks;
     using Runtime.Extensions;
     using Runtime.Interfaces;
-    using UniModules.UniGame.SerializableContext.Runtime.Addressables;
-    using UniModules.UniGame.Context.Runtime.Abstract;
+    using global::UniGame.Context.Runtime;
     using UnityEngine;
 
     [HideNode]
@@ -30,7 +29,7 @@ namespace UniModules.GameFlow.Runtime.Core
 #if ODIN_INSPECTOR
         [Sirenix.OdinInspector.DrawWithUnity]
 #endif
-        private List<AsyncContextDataSource> _dataSources = new List<AsyncContextDataSource>();
+        private List<AsyncSource> _dataSources = new List<AsyncSource>();
 
         [SerializeField]
 #if ODIN_INSPECTOR
@@ -134,13 +133,18 @@ namespace UniModules.GameFlow.Runtime.Core
         
         private async UniTask LoadDataSources()
         {
-            UniTask.WhenAll(_dataSources.Select(x => x.RegisterAsync(Context)))
+            UniTask.WhenAll(_dataSources.Select(x => x
+                    .ToSharedInstance(LifeTime)
+                    .RegisterAsync(Context)))
                 .AttachExternalCancellation(LifeTime.TokenSource)
                 .Forget();
 
             foreach (var referenceSource in _asyncDataSources) {
-                var source = await referenceSource.LoadAssetTaskAsync(LifeTime);
-                source.RegisterAsync(Context).AttachExternalCancellation(LifeTime.TokenSource)
+                var source = await referenceSource
+                    .LoadAssetTaskAsync(LifeTime)
+                    .ToSharedInstanceAsync(LifeTime);
+                source.RegisterAsync(Context)
+                    .AttachExternalCancellation(LifeTime.TokenSource)
                     .Forget();
             }
         }

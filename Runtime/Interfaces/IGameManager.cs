@@ -2,7 +2,7 @@
 {
     using System;
     using Cysharp.Threading.Tasks;
-    using UniModules.UniGame.Core.Runtime.Interfaces;
+    using Core.Runtime;
 
     public interface IGameManager : ILifeTimeContext, IDisposable
     {

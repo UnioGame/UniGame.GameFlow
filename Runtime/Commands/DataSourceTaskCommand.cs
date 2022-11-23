@@ -3,8 +3,7 @@
     using System;
     using Cysharp.Threading.Tasks;
     using UniCore.Runtime.ProfilerTools;
-    using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
-    using UniModules.UniGame.Core.Runtime.Interfaces;
+    using Core.Runtime;
 
     [Serializable]
     public class DataSourceTaskCommand<TData> : ILifeTimeCommand 

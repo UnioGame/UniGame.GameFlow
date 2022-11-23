@@ -2,7 +2,7 @@ namespace UniModules.GameFlow.Runtime.Interfaces
 {
     using System;
     using System.Collections.Generic;
-    using UniModules.UniGame.Core.Runtime.Interfaces;
+    using global::UniGame.Core.Runtime;
     using UniRx;
 
     public interface IPortValue : 

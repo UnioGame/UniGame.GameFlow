@@ -3,7 +3,7 @@
     using System;
     using Core.Interfaces;
     using Interfaces;
-    using UniModules.UniGame.Core.Runtime.Interfaces;
+    using global::UniGame.Core.Runtime;
 
     [Serializable]
     public class SerializedNodeCommand : ILifeTimeCommandSource, IValidator

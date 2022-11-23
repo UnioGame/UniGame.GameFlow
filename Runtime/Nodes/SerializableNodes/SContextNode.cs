@@ -4,7 +4,7 @@
     using Cysharp.Threading.Tasks;
     using UniModules.GameFlow.Runtime.Attributes;
     using UniCore.Runtime.ProfilerTools;
-    using UniModules.UniGame.Core.Runtime.Interfaces;
+    using Core.Runtime;
     using UniRx;
 
     [Serializable]

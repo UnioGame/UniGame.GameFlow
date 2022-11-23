@@ -1,6 +1,6 @@
 ﻿using UniCore.Runtime.ProfilerTools;
 using UniModules.GameFlow.Runtime.Core;
-using UniModules.UniGame.Core.Runtime.Extension;
+using UniGame.Core.Runtime.Extension;
 
 namespace UniModules.GameFlow.Editor 
 {

@@ -4,7 +4,7 @@ namespace Game.Modules.Assets.UniGame.GameFlow.Runtime.Nodes
     using global::UniGame.UniNodes.Nodes.Runtime.Common;
     using UniCore.Runtime.ProfilerTools;
     using UniModules.UniGame.Context.SerializableContext.Runtime.Abstract;
-    using UniModules.UniGame.Core.Runtime.Interfaces;
+    using global::UniGame.Core.Runtime;
     using UniModules.UniGameFlow.NodeSystem.Runtime.Core.Attributes;
     using UnityEngine;
 

@@ -4,9 +4,9 @@ using UniCore.Runtime.ProfilerTools;
 using UniGame.GameFlow.Runtime.Interfaces;
 using UniGame.UniNodes.Nodes.Runtime.Common;
 using UniModules.GameFlow.Runtime.Attributes;
-using UniModules.UniCore.Runtime.Attributes;
+using UniCore.Runtime.Attributes;
 using UniModules.UniCore.Runtime.ProfilerTools;
-using UniModules.UniGame.Core.Runtime.Interfaces;
+using UniGame.Core.Runtime;
 using UnityEngine;
 
 namespace UniGame.UniNodes.GameFlow.Runtime.Nodes

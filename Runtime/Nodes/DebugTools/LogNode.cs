@@ -12,7 +12,7 @@
     using UniCore.Runtime.ProfilerTools;
     using UniModules.UniCore.Runtime.ProfilerTools;
     using UniModules.UniCore.Runtime.Rx.Extensions;
-    using UniModules.UniGame.Core.Runtime.Interfaces;
+    using Core.Runtime;
     using UniModules.UniGameFlow.NodeSystem.Runtime.Core.Attributes;
     using UniRx;
     using UnityEngine;

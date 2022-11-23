@@ -1,4 +1,4 @@
-﻿using UniModules.UniGame.Core.Runtime.Interfaces;
+﻿using UniGame.Core.Runtime;
 using UniModules.UniGame.GameFlow.GameFlowEditor.Editor.Attributes;
 using UniModules.UniGame.GameFlow.GameFlowEditor.Runtime.Nodes;
 

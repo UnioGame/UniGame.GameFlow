@@ -11,7 +11,7 @@ namespace UniGame.GameFlowEditor.Editor
     using Runtime;
     using UniModules.Editor;
     using UniModules.UniCore.Runtime.DataFlow;
-    using UniModules.UniGame.Core.Runtime.DataFlow.Interfaces;
+    using Core.Runtime;
     using UniModules.GameFlow.Editor;
     using UniModules.UniGameFlow.GameFlowEditor.Editor.NodesSelectorWindow;
     using UniModules.UniGameFlow.GameFlowEditor.Editor.Tools;

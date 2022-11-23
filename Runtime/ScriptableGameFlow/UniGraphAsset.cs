@@ -1,7 +1,7 @@
 ﻿using GraphProcessor;
 using UniGame.GameFlow;
-using UniModules.UniCore.Runtime.ObjectPool.Runtime;
-using UniModules.UniCore.Runtime.ObjectPool.Runtime.Extensions;
+using UniGame.Runtime.ObjectPool;
+using UniGame.Runtime.ObjectPool.Extensions;
 using UniRx;
 
 #if UNITY_EDITOR
