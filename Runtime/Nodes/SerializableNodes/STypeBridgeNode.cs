@@ -37,6 +37,7 @@
         
         private RecycleReactiveProperty<TData> _valueData;
         private RecycleReactiveProperty<bool>  _isReady;
+        private bool _isFinished = false;
 
         public IPortValue input;
         public IPortValue output;
@@ -83,11 +84,12 @@
                     .AttachExternalCancellation(LifeTime.TokenSource)
                     .Forget())
                 .AddTo(LifeTime);
-
-            _isReady.Where(x => x)
-                .CombineLatest(_valueData, (x, value) => value)
-                .Subscribe(output.Publish)
-                .AddTo(LifeTime);
+            
+            //
+            // _isReady.Where(x => x)
+            //     .CombineLatest(_valueData, (x, value) => value)
+            //     .Subscribe(output.Publish)
+            //     .AddTo(LifeTime);
             
             //reset local value
             var valueObservable = input.Receive<TData>();
@@ -100,11 +102,11 @@
             return UniTask.CompletedTask;
         }
 
-        public void Complete()
+        public void CompleteProcessing(TData data)
         {
-            _isReady.Value = true;
-            if (completeOnce) return;
-            _isReady.Value = false;
+            if (_isFinished) return;
+            _isFinished = completeOnce;
+            output.Publish(data);
         }
 
         protected virtual UniTask OnValueUpdate(TData value)

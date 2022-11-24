@@ -49,7 +49,7 @@ namespace UniGame.UniNodes.Nodes.Runtime.Common
             }
         }
 
-        protected override async UniTask OnContextActivate(IContext context)
+        protected override async UniTask<bool> OnContextActivate(IContext context)
         {
             var graphAsset = await nestedGraph.LoadAssetTaskAsync(LifeTime);
             var graphGameObject = graphAsset.gameObject;
@@ -66,8 +66,8 @@ namespace UniGame.UniNodes.Nodes.Runtime.Common
                 .AddTo(LifeTime);
 
             await LaunchGraph(graph, connection);
-            
-            Complete();
+
+            return true;
         }
 
         private async UniTask LaunchGraph(UniGraph graph, IContextConnection context)

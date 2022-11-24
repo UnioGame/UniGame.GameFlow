@@ -25,7 +25,7 @@ namespace UniGame.GameFlow
 
         public bool destroyWith = true;
         
-        protected override async UniTask OnContextActivate(IContext context)
+        protected override async UniTask<bool> OnContextActivate(IContext context)
         {
             var component = await assetReference.LoadAssetTaskAsync(LifeTime);
 
@@ -35,8 +35,8 @@ namespace UniGame.GameFlow
 
             var result = instance.GetComponent<TComponent>();
             context.Publish(result);
-            
-            Complete();
+
+            return true;
         }
     } 
 }

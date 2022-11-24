@@ -26,7 +26,7 @@ namespace UniGame.UniNodes.Nodes.Runtime.Addressables
         protected override async UniTask OnContextActivate(IContext context)
         {
             await UniTask.WhenAll(assetReferences.Select(x => x.LoadAssetTaskAsync<Object>(LifeTime)));
-            Complete();
+            CompleteProcessing(context);
         }
     }
 }

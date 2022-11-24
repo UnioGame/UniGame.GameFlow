@@ -66,7 +66,7 @@ namespace UniGame.UniNodes.GameFlow.Runtime.Nodes
         private UniTask<IContext> BindService(TServiceApi service,IContext context)
         {
             context.Publish(service);
-            Complete();
+            CompleteProcessing(context);
             return UniTask.FromResult(context);
         }
     }

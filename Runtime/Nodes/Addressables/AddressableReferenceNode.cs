@@ -44,7 +44,7 @@ namespace UniModules.UniGameFlow.Nodes.Runtime.Addressables
             {
                 context.Publish(value);
             }
-            Complete();
+            CompleteProcessing(context);
         }
     }
 }

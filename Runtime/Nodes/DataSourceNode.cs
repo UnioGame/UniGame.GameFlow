@@ -31,7 +31,7 @@
             {
                 Debug.LogError($"Asset is not an IAsyncContextDataSource. Asset: '{loadedRef.Name}' | Graph: '{GraphData.ItemName}'");
                 
-                Complete();
+                CompleteProcessing(context);
                 return;
             }
             
@@ -42,7 +42,7 @@
                 loadedRef.AddTo(LifeTime);
             }
             
-            Complete();
+            CompleteProcessing(context);
         }
     }
 }

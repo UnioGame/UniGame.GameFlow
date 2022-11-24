@@ -61,19 +61,19 @@ namespace UniGame.GameFlow.Runtime.Nodes
 
         #endregion
 
-        protected sealed override async UniTask OnContextActivate(IContext context)
+        protected sealed override async UniTask<bool> OnContextActivate(IContext context)
         {
             await BindContext();
             
-            if (_localContextContainer == null || !copyContextToContainer) return;
+            if (_localContextContainer == null || !copyContextToContainer) return true;
             
             var localContextContainer = await _localContextContainer
                 .LoadAssetTaskAsync(LifeTime);
             
             LifeTime.AddDispose(localContextContainer);
             localContextContainer.SetValue(_contextConnection);
-            
-            Complete();
+
+            return true;
         }
         
 

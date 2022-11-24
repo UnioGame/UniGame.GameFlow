@@ -33,7 +33,7 @@ namespace Game.Modules.Assets.UniGame.GameFlow.Runtime.Nodes
             {
                 case AsyncStatus.Succeeded:
                 case {} when completeOnFalse == true:
-                    Complete();
+                    CompleteProcessing(context);
                     break;
                 default:
                     GameLog.LogError($"NODE: {nameof(ContextStateNode)} : {name} STATUS {result}");

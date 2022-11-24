@@ -36,7 +36,7 @@ namespace UniGame.UniNodes.GameFlow.Runtime.Nodes
 
         protected abstract UniTask<TServiceApi> CreateService(IContext context);
 
-        protected sealed override async UniTask OnContextActivate(IContext context)
+        protected sealed override async UniTask<bool> OnContextActivate(IContext context)
         {
             
 #if UNITY_EDITOR || GAME_LOGS_ENABLED
@@ -59,6 +59,8 @@ namespace UniGame.UniNodes.GameFlow.Runtime.Nodes
             await OnServiceCreated(_service,context);
             
             GameLog.LogRuntime($"NODE SERVICE {typeof(TServiceApi).Name} CREATED");
+
+            return true;
         }
 
         protected virtual UniTask OnServiceCreated(TServiceApi service,IContext context) => UniTask.CompletedTask;
@@ -66,7 +68,7 @@ namespace UniGame.UniNodes.GameFlow.Runtime.Nodes
         private UniTask<IContext> BindService(TServiceApi service,IContext context)
         {
             context.Publish(service);
-            Complete();
+            CompleteProcessing(context);
             return UniTask.FromResult(context);
         }
     }

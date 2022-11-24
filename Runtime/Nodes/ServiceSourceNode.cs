@@ -32,7 +32,7 @@ namespace Game.Modules.Assets.UniGame.GameFlow.Runtime.Nodes
 
             if (!validation)
             {
-                Complete();
+                CompleteProcessing(context);
                 return;
             }
 
@@ -40,7 +40,7 @@ namespace Game.Modules.Assets.UniGame.GameFlow.Runtime.Nodes
 
             await OnSourceComplete(context, serviceSource);
 
-            Complete();
+            CompleteProcessing(context);
         }
 
         protected virtual UniTask<bool> OnValidateSource(IContext context, TSource source)

@@ -30,7 +30,7 @@ namespace UniGame.UniNodes.GameFlow.Runtime.Nodes
             
             results.Despawn();
             
-            Complete();
+            CompleteProcessing(context);
         }
     }
 }
