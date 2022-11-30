@@ -43,9 +43,9 @@ namespace UniGame.UniNodes.GameFlow.Runtime.Commands
 
             await UniTask.Yield(PlayerLoopTiming.LastPostLateUpdate);
             
-            if (!(asset is IAsyncContextDataSource dataSource))
+            if (!(asset is IAsyncDataSource dataSource))
             {
-                GameLog.LogError($"Asset loaded by guid {_resource.AssetGUID} is not {nameof(IAsyncContextDataSource)} or NULL");
+                GameLog.LogError($"Asset loaded by guid {_resource.AssetGUID} is not {nameof(IAsyncDataSource)} or NULL");
                 _resource.UnloadReference();
                 return;
             }

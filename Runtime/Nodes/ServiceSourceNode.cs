@@ -15,7 +15,7 @@ namespace Game.Modules.Assets.UniGame.GameFlow.Runtime.Nodes
 
     [HideNode]
     public class ServiceSourceNode<TSource> : ContextNode
-        where TSource : Object, IAsyncContextDataSource
+        where TSource : Object, IAsyncDataSource
     {
         public AssetReferenceT<TSource> sourceAsset;
 

@@ -27,7 +27,7 @@
             var loadedRef = await contextDataSource
                 .LoadAssetInstanceTaskAsync<LifetimeScriptableObject>(LifeTime,true);
 
-            if (!(loadedRef is IAsyncContextDataSource asyncRef))
+            if (!(loadedRef is IAsyncDataSource asyncRef))
             {
                 Debug.LogError($"Asset is not an IAsyncContextDataSource. Asset: '{loadedRef.Name}' | Graph: '{GraphData.ItemName}'");
                 

@@ -35,7 +35,7 @@ namespace UniModules.UniGame.GameFlow.GameFlow.Runtime
         public List<AssetReferenceDataSource> asyncDataSources = new List<AssetReferenceDataSource>();
 
         [SerializeReference]
-        public List<IAsyncContextDataSource> dataSources = new List<IAsyncContextDataSource>();
+        public List<IAsyncDataSource> dataSources = new List<IAsyncDataSource>();
 
         [SerializeReference]
         public bool executeOnStart = true;

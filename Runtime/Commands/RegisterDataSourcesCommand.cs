@@ -16,12 +16,12 @@
         where TSource : AssetReference
     {
         private readonly UniTask<IContext> contextTask;
-        private LoadAddressablesSourcesCommand<ScriptableObject,IAsyncContextDataSource> loadAssetCommand;
+        private LoadAddressablesSourcesCommand<ScriptableObject,IAsyncDataSource> loadAssetCommand;
         
         public RegisterDataSourcesCommand(UniTask<IContext> contextTask,IReadOnlyList<TSource> resources)
         {
             this.contextTask = contextTask;
-            this.loadAssetCommand = new LoadAddressablesSourcesCommand<ScriptableObject,IAsyncContextDataSource>(resources);
+            this.loadAssetCommand = new LoadAddressablesSourcesCommand<ScriptableObject,IAsyncDataSource>(resources);
         }
 
         public async UniTask Execute(ILifeTime lifeTime)
