@@ -121,7 +121,7 @@ namespace UniModules.UniGame.GameFlow.GameFlow.Runtime
         {
             var connection = new ContextConnection();
             connection.Connect(context).AddTo(LifeTime);
-            await graph.AddTo(LifeTime).ExecuteAsync();
+            await graph.AddTo(LifeTime).ExecuteAsync(connection);
         }
 
         private UniTask ExecuteSources(IContext context)
