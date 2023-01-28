@@ -11,13 +11,12 @@ namespace UniModules.GameFlow.Editor.Processor.FlowProcessors
     using global::UniModules.GameFlow.Runtime.Interfaces;
     using UnityEngine;
     using UnityEngine.UIElements;
-
-
+    
     public class NodeTypeStyleEditorProcessor : BaseEditorProcessorAsset<NodeTypeStyleEditorProcessor>,IGameFlowGraphProcessor
     {
         public StyleMap nodeStyleMap = new StyleMap();
         
-        [STypeFilter(typeof(INode),true)]
+        [STypeFilter(typeof(INode),true,true)]
         public SType nodeType;
         
         public StyleSheet style;
