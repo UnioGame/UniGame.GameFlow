@@ -79,6 +79,9 @@ namespace UniModules.UniGameFlow.GameFlow.Runtime.Nodes
             if (_localContextContainer == null) return;
             
             var localContextContainer = await _localContextContainer.LoadAssetTaskAsync(LifeTime);
+            
+            if(localContextContainer == null) return;
+            
             LifeTime.AddDispose(localContextContainer);
             localContextContainer.SetValue(_contextConnection);
         }
