@@ -76,7 +76,7 @@ namespace UniModules.UniGameFlow.GameFlow.Runtime.Nodes
 
         protected override async UniTask OnExecute()
         {
-            if (_localContextContainer == null) return;
+            if (_localContextContainer == null || !_localContextContainer.RuntimeKeyIsValid()) return;
             
             var localContextContainer = await _localContextContainer.LoadAssetTaskAsync(LifeTime);
             
