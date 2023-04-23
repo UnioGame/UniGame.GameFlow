@@ -18,7 +18,7 @@
         
         protected sealed override async UniTask<AsyncStatus> OnExecute(IUniGraph uniGraph, ILifeTime executionLifeTime)
         {
-            var cancellationToken = executionLifeTime.TokenSource;
+            var cancellationToken = executionLifeTime.CancellationToken;
             
             UpdateCancellationNodes(uniGraph);
                       
@@ -38,7 +38,7 @@
             foreach (var uniNode in uniNodes)
             {
                 uniNode.ExecuteAsync()
-                    .AttachExternalCancellation(uniGraph.LifeTime.TokenSource)
+                    .AttachExternalCancellation(uniGraph.LifeTime.CancellationToken)
                     .Forget();
             }
             

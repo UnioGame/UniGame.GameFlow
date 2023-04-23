@@ -114,7 +114,7 @@ namespace UniModules.UniGameFlow.Nodes.Runtime.States
             _inputPort       = GetPortValue(nameof(input));
 
             LifeTime.AddCleanUpAction(async () => await _asyncStateProxy.ExitAsync()
-                .AttachExternalCancellation(LifeTime.TokenSource));
+                .AttachExternalCancellation(LifeTime.CancellationToken));
 
             LogNodeExecutionState();
 

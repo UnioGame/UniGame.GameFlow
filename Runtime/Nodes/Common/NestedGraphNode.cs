@@ -79,7 +79,7 @@ namespace UniGame.UniNodes.Nodes.Runtime.Common
             }
             
             graph.ExecuteAsync(context)
-                .AttachExternalCancellation(LifeTime.TokenSource)
+                .AttachExternalCancellation(LifeTime.CancellationToken)
                 .Forget();
         }
         

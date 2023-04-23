@@ -230,7 +230,7 @@ namespace UniModules.GameFlow.Runtime.Core
         {
             Initialize(GraphData);
             await SNode.ExecuteAsync()
-                .AttachExternalCancellation(LifeTime.TokenSource);
+                .AttachExternalCancellation(LifeTime.CancellationToken);
         }
 
         /// <summary>
