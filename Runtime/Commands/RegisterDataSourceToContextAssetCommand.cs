@@ -33,7 +33,9 @@ namespace UniGame.UniNodes.GameFlow.Runtime.Commands
                 return;    
             }
             
-            await asset.RegisterAsync(context.Value);
+            if (asset is not IAsyncDataSource asyncSource) return;
+            
+            await asyncSource.RegisterAsync(context.Value);
         }
     }
 }

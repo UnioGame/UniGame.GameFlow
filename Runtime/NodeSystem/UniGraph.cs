@@ -143,7 +143,10 @@ namespace UniModules.GameFlow.Runtime.Core
                 var source = await referenceSource
                     .LoadAssetTaskAsync(LifeTime)
                     .ToSharedInstanceAsync(LifeTime);
-                source.RegisterAsync(Context)
+                
+                if (source is not IAsyncDataSource asyncSource) continue;
+                
+                asyncSource.RegisterAsync(Context)
                     .AttachExternalCancellation(LifeTime.CancellationToken)
                     .Forget();
             }

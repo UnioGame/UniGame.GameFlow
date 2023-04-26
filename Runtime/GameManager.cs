@@ -142,7 +142,8 @@ namespace UniModules.UniGame.GameFlow.GameFlow.Runtime
         private async UniTask RegisterSource(AssetReferenceDataSource dataSource, IContext context)
         {
             var sourceAsset = await dataSource.LoadAssetTaskAsync(LifeTime);
-            await sourceAsset.RegisterAsync(context);
+            if (sourceAsset is not IAsyncDataSource asyncSource) return;
+            await asyncSource.RegisterAsync(context);
         }
 
         private void OnDestroy() => Dispose();
