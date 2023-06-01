@@ -112,6 +112,14 @@ namespace UniGame.GameFlowEditor.Runtime
             ConnectNodePorts();
         }
 
+        protected override void OnEnable()
+        {
+#if !UNITY_EDITOR
+            return;
+#endif
+            base.OnEnable();
+        }
+
         private void ValidateGraph()
         {
             var removed = ClassPool.Spawn<List<BaseNode>>();
@@ -194,6 +202,7 @@ namespace UniGame.GameFlowEditor.Runtime
             edges.RemoveAll(x => x.inputNode is UniBaseNode && x.outputNode is UniBaseNode);
         }
 
+        
     }
     
     public struct NodePortConnection
