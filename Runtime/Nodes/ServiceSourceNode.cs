@@ -28,7 +28,7 @@ namespace Game.Modules.Assets.UniGame.GameFlow.Runtime.Nodes
                 disposableService.AddTo(LifeTime);
             
             var validation = await OnValidateSource(context, serviceSource)
-                .AttachExternalCancellation(LifeTime.CancellationToken);
+                .AttachExternalCancellation(LifeTime.Token);
 
             if (!validation)
             {

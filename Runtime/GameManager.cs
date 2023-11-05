@@ -89,12 +89,12 @@ namespace UniModules.UniGame.GameFlow.GameFlow.Runtime
             foreach (var graph in gameFlows)
             {
                 ExecuteGameFlowAsync(graph,context)
-                    .AttachExternalCancellation(LifeTime.CancellationToken)
+                    .AttachExternalCancellation(LifeTime.Token)
                     .Forget();
             }
 
             ExecuteAsyncFlows(_gameContext)
-                .AttachExternalCancellation(LifeTime.CancellationToken)
+                .AttachExternalCancellation(LifeTime.Token)
                 .Forget();
             
             return UniTask.CompletedTask;
@@ -112,7 +112,7 @@ namespace UniModules.UniGame.GameFlow.GameFlow.Runtime
                 var graph       = graphObject.GetComponent<UniGraph>();
                 
                 ExecuteGameFlowAsync(graph,context)
-                    .AttachExternalCancellation(LifeTime.CancellationToken)
+                    .AttachExternalCancellation(LifeTime.Token)
                     .Forget();
             }
         }
@@ -128,12 +128,12 @@ namespace UniModules.UniGame.GameFlow.GameFlow.Runtime
         {
             foreach (var source in dataSources)
                 source.RegisterAsync(context)
-                    .AttachExternalCancellation(LifeTime.CancellationToken)
+                    .AttachExternalCancellation(LifeTime.Token)
                     .Forget();
             
             foreach (var sourceReference in asyncDataSources)
                 RegisterSource(sourceReference, context)
-                    .AttachExternalCancellation(LifeTime.CancellationToken)
+                    .AttachExternalCancellation(LifeTime.Token)
                     .Forget();
             
             return UniTask.CompletedTask;

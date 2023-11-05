@@ -32,7 +32,7 @@
         {
             var lifeTime = this.GetAssetLifeTime();
             targetGraph?.ExecuteAsync()
-                .AttachExternalCancellation(lifeTime.CancellationToken)
+                .AttachExternalCancellation(lifeTime.Token)
                 .Forget();
         }
         

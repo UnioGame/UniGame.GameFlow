@@ -121,11 +121,11 @@ namespace UniModules.GameFlow.Runtime.Core
             LifeTime.AddCleanUpAction(() => _graphContext = new ContextConnection());
             
             graphProcessor?.ExecuteAsync(this)
-                .AttachExternalCancellation(LifeTime.CancellationToken)
+                .AttachExternalCancellation(LifeTime.Token)
                 .Forget();
 
             LoadDataSources()
-                .AttachExternalCancellation(LifeTime.CancellationToken)
+                .AttachExternalCancellation(LifeTime.Token)
                 .Forget();
             
             return UniTask.CompletedTask;
@@ -136,7 +136,7 @@ namespace UniModules.GameFlow.Runtime.Core
             UniTask.WhenAll(_dataSources.Select(x => x
                     .ToSharedInstance(LifeTime)
                     .RegisterAsync(Context)))
-                .AttachExternalCancellation(LifeTime.CancellationToken)
+                .AttachExternalCancellation(LifeTime.Token)
                 .Forget();
 
             foreach (var referenceSource in _asyncDataSources) {
@@ -147,7 +147,7 @@ namespace UniModules.GameFlow.Runtime.Core
                 if (source is not IAsyncDataSource asyncSource) continue;
                 
                 asyncSource.RegisterAsync(Context)
-                    .AttachExternalCancellation(LifeTime.CancellationToken)
+                    .AttachExternalCancellation(LifeTime.Token)
                     .Forget();
             }
         }

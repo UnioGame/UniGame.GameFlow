@@ -81,7 +81,7 @@
         {
             _valueData
                 .Subscribe(x => OnValueUpdate(x)
-                    .AttachExternalCancellation(LifeTime.CancellationToken)
+                    .AttachExternalCancellation(LifeTime.Token)
                     .Forget())
                 .AddTo(LifeTime);
             

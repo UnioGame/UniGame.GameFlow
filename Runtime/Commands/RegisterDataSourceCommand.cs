@@ -53,7 +53,7 @@ namespace UniGame.UniNodes.GameFlow.Runtime.Commands
             OnSourceLoaded(asset, lifeTime);
             
             dataSource.RegisterAsync(await _contextTask)
-                .AttachExternalCancellation(lifeTime.CancellationToken)
+                .AttachExternalCancellation(lifeTime.Token)
                 .Forget();
         }
 

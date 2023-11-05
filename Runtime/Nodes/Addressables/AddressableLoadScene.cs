@@ -59,7 +59,7 @@ namespace UniGame.UniNodes.Nodes.Runtime.Addressables
                 .AwaitFirstAsync(LifeTime);
 
             await sceneAsset.LoadSceneTaskAsync(LifeTime)
-                .AttachExternalCancellation(LifeTime.CancellationToken);
+                .AttachExternalCancellation(LifeTime.Token);
         }
         
     }
