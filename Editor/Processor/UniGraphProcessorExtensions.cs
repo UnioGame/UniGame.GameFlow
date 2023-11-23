@@ -23,7 +23,9 @@
         
         public static NodeProcessor NodeProcessor => GetNodeProcessor();
 
-        public static NodeProcessor GetNodeProcessor() => (nodeProcessor = nodeProcessor == null ? nodeProcessor.LoadOrCreate(defaultProcessorPath) : nodeProcessor);
+        public static NodeProcessor GetNodeProcessor() => (nodeProcessor = nodeProcessor == null 
+            ? nodeProcessor.LoadOrCreate(defaultProcessorPath,x => nodeProcessor = x) 
+            : nodeProcessor);
 
         public static void UpdatePorts(this INode node)
         {
