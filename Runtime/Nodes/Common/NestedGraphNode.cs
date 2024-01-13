@@ -4,7 +4,7 @@ namespace UniGame.UniNodes.Nodes.Runtime.Common
 {
     using System;
     using Cysharp.Threading.Tasks;
-    using Sirenix.OdinInspector;
+   
     using UniModules.GameFlow.Runtime.Attributes;
     using UniModules.GameFlow.Runtime.Core;
     using UniModules.UniGame.Context.Runtime.Connections;
@@ -13,6 +13,10 @@ namespace UniGame.UniNodes.Nodes.Runtime.Common
     using UnityEngine;
     using Object = UnityEngine.Object;
 
+#if ODIN_INSPECTOR
+     using Sirenix.OdinInspector;
+#endif
+    
     [Serializable]
     [CreateNodeMenu("Common/Graph/NestedGraphNode")]
     [NodeInfo(nameof(GraphContextOutputNode), 
@@ -27,8 +31,10 @@ namespace UniGame.UniNodes.Nodes.Runtime.Common
         [HideInInspector]
         public string graphName;
         
+#if ODIN_INSPECTOR
         [DrawWithUnity]
         [HideLabel]
+#endif
         public AssetReferenceComponent<UniGraph> nestedGraph;
 
         public bool awaitGraph = false;
