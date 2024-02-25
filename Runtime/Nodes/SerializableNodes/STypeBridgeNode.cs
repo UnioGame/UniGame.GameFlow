@@ -20,7 +20,7 @@
     [Serializable]
     public class STypeBridgeNode<TData> : 
         SNode,
-        IReadonlyRecycleReactiveProperty<TData>
+        IReadonlyReactiveValue<TData>
     {
         protected const string portName = "context";
         
@@ -35,8 +35,8 @@
 
         #endregion
         
-        private RecycleReactiveProperty<TData> _valueData;
-        private RecycleReactiveProperty<bool>  _isReady;
+        private ReactiveValue<TData> _valueData;
+        private ReactiveValue<bool>  _isReady;
         private bool _isFinished = false;
 
         public IPortValue input;
@@ -66,8 +66,8 @@
         {
             base.UpdateCommands(nodeCommands);
 
-            _valueData = new RecycleReactiveProperty<TData>().AddTo(LifeTime);
-            _isReady   = new RecycleReactiveProperty<bool>().AddTo(LifeTime);
+            _valueData = new ReactiveValue<TData>().AddTo(LifeTime);
+            _isReady   = new ReactiveValue<bool>().AddTo(LifeTime);
             
             var inputName   = portName.GetFormatedPortName(PortIO.Input);
             var outputName  = portName.GetFormatedPortName(PortIO.Output);

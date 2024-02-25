@@ -13,7 +13,7 @@
     [Serializable]
     [HideNode]
     public class ContextNode : UniNode,
-        IReadonlyRecycleReactiveProperty<IContext>, 
+        IReadonlyReactiveValue<IContext>, 
         IMessageBroker
     {
         private SContextNode contextNode;

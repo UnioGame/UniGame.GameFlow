@@ -9,7 +9,7 @@
     [HideNode]
     [Serializable]
     public class TypeBridgeNode<TData> : UniNode,
-        IReadonlyRecycleReactiveProperty<TData>
+        IReadonlyReactiveValue<TData>
     {
         private STypeBridgeNode<TData> value;
 

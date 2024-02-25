@@ -18,8 +18,8 @@
 
         private IPortPair                      _portPair;
         private INode                          _node;
-        private RecycleReactiveProperty<TData> _valueData  = new RecycleReactiveProperty<TData>();
-        private RecycleReactiveProperty<bool>  _isFinalyze = new RecycleReactiveProperty<bool>();
+        private ReactiveValue<TData> _valueData  = new ReactiveValue<TData>();
+        private ReactiveValue<bool>  _isFinalyze = new ReactiveValue<bool>();
 
         public PortTypeDataBridgeCommand(
             IUniNode node,

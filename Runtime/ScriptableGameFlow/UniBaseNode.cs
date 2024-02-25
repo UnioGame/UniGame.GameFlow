@@ -32,7 +32,7 @@ namespace UniGame.GameFlowEditor.Runtime
         
         public Dictionary<INodePort,PortData> portData = new Dictionary<INodePort, PortData>(8);
 
-        private RecycleReactiveProperty<INode> nodeSubject = new RecycleReactiveProperty<INode>();
+        private ReactiveValue<INode> nodeSubject = new ReactiveValue<INode>();
 
         #region public properties
 
@@ -48,7 +48,7 @@ namespace UniGame.GameFlowEditor.Runtime
 
         public UniBaseNode()
         {
-            nodeSubject ??= new RecycleReactiveProperty<INode>();
+            nodeSubject ??= new ReactiveValue<INode>();
         }
         
         public void Initialize(INode node, UniGraph ownerGraph)
